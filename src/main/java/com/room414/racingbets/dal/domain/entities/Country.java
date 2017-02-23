@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import java.io.Serializable;
+
 /**
  * Class that represents country entity
  *
@@ -13,7 +15,7 @@ package com.room414.racingbets.dal.domain.entities;
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-public class Country {
+public class Country implements Serializable {
     private int id;
     private String name;
     private String code;
@@ -86,5 +88,14 @@ public class Country {
         result = 31 * result + (code != null ? code.hashCode() : 0);
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                '}';
     }
 }

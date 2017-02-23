@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import java.io.Serializable;
+
 /**
  * Class that represents user role.
  *
@@ -12,7 +14,7 @@ package com.room414.racingbets.dal.domain.entities;
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-public class Role {
+public class Role implements Serializable {
     private int id;
     private String name;
 
@@ -70,5 +72,13 @@ public class Role {
         result = 31 * result + (name != null ? name.hashCode() : 0);
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

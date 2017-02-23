@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import java.io.Serializable;
+
 /**
  * Class that represents track surface condition.
  *
@@ -13,7 +15,7 @@ package com.room414.racingbets.dal.domain.entities;
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-public class TrackCondition {
+public class TrackCondition implements Serializable {
     private int id;
     private String name;
 
@@ -71,5 +73,13 @@ public class TrackCondition {
         result = 31 * result + (name != null ? name.hashCode() : 0);
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TrackCondition{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
