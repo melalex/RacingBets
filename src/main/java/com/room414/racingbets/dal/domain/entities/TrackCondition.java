@@ -1,26 +1,27 @@
 package com.room414.racingbets.dal.domain.entities;
 
 /**
- * Class that represents user role.
+ * Class that represents track surface condition.
  *
  * <h4>Fields</h4>
  * <ul>
- *      <li>id - role id</li>
- *      <li>name - role name</li>
+ *      <li>id - track surface condition id</li>
+ *      <li>name - track surface condition type</li>
  * </ul>
  *
+ * @link https://en.wikipedia.org/wiki/Going_(horse_racing)#United_Kingdom_and_Ireland
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-public class Role {
+public class TrackCondition {
     private int id;
     private String name;
 
-    public Role() {
+    public TrackCondition() {
 
     }
 
-    public Role(int id, String name) {
+    public TrackCondition(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -50,13 +51,13 @@ public class Role {
             return false;
         }
 
-        Role role = (Role) o;
+        TrackCondition that = (TrackCondition) o;
 
-        if (id != role.id) {
+        if (id != that.id) {
             return false;
         }
 
-        if (name != null ? !name.equals(role.name) : role.name != null) {
+        if (name != null ? !name.equals(that.name) : that.name != null) {
             return false;
         }
 

@@ -7,7 +7,7 @@ package com.room414.racingbets.dal.domain.entities;
  * <ul>
  *      <li>id - role id</li>
  *      <li>name - country name</li>
- *      <li>code - ISO 3166 country code</li>
+ *      <li>code - ISO 3166 country code { @link https://en.wikipedia.org/wiki/ISO_3166 } </li>
  * </ul>
  *
  * @author Alexander Melashchenko
@@ -71,7 +71,11 @@ public class Country {
             return false;
         }
 
-        return code != null ? code.equals(country.code) : country.code == null;
+        if (code != null ? !code.equals(country.code) : country.code != null) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

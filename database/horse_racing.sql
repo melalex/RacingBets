@@ -52,6 +52,7 @@ CREATE TABLE `horse_racing`.`race` (
   `racecourse_id` INT UNSIGNED NOT NULL,
   `start_date_time` DATETIME NOT NULL,
   `weather_id` INT UNSIGNED NOT NULL,
+  `going_id` INT UNSIGNED NOT NULL,
   `race_type` ENUM('flat', 'jump', 'harness') NOT NULL,
   `race_class` INT(2) UNSIGNED NOT NULL,
   `min_age` INT(2) UNSIGNED NOT NULL,
@@ -67,7 +68,6 @@ CREATE TABLE `horse_racing`.`racecourse` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `country_id` INT UNSIGNED NOT NULL,
-  `track_surface_id` INT UNSIGNED NOT NULL,
   `latitude` DOUBLE NOT NULL,
   `longitude` DOUBLE NOT NULL,
   `contact` VARCHAR(45) NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE `horse_racing`.`weather` (
   UNIQUE INDEX `name_UNIQUE` (`name` ASC));
 
 
-CREATE TABLE `horse_racing`.`track_surface` (
+CREATE TABLE `horse_racing`.`going` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
@@ -266,7 +266,8 @@ ADD CONSTRAINT `participant_trainer_id_fkey`
 
 ALTER TABLE `horse_racing`.`race` 
 ADD INDEX `race_racecourse_id_fkey_idx` (`racecourse_id` ASC),
-ADD INDEX `race_weather_id_fkey_idx` (`weather_id` ASC);
+ADD INDEX `race_weather_id_fkey_idx` (`weather_id` ASC),
+ADD INDEX `race_going_id_fkey_idx` (`going_id` ASC);
 ALTER TABLE `horse_racing`.`race` 
 ADD CONSTRAINT `race_racecourse_id_fkey`
   FOREIGN KEY (`racecourse_id`)
@@ -277,17 +278,16 @@ ADD CONSTRAINT `race_weather_id_fkey`
   FOREIGN KEY (`weather_id`)
   REFERENCES `horse_racing`.`weather` (`id`)
   ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+  ADD CONSTRAINT `race_going_id_fkey`
+  FOREIGN KEY (`going_id`)
+  REFERENCES `horse_racing`.`going` (`id`)
+  ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
 ALTER TABLE `horse_racing`.`racecourse` 
-ADD INDEX `racecourse_country_id_fkey_idx` (`country_id` ASC),
-ADD INDEX `race_track_surface_id_fkey_idx` (`track_surface_id` ASC);
+ADD INDEX `racecourse_country_id_fkey_idx` (`country_id` ASC);
 ALTER TABLE `horse_racing`.`racecourse` 
-ADD CONSTRAINT `race_track_surface_id_fkey`
-  FOREIGN KEY (`track_surface_id`)
-  REFERENCES `horse_racing`.`track_surface` (`id`)
-  ON DELETE CASCADE
-  ON UPDATE NO ACTION,
 ADD CONSTRAINT `racecourse_country_id_fkey`
   FOREIGN KEY (`country_id`)
   REFERENCES `horse_racing`.`country` (`id`)
@@ -347,18 +347,18 @@ INSERT INTO horse_racing.weather (name) VALUES ('Blizzard');
 INSERT INTO horse_racing.weather (name) VALUES ('Avalanche');
 INSERT INTO horse_racing.weather (name) VALUES ('Mist');
 
-INSERT INTO horse_racing.track_surface (name) VALUES ('Hard');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Firm');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Good to firm');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Good');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Good to soft');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Soft');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Heavy');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Fast');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Standard to fast');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Standard');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Standard to slow');
-INSERT INTO horse_racing.track_surface (name) VALUES ('Slow');
+INSERT INTO horse_racing.going (name) VALUES ('Hard');
+INSERT INTO horse_racing.going (name) VALUES ('Firm');
+INSERT INTO horse_racing.going (name) VALUES ('Good to firm');
+INSERT INTO horse_racing.going (name) VALUES ('Good');
+INSERT INTO horse_racing.going (name) VALUES ('Good to soft');
+INSERT INTO horse_racing.going (name) VALUES ('Soft');
+INSERT INTO horse_racing.going (name) VALUES ('Heavy');
+INSERT INTO horse_racing.going (name) VALUES ('Fast');
+INSERT INTO horse_racing.going (name) VALUES ('Standard to fast');
+INSERT INTO horse_racing.going (name) VALUES ('Standard');
+INSERT INTO horse_racing.going (name) VALUES ('Standard to slow');
+INSERT INTO horse_racing.going (name) VALUES ('Slow');
  
 INSERT INTO horse_racing.role (name) VALUES ('Handicapper');
 INSERT INTO horse_racing.role (name) VALUES ('Bookmaker');
