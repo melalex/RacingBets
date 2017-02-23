@@ -2,8 +2,13 @@ package com.room414.racingbets.dal.domain.entities;
 
 /**
  * Class that represents country entity
- * <p>name - country name</p>
- * <p>code - ISO 3166 country code</p>
+ *
+ * <h4>Fields</h4>
+ * <ul>
+ *      <li>id - role id</li>
+ *      <li>name - country name</li>
+ *      <li>code - ISO 3166 country code</li>
+ * </ul>
  *
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
