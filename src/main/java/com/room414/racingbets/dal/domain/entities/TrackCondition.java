@@ -16,6 +16,7 @@ import com.room414.racingbets.dal.abstraction.entities.SimpleEntity;
  * @version 1.0 23 Feb 2017
  */
 public class TrackCondition extends SimpleEntity {
+    private static final long serialVersionUID = -7323668186892234248L;
 
     @Override
     public String toString() {

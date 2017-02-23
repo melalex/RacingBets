@@ -15,6 +15,7 @@ import com.room414.racingbets.dal.abstraction.entities.SimpleEntity;
  * @version 1.0 23 Feb 2017
  */
 public class Weather extends SimpleEntity {
+    private static final long serialVersionUID = 682538209045483454L;
 
     @Override
     public String toString() {

@@ -13,7 +13,7 @@ CREATE TABLE `horse_racing`.`horse` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
   
-CREATE TABLE `horse_racing`.`jokey` (
+CREATE TABLE `horse_racing`.`jockey` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,

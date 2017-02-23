@@ -17,6 +17,8 @@ import com.room414.racingbets.dal.abstraction.entities.SimpleEntity;
  * @version 1.0 23 Feb 2017
  */
 public class Breed extends SimpleEntity {
+    private static final long serialVersionUID = -535686461062038376L;
+
     @Override
     public String toString() {
         return "Breed{" +

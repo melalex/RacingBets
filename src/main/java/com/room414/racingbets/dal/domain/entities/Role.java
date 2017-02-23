@@ -15,6 +15,7 @@ import com.room414.racingbets.dal.abstraction.entities.SimpleEntity;
  * @version 1.0 23 Feb 2017
  */
 public class Role extends SimpleEntity {
+    private static final long serialVersionUID = 487854808117130494L;
 
     @Override
     public String toString() {

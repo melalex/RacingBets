@@ -9,6 +9,7 @@ import com.room414.racingbets.dal.abstraction.entities.Person;
  * @version 1.0 23 Feb 2017
  */
 public class Owner extends Person {
+    private static final long serialVersionUID = 3071894574677370238L;
 
     @Override
     public String toString() {

@@ -16,6 +16,8 @@ import java.io.Serializable;
  * @version 1.0 23 Feb 2017
  */
 public class Country implements Serializable {
+    private static final long serialVersionUID = 8904582879716615954L;
+
     /**
      * Country id in data storage
      */

@@ -12,6 +12,8 @@ import java.sql.Date;
  * @version 1.0 23 Feb 2017
  */
 public abstract class Person implements Serializable {
+    private static final long serialVersionUID = -5384092688130247272L;
+
     protected int id;
     protected String firstName;
     protected String secondName;
