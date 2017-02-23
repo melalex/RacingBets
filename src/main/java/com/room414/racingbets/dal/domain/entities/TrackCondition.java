@@ -3,12 +3,12 @@ package com.room414.racingbets.dal.domain.entities;
 import java.io.Serializable;
 
 /**
- * Class that represents track surface condition.
+ * Class that represents track surface condition type.
  *
  * <h4>Fields</h4>
  * <ul>
  *      <li>id - track surface condition id</li>
- *      <li>name - track surface condition type</li>
+ *      <li>conditionType - track surface condition type</li>
  * </ul>
  *
  * @link https://en.wikipedia.org/wiki/Going_(horse_racing)#United_Kingdom_and_Ireland
@@ -17,15 +17,15 @@ import java.io.Serializable;
  */
 public class TrackCondition implements Serializable {
     private int id;
-    private String name;
+    private String conditionType;
 
     public TrackCondition() {
 
     }
 
-    public TrackCondition(int id, String name) {
+    public TrackCondition(int id, String conditionType) {
         this.id = id;
-        this.name = name;
+        this.conditionType = conditionType;
     }
 
     public int getId() {
@@ -36,12 +36,12 @@ public class TrackCondition implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getConditionType() {
+        return conditionType;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setConditionType(String conditionType) {
+        this.conditionType = conditionType;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class TrackCondition implements Serializable {
             return false;
         }
 
-        if (name != null ? !name.equals(that.name) : that.name != null) {
+        if (conditionType != null ? !conditionType.equals(that.conditionType) : that.conditionType != null) {
             return false;
         }
 
@@ -70,7 +70,7 @@ public class TrackCondition implements Serializable {
     public int hashCode() {
         int result = id;
 
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (conditionType != null ? conditionType.hashCode() : 0);
 
         return result;
     }
@@ -79,7 +79,7 @@ public class TrackCondition implements Serializable {
     public String toString() {
         return "TrackCondition{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", conditionType='" + conditionType + '\'' +
                 '}';
     }
 }

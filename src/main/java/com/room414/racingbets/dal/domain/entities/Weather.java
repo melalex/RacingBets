@@ -3,28 +3,28 @@ package com.room414.racingbets.dal.domain.entities;
 import java.io.Serializable;
 
 /**
- * Class that represents user role.
+ * Class that represents weather type.
  *
  * <h4>Fields</h4>
  * <ul>
- *      <li>id - role id</li>
- *      <li>roleName - role roleName</li>
+ *      <li>id - weather type id</li>
+ *      <li>conditionType - weather type name</li>
  * </ul>
  *
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-public class Role implements Serializable {
+public class Weather implements Serializable {
     private int id;
-    private String roleName;
+    private String weatherType;
 
-    public Role() {
+    public Weather() {
 
     }
 
-    public Role(int id, String roleName) {
+    public Weather(int id, String weatherType) {
         this.id = id;
-        this.roleName = roleName;
+        this.weatherType = weatherType;
     }
 
     public int getId() {
@@ -35,12 +35,12 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public String getWeatherType() {
+        return weatherType;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setWeatherType(String weatherType) {
+        this.weatherType = weatherType;
     }
 
     @Override
@@ -52,13 +52,13 @@ public class Role implements Serializable {
             return false;
         }
 
-        Role role = (Role) o;
+        Weather weather = (Weather) o;
 
-        if (id != role.id) {
+        if (id != weather.id) {
             return false;
         }
 
-        if (roleName != null ? !roleName.equals(role.roleName) : role.roleName != null) {
+        if (weatherType != null ? !weatherType.equals(weather.weatherType) : weather.weatherType != null) {
             return false;
         }
 
@@ -69,16 +69,16 @@ public class Role implements Serializable {
     public int hashCode() {
         int result = id;
 
-        result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
+        result = 31 * result + (weatherType != null ? weatherType.hashCode() : 0);
 
         return result;
     }
 
     @Override
     public String toString() {
-        return "Role{" +
+        return "Weather{" +
                 "id=" + id +
-                ", roleName='" + roleName + '\'' +
+                ", weatherType='" + weatherType + '\'' +
                 '}';
     }
 }
