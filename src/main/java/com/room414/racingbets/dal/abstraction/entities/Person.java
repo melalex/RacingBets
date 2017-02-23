@@ -18,11 +18,6 @@ public abstract class Person implements Serializable {
     protected String firstName;
     protected String secondName;
     protected Date birthday;
-    /**
-     * Person's country.
-     *
-     * @see Country
-     */
     protected Country country;
 
     public Person() {
