@@ -131,7 +131,7 @@ CREATE TABLE `horse_racing`.`application_user` (
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `is_email_confirmed` VARCHAR(45) NOT NULL,
+  `is_email_confirmed` TINYINT(1) NOT NULL,
   `balance` DECIMAL(12) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
