@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * <h4>Fields</h4>
  * <ul>
- *      <li>id - role id</li>
+ *      <li>id - country id</li>
  *      <li>name - country name</li>
  *      <li>code - ISO 3166 country code { @link https://en.wikipedia.org/wiki/ISO_3166 } </li>
  * </ul>
@@ -16,8 +16,18 @@ import java.io.Serializable;
  * @version 1.0 23 Feb 2017
  */
 public class Country implements Serializable {
+    /**
+     * Country id in data storage
+     */
     private int id;
+    /**
+     * Country name
+     */
     private String name;
+    /** ISO 3166 country code.
+     *
+     * @link https://en.wikipedia.org/wiki/ISO_3166
+     */
     private String code;
 
     public Country() {
