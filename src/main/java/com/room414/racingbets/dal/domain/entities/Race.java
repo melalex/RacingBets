@@ -11,6 +11,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
+// TODO: add comments
 public class Race implements Serializable {
     private static final long serialVersionUID = 8351694393075721386L;
 
@@ -59,6 +60,87 @@ public class Race implements Serializable {
             @Override
             public String toString() {
                 return "harness";
+            }
+        },
+    }
+
+    /**
+     * Represents track surface condition type.
+     *
+     * @link https://en.wikipedia.org/wiki/Going_(horse_racing)#United_Kingdom_and_Ireland
+     */
+    // TODO: valueOf
+    public enum TrackCondition {
+        HARD {
+            @Override
+            public String toString() {
+                return "Hard";
+            }
+        },
+        FIRM {
+            @Override
+            public String toString() {
+                return "Firm";
+            }
+        },
+        GOOD_TO_FIRM {
+            @Override
+            public String toString() {
+                return "Good to firm";
+            }
+        },
+        GOOD {
+            @Override
+            public String toString() {
+                return "Good";
+            }
+        },
+        GOOD_TO_SOFT {
+            @Override
+            public String toString() {
+                return "Good to soft";
+            }
+        },
+        SOFT {
+            @Override
+            public String toString() {
+                return "Soft";
+            }
+        },
+        HEAVY {
+            @Override
+            public String toString() {
+                return "Heavy";
+            }
+        },
+        FAST {
+            @Override
+            public String toString() {
+                return "Fast";
+            }
+        },
+        STANDARD_TO_FAST {
+            @Override
+            public String toString() {
+                return "Standard to fast";
+            }
+        },
+        STANDARD {
+            @Override
+            public String toString() {
+                return "Standard";
+            }
+        },
+        STANDARD_TO_SLOW {
+            @Override
+            public String toString() {
+                return "Standard to slow";
+            }
+        },
+        SLOW{
+            @Override
+            public String toString() {
+                return "Slow";
             }
         },
     }
