@@ -33,17 +33,28 @@ public class ApplicationUser implements Serializable {
      */
     private Set<Role> roles = new HashSet<>();
 
+    // TODO: valueOf
     public enum Role {
         /**
          * Can bet, view history and schedule of races, looking at the statistics of the horses, jockeys and trainers.
          */
-        HANDICAPPER,
+        HANDICAPPER {
+            @Override
+            public String toString() {
+                return "Handicapper";
+            }
+        },
         /**
-         * Organize races and determine their winners, replenish handicapper's balance.
+         * Organize races and determine their winners, replenish handicapper's balance, gives winnings.
          *
          * @see ApplicationUser#balance
          */
-        BOOKMAKER,
+        BOOKMAKER {
+            @Override
+            public String toString() {
+                return "Bookmaker";
+            }
+        },
         /**
          * Adding an entities (Horse, Owner, Jockey, Trainer, Breed, Racecourse) in the database,
          * adds and removes bookmakers.
@@ -56,7 +67,12 @@ public class ApplicationUser implements Serializable {
          * @see Racecourse
          * @see ApplicationUser.Role#BOOKMAKER
          */
-        ADMIN,
+        ADMIN {
+            @Override
+            public String toString() {
+                return "Admin";
+            }
+        },
     }
 
     public ApplicationUser() {

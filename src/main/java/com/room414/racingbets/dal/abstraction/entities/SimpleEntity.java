@@ -11,6 +11,7 @@ import java.io.Serializable;
 public abstract class SimpleEntity implements Serializable {
     private static final long serialVersionUID = 1774311501339823537L;
 
+    // TODO: field comments
     protected int id;
     protected String name;
 

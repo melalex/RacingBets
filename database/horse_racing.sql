@@ -2,7 +2,7 @@ CREATE SCHEMA `horse_racing` DEFAULT CHARACTER SET utf8;
 
 CREATE TABLE `horse_racing`.`horse` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   `trainer_id` INT UNSIGNED NOT NULL,
   `owner_id` INT UNSIGNED NOT NULL,
   `birthday` DATE NOT NULL,
@@ -41,14 +41,14 @@ CREATE TABLE `horse_racing`.`trainer` (
   
 CREATE TABLE `horse_racing`.`breed` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`roleName` ASC));
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
 
 CREATE TABLE `horse_racing`.`race` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   `racecourse_id` INT UNSIGNED NOT NULL,
   `start_date_time` DATETIME NOT NULL,
   `weather_id` INT UNSIGNED NOT NULL,
@@ -60,13 +60,16 @@ CREATE TABLE `horse_racing`.`race` (
   `max_raiting` INT(5) UNSIGNED NOT NULL,
   `distance` FLOAT UNSIGNED NOT NULL,
   `verdict` MEDIUMTEXT NOT NULL,
-  `price` DECIMAL(12) UNSIGNED NOT NULL,
+  `price_1st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
+  `price_2st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
+  `price_3st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
+  `price_4st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 CREATE TABLE `horse_racing`.`racecourse` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   `country_id` INT UNSIGNED NOT NULL,
   `latitude` DOUBLE NOT NULL,
   `longitude` DOUBLE NOT NULL,
@@ -77,25 +80,25 @@ CREATE TABLE `horse_racing`.`racecourse` (
 
 CREATE TABLE `horse_racing`.`country` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   `code` VARCHAR(3) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 CREATE TABLE `horse_racing`.`weather` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`roleName` ASC));
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
 
 
 CREATE TABLE `horse_racing`.`going` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `idnew_table_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`roleName` ASC));
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
   
 CREATE TABLE `horse_racing`.`participant` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -119,8 +122,14 @@ CREATE TABLE `horse_racing`.`participant` (
 CREATE TABLE `horse_racing`.`bet` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED NOT NULL,
-  `type` ENUM('show', 'place', 'win', 'quinella', 'exacta', 'trifecta', 'superfecta') NOT NULL,
-  `bet_size` DECIMAL(12) NOT NULL,
+  `bet_type_id` INT UNSIGNED NOT NULL,
+  `bet_size` DECIMAL(12, 2) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+  
+  CREATE TABLE `horse_racing`.`bet_type` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -132,16 +141,16 @@ CREATE TABLE `horse_racing`.`application_user` (
   `last_name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `is_email_confirmed` TINYINT(1) NOT NULL,
-  `balance` DECIMAL(12) UNSIGNED NOT NULL,
+  `balance` DECIMAL(12, 2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 CREATE TABLE `horse_racing`.`role` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roleName` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `idnew_table_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`roleName` ASC));
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
 
 CREATE TABLE `horse_racing`.`application_user_role` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -155,7 +164,7 @@ CREATE TABLE `horse_racing`.`bet_participant` (
   `race_id` INT UNSIGNED NOT NULL,
   `bet_id` INT UNSIGNED NOT NULL,
   `participant_id` INT UNSIGNED NOT NULL,
-  `place` INT(3) UNSIGNED NOT NULL,
+  `place` INT(2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
   
@@ -196,11 +205,17 @@ ADD CONSTRAINT `application_user_role_role_id_fkey`
   ON UPDATE NO ACTION;
 
 ALTER TABLE `horse_racing`.`bet` 
-ADD INDEX `application_user_id_fkey_idx` (`application_user_id` ASC);
+ADD INDEX `application_user_id_fkey_idx` (`application_user_id` ASC),
+ADD INDEX `bet_type_id_fkey_idx` (`bet_type_id` ASC);
 ALTER TABLE `horse_racing`.`bet` 
 ADD CONSTRAINT `application_user_id_fkey`
   FOREIGN KEY (`application_user_id`)
   REFERENCES `horse_racing`.`application_user` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `bet_type_id_fkey`
+  FOREIGN KEY (`bet_type_id`)
+  REFERENCES `horse_racing`.`bet_type` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
@@ -240,7 +255,7 @@ ADD CONSTRAINT `horse_breed_id_fkey`
 ALTER TABLE `horse_racing`.`participant` 
 ADD INDEX `participant_horse_id_fkey_idx` (`horse_id` ASC),
 ADD INDEX `participant_rase_id_fkey_idx` (`rase_id` ASC),
-ADD INDEX `participant_jokey_id_fkey_idx` (`jockey_id` ASC),
+ADD INDEX `participant_jockey_id_fkey_idx` (`jockey_id` ASC),
 ADD INDEX `participant_trainer_id_fkey_idx` (`trainer_id` ASC);
 ALTER TABLE `horse_racing`.`participant` 
 ADD CONSTRAINT `participant_horse_id_fkey`
@@ -253,9 +268,9 @@ ADD CONSTRAINT `participant_rase_id_fkey`
   REFERENCES `horse_racing`.`race` (`id`)
   ON DELETE CASCADE
   ON UPDATE NO ACTION,
-ADD CONSTRAINT `participant_jokey_id_fkey`
+ADD CONSTRAINT `participant_jockey_id_fkey`
   FOREIGN KEY (`jockey_id`)
-  REFERENCES `horse_racing`.`jokey` (`id`)
+  REFERENCES `horse_racing`.`jockey` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `participant_trainer_id_fkey`
@@ -294,10 +309,10 @@ ADD CONSTRAINT `racecourse_country_id_fkey`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
-ALTER TABLE `horse_racing`.`jokey` 
-ADD INDEX `jokey_country_id_fkey_idx` (`country_id` ASC);
-ALTER TABLE `horse_racing`.`jokey` 
-ADD CONSTRAINT `jokey_country_id_fkey`
+ALTER TABLE `horse_racing`.`jockey` 
+ADD INDEX `jockey_country_id_fkey_idx` (`country_id` ASC);
+ALTER TABLE `horse_racing`.`jockey` 
+ADD CONSTRAINT `jockey_country_id_fkey`
   FOREIGN KEY (`country_id`)
   REFERENCES `horse_racing`.`country` (`id`)
   ON DELETE NO ACTION
@@ -321,45 +336,57 @@ ADD CONSTRAINT `trainer_country_id_fkey`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
-INSERT INTO horse_racing.weather (roleName) VALUES ('Rainy');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Stormy');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Sunny');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Cloudy');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Hot');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Cold');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Dry');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Wet');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Windy');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Hurricanes');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Typhoons');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Sand-storms');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Snow-storms');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Tornados');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Humid');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Foggy');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Snow');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Thundersnow');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Hail');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Sleet');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Drought');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Wildfire');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Blizzard');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Avalanche');
-INSERT INTO horse_racing.weather (roleName) VALUES ('Mist');
+INSERT INTO horse_racing.weather (name) VALUES ('Rainy');
+INSERT INTO horse_racing.weather (name) VALUES ('Stormy');
+INSERT INTO horse_racing.weather (name) VALUES ('Sunny');
+INSERT INTO horse_racing.weather (name) VALUES ('Cloudy');
+INSERT INTO horse_racing.weather (name) VALUES ('Hot');
+INSERT INTO horse_racing.weather (name) VALUES ('Cold');
+INSERT INTO horse_racing.weather (name) VALUES ('Dry');
+INSERT INTO horse_racing.weather (name) VALUES ('Wet');
+INSERT INTO horse_racing.weather (name) VALUES ('Windy');
+INSERT INTO horse_racing.weather (name) VALUES ('Hurricanes');
+INSERT INTO horse_racing.weather (name) VALUES ('Typhoons');
+INSERT INTO horse_racing.weather (name) VALUES ('Sand-storms');
+INSERT INTO horse_racing.weather (name) VALUES ('Snow-storms');
+INSERT INTO horse_racing.weather (name) VALUES ('Tornados');
+INSERT INTO horse_racing.weather (name) VALUES ('Humid');
+INSERT INTO horse_racing.weather (name) VALUES ('Foggy');
+INSERT INTO horse_racing.weather (name) VALUES ('Snow');
+INSERT INTO horse_racing.weather (name) VALUES ('Thundersnow');
+INSERT INTO horse_racing.weather (name) VALUES ('Hail');
+INSERT INTO horse_racing.weather (name) VALUES ('Sleet');
+INSERT INTO horse_racing.weather (name) VALUES ('Drought');
+INSERT INTO horse_racing.weather (name) VALUES ('Wildfire');
+INSERT INTO horse_racing.weather (name) VALUES ('Blizzard');
+INSERT INTO horse_racing.weather (name) VALUES ('Avalanche');
+INSERT INTO horse_racing.weather (name) VALUES ('Mist');
 
-INSERT INTO horse_racing.going (roleName) VALUES ('Hard');
-INSERT INTO horse_racing.going (roleName) VALUES ('Firm');
-INSERT INTO horse_racing.going (roleName) VALUES ('Good to firm');
-INSERT INTO horse_racing.going (roleName) VALUES ('Good');
-INSERT INTO horse_racing.going (roleName) VALUES ('Good to soft');
-INSERT INTO horse_racing.going (roleName) VALUES ('Soft');
-INSERT INTO horse_racing.going (roleName) VALUES ('Heavy');
-INSERT INTO horse_racing.going (roleName) VALUES ('Fast');
-INSERT INTO horse_racing.going (roleName) VALUES ('Standard to fast');
-INSERT INTO horse_racing.going (roleName) VALUES ('Standard');
-INSERT INTO horse_racing.going (roleName) VALUES ('Standard to slow');
-INSERT INTO horse_racing.going (roleName) VALUES ('Slow');
+INSERT INTO horse_racing.going (name) VALUES ('Hard');
+INSERT INTO horse_racing.going (name) VALUES ('Firm');
+INSERT INTO horse_racing.going (name) VALUES ('Good to firm');
+INSERT INTO horse_racing.going (name) VALUES ('Good');
+INSERT INTO horse_racing.going (name) VALUES ('Good to soft');
+INSERT INTO horse_racing.going (name) VALUES ('Soft');
+INSERT INTO horse_racing.going (name) VALUES ('Heavy');
+INSERT INTO horse_racing.going (name) VALUES ('Fast');
+INSERT INTO horse_racing.going (name) VALUES ('Standard to fast');
+INSERT INTO horse_racing.going (name) VALUES ('Standard');
+INSERT INTO horse_racing.going (name) VALUES ('Standard to slow');
+INSERT INTO horse_racing.going (name) VALUES ('Slow');
  
-INSERT INTO horse_racing.role (roleName) VALUES ('Handicapper');
-INSERT INTO horse_racing.role (roleName) VALUES ('Bookmaker');
-INSERT INTO horse_racing.role (roleName) VALUES ('Admin');
+INSERT INTO horse_racing.role (name) VALUES ('Handicapper');
+INSERT INTO horse_racing.role (name) VALUES ('Bookmaker');
+INSERT INTO horse_racing.role (name) VALUES ('Admin');
+
+INSERT INTO horse_racing.bet_type (name) VALUES ('Show');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Place');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Win');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Quinella');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Exacta');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Trifecta');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Superfecta');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Daily Double');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Pick 3');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Pick 4');
+INSERT INTO horse_racing.bet_type (name) VALUES ('Pick 6');
