@@ -219,4 +219,15 @@ public class Bet implements Serializable {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Bet{" +
+                "id=" + id +
+                ", user=" + user +
+                ", betSize=" + betSize +
+                ", betType=" + betType +
+                ", participants=" + participants +
+                '}';
+    }
 }

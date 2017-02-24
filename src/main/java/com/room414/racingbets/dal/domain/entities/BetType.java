@@ -14,6 +14,7 @@ import com.room414.racingbets.dal.abstraction.entities.SimpleEntity;
  * @author Alexander Melashchenko
  * @version 1.0 24 Feb 2017
  */
+// TODO: remove this class
 public class BetType extends SimpleEntity {
     private static final long serialVersionUID = -8773086214148701974L;
 

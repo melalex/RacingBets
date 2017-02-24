@@ -144,4 +144,17 @@ public class Racecourse implements Serializable {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Racecourse{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", country=" + country +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", contact='" + contact + '\'' +
+                ", clerk='" + clerk + '\'' +
+                '}';
+    }
 }

@@ -219,4 +219,19 @@ public class ApplicationUser implements Serializable {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ApplicationUser{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", isEmailConfirmed=" + isEmailConfirmed +
+                ", balance=" + balance +
+                ", roles=" + roles +
+                '}';
+    }
 }
