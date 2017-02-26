@@ -20,114 +20,77 @@ public class Bet implements Serializable {
     private BetType betType;
     private List<Participant> participants;
 
-    // TODO: valueOf
     public enum BetType {
         /**
          * Your horse must finish 1st, 2nd, or 3rd; modest payoffs
          */
-        SHOW {
-            @Override
-            public String toString() {
-                return "Show";
-            }
-        },
+        SHOW("Show"),
         /**
          * Your horse must finish 1st or 2nd; payoffs better than to show
          */
-        PLACE {
-            @Override
-            public String toString() {
-                return "Place";
-            }
-        },
+        PLACE("Place"),
         /**
          * Your horse must finish 1st; payoff determined by the win odds
          */
-        WIN {
-            @Override
-            public String toString() {
-                return "Win";
-            }
-        },
+        WIN("Win"),
         /**
          * Your horses must finish 1st and 2nd in either order; a normal play is to box three horses
          */
-        QUINELLA {
-            @Override
-            public String toString() {
-                return "Quinella";
-            }
-        },
+        QUINELLA("Quinella"),
         /**
          * Your horses must finish 1st and 2nd in exact order; riskier bet
          * that can pay a little or a lot, depending on the horses’ odds
          */
-        EXACTA {
-            @Override
-            public String toString() {
-                return "Exacta";
-            }
-        },
+        EXACTA("Exacta"),
         /**
          * Your horses must finish 1st, 2nd, and 3rd in exact order; can
          * be expensive to play if you use a lot of horses
          */
-        TRIFECTA {
-            @Override
-            public String toString() {
-                return "Trifecta";
-            }
-        },
+        TRIFECTA("Trifecta"),
         /**
          * Your horses must finish 1st, 2nd, 3rd, and 4th; hard to bet
          * unless you have a sizeable bankroll; big payoff possible
          */
-        SUPERFECTA {
-            @Override
-            public String toString() {
-                return "Superfecta";
-            }
-        },
+        SUPERFECTA("Superfecta"),
         /**
          * Your horses must win the two consecutive races; chance for a
          * nice payoff with mid-priced horses
          */
-        DAILY_DOUBLE {
-            @Override
-            public String toString() {
-                return "Daily Double";
-            }
-        },
+        DAILY_DOUBLE("Daily Double"),
         /**
          * Your horses must win three consecutive races; it’s a
          * daily double plus another race; $1 unit makes it affordable
          */
-        PICK_3 {
-            @Override
-            public String toString() {
-                return "Pick 3";
-            }
-        },
+        PICK_3("Pick 3"),
         /**
          * Your horses must win four consecutive races; chance for a big
          * score for a modest amount
          */
-        PICK_4 {
-            @Override
-            public String toString() {
-                return "Pick 4";
-            }
-        },
+        PICK_4("Pick 4"),
         /**
          * Your horses must win six consecutive races; very expensive to
          * play; huge payoffs possible; a home run bet
          */
-        PICK_6 {
-            @Override
-            public String toString() {
-                return "Pick 6";
+        PICK_6("Pick 6");
+
+        private String name;
+
+        BetType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static BetType getRole(String name) {
+            for(BetType v : values()) {
+                if (v.getName().equalsIgnoreCase(name)) {
+                    return v;
+                }
             }
-        },
+            throw new IllegalArgumentException("There is no BetType named " + name);
+        }
     }
 
     public Bet() {

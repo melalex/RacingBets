@@ -33,28 +33,17 @@ public class ApplicationUser implements Serializable {
      */
     private Set<Role> roles = new HashSet<>();
 
-    // TODO: valueOf
     public enum Role {
         /**
          * Can bet, view history and schedule of races, looking at the statistics of the horses, jockeys and trainers.
          */
-        HANDICAPPER {
-            @Override
-            public String toString() {
-                return "Handicapper";
-            }
-        },
+        HANDICAPPER("Handicapper"),
         /**
          * Organize races and determine their winners, replenish handicapper's balance, gives winnings.
          *
          * @see ApplicationUser#balance
          */
-        BOOKMAKER {
-            @Override
-            public String toString() {
-                return "Bookmaker";
-            }
-        },
+        BOOKMAKER("Bookmaker"),
         /**
          * Adding an entities (Horse, Owner, Jockey, Trainer, Breed, Racecourse) in the database,
          * adds and removes bookmakers.
@@ -67,12 +56,31 @@ public class ApplicationUser implements Serializable {
          * @see Racecourse
          * @see ApplicationUser.Role#BOOKMAKER
          */
-        ADMIN {
-            @Override
-            public String toString() {
-                return "Admin";
+        ADMIN("Admin");
+
+        private String name;
+
+        Role(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        public static Role getRole(String name) {
+            for(Role v : values()) {
+                if (v.getName().equalsIgnoreCase(name)) {
+                    return v;
+                }
             }
-        },
+            throw new IllegalArgumentException("There is no Role named " + name);
+        }
     }
 
     public ApplicationUser() {
