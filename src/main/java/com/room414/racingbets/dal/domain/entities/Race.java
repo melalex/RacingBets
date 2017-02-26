@@ -1,5 +1,8 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.domain.enums.RaceType;
+import com.room414.racingbets.dal.domain.enums.TrackCondition;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -60,81 +63,6 @@ public class Race implements Serializable {
      * Map place -> price
      */
     private List<BigDecimal> prices;
-
-    public enum RaceType {
-        /**
-         * Where horses gallop directly between two points around a straight or oval track.
-         */
-        FLAT("flat"),
-        /**
-         * Where horses race over obstacles.
-         */
-        JUMP("jump"),
-        /**
-         * Where horses trot or pace while pulling a driver in a sulky.
-         */
-        HARNESS("harness");
-
-        private String name;
-
-        RaceType(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static RaceType getRaceType(String name) {
-            for(RaceType v : values()) {
-                if (v.getName().equalsIgnoreCase(name)) {
-                    return v;
-                }
-            }
-            throw new IllegalArgumentException("There is no RaceType named " + name);
-        }
-    }
-
-    /**
-     * Represents track surface condition type.
-     *
-     * @see <a href="https://en.wikipedia.org/wiki/Going_(horse_racing)#United_Kingdom_and_Ireland">
-     *          Track condition types
-     *      </a>
-     */
-    public enum TrackCondition {
-        HARD("Hard"),
-        FIRM("Firm"),
-        GOOD_TO_FIRM("Good to firm"),
-        GOOD("Good"),
-        GOOD_TO_SOFT("Good to soft"),
-        SOFT("Soft"),
-        HEAVY("Heavy"),
-        FAST("Fast"),
-        STANDARD_TO_FAST("Standard to fast"),
-        STANDARD("Standard"),
-        STANDARD_TO_SLOW("Standard to slow"),
-        SLOW("Slow");
-
-        private String name;
-
-        TrackCondition(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static TrackCondition getTrackCondition(String name) {
-            for(TrackCondition v : values()) {
-                if (v.getName().equalsIgnoreCase(name)) {
-                    return v;
-                }
-            }
-            throw new IllegalArgumentException("There is no TrackCondition named " + name);
-        }
-    }
 
     public Race() {
     }

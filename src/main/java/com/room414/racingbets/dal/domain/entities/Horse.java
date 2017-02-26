@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.domain.enums.Gender;
+
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -20,30 +22,6 @@ public class Horse implements Serializable {
     private Horse dam;
 
     public Horse() {
-    }
-
-    public enum Gender {
-        MARE("mare"),
-        STALLION("stallion");
-
-        private String name;
-
-        Gender(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static Gender getGender(String name) {
-            for(Gender v : values()) {
-                if (v.getName().equalsIgnoreCase(name)) {
-                    return v;
-                }
-            }
-            throw new IllegalArgumentException("There is no Gender named " + name);
-        }
     }
 
     public int getId() {

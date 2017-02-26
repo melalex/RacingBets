@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.domain.enums.Role;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -29,58 +31,9 @@ public class ApplicationUser implements Serializable {
      */
     private BigDecimal balance;
     /**
-     * Roles define specific system functionality available to a user.
+     * Roles applied to concrete User.
      */
     private Set<Role> roles = new HashSet<>();
-
-    public enum Role {
-        /**
-         * Can bet, view history and schedule of races, looking at the statistics of the horses, jockeys and trainers.
-         */
-        HANDICAPPER("Handicapper"),
-        /**
-         * Organize races and determine their winners, replenish handicapper's balance, gives winnings.
-         *
-         * @see ApplicationUser#balance
-         */
-        BOOKMAKER("Bookmaker"),
-        /**
-         * Adding an entities (Horse, Owner, Jockey, Trainer, Racecourse) in the database,
-         * adds and removes bookmakers.
-         *
-         * @see Horse
-         * @see Owner
-         * @see Jockey
-         * @see Trainer
-         * @see Racecourse
-         * @see ApplicationUser.Role#BOOKMAKER
-         */
-        ADMIN("Admin");
-
-        private String name;
-
-        Role(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        public static Role getRole(String name) {
-            for(Role v : values()) {
-                if (v.getName().equalsIgnoreCase(name)) {
-                    return v;
-                }
-            }
-            throw new IllegalArgumentException("There is no Role named " + name);
-        }
-    }
 
     public ApplicationUser() {
     }
