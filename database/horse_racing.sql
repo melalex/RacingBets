@@ -1,6 +1,6 @@
 CREATE SCHEMA `horse_racing` DEFAULT CHARACTER SET utf8;
 
-CREATE TABLE `horse_racing`.`horse` (
+CREATE TABLE `horse_racing`.`horseEntity` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `trainer_id` INT UNSIGNED NOT NULL,
@@ -208,12 +208,12 @@ ADD CONSTRAINT `bet_type_id_fkey`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
-ALTER TABLE `horse_racing`.`horse` 
+ALTER TABLE `horse_racing`.`horseEntity`
 ADD INDEX `horse_trainer_id_fkey_idx` (`trainer_id` ASC),
 ADD INDEX `horse_owner_id_fkey_idx` (`owner_id` ASC),
 ADD INDEX `horse_sire_id_fkey_idx` (`sire_id` ASC),
 ADD INDEX `horse_dam_id_fkey_idx` (`dam_id` ASC),
-ALTER TABLE `horse_racing`.`horse` 
+ALTER TABLE `horse_racing`.`horseEntity`
 ADD CONSTRAINT `horse_trainer_id_fkey`
   FOREIGN KEY (`trainer_id`)
   REFERENCES `horse_racing`.`trainer` (`id`)
@@ -226,12 +226,12 @@ ADD CONSTRAINT `horse_owner_id_fkey`
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `horse_sire_id_fkey`
   FOREIGN KEY (`sire_id`)
-  REFERENCES `horse_racing`.`horse` (`id`)
+  REFERENCES `horse_racing`.`horseEntity` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `horse_dam_id_fkey`
   FOREIGN KEY (`dam_id`)
-  REFERENCES `horse_racing`.`horse` (`id`)
+  REFERENCES `horse_racing`.`horseEntity` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
@@ -243,7 +243,7 @@ ADD INDEX `participant_trainer_id_fkey_idx` (`trainer_id` ASC);
 ALTER TABLE `horse_racing`.`participant` 
 ADD CONSTRAINT `participant_horse_id_fkey`
   FOREIGN KEY (`horse_id`)
-  REFERENCES `horse_racing`.`horse` (`id`)
+  REFERENCES `horse_racing`.`horseEntity` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `participant_rase_id_fkey`

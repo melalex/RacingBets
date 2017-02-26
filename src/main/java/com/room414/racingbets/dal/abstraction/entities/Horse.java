@@ -1,18 +1,23 @@
 package com.room414.racingbets.dal.abstraction.entities;
 
+import com.room414.racingbets.dal.domain.entities.HorseEntity;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
+import com.room414.racingbets.dal.domain.enums.Gender;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
- * Base class to Horse and its proxies.
+ * Base class to HorseEntity and its proxies.
  *
- * @see com.room414.racingbets.dal.domain.entities.Horse
+ * @see HorseEntity
  * @author Alexander Melashchenko
  * @version 1.0 26 Feb 2017
  */
-public abstract class Horse {
+public abstract class Horse implements Serializable{
+    private static final long serialVersionUID = -4727421296999383932L;
+
     public abstract int getId();
     public abstract void setId(int id);
     public abstract String getName();
@@ -23,10 +28,10 @@ public abstract class Horse {
     public abstract void setOwner(Owner owner);
     public abstract Date getBirthday();
     public abstract void setBirthday(Date birthday);
-    public abstract com.room414.racingbets.dal.domain.entities.Horse.Gender getGender();
-    public abstract void setGender(com.room414.racingbets.dal.domain.entities.Horse.Gender gender);
-    public abstract com.room414.racingbets.dal.domain.entities.Horse getSir();
-    public abstract void setSir(com.room414.racingbets.dal.domain.entities.Horse sir);
-    public abstract com.room414.racingbets.dal.domain.entities.Horse getDam();
-    public abstract void setDam(com.room414.racingbets.dal.domain.entities.Horse dam);
+    public abstract Gender getGender();
+    public abstract void setGender(Gender gender);
+    public abstract Horse getSir();
+    public abstract void setSir(Horse sir);
+    public abstract Horse getDam();
+    public abstract void setDam(Horse dam);
 }

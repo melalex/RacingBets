@@ -44,7 +44,7 @@ public class Race implements Serializable {
     private int maxAge;
 
     /**
-     * Horse min OR.
+     * Horse
      *
      * @see Participant#getOfficialRating()
      */

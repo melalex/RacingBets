@@ -1,15 +1,17 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.enums.Gender;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 /**
+ * Class that represents HorseEntity entity.
+ *
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-public class Horse implements Serializable {
+public class HorseEntity extends Horse {
     private static final long serialVersionUID = -4741079009638927620L;
 
     private int id;
@@ -21,69 +23,85 @@ public class Horse implements Serializable {
     private Horse sir;
     private Horse dam;
 
-    public Horse() {
+    public HorseEntity() {
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public Trainer getTrainer() {
         return trainer;
     }
 
+    @Override
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
     }
 
+    @Override
     public Owner getOwner() {
         return owner;
     }
 
+    @Override
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
 
+    @Override
     public Date getBirthday() {
         return birthday;
     }
 
+    @Override
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
+    @Override
     public Gender getGender() {
         return gender;
     }
 
+    @Override
     public void setGender(Gender gender) {
         this.gender = gender;
     }
 
+    @Override
     public Horse getSir() {
         return sir;
     }
 
+    @Override
     public void setSir(Horse sir) {
         this.sir = sir;
     }
 
+    @Override
     public Horse getDam() {
         return dam;
     }
 
+    @Override
     public void setDam(Horse dam) {
         this.dam = dam;
     }
@@ -98,37 +116,37 @@ public class Horse implements Serializable {
             return false;
         }
 
-        Horse horse = (Horse) o;
+        HorseEntity horseEntity = (HorseEntity) o;
 
-        if (id != horse.id) {
+        if (id != horseEntity.id) {
             return false;
         }
 
-        if (name != null ? !name.equals(horse.name) : horse.name != null) {
+        if (name != null ? !name.equals(horseEntity.name) : horseEntity.name != null) {
             return false;
         }
 
-        if (trainer != null ? !trainer.equals(horse.trainer) : horse.trainer != null) {
+        if (trainer != null ? !trainer.equals(horseEntity.trainer) : horseEntity.trainer != null) {
             return false;
         }
 
-        if (owner != null ? !owner.equals(horse.owner) : horse.owner != null) {
+        if (owner != null ? !owner.equals(horseEntity.owner) : horseEntity.owner != null) {
             return false;
         }
 
-        if (birthday != null ? !birthday.equals(horse.birthday) : horse.birthday != null) {
+        if (birthday != null ? !birthday.equals(horseEntity.birthday) : horseEntity.birthday != null) {
             return false;
         }
 
-        if (gender != horse.gender) {
+        if (gender != horseEntity.gender) {
             return false;
         }
 
-        if (sir != null ? !sir.equals(horse.sir) : horse.sir != null) {
+        if (sir != null ? !sir.equals(horseEntity.sir) : horseEntity.sir != null) {
             return false;
         }
 
-        if (dam != null ? !dam.equals(horse.dam) : horse.dam != null) {
+        if (dam != null ? !dam.equals(horseEntity.dam) : horseEntity.dam != null) {
             return false;
         }
 
@@ -152,7 +170,7 @@ public class Horse implements Serializable {
 
     @Override
     public String toString() {
-        return "Horse{" +
+        return "HorseEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", trainer=" + trainer +

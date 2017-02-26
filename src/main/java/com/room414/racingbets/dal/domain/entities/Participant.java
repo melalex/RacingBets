@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.abstraction.entities.Horse;
+
 import java.io.Serializable;
 
 /**
@@ -77,8 +79,8 @@ public class Participant implements Serializable {
         return horse;
     }
 
-    public void setHorse(Horse horse) {
-        this.horse = horse;
+    public void setHorse(HorseEntity horseEntity) {
+        this.horse = horseEntity;
     }
 
     public float getCarriedWeight() {

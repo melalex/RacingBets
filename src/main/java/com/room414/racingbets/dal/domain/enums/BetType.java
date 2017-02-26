@@ -4,7 +4,7 @@ package com.room414.racingbets.dal.domain.enums;
  * Enum that represents type of bet.
  *
  * @see <a href="http://www.dummies.com/games/casino-games/betting-on-horse-racing-for-dummies-cheat-sheet/">
- *          Horse race beting
+ *          HorseEntity race beting
  *      </a>
  *
  * @author Alexander Melashchenko
