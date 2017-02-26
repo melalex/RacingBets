@@ -8,10 +8,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Class that represent race.
+ *
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-// TODO: add comments
 public class Race implements Serializable {
     private static final long serialVersionUID = 8351694393075721386L;
 
@@ -21,47 +22,78 @@ public class Race implements Serializable {
     /**
      * Race's start date and time.
      */
-    // TODO: change to SQL DATETIME
     private Timestamp start;
-    private Weather weather;
+    /**
+     * Description of ground conditions
+     */
     private TrackCondition trackCondition;
     private RaceType raceType;
 
-    // TODO: add comment
     private int raceClass;
+
+    /**
+     * Horse min age.
+     */
     private int minAge;
+    /**
+     * Horse max age.
+     */
     private int maxAge;
-    // TODO: rename to rating in db
+
+    /**
+     * Horse min OR.
+     *
+     * @see Participant#getOfficialRating()
+     */
     private int minRating;
+    /**
+     * Horse max OR.
+     *
+     * @see Participant#getOfficialRating()
+     */
     private int maxRating;
 
     private float distance;
-    private String verdict;
 
-    // TODO: change db representation
+    private List<Participant> participants;
+    /**
+     * Map place -> price
+     */
     private List<BigDecimal> prices;
 
     // TODO: add comment
-    // TODO: valueOf
     public enum RaceType {
-        FLAT {
-            @Override
-            public String toString() {
-                return "flat";
+        /**
+         * Where horses gallop directly between two points around a straight or oval track.
+         */
+        FLAT("flat"),
+        /**
+         * Where horses race over obstacles.
+         */
+        JUMP("jump"),
+        /**
+         * Where horses trot or pace while pulling a driver in a sulky.
+         */
+        HARNESS("harness");
+
+        private String name;
+
+        RaceType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static RaceType getRaceType(String name) {
+            for(RaceType v : values()) {
+                if (v.getName().equalsIgnoreCase(name)) {
+                    return v;
+                }
             }
-        },
-        JUMP {
-            @Override
-            public String toString() {
-                return "jump";
-            }
-        },
-        HARNESS {
-            @Override
-            public String toString() {
-                return "harness";
-            }
-        },
+            throw new IllegalArgumentException("There is no RaceType named " + name);
+        }
     }
 
     /**
@@ -69,80 +101,38 @@ public class Race implements Serializable {
      *
      * @link https://en.wikipedia.org/wiki/Going_(horse_racing)#United_Kingdom_and_Ireland
      */
-    // TODO: valueOf
     public enum TrackCondition {
-        HARD {
-            @Override
-            public String toString() {
-                return "Hard";
+        HARD("Hard"),
+        FIRM("Firm"),
+        GOOD_TO_FIRM("Good to firm"),
+        GOOD("Good"),
+        GOOD_TO_SOFT("Good to soft"),
+        SOFT("Soft"),
+        HEAVY("Heavy"),
+        FAST("Fast"),
+        STANDARD_TO_FAST("Standard to fast"),
+        STANDARD("Standard"),
+        STANDARD_TO_SLOW("Standard to slow"),
+        SLOW("Slow");
+
+        private String name;
+
+        TrackCondition(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static TrackCondition getTrackCondition(String name) {
+            for(TrackCondition v : values()) {
+                if (v.getName().equalsIgnoreCase(name)) {
+                    return v;
+                }
             }
-        },
-        FIRM {
-            @Override
-            public String toString() {
-                return "Firm";
-            }
-        },
-        GOOD_TO_FIRM {
-            @Override
-            public String toString() {
-                return "Good to firm";
-            }
-        },
-        GOOD {
-            @Override
-            public String toString() {
-                return "Good";
-            }
-        },
-        GOOD_TO_SOFT {
-            @Override
-            public String toString() {
-                return "Good to soft";
-            }
-        },
-        SOFT {
-            @Override
-            public String toString() {
-                return "Soft";
-            }
-        },
-        HEAVY {
-            @Override
-            public String toString() {
-                return "Heavy";
-            }
-        },
-        FAST {
-            @Override
-            public String toString() {
-                return "Fast";
-            }
-        },
-        STANDARD_TO_FAST {
-            @Override
-            public String toString() {
-                return "Standard to fast";
-            }
-        },
-        STANDARD {
-            @Override
-            public String toString() {
-                return "Standard";
-            }
-        },
-        STANDARD_TO_SLOW {
-            @Override
-            public String toString() {
-                return "Standard to slow";
-            }
-        },
-        SLOW{
-            @Override
-            public String toString() {
-                return "Slow";
-            }
-        },
+            throw new IllegalArgumentException("There is no TrackCondition named " + name);
+        }
     }
 
     public Race() {
@@ -178,14 +168,6 @@ public class Race implements Serializable {
 
     public void setStart(Timestamp start) {
         this.start = start;
-    }
-
-    public Weather getWeather() {
-        return weather;
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
     }
 
     public TrackCondition getTrackCondition() {
@@ -252,14 +234,6 @@ public class Race implements Serializable {
         this.distance = distance;
     }
 
-    public String getVerdict() {
-        return verdict;
-    }
-
-    public void setVerdict(String verdict) {
-        this.verdict = verdict;
-    }
-
     public List<BigDecimal> getPrices() {
         List<BigDecimal> result = new ArrayList<>();
         Collections.copy(result, prices);
@@ -322,19 +296,11 @@ public class Race implements Serializable {
             return false;
         }
 
-        if (weather != null ? !weather.equals(race.weather) : race.weather != null) {
-            return false;
-        }
-
         if (trackCondition != null ? !trackCondition.equals(race.trackCondition) : race.trackCondition != null) {
             return false;
         }
 
         if (raceType != race.raceType) {
-            return false;
-        }
-
-        if (verdict != null ? !verdict.equals(race.verdict) : race.verdict != null) {
             return false;
         }
 
@@ -352,7 +318,6 @@ public class Race implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (racecourse != null ? racecourse.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
-        result = 31 * result + (weather != null ? weather.hashCode() : 0);
         result = 31 * result + (trackCondition != null ? trackCondition.hashCode() : 0);
         result = 31 * result + (raceType != null ? raceType.hashCode() : 0);
         result = 31 * result + raceClass;
@@ -361,7 +326,6 @@ public class Race implements Serializable {
         result = 31 * result + minRating;
         result = 31 * result + maxRating;
         result = 31 * result + (distance != +0.0f ? Float.floatToIntBits(distance) : 0);
-        result = 31 * result + (verdict != null ? verdict.hashCode() : 0);
         result = 31 * result + (prices != null ? prices.hashCode() : 0);
 
         return result;
@@ -374,7 +338,6 @@ public class Race implements Serializable {
                 ", name='" + name + '\'' +
                 ", racecourse=" + racecourse +
                 ", start=" + start +
-                ", weather=" + weather +
                 ", trackCondition=" + trackCondition +
                 ", raceType=" + raceType +
                 ", raceClass=" + raceClass +
@@ -383,7 +346,6 @@ public class Race implements Serializable {
                 ", minRating=" + minRating +
                 ", maxRating=" + maxRating +
                 ", distance=" + distance +
-                ", verdict='" + verdict + '\'' +
                 ", prices=" + prices +
                 '}';
     }

@@ -51,13 +51,12 @@ CREATE TABLE `horse_racing`.`race` (
   `name` VARCHAR(45) NOT NULL,
   `racecourse_id` INT UNSIGNED NOT NULL,
   `start_date_time` DATETIME NOT NULL,
-  `weather_id` INT UNSIGNED NOT NULL,
   `going_id` INT UNSIGNED NOT NULL,
   `race_type` ENUM('flat', 'jump', 'harness') NOT NULL,
   `race_class` INT(2) UNSIGNED NOT NULL,
   `min_age` INT(2) UNSIGNED NOT NULL,
-  `min_raiting` INT(5) UNSIGNED NOT NULL,
-  `max_raiting` INT(5) UNSIGNED NOT NULL,
+  `min_rating` INT(5) UNSIGNED NOT NULL,
+  `max_rating` INT(5) UNSIGNED NOT NULL,
   `distance` FLOAT UNSIGNED NOT NULL,
   `verdict` MEDIUMTEXT NOT NULL,
   `price_1st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
@@ -85,14 +84,6 @@ CREATE TABLE `horse_racing`.`country` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
-CREATE TABLE `horse_racing`.`weather` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
-
-
 CREATE TABLE `horse_racing`.`going` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -107,15 +98,12 @@ CREATE TABLE `horse_racing`.`participant` (
   `rase_id` INT UNSIGNED NOT NULL,
   `carried_weight` FLOAT UNSIGNED NOT NULL,
   `topspeed` INT(3) UNSIGNED NOT NULL,
-  `racing_post_rating` INT(4) UNSIGNED NOT NULL,
   `official_rating` INT(5) UNSIGNED NOT NULL,
   `ods_numerator` INT(4) UNSIGNED NOT NULL,
   `ods_denominator` INT(4) UNSIGNED NOT NULL,
-  `head_gear` ENUM('blinkers', 'visor', 'eyeshield', 'hood, tongue-strap', 'sheepskin cheekpieces') NOT NULL,
   `jockey_id` INT UNSIGNED NOT NULL,
   `trainer_id` INT UNSIGNED NOT NULL,
   `place` INT(2) UNSIGNED NOT NULL,
-  `winner` ENUM('cd', 'c', 'd', 'bf') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -281,7 +269,6 @@ ADD CONSTRAINT `participant_trainer_id_fkey`
 
 ALTER TABLE `horse_racing`.`race` 
 ADD INDEX `race_racecourse_id_fkey_idx` (`racecourse_id` ASC),
-ADD INDEX `race_weather_id_fkey_idx` (`weather_id` ASC),
 ADD INDEX `race_going_id_fkey_idx` (`going_id` ASC);
 ALTER TABLE `horse_racing`.`race` 
 ADD CONSTRAINT `race_racecourse_id_fkey`
@@ -289,12 +276,7 @@ ADD CONSTRAINT `race_racecourse_id_fkey`
   REFERENCES `horse_racing`.`racecourse` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
-ADD CONSTRAINT `race_weather_id_fkey`
-  FOREIGN KEY (`weather_id`)
-  REFERENCES `horse_racing`.`weather` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-  ADD CONSTRAINT `race_going_id_fkey`
+ADD CONSTRAINT `race_going_id_fkey`
   FOREIGN KEY (`going_id`)
   REFERENCES `horse_racing`.`going` (`id`)
   ON DELETE NO ACTION
@@ -335,32 +317,6 @@ ADD CONSTRAINT `trainer_country_id_fkey`
   REFERENCES `horse_racing`.`country` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
-  
-INSERT INTO horse_racing.weather (name) VALUES ('Rainy');
-INSERT INTO horse_racing.weather (name) VALUES ('Stormy');
-INSERT INTO horse_racing.weather (name) VALUES ('Sunny');
-INSERT INTO horse_racing.weather (name) VALUES ('Cloudy');
-INSERT INTO horse_racing.weather (name) VALUES ('Hot');
-INSERT INTO horse_racing.weather (name) VALUES ('Cold');
-INSERT INTO horse_racing.weather (name) VALUES ('Dry');
-INSERT INTO horse_racing.weather (name) VALUES ('Wet');
-INSERT INTO horse_racing.weather (name) VALUES ('Windy');
-INSERT INTO horse_racing.weather (name) VALUES ('Hurricanes');
-INSERT INTO horse_racing.weather (name) VALUES ('Typhoons');
-INSERT INTO horse_racing.weather (name) VALUES ('Sand-storms');
-INSERT INTO horse_racing.weather (name) VALUES ('Snow-storms');
-INSERT INTO horse_racing.weather (name) VALUES ('Tornados');
-INSERT INTO horse_racing.weather (name) VALUES ('Humid');
-INSERT INTO horse_racing.weather (name) VALUES ('Foggy');
-INSERT INTO horse_racing.weather (name) VALUES ('Snow');
-INSERT INTO horse_racing.weather (name) VALUES ('Thundersnow');
-INSERT INTO horse_racing.weather (name) VALUES ('Hail');
-INSERT INTO horse_racing.weather (name) VALUES ('Sleet');
-INSERT INTO horse_racing.weather (name) VALUES ('Drought');
-INSERT INTO horse_racing.weather (name) VALUES ('Wildfire');
-INSERT INTO horse_racing.weather (name) VALUES ('Blizzard');
-INSERT INTO horse_racing.weather (name) VALUES ('Avalanche');
-INSERT INTO horse_racing.weather (name) VALUES ('Mist');
 
 INSERT INTO horse_racing.going (name) VALUES ('Hard');
 INSERT INTO horse_racing.going (name) VALUES ('Firm');

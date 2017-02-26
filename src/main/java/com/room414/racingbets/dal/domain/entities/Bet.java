@@ -83,7 +83,7 @@ public class Bet implements Serializable {
             return name;
         }
 
-        public static BetType getRole(String name) {
+        public static BetType getBetType(String name) {
             for(BetType v : values()) {
                 if (v.getName().equalsIgnoreCase(name)) {
                     return v;
