@@ -45,14 +45,13 @@ public class ApplicationUser implements Serializable {
          */
         BOOKMAKER("Bookmaker"),
         /**
-         * Adding an entities (Horse, Owner, Jockey, Trainer, Breed, Racecourse) in the database,
+         * Adding an entities (Horse, Owner, Jockey, Trainer, Racecourse) in the database,
          * adds and removes bookmakers.
          *
          * @see Horse
          * @see Owner
          * @see Jockey
          * @see Trainer
-         * @see Breed
          * @see Racecourse
          * @see ApplicationUser.Role#BOOKMAKER
          */

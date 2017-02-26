@@ -9,7 +9,6 @@ CREATE TABLE `horse_racing`.`horse` (
   `gender` ENUM('mare', 'stallion') NOT NULL,
   `sire_id` INT UNSIGNED NULL,
   `dam_id` INT UNSIGNED NULL,
-  `breed_id` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
   
@@ -38,13 +37,6 @@ CREATE TABLE `horse_racing`.`trainer` (
   `birthday` DATE,
   `country_id` INT UNSIGNED,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
-  
-CREATE TABLE `horse_racing`.`breed` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
 
 CREATE TABLE `horse_racing`.`race` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -221,7 +213,6 @@ ADD INDEX `horse_trainer_id_fkey_idx` (`trainer_id` ASC),
 ADD INDEX `horse_owner_id_fkey_idx` (`owner_id` ASC),
 ADD INDEX `horse_sire_id_fkey_idx` (`sire_id` ASC),
 ADD INDEX `horse_dam_id_fkey_idx` (`dam_id` ASC),
-ADD INDEX `horse_breed_id_fkey_idx` (`breed_id` ASC);
 ALTER TABLE `horse_racing`.`horse` 
 ADD CONSTRAINT `horse_trainer_id_fkey`
   FOREIGN KEY (`trainer_id`)
@@ -241,11 +232,6 @@ ADD CONSTRAINT `horse_sire_id_fkey`
 ADD CONSTRAINT `horse_dam_id_fkey`
   FOREIGN KEY (`dam_id`)
   REFERENCES `horse_racing`.`horse` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `horse_breed_id_fkey`
-  FOREIGN KEY (`breed_id`)
-  REFERENCES `horse_racing`.`breed` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   

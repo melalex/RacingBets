@@ -18,7 +18,6 @@ public class Horse implements Serializable {
     private Gender gender;
     private Horse sir;
     private Horse dam;
-    private Breed breed;
 
     public Horse() {
     }
@@ -111,14 +110,6 @@ public class Horse implements Serializable {
         this.dam = dam;
     }
 
-    public Breed getBreed() {
-        return breed;
-    }
-
-    public void setBreed(Breed breed) {
-        this.breed = breed;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -163,10 +154,6 @@ public class Horse implements Serializable {
             return false;
         }
 
-        if (breed != null ? !breed.equals(horse.breed) : horse.breed != null) {
-            return false;
-        }
-
         return true;
     }
 
@@ -181,7 +168,6 @@ public class Horse implements Serializable {
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (sir != null ? sir.hashCode() : 0);
         result = 31 * result + (dam != null ? dam.hashCode() : 0);
-        result = 31 * result + (breed != null ? breed.hashCode() : 0);
 
         return result;
     }
@@ -197,7 +183,6 @@ public class Horse implements Serializable {
                 ", gender=" + gender +
                 ", sir=" + sir +
                 ", dam=" + dam +
-                ", breed=" + breed +
                 '}';
     }
 }
