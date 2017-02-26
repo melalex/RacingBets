@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @version 1.0 23 Feb 2017
  */
 public class Breed implements Serializable {
+    private static final long serialVersionUID = -8486320747087470275L;
 
     private int id;
     private String name;
