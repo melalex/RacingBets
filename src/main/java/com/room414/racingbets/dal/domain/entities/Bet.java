@@ -7,7 +7,9 @@ import java.util.List;
 /**
  * Class that represents a bet of handicapper.
  *
- * @link http://www.dummies.com/games/casino-games/betting-on-horse-racing-for-dummies-cheat-sheet/
+ * @see <a href="http://www.dummies.com/games/casino-games/betting-on-horse-racing-for-dummies-cheat-sheet/">
+ *          Horse race beting
+ *      </a>
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */

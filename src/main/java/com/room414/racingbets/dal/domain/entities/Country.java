@@ -5,13 +5,6 @@ import java.io.Serializable;
 /**
  * Class that represents country entity
  *
- * <h4>Fields</h4>
- * <ul>
- *      <li>id - country id</li>
- *      <li>name - country name</li>
- *      <li>code - ISO 3166 country code { @link https://en.wikipedia.org/wiki/ISO_3166 } </li>
- * </ul>
- *
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
@@ -28,7 +21,7 @@ public class Country implements Serializable {
     private String name;
     /** ISO 3166 country code.
      *
-     * @link https://en.wikipedia.org/wiki/ISO_3166
+     * @see <a href="https://en.wikipedia.org/wiki/ISO_3166">ISO 3166</a>
      */
     private String code;
 

@@ -61,7 +61,6 @@ public class Race implements Serializable {
      */
     private List<BigDecimal> prices;
 
-    // TODO: add comment
     public enum RaceType {
         /**
          * Where horses gallop directly between two points around a straight or oval track.
@@ -99,7 +98,9 @@ public class Race implements Serializable {
     /**
      * Represents track surface condition type.
      *
-     * @link https://en.wikipedia.org/wiki/Going_(horse_racing)#United_Kingdom_and_Ireland
+     * @see <a href="https://en.wikipedia.org/wiki/Going_(horse_racing)#United_Kingdom_and_Ireland">
+     *          Track condition types
+     *      </a>
      */
     public enum TrackCondition {
         HARD("Hard"),
