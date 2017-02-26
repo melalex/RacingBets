@@ -41,71 +41,71 @@ public class HorseLazyLoadProxy extends Horse {
 
     @Override
     public String getName() {
-        return horse.getName();
+        return getHorse().getName();
     }
 
     @Override
     public void setName(String name) {
-        horse.setName(name);
+        getHorse().setName(name);
     }
 
     @Override
     public Trainer getTrainer() {
-        return horse.getTrainer();
+        return getHorse().getTrainer();
     }
 
     @Override
     public void setTrainer(Trainer trainer) {
-        horse.setTrainer(trainer);
+        getHorse().setTrainer(trainer);
     }
 
     @Override
     public Owner getOwner() {
-        return horse.getOwner();
+        return getHorse().getOwner();
     }
 
     @Override
     public void setOwner(Owner owner) {
-        horse.setOwner(owner);
+        getHorse().setOwner(owner);
     }
 
     @Override
     public Date getBirthday() {
-        return horse.getBirthday();
+        return getHorse().getBirthday();
     }
 
     @Override
     public void setBirthday(Date birthday) {
-        horse.setBirthday(birthday);
+        getHorse().setBirthday(birthday);
     }
 
     @Override
     public Gender getGender() {
-        return horse.getGender();
+        return getHorse().getGender();
     }
 
     @Override
     public void setGender(Gender gender) {
-        horse.setGender(gender);
+        getHorse().setGender(gender);
     }
 
     @Override
     public Horse getSir() {
-        return horse.getSir();
+        return getHorse().getSir();
     }
 
     @Override
     public void setSir(Horse sir) {
-        horse.setSir(sir);
+        getHorse().setSir(sir);
     }
 
     @Override
     public Horse getDam() {
-        return horse.getDam();
+        return getHorse().getDam();
     }
 
     @Override
     public void setDam(Horse dam) {
-        horse.setDam(dam);
+        getHorse().setDam(dam);
     }
 }
