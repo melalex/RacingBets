@@ -58,11 +58,20 @@ CREATE TABLE `horse_racing`.`race` (
   `min_rating` INT(5) UNSIGNED NOT NULL,
   `max_rating` INT(5) UNSIGNED NOT NULL,
   `distance` FLOAT UNSIGNED NOT NULL,
-  `verdict` MEDIUMTEXT NOT NULL,
-  `price_1st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
-  `price_2st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
-  `price_3st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
-  `price_4st_palce` DECIMAL(12, 2) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+CREATE TABLE `horse_racing`.`race_price` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `race_id` INT UNSIGNED NOT NULL,
+  `price_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+CREATE TABLE `horse_racing`.`price` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `price_size` DECIMAL(12, 2) UNSIGNED NOT NULL,
+  `place` INT(2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -279,6 +288,21 @@ ADD CONSTRAINT `race_racecourse_id_fkey`
 ADD CONSTRAINT `race_going_id_fkey`
   FOREIGN KEY (`going_id`)
   REFERENCES `horse_racing`.`going` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `horse_racing`.`race_price` 
+ADD INDEX `race_price_race_id_fkey_idx` (`race_id` ASC),
+ADD INDEX `race_price_price_id_fkey_idx` (`price_id` ASC);
+ALTER TABLE `horse_racing`.`race_price` 
+ADD CONSTRAINT `race_price_racecourse_id_fkey`
+  FOREIGN KEY (`race_id`)
+  REFERENCES `horse_racing`.`race` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `race_price_price_id_fkey`
+  FOREIGN KEY (`price_id`)
+  REFERENCES `horse_racing`.`price` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
