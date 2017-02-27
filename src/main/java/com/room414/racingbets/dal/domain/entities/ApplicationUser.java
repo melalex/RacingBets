@@ -10,6 +10,8 @@ import java.util.Set;
 /**
  * Class that represents a system actor.
  *
+ * <p>To create instances of ApplicationUser is recommended to use the ApplicationUserBuilder</p>
+ *
  * @see com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
@@ -105,13 +107,16 @@ public class ApplicationUser implements Serializable {
 
     public Set<Role> getRoles() {
         Set<Role> result = new HashSet<>();
-        result.addAll(roles);
+
+        if (roles != null) {
+            result.addAll(roles);
+        }
+
         return result;
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles.clear();
-        this.roles.addAll(roles);
+        this.roles = roles;
     }
 
     @Override

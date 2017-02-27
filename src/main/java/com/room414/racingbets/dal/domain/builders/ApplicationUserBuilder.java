@@ -25,6 +25,13 @@ public class ApplicationUserBuilder {
     private BigDecimal balance;
     private Set<Role> roles;
 
+    private Set<Role> getRoles() {
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
+        return roles;
+    }
+
     public ApplicationUserBuilder setId(int id) {
         this.id = id ;
         return this;
@@ -70,6 +77,11 @@ public class ApplicationUserBuilder {
         return this;
     }
 
+    public ApplicationUserBuilder addRole(Role role) {
+        getRoles().add(role);
+        return this;
+    }
+
     public ApplicationUser build() {
         ApplicationUser applicationUser = new ApplicationUser();
 
@@ -81,7 +93,7 @@ public class ApplicationUserBuilder {
         applicationUser.setLastName(lastName);
         applicationUser.setBalance(balance);
         applicationUser.setEmailConfirmed(isEmailConfirmed);
-        applicationUser.setRoles(roles);
+        applicationUser.setRoles(getRoles());
 
         return applicationUser;
     }
