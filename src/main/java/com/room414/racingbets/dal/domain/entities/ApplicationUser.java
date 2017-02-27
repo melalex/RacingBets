@@ -10,6 +10,7 @@ import java.util.Set;
 /**
  * Class that represents a system actor.
  *
+ * @see com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
@@ -27,7 +28,7 @@ public class ApplicationUser implements Serializable {
      */
     private boolean isEmailConfirmed;
     /**
-     * The cash balance of the user
+     * The cash balance of the user.
      */
     private BigDecimal balance;
     /**

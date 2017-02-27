@@ -4,54 +4,85 @@ import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Simplify creating ApplicationUser instance using builder pattern.
  *
+ * @see ApplicationUser
  * @author Alexander Melashchenko
  * @version 1.0 27 Feb 2017
  */
 public class ApplicationUserBuilder {
-    private ApplicationUser applicationUser = new ApplicationUser();
+    private int id;
+    private String login;
+    private String email;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private boolean isEmailConfirmed;
+    private BigDecimal balance;
+    private Set<Role> roles;
 
-    public void setId(int id) {
-        applicationUser.setId(id);
+    public ApplicationUserBuilder setId(int id) {
+        this.id = id ;
+        return this;
     }
 
-    public void setLogin(String login) {
-        applicationUser.setLogin(login);
+    public ApplicationUserBuilder setLogin(String login) {
+        this.login = login;
+        return this;
     }
 
-    public void setEmail(String email) {
-        applicationUser.setEmail(email);
+    public ApplicationUserBuilder setEmail(String email) {
+        this.email = email;
+        return this;
     }
 
-    public void setPassword(String password) {
-        applicationUser.setPassword(password);
+    public ApplicationUserBuilder setPassword(String password) {
+        this.password = password;
+        return this;
     }
 
-    public void setFirstName(String firstName) {
-        applicationUser.setFirstName(firstName);
+    public ApplicationUserBuilder setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
     }
 
-    public void setLastName(String lastName) {
-        applicationUser.setLastName(lastName);
+    public ApplicationUserBuilder setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
     }
 
-    public void setEmailConfirmed(boolean emailConfirmed) {
-        applicationUser.setEmailConfirmed(emailConfirmed);
+    public ApplicationUserBuilder setEmailConfirmed(boolean emailConfirmed) {
+        this.isEmailConfirmed = emailConfirmed;
+        return this;
     }
 
-    public void setBalance(BigDecimal balance) {
-        applicationUser.setBalance(balance);
+    public ApplicationUserBuilder setBalance(BigDecimal balance) {
+        this.balance = balance;
+        return this;
     }
 
-    public void setRoles(Set<Role> roles) {
-        applicationUser.setRoles(roles);
+    public ApplicationUserBuilder setRoles(Set<Role> roles) {
+        this.roles = roles;
+        return this;
     }
 
     public ApplicationUser build() {
+        ApplicationUser applicationUser = new ApplicationUser();
+
+        applicationUser.setId(id);
+        applicationUser.setLogin(login);
+        applicationUser.setPassword(password);
+        applicationUser.setEmail(email);
+        applicationUser.setFirstName(firstName);
+        applicationUser.setLastName(lastName);
+        applicationUser.setBalance(balance);
+        applicationUser.setEmailConfirmed(isEmailConfirmed);
+        applicationUser.setRoles(roles);
+
         return applicationUser;
     }
 }
