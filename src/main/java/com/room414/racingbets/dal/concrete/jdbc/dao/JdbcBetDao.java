@@ -1,20 +1,26 @@
-package com.room414.racingbets.dal.abstraction.dao;
+package com.room414.racingbets.dal.concrete.jdbc.dao;
+
+import com.room414.racingbets.dal.abstraction.dao.BetDao;
+import com.room414.racingbets.dal.domain.entities.Bet;
 
 import java.util.List;
 
 /**
- * Interface of DAO that provides default CRUD operation.
+ * Implementation of BetDao that uses JDBC as data source.
  *
  * @author Alexander Melashchenko
- * @version 1.0 26 Feb 2017
+ * @version 1.0 28 Feb 2017
  */
-public interface CrudDao<K, E> {
+public class JdbcBetDao implements BetDao {
     /**
      * Add new entity to repository
      *
      * @param entity entity that should be added to data store.
      */
-    void create(E entity);
+    @Override
+    public void create(Bet entity) {
+
+    }
 
     /**
      * Find entity by id.
@@ -22,24 +28,36 @@ public interface CrudDao<K, E> {
      * @param id id of entity
      * @return entity with id == param id
      */
-    E find(K id);
+    @Override
+    public Bet find(Integer id) {
+        return null;
+    }
 
     /**
      * @return All entities T that stores in data store.
      */
-    List<E> findAll();
+    @Override
+    public List<Bet> findAll() {
+        return null;
+    }
 
     /**
      * Updates value of entity param in data store
      *
      * @param entity entity to update
      */
-    void update(E entity);
+    @Override
+    public void update(Bet entity) {
+
+    }
 
     /**
      * Removes entity T with specific id from data store.
      *
      * @param id id of entity to remove
      */
-    void delete(K id);
+    @Override
+    public void delete(Integer id) {
+
+    }
 }
