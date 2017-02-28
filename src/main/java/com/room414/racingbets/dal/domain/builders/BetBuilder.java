@@ -8,7 +8,6 @@ import com.room414.racingbets.dal.domain.enums.BetType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Simplify creating Bet instance using builder pattern.
@@ -66,16 +65,8 @@ public class BetBuilder {
         return this;
     }
 
-    public BetBuilder setParticipantsByIds(List<Integer> participantsIds) {
-        if (participantsIds != null) {
-            this.participants = participantsIds.stream().map((id) -> {
-                Participant participant = new ParticipantBuilder().createParticipant();
-                participant.setId(id);
-                return participant;
-            }).collect(Collectors.toList());
-        } else {
-            this.participants = null;
-        }
+    public BetBuilder setParticipantsByIds(List<Integer> Ids) {
+        this.participants = BuildHelper.mapIdsToParticipants(Ids);
         return this;
     }
 
@@ -85,7 +76,7 @@ public class BetBuilder {
     }
 
     public BetBuilder addParticipantById(int id) {
-        Participant participant = new ParticipantBuilder().createParticipant();
+        Participant participant = new Participant();
         participant.setId(id);
         getParticipants().add(participant);
         return this;
