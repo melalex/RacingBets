@@ -9,8 +9,7 @@ import java.util.Set;
 
 /**
  * Class that represents a system actor.
- *
- * <p>To create instances of ApplicationUser is recommended to use the ApplicationUserBuilder</p>
+ * To create instances of ApplicationUser is recommended to use the ApplicationUserBuilder.
  *
  * @see com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder
  * @author Alexander Melashchenko

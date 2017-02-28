@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.abstraction.entities.Person;
 
 /**
  * Horse owner.
- * <p>To create instances of Owner is recommended to use the OwnerBuilder</p>
+ * To create instances of Owner is recommended to use the OwnerBuilder.
  *
  * @see com.room414.racingbets.dal.domain.builders.OwnerBuilder
  * @author Alexander Melashchenko

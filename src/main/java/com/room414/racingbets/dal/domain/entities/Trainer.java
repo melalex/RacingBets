@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.abstraction.entities.Person;
 
 /**
  * Horse trainer.
- * <p>To create instances of Trainer is recommended to use the TrainerBuilder</p>
+ * To create instances of Trainer is recommended to use the TrainerBuilder.
  *
  * @see com.room414.racingbets.dal.domain.builders.TrainerBuilder
  * @author Alexander Melashchenko

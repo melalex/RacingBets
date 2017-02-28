@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.abstraction.entities.Person;
 
 /**
  * Horse jockey.
- * <p>To create instances of Jockey is recommended to use the JockeyBuilder</p>
+ * To create instances of Jockey is recommended to use the JockeyBuilder.
  *
  * @see com.room414.racingbets.dal.domain.builders.JockeyBuilder
  * @author Alexander Melashchenko

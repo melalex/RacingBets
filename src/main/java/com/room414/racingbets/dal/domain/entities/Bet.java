@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Class that represents a bet of handicapper.
- * <p>To create instances of Bet is recommended to use the BetBuilder</p>
+ * To create instances of Bet is recommended to use the BetBuilder
  *
  * @see com.room414.racingbets.dal.domain.builders.BetBuilder
  * @author Alexander Melashchenko

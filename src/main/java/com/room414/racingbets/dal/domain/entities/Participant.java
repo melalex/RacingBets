@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 /**
  * Class that represent participant of the race.
- *
  * To create instances of Participant is recommended to use the ParticipantBuilder.
  *
  * @see com.room414.racingbets.dal.domain.builders.ParticipantBuilder
