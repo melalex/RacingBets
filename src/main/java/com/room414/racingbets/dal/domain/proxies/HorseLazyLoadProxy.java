@@ -115,7 +115,6 @@ public class HorseLazyLoadProxy extends Horse {
     }
 
     @Override
-    // TODO: add tests
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -128,18 +127,18 @@ public class HorseLazyLoadProxy extends Horse {
         if (getClass() == o.getClass()) {
             HorseLazyLoadProxy that = (HorseLazyLoadProxy) o;
 
-            return horse != null
-                    ? horse.equals(that.horse)
-                    : that.horse == null;
+            return getHorse() != null
+                    ? getHorse().equals(that.getHorse())
+                    : that.getHorse() == null;
 
         }
 
-        return horse.equals(o);
+        return getHorse().equals(o);
     }
 
     @Override
     public int hashCode() {
-        return horse != null ? horse.hashCode() : 0;
+        return getHorse() != null ? getHorse().hashCode() : 0;
     }
 
     @Override
