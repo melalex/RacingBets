@@ -3,6 +3,7 @@ package com.room414.racingbets.dal.concrete.jdbc.dao;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -13,6 +14,12 @@ import java.util.List;
  * @version 1.0 28 Feb 2017
  */
 public class JdbcApplicationUserDao implements ApplicationUserDao {
+    private Connection connection;
+
+    JdbcApplicationUserDao(Connection connection) {
+        this.connection = connection;
+    }
+
     /**
      * Add new entity to repository
      *

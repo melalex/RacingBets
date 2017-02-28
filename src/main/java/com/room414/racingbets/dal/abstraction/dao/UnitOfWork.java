@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-
 /**
  * Manages transactions to persistent storage.
  *
