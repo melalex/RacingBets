@@ -8,7 +8,9 @@ import java.util.List;
 
 /**
  * Class that represents a bet of handicapper.
+ * <p>To create instances of Bet is recommended to use the BetBuilder</p>
  *
+ * @see com.room414.racingbets.dal.domain.builders.BetBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
@@ -22,6 +24,14 @@ public class Bet implements Serializable {
     private List<Participant> participants;
 
     public Bet() {
+    }
+
+    public Bet(int id, ApplicationUser user, BigDecimal betSize, BetType betType, List<Participant> participants) {
+        this.id = id;
+        this.user = user;
+        this.betSize = betSize;
+        this.betType = betType;
+        this.participants = participants;
     }
 
     public int getId() {
