@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class that represent race.
@@ -164,13 +165,35 @@ public class Race implements Serializable {
     }
 
     public List<BigDecimal> getPrices() {
-        List<BigDecimal> result = new ArrayList<>();
-        Collections.copy(result, prices);
-        return result;
+        if (prices != null) {
+            return new ArrayList<>(prices);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public void setPrices(List<BigDecimal> prices) {
-        Collections.copy(this.prices, prices);
+        if (prices != null) {
+            this.prices = new ArrayList<>(prices);
+        } else {
+            this.prices = null;
+        }
+    }
+
+    public List<Participant> getParticipants() {
+        if (participants != null) {
+            return new ArrayList<>(participants);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        if (participants != null) {
+            this.participants = new ArrayList<>(participants);
+        } else {
+            this.participants = null;
+        }
     }
 
     @Override
@@ -237,6 +260,10 @@ public class Race implements Serializable {
             return false;
         }
 
+        if (participants != null ? !participants.equals(race.participants) : race.participants != null) {
+            return false;
+        }
+
         return true;
     }
 
@@ -256,6 +283,7 @@ public class Race implements Serializable {
         result = 31 * result + maxRating;
         result = 31 * result + (distance != +0.0f ? Float.floatToIntBits(distance) : 0);
         result = 31 * result + (prices != null ? prices.hashCode() : 0);
+        result = 31 * result + (participants != null ? participants.hashCode() : 0);
 
         return result;
     }

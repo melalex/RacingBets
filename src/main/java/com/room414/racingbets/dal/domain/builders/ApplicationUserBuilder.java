@@ -73,7 +73,11 @@ public class ApplicationUserBuilder {
     }
 
     public ApplicationUserBuilder setRoles(Set<Role> roles) {
-        this.roles = roles;
+        if (roles != null) {
+            this.roles = new HashSet<>(roles);
+        } else {
+            this.roles = null;
+        }
         return this;
     }
 

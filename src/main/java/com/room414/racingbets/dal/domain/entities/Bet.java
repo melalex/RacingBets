@@ -4,6 +4,7 @@ import com.room414.racingbets.dal.domain.enums.BetType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,14 +25,6 @@ public class Bet implements Serializable {
     private List<Participant> participants;
 
     public Bet() {
-    }
-
-    public Bet(int id, ApplicationUser user, BigDecimal betSize, BetType betType, List<Participant> participants) {
-        this.id = id;
-        this.user = user;
-        this.betSize = betSize;
-        this.betType = betType;
-        this.participants = participants;
     }
 
     public int getId() {
@@ -67,11 +60,19 @@ public class Bet implements Serializable {
     }
 
     public List<Participant> getParticipants() {
-        return participants.subList(0, participants.size() - 1);
+        if (participants != null) {
+            return new ArrayList<>(participants);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public void setParticipants(List<Participant> participants) {
-        this.participants = participants.subList(0, participants.size() - 1);
+        if (participants != null) {
+            this.participants = new ArrayList<>(participants);
+        } else {
+            this.participants = null;
+        }
     }
 
     @Override

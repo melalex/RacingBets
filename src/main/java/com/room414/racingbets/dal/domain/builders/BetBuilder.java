@@ -58,16 +58,24 @@ public class BetBuilder {
     }
 
     public BetBuilder setParticipants(List<Participant> participants) {
-        this.participants = participants;
+        if (participants != null) {
+            this.participants = new ArrayList<>(participants);
+        } else {
+            this.participants = null;
+        }
         return this;
     }
 
     public BetBuilder setParticipantsByIds(List<Integer> participantsIds) {
-        this.participants = participantsIds.stream().map((id) -> {
-            Participant participant = new ParticipantBuilder().createParticipant();
-            participant.setId(id);
-            return participant;
-        }).collect(Collectors.toList());
+        if (participantsIds != null) {
+            this.participants = participantsIds.stream().map((id) -> {
+                Participant participant = new ParticipantBuilder().createParticipant();
+                participant.setId(id);
+                return participant;
+            }).collect(Collectors.toList());
+        } else {
+            this.participants = null;
+        }
         return this;
     }
 

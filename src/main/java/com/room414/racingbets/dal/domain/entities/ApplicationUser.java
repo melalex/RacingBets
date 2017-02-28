@@ -105,17 +105,19 @@ public class ApplicationUser implements Serializable {
     }
 
     public Set<Role> getRoles() {
-        Set<Role> result = new HashSet<>();
-
         if (roles != null) {
-            result.addAll(roles);
+            return new HashSet<>(roles);
+        } else {
+            return new HashSet<>();
         }
-
-        return result;
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+        if (roles != null) {
+            this.roles = new HashSet<>(roles);
+        } else {
+            this.roles = null;
+        }
     }
 
     @Override
