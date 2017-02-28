@@ -7,7 +7,9 @@ import java.sql.Date;
 
 /**
  * Class that represents HorseEntity entity.
+ * <p>To create instances of HorseEntity is recommended to use the HorseBuilder</p>
  *
+ * @see com.room414.racingbets.dal.domain.builders.HorseBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
