@@ -9,10 +9,14 @@ import com.room414.racingbets.dal.domain.enums.Gender;
 import java.sql.Date;
 
 /**
+ * Provides Horse entity lazy load.
+ *
  * @author Alexander Melashchenko
  * @version 1.0 26 Feb 2017
  */
 public class HorseLazyLoadProxy extends Horse {
+    private static final long serialVersionUID = -5739620713735570435L;
+
     private int id;
     private Horse horse;
     private HorseDao horseDao;
@@ -24,7 +28,7 @@ public class HorseLazyLoadProxy extends Horse {
 
     private Horse getHorse() {
         if (horse == null) {
-            // TODO: Lazy load logic
+            horse = horseDao.find(id);
         }
         return horse;
     }
@@ -37,6 +41,7 @@ public class HorseLazyLoadProxy extends Horse {
     @Override
     public void setId(int id) {
         this.id = id;
+        getHorse().setId(id);
     }
 
     @Override
@@ -107,5 +112,40 @@ public class HorseLazyLoadProxy extends Horse {
     @Override
     public void setDam(Horse dam) {
         getHorse().setDam(dam);
+    }
+
+    @Override
+    // TODO: add tests
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null) {
+            return false;
+        }
+
+        if (getClass() == o.getClass()) {
+            HorseLazyLoadProxy that = (HorseLazyLoadProxy) o;
+
+            return horse != null
+                    ? horse.equals(that.horse)
+                    : that.horse == null;
+
+        }
+
+        return horse.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return horse != null ? horse.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "HorseLazyLoadProxy{" +
+                "id=" + id +
+                '}';
     }
 }

@@ -163,7 +163,7 @@ public class ApplicationUser implements Serializable {
             return false;
         }
 
-        if (!roles.equals(that.roles)) {
+        if (roles != null ? !roles.equals(that.roles) : that.roles != null) {
             return false;
         }
 

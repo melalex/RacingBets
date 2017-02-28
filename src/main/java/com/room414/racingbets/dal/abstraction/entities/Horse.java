@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.entities;
 
-import com.room414.racingbets.dal.domain.entities.HorseEntity;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.domain.enums.Gender;
@@ -11,7 +10,8 @@ import java.sql.Date;
 /**
  * Base class to HorseEntity and its proxies.
  *
- * @see HorseEntity
+ * @see com.room414.racingbets.dal.domain.entities.HorseEntity
+ * @see com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy
  * @author Alexander Melashchenko
  * @version 1.0 26 Feb 2017
  */
