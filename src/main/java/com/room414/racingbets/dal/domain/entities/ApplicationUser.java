@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.io.Serializable;
@@ -38,6 +39,10 @@ public class ApplicationUser implements Serializable {
     private Set<Role> roles = new HashSet<>();
 
     public ApplicationUser() {
+    }
+
+    public static ApplicationUserBuilder builder() {
+        return new ApplicationUserBuilder();
     }
 
     public int getId() {

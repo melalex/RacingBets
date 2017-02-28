@@ -91,7 +91,7 @@ public class BetBuilder {
         return this;
     }
 
-    public Bet createBet() {
+    public Bet build() {
         Bet bet = new Bet();
 
         bet.setId(id);

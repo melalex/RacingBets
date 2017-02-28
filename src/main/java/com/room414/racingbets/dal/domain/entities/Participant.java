@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
+import com.room414.racingbets.dal.domain.builders.ParticipantBuilder;
 
 import java.io.Serializable;
 
@@ -8,7 +9,7 @@ import java.io.Serializable;
  * Class that represent participant of the race.
  * To create instances of Participant is recommended to use the ParticipantBuilder.
  *
- * @see com.room414.racingbets.dal.domain.builders.ParticipantBuilder
+ * @see ParticipantBuilder
  * @see Race
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
@@ -59,6 +60,10 @@ public class Participant implements Serializable {
     private int place;
 
     public Participant() {
+    }
+
+    public static ParticipantBuilder builder() {
+        return new ParticipantBuilder();
     }
 
     public int getId() {

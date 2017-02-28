@@ -89,7 +89,7 @@ public class HorseBuilder {
         return this;
     }
 
-    public Horse createHorseEntity() {
+    public Horse build() {
         Horse horse = new HorseEntity();
 
         horse.setId(id);

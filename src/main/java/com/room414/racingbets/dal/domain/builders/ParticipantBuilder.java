@@ -99,7 +99,7 @@ public class ParticipantBuilder {
         return this;
     }
 
-    public Participant createParticipant() {
+    public Participant build() {
         Participant participant = new Participant();
 
         participant.setId(id);

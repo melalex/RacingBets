@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * Class that represent race.
  * To create instances of Race is recommended to use the RaceBuilder.
  *
- * @see com.room414.racingbets.dal.domain.builders.RaceBuilder
+ * @see RaceBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
@@ -66,6 +67,10 @@ public class Race implements Serializable {
     private List<BigDecimal> prices;
 
     public Race() {
+    }
+
+    public static RaceBuilder builder() {
+        return new RaceBuilder();
     }
 
     public int getId() {

@@ -163,7 +163,7 @@ public class RaceBuilder {
         return this;
     }
 
-    public Race createRace() {
+    public Race build() {
         Race race = new Race();
 
         race.setId(id);

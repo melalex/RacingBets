@@ -1,12 +1,14 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.domain.builders.RacecourseBuilder;
+
 import java.io.Serializable;
 
 /**
  * Stores information about racecourse.
  * To create instances of Race is recommended to use the RaceBuilder.
  *
- * @see com.room414.racingbets.dal.domain.builders.RacecourseBuilder
+ * @see RacecourseBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
@@ -28,6 +30,10 @@ public class Racecourse implements Serializable {
     private String clerk;
 
     public Racecourse() {
+    }
+
+    private static RacecourseBuilder builder() {
+        return new RacecourseBuilder();
     }
 
     public int getId() {
