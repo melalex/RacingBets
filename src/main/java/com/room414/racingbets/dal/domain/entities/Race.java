@@ -7,13 +7,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Class that represent race.
+ * To create instances of Race is recommended to use the RaceBuilder.
  *
+ * @see com.room414.racingbets.dal.domain.builders.RaceBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */

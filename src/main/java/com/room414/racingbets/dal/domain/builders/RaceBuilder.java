@@ -12,6 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Simplify creating Race instance using builder pattern.
+ *
+ * @see Race
+ * @author Alexander Melashchenko
+ * @version 1.0 28 Feb 2017
+ */
 public class RaceBuilder {
     private int id;
     private String name;
@@ -58,7 +65,7 @@ public class RaceBuilder {
     }
 
     public RaceBuilder setRacecourseById(int id) {
-        this.racecourse = new Racecourse();
+        this.racecourse = new RacecourseBuilder().createRacecourse();
         racecourse.setId(id);
         return this;
     }

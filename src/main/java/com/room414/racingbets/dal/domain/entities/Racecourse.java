@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 /**
  * Stores information about racecourse.
+ * To create instances of Race is recommended to use the RaceBuilder.
  *
+ * @see com.room414.racingbets.dal.domain.builders.RacecourseBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
@@ -21,7 +23,7 @@ public class Racecourse implements Serializable {
      */
     private String contact;
     /**
-     * Clerk of the course
+     * Clerk of the racecourse
      */
     private String clerk;
 
