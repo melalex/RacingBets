@@ -60,7 +60,7 @@ public class RacecourseBuilder {
         return this;
     }
 
-    public Racecourse createRacecourse() {
+    public Racecourse build() {
         Racecourse racecourse = new Racecourse();
 
         racecourse.setId(id);

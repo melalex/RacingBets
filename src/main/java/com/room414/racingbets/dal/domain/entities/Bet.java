@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.enums.BetType;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.List;
  * Class that represents a bet of handicapper.
  * To create instances of Bet is recommended to use the BetBuilder
  *
- * @see com.room414.racingbets.dal.domain.builders.BetBuilder
+ * @see BetBuilder
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
@@ -25,6 +26,10 @@ public class Bet implements Serializable {
     private List<Participant> participants;
 
     public Bet() {
+    }
+
+    public static BetBuilder builder() {
+        return new BetBuilder();
     }
 
     public int getId() {

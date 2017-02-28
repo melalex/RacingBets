@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.abstraction.entities;
 
+import com.room414.racingbets.dal.domain.builders.HorseBuilder;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.domain.enums.Gender;
@@ -17,6 +18,11 @@ import java.sql.Date;
  */
 public abstract class Horse implements Serializable{
     private static final long serialVersionUID = -4727421296999383932L;
+
+    // TODO: is cool?
+    public static HorseBuilder builder() {
+        return new HorseBuilder();
+    }
 
     public abstract int getId();
     public abstract void setId(int id);

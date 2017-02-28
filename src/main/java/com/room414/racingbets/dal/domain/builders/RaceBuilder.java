@@ -65,7 +65,7 @@ public class RaceBuilder {
     }
 
     public RaceBuilder setRacecourseById(int id) {
-        this.racecourse = new RacecourseBuilder().createRacecourse();
+        this.racecourse = new Racecourse();
         racecourse.setId(id);
         return this;
     }
@@ -125,15 +125,7 @@ public class RaceBuilder {
     }
 
     public RaceBuilder setParticipantsByIds(List<Integer> ids) {
-        if (ids != null) {
-            this.participants = ids.stream().map(id -> {
-                Participant participant = new Participant();
-                participant.setId(id);
-                return participant;
-            }).collect(Collectors.toList());
-        } else {
-            this.participants = null;
-        }
+        this.participants = BuildHelper.mapIdsToParticipants(ids);
         return this;
     }
 
@@ -163,7 +155,7 @@ public class RaceBuilder {
         return this;
     }
 
-    public Race createRace() {
+    public Race build() {
         Race race = new Race();
 
         race.setId(id);
