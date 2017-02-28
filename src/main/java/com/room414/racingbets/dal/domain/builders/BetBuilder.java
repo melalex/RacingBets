@@ -64,7 +64,7 @@ public class BetBuilder {
 
     public BetBuilder setParticipantsByIds(List<Integer> participantsIds) {
         this.participants = participantsIds.stream().map((id) -> {
-            Participant participant = new Participant();
+            Participant participant = new ParticipantBuilder().createParticipant();
             participant.setId(id);
             return participant;
         }).collect(Collectors.toList());
@@ -77,7 +77,7 @@ public class BetBuilder {
     }
 
     public BetBuilder addParticipantById(int id) {
-        Participant participant = new Participant();
+        Participant participant = new ParticipantBuilder().createParticipant();
         participant.setId(id);
         getParticipants().add(participant);
         return this;
