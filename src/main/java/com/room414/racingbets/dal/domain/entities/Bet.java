@@ -149,6 +149,7 @@ public class Bet implements Serializable {
                 ", user=" + user +
                 ", betSize=" + betSize +
                 ", betType=" + betType +
+                ", betStatus=" + betStatus +
                 ", participants=" + participants +
                 '}';
     }

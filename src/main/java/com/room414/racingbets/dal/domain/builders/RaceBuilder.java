@@ -25,6 +25,8 @@ public class RaceBuilder {
     private String name;
     private Racecourse racecourse;
     private Timestamp start;
+    private BigDecimal minBet;
+    private float commission;
     private TrackCondition trackCondition;
     private RaceType raceType;
     private RaceStatus raceStatus;
@@ -74,6 +76,16 @@ public class RaceBuilder {
 
     public RaceBuilder setStart(Timestamp start) {
         this.start = start;
+        return this;
+    }
+
+    public RaceBuilder setMinBet(BigDecimal minBet) {
+        this.minBet = minBet;
+        return this;
+    }
+
+    public RaceBuilder setCommission(float commission) {
+        this.commission = commission;
         return this;
     }
 
@@ -169,6 +181,8 @@ public class RaceBuilder {
         race.setName(name);
         race.setRacecourse(racecourse);
         race.setStart(start);
+        race.setMinBet(minBet);
+        race.setCommission(commission);
         race.setTrackCondition(trackCondition);
         race.setRaceType(raceType);
         race.setRaceStatus(raceStatus);

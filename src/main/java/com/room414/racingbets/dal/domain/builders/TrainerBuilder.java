@@ -17,7 +17,7 @@ public class TrainerBuilder extends PersonBuilder {
 
         trainer.setId(id);
         trainer.setFirstName(firstName);
-        trainer.setSecondName(secondName);
+        trainer.setLastName(secondName);
         trainer.setBirthday(birthday);
         trainer.setCountry(country);
 
