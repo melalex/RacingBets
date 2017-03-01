@@ -19,6 +19,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
+// TODO: float fields to double
 public class Race implements Serializable {
     private static final long serialVersionUID = 8351694393075721386L;
 

@@ -10,4 +10,5 @@ import com.room414.racingbets.dal.domain.entities.Country;
  * @version 1.0 27 Feb 2017
  */
 public interface CountryDao extends CrudDao<Integer, Country> {
+
 }
