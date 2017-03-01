@@ -17,7 +17,7 @@ public class JockeyBuilder extends PersonBuilder {
 
         jockey.setId(id);
         jockey.setFirstName(firstName);
-        jockey.setSecondName(secondName);
+        jockey.setLastName(secondName);
         jockey.setBirthday(birthday);
         jockey.setCountry(country);
 

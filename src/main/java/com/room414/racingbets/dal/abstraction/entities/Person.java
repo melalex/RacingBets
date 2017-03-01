@@ -16,7 +16,7 @@ public abstract class Person implements Serializable {
 
     protected int id;
     protected String firstName;
-    protected String secondName;
+    protected String lastName;
     protected Date birthday;
     protected Country country;
 
@@ -39,12 +39,12 @@ public abstract class Person implements Serializable {
         this.firstName = firstName;
     }
 
-    public String getSecondName() {
-        return secondName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Date getBirthday() {
@@ -83,7 +83,7 @@ public abstract class Person implements Serializable {
             return false;
         }
 
-        if (secondName != null ? !secondName.equals(person.secondName) : person.secondName != null) {
+        if (lastName != null ? !lastName.equals(person.lastName) : person.lastName != null) {
             return false;
         }
 
@@ -103,7 +103,7 @@ public abstract class Person implements Serializable {
         int result = id;
 
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
 
@@ -115,7 +115,7 @@ public abstract class Person implements Serializable {
         return "Person{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", country=" + country +
                 '}';

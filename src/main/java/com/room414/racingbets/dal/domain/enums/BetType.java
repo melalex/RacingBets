@@ -41,27 +41,7 @@ public enum BetType {
      * Your horses must finish 1st, 2nd, 3rd, and 4th; hard to bet
      * unless you have a sizeable bankroll; big payoff possible
      */
-    SUPERFECTA("Superfecta"),
-    /**
-     * Your horses must win the two consecutive races; chance for a
-     * nice payoff with mid-priced horses
-     */
-    DAILY_DOUBLE("Daily Double"),
-    /**
-     * Your horses must win three consecutive races; it’s a
-     * daily double plus another race; $1 unit makes it affordable
-     */
-    PICK_3("Pick 3"),
-    /**
-     * Your horses must win four consecutive races; chance for a big
-     * score for a modest amount
-     */
-    PICK_4("Pick 4"),
-    /**
-     * Your horses must win six consecutive races; very expensive to
-     * play; huge payoffs possible; a home run bet
-     */
-    PICK_6("Pick 6");
+    SUPERFECTA("Superfecta");
 
     private String name;
 

@@ -23,7 +23,7 @@ public class Owner extends Person {
         return "Owner{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", country=" + country +
                 '}';

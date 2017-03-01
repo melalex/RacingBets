@@ -10,7 +10,11 @@ public enum BetStatus {
      */
     SCHEDULED("scheduled"),
     LOSE("lose"),
-    WIN("win");
+    WIN("win"),
+    /**
+     * Bet is returned if the participant was disqualified.
+     */
+    REJECTED("rejected");
 
     private String name;
 

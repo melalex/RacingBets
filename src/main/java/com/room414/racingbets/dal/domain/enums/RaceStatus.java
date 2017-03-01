@@ -14,9 +14,13 @@ public enum  RaceStatus {
      */
     RIDING("riding"),
     /**
-     * The race is over (bet will not be accepted)
+     * The race is over (bets will not be accepted)
      */
-    FINISHED("finished");
+    FINISHED("finished"),
+    /**
+     * The race is rejected (bets will be returned)
+     */
+    REJECTED("rejected");
 
     private String name;
 

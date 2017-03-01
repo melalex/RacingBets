@@ -17,7 +17,7 @@ public class OwnerBuilder extends PersonBuilder {
 
         owner.setId(id);
         owner.setFirstName(firstName);
-        owner.setSecondName(secondName);
+        owner.setLastName(secondName);
         owner.setBirthday(birthday);
         owner.setCountry(country);
 

@@ -23,7 +23,7 @@ public class Trainer extends Person {
         return "Trainer{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", country=" + country +
                 '}';

@@ -23,7 +23,7 @@ public class Jockey extends Person {
         return "Jockey{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", country=" + country +
                 '}';

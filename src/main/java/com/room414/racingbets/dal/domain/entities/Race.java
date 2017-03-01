@@ -29,6 +29,11 @@ public class Race implements Serializable {
      * Race's start date and time.
      */
     private Timestamp start;
+    private BigDecimal minBet;
+    /**
+     * Bookmaker part from bets
+     */
+    private float commission;
     /**
      * Description of ground conditions
      */
@@ -105,6 +110,22 @@ public class Race implements Serializable {
 
     public void setStart(Timestamp start) {
         this.start = start;
+    }
+
+    public BigDecimal getMinBet() {
+        return minBet;
+    }
+
+    public void setMinBet(BigDecimal minBet) {
+        this.minBet = minBet;
+    }
+
+    public float getCommission() {
+        return commission;
+    }
+
+    public void setCommission(float commission) {
+        this.commission = commission;
     }
 
     public TrackCondition getTrackCondition() {
@@ -263,6 +284,14 @@ public class Race implements Serializable {
             return false;
         }
 
+        if (minBet != null ? !minBet.equals(race.minBet) : race.minBet != null) {
+            return false;
+        }
+
+        if (Float.compare(race.commission, commission) != 0) {
+            return false;
+        }
+
         if (trackCondition != null ? !trackCondition.equals(race.trackCondition) : race.trackCondition != null) {
             return false;
         }
@@ -293,6 +322,8 @@ public class Race implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (racecourse != null ? racecourse.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
+        result = 31 * result + (minBet != null ? minBet.hashCode() : 0);
+        result = 31 * result + (commission != +0.0f ? Float.floatToIntBits(commission) : 0);
         result = 31 * result + (trackCondition != null ? trackCondition.hashCode() : 0);
         result = 31 * result + (raceType != null ? raceType.hashCode() : 0);
         result = 31 * result + (raceStatus != null ? raceStatus.hashCode() : 0);
@@ -302,8 +333,8 @@ public class Race implements Serializable {
         result = 31 * result + minRating;
         result = 31 * result + maxRating;
         result = 31 * result + (distance != +0.0f ? Float.floatToIntBits(distance) : 0);
-        result = 31 * result + (prices != null ? prices.hashCode() : 0);
         result = 31 * result + (participants != null ? participants.hashCode() : 0);
+        result = 31 * result + (prices != null ? prices.hashCode() : 0);
 
         return result;
     }
@@ -315,14 +346,18 @@ public class Race implements Serializable {
                 ", name='" + name + '\'' +
                 ", racecourse=" + racecourse +
                 ", start=" + start +
+                ", minBet=" + minBet +
+                ", commission=" + commission +
                 ", trackCondition=" + trackCondition +
                 ", raceType=" + raceType +
+                ", raceStatus=" + raceStatus +
                 ", raceClass=" + raceClass +
                 ", minAge=" + minAge +
                 ", maxAge=" + maxAge +
                 ", minRating=" + minRating +
                 ", maxRating=" + maxRating +
                 ", distance=" + distance +
+                ", participants=" + participants +
                 ", prices=" + prices +
                 '}';
     }
