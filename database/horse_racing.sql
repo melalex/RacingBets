@@ -1,6 +1,6 @@
 CREATE SCHEMA `horse_racing` DEFAULT CHARACTER SET utf8;
 
-CREATE TABLE `horse_racing`.`horseEntity` (
+CREATE TABLE `horse_racing`.`horse` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `trainer_id` INT UNSIGNED NOT NULL,
@@ -41,8 +41,9 @@ CREATE TABLE `horse_racing`.`trainer` (
 CREATE TABLE `horse_racing`.`race` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
+  `status` ENUM('scheduled', 'riding', 'finished') NOT NULL,
   `racecourse_id` INT UNSIGNED NOT NULL,
-  `start_date_time` DATETIME NOT NULL,
+  `start_date_time` TIMESTAMP NOT NULL,
   `going_id` INT UNSIGNED NOT NULL,
   `race_type` ENUM('flat', 'jump', 'harness') NOT NULL,
   `race_class` INT(2) UNSIGNED NOT NULL,
@@ -53,15 +54,9 @@ CREATE TABLE `horse_racing`.`race` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
-CREATE TABLE `horse_racing`.`race_price` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `race_id` INT UNSIGNED NOT NULL,
-  `price_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
-
 CREATE TABLE `horse_racing`.`price` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `race_id` INT UNSIGNED NOT NULL,
   `price_size` DECIMAL(12, 2) UNSIGNED NOT NULL,
   `place` INT(2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
@@ -112,6 +107,7 @@ CREATE TABLE `horse_racing`.`bet` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED NOT NULL,
   `bet_type_id` INT UNSIGNED NOT NULL,
+  `status` ENUM('scheduled', 'win', 'lose') NOT NULL,
   `bet_size` DECIMAL(12, 2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
@@ -208,12 +204,12 @@ ADD CONSTRAINT `bet_type_id_fkey`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
-ALTER TABLE `horse_racing`.`horseEntity`
+ALTER TABLE `horse_racing`.`horse`
 ADD INDEX `horse_trainer_id_fkey_idx` (`trainer_id` ASC),
 ADD INDEX `horse_owner_id_fkey_idx` (`owner_id` ASC),
 ADD INDEX `horse_sire_id_fkey_idx` (`sire_id` ASC),
-ADD INDEX `horse_dam_id_fkey_idx` (`dam_id` ASC),
-ALTER TABLE `horse_racing`.`horseEntity`
+ADD INDEX `horse_dam_id_fkey_idx` (`dam_id` ASC);
+ALTER TABLE `horse_racing`.`horse`
 ADD CONSTRAINT `horse_trainer_id_fkey`
   FOREIGN KEY (`trainer_id`)
   REFERENCES `horse_racing`.`trainer` (`id`)
@@ -226,12 +222,12 @@ ADD CONSTRAINT `horse_owner_id_fkey`
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `horse_sire_id_fkey`
   FOREIGN KEY (`sire_id`)
-  REFERENCES `horse_racing`.`horseEntity` (`id`)
+  REFERENCES `horse_racing`.`horse` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `horse_dam_id_fkey`
   FOREIGN KEY (`dam_id`)
-  REFERENCES `horse_racing`.`horseEntity` (`id`)
+  REFERENCES `horse_racing`.`horse` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
@@ -243,7 +239,7 @@ ADD INDEX `participant_trainer_id_fkey_idx` (`trainer_id` ASC);
 ALTER TABLE `horse_racing`.`participant` 
 ADD CONSTRAINT `participant_horse_id_fkey`
   FOREIGN KEY (`horse_id`)
-  REFERENCES `horse_racing`.`horseEntity` (`id`)
+  REFERENCES `horse_racing`.`horse` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `participant_rase_id_fkey`
@@ -277,18 +273,12 @@ ADD CONSTRAINT `race_going_id_fkey`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `horse_racing`.`race_price` 
-ADD INDEX `race_price_race_id_fkey_idx` (`race_id` ASC),
-ADD INDEX `race_price_price_id_fkey_idx` (`price_id` ASC);
-ALTER TABLE `horse_racing`.`race_price` 
+ALTER TABLE `horse_racing`.`price` 
+ADD INDEX `race_price_race_id_fkey_idx` (`race_id` ASC);
+ALTER TABLE `horse_racing`.`price` 
 ADD CONSTRAINT `race_price_racecourse_id_fkey`
   FOREIGN KEY (`race_id`)
   REFERENCES `horse_racing`.`race` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `race_price_price_id_fkey`
-  FOREIGN KEY (`price_id`)
-  REFERENCES `horse_racing`.`price` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 

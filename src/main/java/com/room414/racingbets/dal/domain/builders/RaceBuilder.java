@@ -3,6 +3,7 @@ package com.room414.racingbets.dal.domain.builders;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.entities.Racecourse;
+import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
 
@@ -26,6 +27,7 @@ public class RaceBuilder {
     private Timestamp start;
     private TrackCondition trackCondition;
     private RaceType raceType;
+    private RaceStatus raceStatus;
     private int raceClass;
     private int minAge;
     private int maxAge;
@@ -82,6 +84,11 @@ public class RaceBuilder {
 
     public RaceBuilder setRaceType(RaceType raceType) {
         this.raceType = raceType;
+        return this;
+    }
+
+    public RaceBuilder setRaceStatus(RaceStatus raceStatus) {
+        this.raceStatus = raceStatus;
         return this;
     }
 
@@ -164,6 +171,7 @@ public class RaceBuilder {
         race.setStart(start);
         race.setTrackCondition(trackCondition);
         race.setRaceType(raceType);
+        race.setRaceStatus(raceStatus);
         race.setRaceClass(raceClass);
         race.setMinAge(minAge);
         race.setMaxAge(maxAge);
