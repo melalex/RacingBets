@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
 import com.room414.racingbets.dal.domain.builders.RaceBuilder;
+import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
 
@@ -33,6 +34,7 @@ public class Race implements Serializable {
      */
     private TrackCondition trackCondition;
     private RaceType raceType;
+    private RaceStatus raceStatus;
 
     private int raceClass;
 
@@ -123,6 +125,14 @@ public class Race implements Serializable {
 
     public int getRaceClass() {
         return raceClass;
+    }
+
+    public RaceStatus getRaceStatus() {
+        return raceStatus;
+    }
+
+    public void setRaceStatus(RaceStatus raceStatus) {
+        this.raceStatus = raceStatus;
     }
 
     public void setRaceClass(int raceClass) {
@@ -261,6 +271,10 @@ public class Race implements Serializable {
             return false;
         }
 
+        if (raceStatus != race.raceStatus) {
+            return false;
+        }
+
         if (prices != null ? !prices.equals(race.prices) : race.prices != null) {
             return false;
         }
@@ -281,6 +295,7 @@ public class Race implements Serializable {
         result = 31 * result + (start != null ? start.hashCode() : 0);
         result = 31 * result + (trackCondition != null ? trackCondition.hashCode() : 0);
         result = 31 * result + (raceType != null ? raceType.hashCode() : 0);
+        result = 31 * result + (raceStatus != null ? raceStatus.hashCode() : 0);
         result = 31 * result + raceClass;
         result = 31 * result + minAge;
         result = 31 * result + maxAge;

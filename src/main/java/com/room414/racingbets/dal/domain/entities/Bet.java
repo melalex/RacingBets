@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.domain.entities;
 
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
+import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
 
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class Bet implements Serializable {
     private ApplicationUser user;
     private BigDecimal betSize;
     private BetType betType;
+    private BetStatus betStatus;
     private List<Participant> participants;
 
     public Bet() {
@@ -62,6 +64,14 @@ public class Bet implements Serializable {
 
     public void setBetType(BetType betType) {
         this.betType = betType;
+    }
+
+    public BetStatus getBetStatus() {
+        return betStatus;
+    }
+
+    public void setBetStatus(BetStatus betStatus) {
+        this.betStatus = betStatus;
     }
 
     public List<Participant> getParticipants() {
@@ -108,6 +118,10 @@ public class Bet implements Serializable {
             return false;
         }
 
+        if (betStatus != bet.betStatus) {
+            return false;
+        }
+
         if (participants != null ? !participants.equals(bet.participants) : bet.participants != null) {
             return false;
         }
@@ -122,6 +136,7 @@ public class Bet implements Serializable {
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (betSize != null ? betSize.hashCode() : 0);
         result = 31 * result + (betType != null ? betType.hashCode() : 0);
+        result = 31 * result + (betStatus != null ? betStatus.hashCode() : 0);
         result = 31 * result + (participants != null ? participants.hashCode() : 0);
 
         return result;

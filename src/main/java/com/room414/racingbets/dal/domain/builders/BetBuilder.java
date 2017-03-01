@@ -3,6 +3,7 @@ package com.room414.racingbets.dal.domain.builders;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class BetBuilder {
     private ApplicationUser user;
     private BigDecimal betSize;
     private BetType betType;
+    private BetStatus betStatus;
     private List<Participant> participants;
 
     private List<Participant> getParticipants() {
@@ -53,6 +55,11 @@ public class BetBuilder {
 
     public BetBuilder setBetType(BetType betType) {
         this.betType = betType;
+        return this;
+    }
+
+    public BetBuilder setBetStatus(BetStatus betStatus) {
+        this.betStatus = betStatus;
         return this;
     }
 
@@ -89,6 +96,7 @@ public class BetBuilder {
         bet.setUser(user);
         bet.setBetSize(betSize);
         bet.setBetType(betType);
+        bet.setBetStatus(betStatus);
         bet.setParticipants(participants);
 
         return bet;
