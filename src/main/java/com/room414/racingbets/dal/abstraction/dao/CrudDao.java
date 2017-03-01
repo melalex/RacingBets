@@ -25,9 +25,16 @@ public interface CrudDao<K, E> {
     E find(K id);
 
     /**
-     * @return All entities T that stores in data store.
+     * @param offset the number of items that need to skip
+     * @param limit elements count in result
+     * @return All entities that stores in data store.
      */
-    List<E> findAll();
+    List<E> findAll(int offset, int limit);
+
+    /**
+     * @return count of entities in data store.
+     */
+    int count();
 
     /**
      * Updates value of entity param in data store
