@@ -2,7 +2,9 @@ package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
+import com.room414.racingbets.dal.domain.enums.Role;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.List;
 
@@ -20,52 +22,84 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
         this.connection = connection;
     }
 
-    /**
-     * Add new entity to repository
-     *
-     * @param entity entity that should be added to data store.
-     */
+
     @Override
     public void create(ApplicationUser entity) {
 
     }
 
-    /**
-     * Find entity by id.
-     *
-     * @param id id of entity
-     * @return entity with id == param id
-     */
     @Override
     public ApplicationUser find(Integer id) {
         return null;
     }
 
-    /**
-     * @return All entities T that stores in data store.
-     */
     @Override
-    public List<ApplicationUser> findAll() {
+    public List<ApplicationUser> findAll(int offset, int limit) {
         return null;
     }
 
-    /**
-     * Updates value of entity param in data store
-     *
-     * @param entity entity to update
-     */
+    @Override
+    public int count() {
+        return 0;
+    }
+
     @Override
     public void update(ApplicationUser entity) {
 
     }
 
-    /**
-     * Removes entity T with specific id from data store.
-     *
-     * @param id id of entity to remove
-     */
     @Override
     public void delete(Integer id) {
+
+    }
+
+    @Override
+    public List<ApplicationUser> findByLoginPart(String loginPart, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public int findByLoginPartCount(String loginPart) {
+        return 0;
+    }
+
+    @Override
+    public ApplicationUser findByLogin(String login) {
+        return null;
+    }
+
+    @Override
+    public boolean checkPassword(int id, String password) {
+        return false;
+    }
+
+    @Override
+    public void confirmEmail(int id) {
+
+    }
+
+    @Override
+    public boolean isEmailConfirmed(int id) {
+        return false;
+    }
+
+    @Override
+    public void addRole(int userId, Role role) {
+
+    }
+
+    @Override
+    public void removeRole(int userId, Role role) {
+
+    }
+
+    @Override
+    public boolean tryGetMoney(int id, BigDecimal amount) {
+        return false;
+    }
+
+    @Override
+    public void putMoney(int id, BigDecimal amount) {
 
     }
 }

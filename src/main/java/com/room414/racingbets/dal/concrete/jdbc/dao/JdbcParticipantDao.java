@@ -2,8 +2,10 @@ package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import com.room414.racingbets.dal.infrastructure.Pair;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -20,52 +22,74 @@ public class JdbcParticipantDao implements ParticipantDao {
         this.connection = connection;
     }
 
-    /**
-     * Add new entity to repository
-     *
-     * @param entity entity that should be added to data store.
-     */
+
     @Override
     public void create(Participant entity) {
 
     }
 
-    /**
-     * Find entity by id.
-     *
-     * @param id id of entity
-     * @return entity with id == param id
-     */
     @Override
     public Participant find(Integer id) {
         return null;
     }
 
-    /**
-     * @return All entities T that stores in data store.
-     */
     @Override
-    public List<Participant> findAll() {
+    public List<Participant> findAll(int offset, int limit) {
         return null;
     }
 
-    /**
-     * Updates value of entity param in data store
-     *
-     * @param entity entity to update
-     */
+    @Override
+    public int count() {
+        return 0;
+    }
+
     @Override
     public void update(Participant entity) {
 
     }
 
-    /**
-     * Removes entity T with specific id from data store.
-     *
-     * @param id id of entity to remove
-     */
     @Override
     public void delete(Integer id) {
 
+    }
+
+    @Override
+    public List<Pair<Participant, Timestamp>> findByHorseId(int id, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public int findByHorseIdCount(int id) {
+        return 0;
+    }
+
+    @Override
+    public List<Pair<Participant, Timestamp>> findByOwnerId(int id, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public int findByOwnerIdCount(int id) {
+        return 0;
+    }
+
+    @Override
+    public List<Pair<Participant, Timestamp>> findByJockeyId(int id, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public int findByJockeyIdCount(int id) {
+        return 0;
+    }
+
+    @Override
+    public List<Pair<Participant, Timestamp>> findByTrainerId(int id, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public int findByTrainerIdCount(int id) {
+        return 0;
     }
 }
