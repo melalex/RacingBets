@@ -12,8 +12,8 @@ import java.util.List;
  */
 public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
     @Override
-    public boolean create(T entity) throws DalException {
-        return false;
+    public void create(T entity) throws DalException {
+
     }
 
     @Override
@@ -28,6 +28,11 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public T find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<T> findAll() throws DalException {
         return null;
     }
 

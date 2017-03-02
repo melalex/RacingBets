@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
+import com.room414.racingbets.dal.domain.infrastructure.BuildHelper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

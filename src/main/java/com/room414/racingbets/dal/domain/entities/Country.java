@@ -29,7 +29,7 @@ public class Country implements Serializable {
 
     }
 
-    public Country(int id, String name, String code) {
+    public Country(long id, String name, String code) {
         this.id = id;
         this.name = name;
         this.code = code;

@@ -15,29 +15,35 @@ public interface CrudDao<K, E> {
      * Add new entity to repository
      *
      * @param entity entity that should be added to data store.
-     * @return is created
      */
-    boolean create(E entity) throws DalException;
+    // TODO: boolean or exception
+    void create(E entity) throws DalException;
 
     /**
      * Find entity by id.
      *
      * @param id id of entity
-     * @return entity with id == param id
+     * @return entity with id == param id or null if no found
      */
-    E find(K id);
+    E find(K id) throws DalException;
+
+    /**
+     * @return All entities that stores in data store.
+     */
+    List<E> findAll() throws DalException;
+
 
     /**
      * @param offset the number of items that need to skip
      * @param limit elements count in result
      * @return All entities that stores in data store.
      */
-    List<E> findAll(long offset, long limit);
+    List<E> findAll(long offset, long limit) throws DalException;
 
     /**
      * @return count of entities in data store.
      */
-    long count();
+    long count() throws DalException;
 
     /**
      * Updates value of entity param in data store
@@ -45,7 +51,7 @@ public interface CrudDao<K, E> {
      * @param entity entity to update
      * @return count of updated entities
      */
-    long update(E entity);
+    long update(E entity) throws DalException;
 
     /**
      * Removes entity T with specific id from data store.
@@ -53,5 +59,5 @@ public interface CrudDao<K, E> {
      * @param id id of entity to remove
      * @return is deleted
      */
-    boolean delete(K id);
+    boolean delete(K id) throws DalException;
 }

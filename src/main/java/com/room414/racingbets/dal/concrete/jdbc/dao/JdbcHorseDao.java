@@ -28,8 +28,8 @@ public class JdbcHorseDao implements HorseDao {
     }
 
     @Override
-    public boolean create(Horse entity) throws DalException {
-        return false;
+    public void create(Horse entity) throws DalException {
+
     }
 
     @Override
@@ -39,6 +39,11 @@ public class JdbcHorseDao implements HorseDao {
 
     @Override
     public Horse find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Horse> findAll() throws DalException {
         return null;
     }
 

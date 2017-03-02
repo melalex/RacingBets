@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.infrastructure;
+package com.room414.racingbets.dal.abstraction.infrastructure;
 
 import java.io.Serializable;
 

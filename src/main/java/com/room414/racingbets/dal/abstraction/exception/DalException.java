@@ -1,6 +1,8 @@
 package com.room414.racingbets.dal.abstraction.exception;
 
 /**
+ * Indicates the error when requesting to a data store.
+ *
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */

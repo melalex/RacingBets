@@ -32,12 +32,17 @@ public class JdbcRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public boolean create(Racecourse entity) throws DalException {
-        return false;
+    public void create(Racecourse entity) throws DalException {
+
     }
 
     @Override
     public Racecourse find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Racecourse> findAll() throws DalException {
         return null;
     }
 

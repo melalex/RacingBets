@@ -6,12 +6,12 @@ import com.room414.racingbets.dal.domain.entities.Racecourse;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
+import com.room414.racingbets.dal.domain.infrastructure.BuildHelper;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Simplify creating Race instance using builder pattern.

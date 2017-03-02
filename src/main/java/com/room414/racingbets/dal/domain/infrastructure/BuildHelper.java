@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.domain.builders;
+package com.room414.racingbets.dal.domain.infrastructure;
 
 import com.room414.racingbets.dal.domain.entities.Participant;
 
@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-class BuildHelper {
-    static List<Participant> mapIdsToParticipants(List<Integer> ids) {
+public class BuildHelper {
+    public static List<Participant> mapIdsToParticipants(List<Integer> ids) {
         if (ids != null) {
             return ids.stream().map((id) -> {
                 Participant participant = new Participant();

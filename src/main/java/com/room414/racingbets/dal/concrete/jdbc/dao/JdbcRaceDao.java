@@ -25,12 +25,17 @@ public class JdbcRaceDao implements RaceDao {
 
 
     @Override
-    public boolean create(Race entity) throws DalException {
-        return false;
+    public void create(Race entity) throws DalException {
+
     }
 
     @Override
     public Race find(Integer id) {
+        return null;
+    }
+
+    @Override
+    public List<Race> findAll() throws DalException {
         return null;
     }
 

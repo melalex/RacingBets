@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.jdbc.dao;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Participant;
-import com.room414.racingbets.dal.infrastructure.Pair;
+import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -25,12 +25,17 @@ public class JdbcParticipantDao implements ParticipantDao {
 
 
     @Override
-    public boolean create(Participant entity) throws DalException {
-        return false;
+    public void create(Participant entity) throws DalException {
+
     }
 
     @Override
     public Participant find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Participant> findAll() throws DalException {
         return null;
     }
 

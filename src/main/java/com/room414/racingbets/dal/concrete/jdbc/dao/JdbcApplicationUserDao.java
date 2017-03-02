@@ -25,12 +25,17 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
 
     @Override
-    public boolean create(ApplicationUser entity) throws DalException {
-        return false;
+    public void create(ApplicationUser entity) throws DalException {
+
     }
 
     @Override
     public ApplicationUser find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<ApplicationUser> findAll() throws DalException {
         return null;
     }
 

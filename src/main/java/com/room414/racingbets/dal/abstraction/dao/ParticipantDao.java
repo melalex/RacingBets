@@ -1,7 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.domain.entities.Participant;
-import com.room414.racingbets.dal.infrastructure.Pair;
+import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 
 import java.sql.Timestamp;
 import java.util.List;

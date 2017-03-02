@@ -24,8 +24,8 @@ public class JdbcBetDao implements BetDao {
     }
 
     @Override
-    public boolean create(Bet entity) throws DalException {
-        return false;
+    public void create(Bet entity) throws DalException {
+
     }
 
     @Override
@@ -40,6 +40,11 @@ public class JdbcBetDao implements BetDao {
 
     @Override
     public Bet find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Bet> findAll() throws DalException {
         return null;
     }
 
