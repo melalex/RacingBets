@@ -19,7 +19,7 @@ import java.util.Set;
 public class ApplicationUser implements Serializable {
     private static final long serialVersionUID = 6029712881413191567L;
 
-    private int id;
+    private long id;
     private String login;
     private String email;
     private String password;
@@ -45,11 +45,11 @@ public class ApplicationUser implements Serializable {
         return new ApplicationUserBuilder();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -178,7 +178,7 @@ public class ApplicationUser implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
@@ -187,7 +187,7 @@ public class ApplicationUser implements Serializable {
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (isEmailConfirmed ? 1 : 0);
         result = 31 * result + (balance != null ? balance.hashCode() : 0);
-        result = 31 * result + roles.hashCode();
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
 
         return result;
     }

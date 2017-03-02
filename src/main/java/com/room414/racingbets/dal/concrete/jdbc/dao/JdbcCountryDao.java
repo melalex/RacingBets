@@ -1,9 +1,13 @@
 package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.CountryDao;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Country;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -22,8 +26,32 @@ public class JdbcCountryDao implements CountryDao {
 
 
     @Override
-    public boolean create(Country entity) {
-        String sqlStatement = "";
+    public boolean create(Country entity) throws DalException {
+        String sqlStatement = "INSERT INTO country (name, code) VALUES (?, ?)";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setString(1, entity.getName());
+            statement.setString(1, entity.getCode());
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows != 0) {
+
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    entity.setId(generatedKeys.getLong(1));
+                }
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+
+
+        } catch (SQLException e) {
+            throw new DalException(e);
+        }
     }
 
     @Override

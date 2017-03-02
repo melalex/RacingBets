@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ public interface CrudDao<K, E> {
      * @param entity entity that should be added to data store.
      * @return is created
      */
-    boolean create(E entity);
+    boolean create(E entity) throws DalException;
 
     /**
      * Find entity by id.
