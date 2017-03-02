@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.abstraction.factories;
 
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 
 /**
  * It manages the creation of UnitOfWork instances.
@@ -9,5 +10,5 @@ import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
  * @version 1.0 28 Feb 2017
  */
 public interface UnitOfWorkFactory {
-    UnitOfWork create();
+    UnitOfWork create() throws DalException;
 }

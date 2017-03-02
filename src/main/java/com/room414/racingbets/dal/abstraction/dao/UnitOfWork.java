@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
+
 /**
  * Manages transactions to persistent storage.
  *
@@ -21,6 +23,6 @@ public interface UnitOfWork extends AutoCloseable {
     CountryDao getCountryDao();
     RacecourseDao getRacecourseDao();
 
-    void commit();
-    void rollback();
+    void commit() throws DalException;
+    void rollback() throws DalException;
 }

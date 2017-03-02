@@ -30,7 +30,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     private CountryDao countryDao;
     private RacecourseDao racecourseDao;
 
-    private JdbcUnitOfWork(Connection connection) {
+    public JdbcUnitOfWork(Connection connection) {
         this.connection = connection;
     }
 
@@ -120,7 +120,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void commit() {
+    public void commit() throws DalException {
         try {
             connection.commit();
         } catch (SQLException e) {
@@ -129,7 +129,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void rollback() {
+    public void rollback() throws DalException {
         try {
             connection.rollback();
         } catch (SQLException e) {
@@ -138,7 +138,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void close() {
+    public void close() throws DalException {
         try {
             connection.close();
         } catch (SQLException e) {
