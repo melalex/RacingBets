@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.concrete.jdbc.base.JdbcPersonDao;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 
 /**
  * Implementation of TrainerDao that uses JDBC as data source.
@@ -14,10 +15,19 @@ import java.sql.Connection;
  * @version 1.0 28 Feb 2017
  */
 public class JdbcTrainerDao extends JdbcPersonDao<Trainer> implements TrainerDao {
-    Connection connection;
+    private static final String TABLE_NAME = "trainer";
 
     JdbcTrainerDao(Connection connection) {
         this.connection = connection;
     }
 
+    @Override
+    protected String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    protected Trainer mapResultSet(ResultSet resultSet) {
+        return null;
+    }
 }

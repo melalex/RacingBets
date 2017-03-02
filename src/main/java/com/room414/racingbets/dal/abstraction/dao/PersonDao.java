@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.entities.Person;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface PersonDao<T extends Person> extends CrudDao<Long, T> {
     /**
      * @return List of Persons whose name starts with namePart or empty list if no found.
      */
-    List<T> findByNamePart(String namePart, long offset, long limit);
+    List<T> findByNamePart(String namePart, long offset, long limit) throws DalException;
 
     /**
      * @return count of Persons whose name starts with namePart

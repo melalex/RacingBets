@@ -1,11 +1,14 @@
 package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 /**
  * @author Alexander Melashchenko
@@ -61,6 +64,43 @@ public class JdbcDaoHelper {
             }
 
             return result;
+        }
+    }
+
+    public static void setId(PreparedStatement statement, Consumer<Long> idSetter) throws SQLException {
+        int affectedRows = statement.executeUpdate();
+
+        if (affectedRows != 0) {
+            throw new SQLException("Creating user failed, no rows affected.");
+        }
+
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                idSetter.accept(generatedKeys.getLong(1));
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+        }
+    }
+
+    public static <T> List<T> findByColumnPart(
+            Connection connection,
+            Mapper<T> mapper,
+            String sqlStatement,
+            String namePart,
+            long offset,
+            long limit
+    ) throws DalException {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setString(1, startsWith(namePart));
+            statement.setLong(2, limit);
+            statement.setLong(3, offset);
+
+            return getResultList(statement, mapper);
+
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, startsWith(namePart), limit, offset);
+            throw new DalException(message, e);
         }
     }
 }

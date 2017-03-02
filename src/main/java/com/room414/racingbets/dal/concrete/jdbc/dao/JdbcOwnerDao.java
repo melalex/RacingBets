@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.concrete.jdbc.base.JdbcPersonDao;
 import com.room414.racingbets.dal.domain.entities.Owner;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -15,11 +16,20 @@ import java.util.List;
  * @version 1.0 28 Feb 2017
  */
 public class JdbcOwnerDao extends JdbcPersonDao<Owner> implements OwnerDao {
-    Connection connection;
+    private static final String TABLE_NAME = "owner";
 
     JdbcOwnerDao(Connection connection) {
         this.connection = connection;
     }
 
 
+    @Override
+    protected String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    protected Owner mapResultSet(ResultSet resultSet) {
+        return null;
+    }
 }

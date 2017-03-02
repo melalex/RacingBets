@@ -22,6 +22,8 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  */
 // TODO: queries as constants
 public class JdbcCountryDao implements CountryDao {
+    private final String TABLE_NAME = "country";
+
     // TODO: is should be local
     private final String ID_COLUMN = "country.id";
     private final String NAME_COLUMN = "country.name";
@@ -34,7 +36,7 @@ public class JdbcCountryDao implements CountryDao {
     }
 
 
-    private Country countryFromResultSet(ResultSet resultSet) throws SQLException {
+    private Country mapResultSet(ResultSet resultSet) throws SQLException {
         long id = resultSet.getLong(ID_COLUMN);
         String name = resultSet.getString(NAME_COLUMN);
         String code = resultSet.getString(CODE_COLUMN);
@@ -49,20 +51,7 @@ public class JdbcCountryDao implements CountryDao {
             statement.setString(1, entity.getName());
             statement.setString(2, entity.getCode());
 
-            int affectedRows = statement.executeUpdate();
-
-            if (affectedRows != 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
-            }
-
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    entity.setId(generatedKeys.getLong(1));
-                } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
-                }
-            }
-
+            JdbcDaoHelper.setId(statement, entity::setId);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, entity.getName(), entity.getCode());
             throw new DalException(message, e);
@@ -76,7 +65,7 @@ public class JdbcCountryDao implements CountryDao {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setLong(1, id);
 
-            return getResult(statement, this::countryFromResultSet);
+            return getResult(statement, this::mapResultSet);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, id);
             throw new DalException(message, e);
@@ -88,7 +77,7 @@ public class JdbcCountryDao implements CountryDao {
         String sqlStatement = "SELECT * FROM country";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return getResultList(statement, this::countryFromResultSet);
+            return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement);
             throw new DalException(message, e);
@@ -103,7 +92,7 @@ public class JdbcCountryDao implements CountryDao {
             statement.setLong(1, limit);
             statement.setLong(2, offset);
 
-            return getResultList(statement, this::countryFromResultSet);
+            return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, limit, offset);
             throw new DalException(message, e);
@@ -161,17 +150,14 @@ public class JdbcCountryDao implements CountryDao {
     public List<Country> findByNamePart(String namePart, long offset, long limit) throws DalException {
         String sqlStatement = "SELECT * FROM country WHERE name LIKE ? LIMIT ? OFFSET ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, startsWith(namePart));
-            statement.setLong(2, limit);
-            statement.setLong(3, offset);
-
-            return getResultList(statement, this::countryFromResultSet);
-
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, startsWith(namePart), limit, offset);
-            throw new DalException(message, e);
-        }
+        return JdbcDaoHelper.findByColumnPart(
+                connection,
+                this::mapResultSet,
+                sqlStatement,
+                namePart,
+                offset,
+                limit
+        );
     }
 
     @Override
