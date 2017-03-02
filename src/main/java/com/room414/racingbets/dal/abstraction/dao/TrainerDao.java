@@ -12,9 +12,5 @@ import java.util.List;
  * @version 1.0 27 Feb 2017
  */
 public interface TrainerDao extends PersonDao<Trainer> {
-    /**
-     * @return List of Trainers whose name starts with namePart or empty list if no found.
-     */
-    List<Trainer> findByNamePart(String namePart, int offset, int limit);
 
 }

@@ -55,27 +55,37 @@ public class JdbcCountryDao implements CountryDao {
     }
 
     @Override
-    public Country find(Integer id) {
+    public Country find(Long id) {
         return null;
     }
 
     @Override
-    public List<Country> findAll(int offset, int limit) {
+    public List<Country> findAll(long offset, long limit) {
         return null;
     }
 
     @Override
-    public int count() {
+    public long count() {
         return 0;
     }
 
     @Override
-    public int update(Country entity) {
-
+    public long update(Country entity) {
+        return 0;
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(Long id) {
+        return false;
+    }
 
+    @Override
+    public List<Country> findByNamePart(String namePart, long offset, long limit) {
+        return null;
+    }
+
+    @Override
+    public int findByNamePartCount(String namePart) {
+        return 0;
     }
 }

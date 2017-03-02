@@ -24,8 +24,8 @@ public abstract class Horse implements Serializable{
         return new HorseBuilder();
     }
 
-    public abstract int getId();
-    public abstract void setId(int id);
+    public abstract long getId();
+    public abstract void setId(long id);
     public abstract String getName();
     public abstract void setName(String name);
     public abstract Trainer getTrainer();

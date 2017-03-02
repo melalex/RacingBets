@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.RacecourseDao;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Racecourse;
 
 import java.sql.Connection;
@@ -20,44 +21,43 @@ public class JdbcRacecourseDao implements RacecourseDao {
         this.connection = connection;
     }
 
-
     @Override
-    public boolean create(Racecourse entity) {
-
-    }
-
-    @Override
-    public Racecourse find(Integer id) {
-        return null;
-    }
-
-    @Override
-    public List<Racecourse> findAll(int offset, int limit) {
-        return null;
-    }
-
-    @Override
-    public int count() {
-        return 0;
-    }
-
-    @Override
-    public int update(Racecourse entity) {
-
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-
-    }
-
-    @Override
-    public List<Racecourse> findByNamePart(String namePart, int offset, int limit) {
+    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) {
         return null;
     }
 
     @Override
     public int findByNamePartCount(String namePart) {
         return 0;
+    }
+
+    @Override
+    public boolean create(Racecourse entity) throws DalException {
+        return false;
+    }
+
+    @Override
+    public Racecourse find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Racecourse> findAll(long offset, long limit) {
+        return null;
+    }
+
+    @Override
+    public long count() {
+        return 0;
+    }
+
+    @Override
+    public long update(Racecourse entity) {
+        return 0;
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.infrastructure.Pair;
 
@@ -24,72 +25,72 @@ public class JdbcParticipantDao implements ParticipantDao {
 
 
     @Override
-    public boolean create(Participant entity) {
-
+    public boolean create(Participant entity) throws DalException {
+        return false;
     }
 
     @Override
-    public Participant find(Integer id) {
+    public Participant find(Long id) {
         return null;
     }
 
     @Override
-    public List<Participant> findAll(int offset, int limit) {
+    public List<Participant> findAll(long offset, long limit) {
         return null;
     }
 
     @Override
-    public int count() {
+    public long count() {
         return 0;
     }
 
     @Override
-    public int update(Participant entity) {
-
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-
-    }
-
-    @Override
-    public List<Pair<Participant, Timestamp>> findByHorseId(int id, int offset, int limit) {
-        return null;
-    }
-
-    @Override
-    public int findByHorseIdCount(int id) {
+    public long update(Participant entity) {
         return 0;
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByOwnerId(int id, int offset, int limit) {
+    public boolean delete(Long id) {
+        return false;
+    }
+
+    @Override
+    public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) {
         return null;
     }
 
     @Override
-    public int findByOwnerIdCount(int id) {
+    public long findByHorseIdCount(long id) {
         return 0;
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByJockeyId(int id, int offset, int limit) {
+    public List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit) {
         return null;
     }
 
     @Override
-    public int findByJockeyIdCount(int id) {
+    public long findByOwnerIdCount(long id) {
         return 0;
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByTrainerId(int id, int offset, int limit) {
+    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) {
         return null;
     }
 
     @Override
-    public int findByTrainerIdCount(int id) {
+    public long findByJockeyIdCount(long id) {
+        return 0;
+    }
+
+    @Override
+    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) {
+        return null;
+    }
+
+    @Override
+    public long findByTrainerIdCount(long id) {
         return 0;
     }
 }

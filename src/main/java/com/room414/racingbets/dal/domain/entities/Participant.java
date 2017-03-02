@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Participant implements Serializable {
     private static final long serialVersionUID = -2072016846596822050L;
 
-    private int id;
+    private long id;
     /**
      * Saddle cloth number the horse will carry.
      */
@@ -66,11 +66,11 @@ public class Participant implements Serializable {
         return new ParticipantBuilder();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -215,7 +215,7 @@ public class Participant implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + number;
         result = 31 * result + (horse != null ? horse.hashCode() : 0);

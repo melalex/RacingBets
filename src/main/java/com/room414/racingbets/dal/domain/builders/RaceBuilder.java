@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
  * @version 1.0 28 Feb 2017
  */
 public class RaceBuilder {
-    private int id;
+    private long id;
     private String name;
     private Racecourse racecourse;
     private Timestamp start;
     private BigDecimal minBet;
-    private float commission;
+    private double commission;
     private TrackCondition trackCondition;
     private RaceType raceType;
     private RaceStatus raceStatus;
@@ -53,7 +53,7 @@ public class RaceBuilder {
         return prices;
     }
 
-    public RaceBuilder setId(int id) {
+    public RaceBuilder setId(long id) {
         this.id = id;
         return this;
     }
@@ -84,7 +84,7 @@ public class RaceBuilder {
         return this;
     }
 
-    public RaceBuilder setCommission(float commission) {
+    public RaceBuilder setCommission(double commission) {
         this.commission = commission;
         return this;
     }

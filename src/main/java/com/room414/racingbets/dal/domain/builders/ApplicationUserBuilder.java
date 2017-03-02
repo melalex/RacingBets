@@ -15,7 +15,7 @@ import java.util.Set;
  * @version 1.0 27 Feb 2017
  */
 public class ApplicationUserBuilder {
-    private int id;
+    private long id;
     private String login;
     private String email;
     private String password;
@@ -32,7 +32,7 @@ public class ApplicationUserBuilder {
         return roles;
     }
 
-    public ApplicationUserBuilder setId(int id) {
+    public ApplicationUserBuilder setId(long id) {
         this.id = id ;
         return this;
     }

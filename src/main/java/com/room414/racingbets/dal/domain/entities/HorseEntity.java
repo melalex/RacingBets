@@ -16,7 +16,7 @@ import java.sql.Date;
 public class HorseEntity extends Horse {
     private static final long serialVersionUID = -4741079009638927620L;
 
-    private int id;
+    private long id;
     private String name;
     private Trainer trainer;
     private Owner owner;
@@ -29,12 +29,12 @@ public class HorseEntity extends Horse {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -157,7 +157,7 @@ public class HorseEntity extends Horse {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (trainer != null ? trainer.hashCode() : 0);

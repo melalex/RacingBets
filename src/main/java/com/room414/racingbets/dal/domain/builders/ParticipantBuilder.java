@@ -14,7 +14,7 @@ import com.room414.racingbets.dal.domain.entities.Trainer;
  * @version 1.0 28 Feb 2017
  */
 public class ParticipantBuilder {
-    private int id;
+    private long id;
     private int number;
     private Horse horse;
     private float carriedWeight;
@@ -26,7 +26,7 @@ public class ParticipantBuilder {
     private Trainer trainer;
     private int place;
 
-    public ParticipantBuilder setId(int id) {
+    public ParticipantBuilder setId(long id) {
         this.id = id;
         return this;
     }

@@ -13,7 +13,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 27 Feb 2017
  */
-public interface ApplicationUserDao extends CrudDao<Integer, ApplicationUser> {
+public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
     // TODO: is good?? (find and count method)
     /**
      * Search ApplicationUser by prefix.
@@ -23,7 +23,7 @@ public interface ApplicationUserDao extends CrudDao<Integer, ApplicationUser> {
      * @param limit elements count in result
      * @return List of ApplicationUsers whose login starts with loginPart or empty if no found.
      */
-    List<ApplicationUser> findByLoginPart(String loginPart, int offset, int limit);
+    List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit);
 
     /**
      * @param loginPart begin of ApplicationUser login
@@ -42,20 +42,20 @@ public interface ApplicationUserDao extends CrudDao<Integer, ApplicationUser> {
      * @param password ApplicationUser password
      * @return checks if ApplicationUser's password is password param
      */
-    boolean checkPassword(int id, String password);
+    boolean checkPassword(long id, String password);
 
     /**
      * Set ApplicationUser isEmailConfirmed field to true to user with id == id param
      *
      * @param id ApplicationUser id
      */
-    void confirmEmail(int id);
+    void confirmEmail(long id);
 
     /**
      * @param id ApplicationUser id
      * @return ApplicationUser isEmailConfirmed field
      */
-    boolean isEmailConfirmed(int id);
+    boolean isEmailConfirmed(long id);
 
     /**
      * Add role to ApplicationUser
@@ -63,7 +63,7 @@ public interface ApplicationUserDao extends CrudDao<Integer, ApplicationUser> {
      * @param userId ApplicationUser id
      * @param role role
      */
-    void addRole(int userId, Role role);
+    void addRole(long userId, Role role);
 
     /**
      * Remove role from ApplicationUser
@@ -71,14 +71,14 @@ public interface ApplicationUserDao extends CrudDao<Integer, ApplicationUser> {
      * @param userId ApplicationUser id
      * @param role role
      */
-    void removeRole(int userId, Role role);
+    void removeRole(long userId, Role role);
 
     /**
      * @param id ApplicationUser id
      * @param amount amount of money
      * @return true if the money were removed successfully, false if not enough money on the balance sheet
      */
-    boolean tryGetMoney(int id, BigDecimal amount);
+    boolean tryGetMoney(long id, BigDecimal amount);
 
     /**
      * Add amount param to ApplicationUser balance field
@@ -86,5 +86,5 @@ public interface ApplicationUserDao extends CrudDao<Integer, ApplicationUser> {
      * @param id ApplicationUser id
      * @param amount amount of money
      */
-    void putMoney(int id, BigDecimal amount);
+    void putMoney(long id, BigDecimal amount);
 }

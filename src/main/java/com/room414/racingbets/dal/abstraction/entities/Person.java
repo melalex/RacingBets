@@ -14,7 +14,7 @@ import java.sql.Date;
 public abstract class Person implements Serializable {
     private static final long serialVersionUID = -5384092688130247272L;
 
-    protected int id;
+    protected long id;
     protected String firstName;
     protected String lastName;
     protected Date birthday;
@@ -23,11 +23,11 @@ public abstract class Person implements Serializable {
     public Person() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -100,7 +100,7 @@ public abstract class Person implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);

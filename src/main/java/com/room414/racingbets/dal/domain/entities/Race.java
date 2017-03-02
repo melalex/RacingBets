@@ -19,11 +19,10 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */
-// TODO: float fields to double
 public class Race implements Serializable {
     private static final long serialVersionUID = 8351694393075721386L;
 
-    private int id;
+    private long id;
     private String name;
     private Racecourse racecourse;
     /**
@@ -34,7 +33,7 @@ public class Race implements Serializable {
     /**
      * Bookmaker part from bets
      */
-    private float commission;
+    private double commission;
     /**
      * Description of ground conditions
      */
@@ -81,11 +80,11 @@ public class Race implements Serializable {
         return new RaceBuilder();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -121,11 +120,11 @@ public class Race implements Serializable {
         this.minBet = minBet;
     }
 
-    public float getCommission() {
+    public double getCommission() {
         return commission;
     }
 
-    public void setCommission(float commission) {
+    public void setCommission(double commission) {
         this.commission = commission;
     }
 
@@ -249,6 +248,10 @@ public class Race implements Serializable {
             return false;
         }
 
+        if (Double.compare(race.commission, commission) != 0) {
+            return false;
+        }
+
         if (raceClass != race.raceClass) {
             return false;
         }
@@ -289,11 +292,7 @@ public class Race implements Serializable {
             return false;
         }
 
-        if (Float.compare(race.commission, commission) != 0) {
-            return false;
-        }
-
-        if (trackCondition != null ? !trackCondition.equals(race.trackCondition) : race.trackCondition != null) {
+        if (trackCondition != race.trackCondition) {
             return false;
         }
 
@@ -305,11 +304,11 @@ public class Race implements Serializable {
             return false;
         }
 
-        if (prices != null ? !prices.equals(race.prices) : race.prices != null) {
+        if (participants != null ? !participants.equals(race.participants) : race.participants != null) {
             return false;
         }
 
-        if (participants != null ? !participants.equals(race.participants) : race.participants != null) {
+        if (prices != null ? !prices.equals(race.prices) : race.prices != null) {
             return false;
         }
 
@@ -318,13 +317,15 @@ public class Race implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
-
+        int result;
+        long temp;
+        result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (racecourse != null ? racecourse.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
         result = 31 * result + (minBet != null ? minBet.hashCode() : 0);
-        result = 31 * result + (commission != +0.0f ? Float.floatToIntBits(commission) : 0);
+        temp = Double.doubleToLongBits(commission);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (trackCondition != null ? trackCondition.hashCode() : 0);
         result = 31 * result + (raceType != null ? raceType.hashCode() : 0);
         result = 31 * result + (raceStatus != null ? raceStatus.hashCode() : 0);
@@ -336,7 +337,6 @@ public class Race implements Serializable {
         result = 31 * result + (distance != +0.0f ? Float.floatToIntBits(distance) : 0);
         result = 31 * result + (participants != null ? participants.hashCode() : 0);
         result = 31 * result + (prices != null ? prices.hashCode() : 0);
-
         return result;
     }
 

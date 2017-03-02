@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -22,42 +23,42 @@ public class JdbcHorseDao implements HorseDao {
 
 
     @Override
-    public boolean create(Horse entity) {
-
-    }
-
-    @Override
-    public Horse find(Integer id) {
+    public List<Horse> findByNamePart(String namePart, long offset, long limit) {
         return null;
     }
 
     @Override
-    public List<Horse> findAll(int offset, int limit) {
-        return null;
-    }
-
-    @Override
-    public int count() {
-        return 0;
-    }
-
-    @Override
-    public int update(Horse entity) {
-
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-
-    }
-
-    @Override
-    public List<Horse> findByNamePart(String namePart, int offset, int limit) {
-        return null;
+    public boolean create(Horse entity) throws DalException {
+        return false;
     }
 
     @Override
     public int findByNamePartCount(String namePart) {
         return 0;
+    }
+
+    @Override
+    public Horse find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Horse> findAll(long offset, long limit) {
+        return null;
+    }
+
+    @Override
+    public long count() {
+        return 0;
+    }
+
+    @Override
+    public long update(Horse entity) {
+        return 0;
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return false;
     }
 }

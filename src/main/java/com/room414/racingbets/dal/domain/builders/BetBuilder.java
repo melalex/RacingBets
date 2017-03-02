@@ -18,7 +18,7 @@ import java.util.List;
  * @version 1.0 27 Feb 2017
  */
 public class BetBuilder {
-    private int id;
+    private long id;
     private ApplicationUser user;
     private BigDecimal betSize;
     private BetType betType;
@@ -32,7 +32,7 @@ public class BetBuilder {
         return participants;
     }
 
-    public BetBuilder setId(int id) {
+    public BetBuilder setId(long id) {
         this.id = id;
         return this;
     }

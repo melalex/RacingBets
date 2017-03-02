@@ -14,7 +14,7 @@ public class Country implements Serializable {
     /**
      * Country id in data storage
      */
-    private int id;
+    private long id;
     /**
      * Country name
      */
@@ -35,11 +35,11 @@ public class Country implements Serializable {
         this.code = code;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -87,7 +87,7 @@ public class Country implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (code != null ? code.hashCode() : 0);

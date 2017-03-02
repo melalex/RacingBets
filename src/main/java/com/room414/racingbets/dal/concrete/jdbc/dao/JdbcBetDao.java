@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
@@ -22,65 +23,64 @@ public class JdbcBetDao implements BetDao {
         this.connection = connection;
     }
 
-
     @Override
-    public boolean create(Bet entity) {
-
+    public boolean create(Bet entity) throws DalException {
+        return false;
     }
 
     @Override
-    public Bet find(Integer id) {
+    public List<Bet> findByUserId(long id, long offset, long limit) {
         return null;
     }
 
     @Override
-    public List<Bet> findAll(int offset, int limit) {
-        return null;
-    }
-
-    @Override
-    public int count() {
+    public long findByUserIdCount(long id) {
         return 0;
     }
 
     @Override
-    public int update(Bet entity) {
-
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-
-    }
-
-    @Override
-    public List<Bet> findByUserId(int id, int offset, int limit) {
+    public Bet find(Long id) {
         return null;
     }
 
     @Override
-    public int findByUserIdCount(int id) {
-        return 0;
-    }
-
-    @Override
-    public List<Bet> findByRaceId(int id, int offset, int limit) {
+    public List<Bet> findByRaceId(long id, long offset, long limit) {
         return null;
     }
 
     @Override
-    public int findByRaceIdCount(int id) {
+    public List<Bet> findAll(long offset, long limit) {
+        return null;
+    }
+
+    @Override
+    public long findByRaceIdCount(long id) {
         return 0;
     }
 
     @Override
-    public void updateStatus(int id, BetStatus status) {
+    public long count() {
+        return 0;
+    }
+
+    @Override
+    public void updateStatus(long id, BetStatus status) {
 
     }
 
     @Override
-    public void updateStatus(int places) {
+    public long update(Bet entity) {
+        return 0;
+    }
 
+    @Override
+    public void updateStatus(long[] places) {
+
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return false;
     }
 
     @Override

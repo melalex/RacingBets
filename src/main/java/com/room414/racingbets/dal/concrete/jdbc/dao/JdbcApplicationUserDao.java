@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 
@@ -24,37 +25,37 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
 
     @Override
-    public boolean create(ApplicationUser entity) {
-
+    public boolean create(ApplicationUser entity) throws DalException {
+        return false;
     }
 
     @Override
-    public ApplicationUser find(Integer id) {
+    public ApplicationUser find(Long id) {
         return null;
     }
 
     @Override
-    public List<ApplicationUser> findAll(int offset, int limit) {
+    public List<ApplicationUser> findAll(long offset, long limit) {
         return null;
     }
 
     @Override
-    public int count() {
+    public long count() {
         return 0;
     }
 
     @Override
-    public int update(ApplicationUser entity) {
-
+    public long update(ApplicationUser entity) {
+        return 0;
     }
 
     @Override
-    public boolean delete(Integer id) {
-
+    public boolean delete(Long id) {
+        return false;
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, int offset, int limit) {
+    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
         return null;
     }
 
@@ -69,37 +70,37 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public boolean checkPassword(int id, String password) {
+    public boolean checkPassword(long id, String password) {
         return false;
     }
 
     @Override
-    public void confirmEmail(int id) {
+    public void confirmEmail(long id) {
 
     }
 
     @Override
-    public boolean isEmailConfirmed(int id) {
+    public boolean isEmailConfirmed(long id) {
         return false;
     }
 
     @Override
-    public void addRole(int userId, Role role) {
+    public void addRole(long userId, Role role) {
 
     }
 
     @Override
-    public void removeRole(int userId, Role role) {
+    public void removeRole(long userId, Role role) {
 
     }
 
     @Override
-    public boolean tryGetMoney(int id, BigDecimal amount) {
+    public boolean tryGetMoney(long id, BigDecimal amount) {
         return false;
     }
 
     @Override
-    public void putMoney(int id, BigDecimal amount) {
+    public void putMoney(long id, BigDecimal amount) {
 
     }
 }

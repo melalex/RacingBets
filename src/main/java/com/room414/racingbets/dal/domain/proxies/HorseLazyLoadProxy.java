@@ -17,11 +17,11 @@ import java.sql.Date;
 public class HorseLazyLoadProxy extends Horse {
     private static final long serialVersionUID = -5739620713735570435L;
 
-    private int id;
+    private long id;
     private Horse horse;
     private HorseDao horseDao;
 
-    public HorseLazyLoadProxy(int id, HorseDao horseDao) {
+    public HorseLazyLoadProxy(long id, HorseDao horseDao) {
         this.id = id;
         this.horseDao = horseDao;
     }
@@ -34,12 +34,12 @@ public class HorseLazyLoadProxy extends Horse {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
         getHorse().setId(id);
     }

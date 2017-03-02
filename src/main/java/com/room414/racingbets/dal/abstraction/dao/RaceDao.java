@@ -18,59 +18,59 @@ public interface RaceDao extends CrudDao<Integer, Race> {
     /**
      * @return List of Races that scheduled on Racecourse with id == id param
      */
-    List<Race> findScheduledByRacecourseId(int id, int offset, int limit);
+    List<Race> findScheduledByRacecourseId(long id, long offset, long limit);
 
     /**
      * @return Count of Races that scheduled on Racecourse with id == id param
      */
-    List<Race> findScheduledByRacecourseIdCount(int id);
+    long findScheduledByRacecourseIdCount(long id);
 
 
     /**
      * @return List of Races that finished on Racecourse with id == id param
      */
-    List<Race> findFinishedByRacecourseId(int id, int offset, int limit);
+    List<Race> findFinishedByRacecourseId(long id, long offset, long limit);
 
     /**
      * @return Count of Races that finished on Racecourse with id == id param
      */
-    List<Race> findFinishedByRacecourseIdCount(int id);
+    long findFinishedByRacecourseIdCount(long id);
 
 
     /**
      * @return List of Races that scheduled on timestamp between begin and end param
      */
-    List<Race> findScheduledInTimestampDiapason(Timestamp begin, Timestamp end, int offset, int limit);
+    List<Race> findScheduledInTimestampDiapason(Timestamp begin, Timestamp end, long offset, long limit);
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param
      */
-    List<Race> findScheduledInTimestampDiapasonCount(Timestamp begin, Timestamp end);
+    long findScheduledInTimestampDiapasonCount(Timestamp begin, Timestamp end);
 
 
     /**
      * @return List of Races that finished on timestamp between begin and end param
      */
-    List<Race> findFinishedInTimestampDiapason(Timestamp begin, Timestamp end, int offset, int limit);
+    List<Race> findFinishedInTimestampDiapason(Timestamp begin, Timestamp end, long offset, long limit);
 
     /**
      * @return Count of Races that finished on timestamp between begin and end param
      */
-    List<Race> findFinishedInTimestampDiapasonCount(Timestamp begin, Timestamp end);
+    long findFinishedInTimestampDiapasonCount(Timestamp begin, Timestamp end);
 
 
     /**
      * @return List of Races that scheduled on timestamp between begin and end param on Racecourse with id == id param
      */
     List<Race> findScheduledInTimestampDiapasonOnRacecourse(
-            int racecourseId, Timestamp begin, Timestamp end, int offset, int limit
+            long racecourseId, Timestamp begin, Timestamp end, long offset, long limit
     );
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param on Racecourse with id == id param
      */
-    List<Race> findScheduledInTimestampDiapasonOnRacecourseCount(
-            int racecourseId, Timestamp begin, Timestamp end
+    long findScheduledInTimestampDiapasonOnRacecourseCount(
+            long racecourseId, Timestamp begin, Timestamp end
     );
 
 
@@ -78,26 +78,26 @@ public interface RaceDao extends CrudDao<Integer, Race> {
      * @return List of Races that finished on timestamp between begin and end param on Racecourse with id == id param
      */
     List<Race> findFinishedInTimestampDiapasonOnRacecourse(
-            int racecourseId, Timestamp begin, Timestamp end, int offset, int limit
+            long racecourseId, Timestamp begin, Timestamp end, long offset, long limit
     );
 
     /**
      * @return Count of Races that finished on timestamp between begin and end param on Racecourse with id == id param
      */
-    List<Race> findFinishedInTimestampDiapasonOnRacecourseCount(
-            int racecourseId, Timestamp begin, Timestamp end
+    long findFinishedInTimestampDiapasonOnRacecourseCount(
+            long racecourseId, Timestamp begin, Timestamp end
     );
 
 
     /**
      * @return List of Races which names starts with namePart or empty list if no found.
      */
-    List<Race> findByNamePart(String namePart, int offset, int limit);
+    List<Race> findByNamePart(String namePart, long offset, long limit);
 
     /**
      * @return count of Races which names starts with namePart
      */
     int findByNamePartCount(String namePart);
 
-    void updateStatus(int id, RaceStatus status);
+    void updateStatus(long id, RaceStatus status);
 }

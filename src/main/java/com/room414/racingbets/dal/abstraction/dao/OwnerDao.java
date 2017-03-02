@@ -12,9 +12,5 @@ import java.util.List;
  * @version 1.0 27 Feb 2017
  */
 public interface OwnerDao extends PersonDao<Owner> {
-    /**
-     * @return List of Owners whose name starts with namePart or empty list if no found.
-     */
-    List<Owner> findByNamePart(String namePart, int offset, int limit);
 
 }

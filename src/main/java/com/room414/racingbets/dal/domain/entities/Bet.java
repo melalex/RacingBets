@@ -20,7 +20,7 @@ import java.util.List;
 public class Bet implements Serializable {
     private static final long serialVersionUID = -5253938704091728335L;
 
-    private int id;
+    private long id;
     private ApplicationUser user;
     private BigDecimal betSize;
     private BetType betType;
@@ -34,11 +34,11 @@ public class Bet implements Serializable {
         return new BetBuilder();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -131,7 +131,7 @@ public class Bet implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (betSize != null ? betSize.hashCode() : 0);

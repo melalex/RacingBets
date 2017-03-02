@@ -16,7 +16,7 @@ import java.sql.Date;
  * @version 1.0 27 Feb 2017
  */
 public class HorseBuilder {
-    private int id;
+    private long id;
     private String name;
     private Trainer trainer;
     private Owner owner;
@@ -25,7 +25,7 @@ public class HorseBuilder {
     private Horse sir;
     private Horse dam;
 
-    public HorseBuilder setId(int id) {
+    public HorseBuilder setId(long id) {
         this.id = id;
         return this;
     }

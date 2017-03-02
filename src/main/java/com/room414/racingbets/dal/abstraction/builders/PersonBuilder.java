@@ -12,13 +12,13 @@ import java.sql.Date;
  * @version 1.0 28 Feb 2017
  */
 public abstract class PersonBuilder {
-    protected int id;
+    protected long id;
     protected String firstName;
     protected String secondName;
     protected Date birthday;
     protected Country country;
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

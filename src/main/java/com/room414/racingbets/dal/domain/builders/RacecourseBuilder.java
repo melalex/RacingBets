@@ -11,7 +11,7 @@ import com.room414.racingbets.dal.domain.entities.Racecourse;
  * @version 1.0 28 Feb 2017
  */
 public class RacecourseBuilder {
-    private int id;
+    private long id;
     private String name;
     private Country country;
     private double latitude;
@@ -19,7 +19,7 @@ public class RacecourseBuilder {
     private String contact;
     private String clerk;
 
-    public RacecourseBuilder setId(int id) {
+    public RacecourseBuilder setId(long id) {
         this.id = id;
         return this;
     }

@@ -13,21 +13,21 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 27 Feb 2017
  */
-public interface ParticipantDao extends CrudDao<Integer, Participant> {
+public interface ParticipantDao extends CrudDao<Long, Participant> {
     /**
      * @return List of Participants and race timestamp.
      */
-    List<Pair<Participant, Timestamp>> findByHorseId(int id, int offset, int limit);
-    int findByHorseIdCount(int id);
+    List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit);
+    long findByHorseIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByOwnerId(int id, int offset, int limit);
-    int findByOwnerIdCount(int id);
+    List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit);
+    long findByOwnerIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByJockeyId(int id, int offset, int limit);
-    int findByJockeyIdCount(int id);
+    List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit);
+    long findByJockeyIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByTrainerId(int id, int offset, int limit);
-    int findByTrainerIdCount(int id);
+    List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit);
+    long findByTrainerIdCount(long id);
 
     // TODO: add some aggregation queries for statistic
 }

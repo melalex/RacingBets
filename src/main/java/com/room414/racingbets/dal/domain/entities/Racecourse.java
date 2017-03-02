@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Racecourse implements Serializable {
     private static final long serialVersionUID = 2069863490131436051L;
 
-    private int id;
+    private long id;
     private String name;
     private Country country;
     private double latitude;
@@ -36,11 +36,11 @@ public class Racecourse implements Serializable {
         return new RacecourseBuilder();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -140,13 +140,16 @@ public class Racecourse implements Serializable {
         int result;
         long temp;
 
-        result = id;
+        result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
+
         temp = Double.doubleToLongBits(latitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         temp = Double.doubleToLongBits(longitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         result = 31 * result + (contact != null ? contact.hashCode() : 0);
         result = 31 * result + (clerk != null ? clerk.hashCode() : 0);
 
