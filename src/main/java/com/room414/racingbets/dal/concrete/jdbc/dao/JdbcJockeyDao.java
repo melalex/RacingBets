@@ -22,7 +22,7 @@ public class JdbcJockeyDao implements JockeyDao {
 
 
     @Override
-    public void create(Jockey entity) {
+    public boolean create(Jockey entity) {
 
     }
 
@@ -42,12 +42,12 @@ public class JdbcJockeyDao implements JockeyDao {
     }
 
     @Override
-    public void update(Jockey entity) {
+    public int update(Jockey entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 

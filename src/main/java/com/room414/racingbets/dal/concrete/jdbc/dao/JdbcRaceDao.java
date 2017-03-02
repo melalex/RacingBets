@@ -24,7 +24,7 @@ public class JdbcRaceDao implements RaceDao {
 
 
     @Override
-    public void create(Race entity) {
+    public boolean create(Race entity) {
 
     }
 
@@ -44,12 +44,12 @@ public class JdbcRaceDao implements RaceDao {
     }
 
     @Override
-    public void update(Race entity) {
+    public int update(Race entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 

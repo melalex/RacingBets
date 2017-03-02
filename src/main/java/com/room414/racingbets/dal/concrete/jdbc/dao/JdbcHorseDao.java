@@ -22,7 +22,7 @@ public class JdbcHorseDao implements HorseDao {
 
 
     @Override
-    public void create(Horse entity) {
+    public boolean create(Horse entity) {
 
     }
 
@@ -42,12 +42,12 @@ public class JdbcHorseDao implements HorseDao {
     }
 
     @Override
-    public void update(Horse entity) {
+    public int update(Horse entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 

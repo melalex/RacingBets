@@ -22,8 +22,8 @@ public class JdbcCountryDao implements CountryDao {
 
 
     @Override
-    public void create(Country entity) {
-
+    public boolean create(Country entity) {
+        String sqlStatement = "";
     }
 
     @Override
@@ -42,12 +42,12 @@ public class JdbcCountryDao implements CountryDao {
     }
 
     @Override
-    public void update(Country entity) {
+    public int update(Country entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 }

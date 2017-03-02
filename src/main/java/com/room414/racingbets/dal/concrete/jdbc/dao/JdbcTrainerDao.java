@@ -22,7 +22,7 @@ public class JdbcTrainerDao implements TrainerDao {
 
 
     @Override
-    public void create(Trainer entity) {
+    public boolean create(Trainer entity) {
 
     }
 
@@ -42,12 +42,12 @@ public class JdbcTrainerDao implements TrainerDao {
     }
 
     @Override
-    public void update(Trainer entity) {
+    public int update(Trainer entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 

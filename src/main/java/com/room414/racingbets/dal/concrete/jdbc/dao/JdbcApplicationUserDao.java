@@ -24,7 +24,7 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
 
     @Override
-    public void create(ApplicationUser entity) {
+    public boolean create(ApplicationUser entity) {
 
     }
 
@@ -44,12 +44,12 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void update(ApplicationUser entity) {
+    public int update(ApplicationUser entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 

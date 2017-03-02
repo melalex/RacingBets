@@ -24,7 +24,7 @@ public class JdbcBetDao implements BetDao {
 
 
     @Override
-    public void create(Bet entity) {
+    public boolean create(Bet entity) {
 
     }
 
@@ -44,12 +44,12 @@ public class JdbcBetDao implements BetDao {
     }
 
     @Override
-    public void update(Bet entity) {
+    public int update(Bet entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 

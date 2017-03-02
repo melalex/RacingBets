@@ -13,8 +13,9 @@ public interface CrudDao<K, E> {
      * Add new entity to repository
      *
      * @param entity entity that should be added to data store.
+     * @return is created
      */
-    void create(E entity);
+    boolean create(E entity);
 
     /**
      * Find entity by id.
@@ -40,13 +41,15 @@ public interface CrudDao<K, E> {
      * Updates value of entity param in data store
      *
      * @param entity entity to update
+     * @return count of updated entities
      */
-    void update(E entity);
+    int update(E entity);
 
     /**
      * Removes entity T with specific id from data store.
      *
      * @param id id of entity to remove
+     * @return is deleted
      */
-    void delete(K id);
+    boolean delete(K id);
 }

@@ -22,7 +22,7 @@ public class JdbcOwnerDao implements OwnerDao {
 
 
     @Override
-    public void create(Owner entity) {
+    public boolean create(Owner entity) {
 
     }
 
@@ -42,12 +42,12 @@ public class JdbcOwnerDao implements OwnerDao {
     }
 
     @Override
-    public void update(Owner entity) {
+    public int update(Owner entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 

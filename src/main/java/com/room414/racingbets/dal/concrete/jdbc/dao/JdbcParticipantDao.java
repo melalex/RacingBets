@@ -24,7 +24,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
 
     @Override
-    public void create(Participant entity) {
+    public boolean create(Participant entity) {
 
     }
 
@@ -44,12 +44,12 @@ public class JdbcParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public void update(Participant entity) {
+    public int update(Participant entity) {
 
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
     }
 
