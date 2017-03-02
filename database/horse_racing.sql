@@ -41,7 +41,7 @@ CREATE TABLE `horse_racing`.`trainer` (
 CREATE TABLE `horse_racing`.`race` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
-  `status` ENUM('scheduled', 'riding', 'finished') NOT NULL,
+  `status` ENUM('scheduled', 'riding', 'finished', 'rejected') NOT NULL,
   `racecourse_id` INT UNSIGNED NOT NULL,
   `start_date_time` TIMESTAMP NOT NULL,
   `going_id` INT UNSIGNED NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE `horse_racing`.`race` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
-CREATE TABLE `horse_racing`.`price` (
+CREATE TABLE `horse_racing`.`prize` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `race_id` INT UNSIGNED NOT NULL,
   `price_size` DECIMAL(12, 2) UNSIGNED NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE `horse_racing`.`going` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `idnew_table_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC));
   
 CREATE TABLE `horse_racing`.`participant` (
@@ -92,14 +92,13 @@ CREATE TABLE `horse_racing`.`participant` (
   `number` INT NOT NULL,
   `horse_id` INT UNSIGNED NOT NULL,
   `rase_id` INT UNSIGNED NOT NULL,
-  `carried_weight` FLOAT UNSIGNED NOT NULL,
-  `topspeed` INT(3) UNSIGNED NOT NULL,
-  `official_rating` INT(5) UNSIGNED NOT NULL,
-  `ods_numerator` INT(4) UNSIGNED NOT NULL,
-  `ods_denominator` INT(4) UNSIGNED NOT NULL,
+  `carried_weight` FLOAT UNSIGNED NULL,
+  `topspeed` INT(3) UNSIGNED NULL,
+  `official_rating` INT(5) UNSIGNED NULL,
+  `ods` DOUBLE UNSIGNED NULL,
   `jockey_id` INT UNSIGNED NOT NULL,
   `trainer_id` INT UNSIGNED NOT NULL,
-  `place` INT(2) UNSIGNED NOT NULL,
+  `place` INT(2) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -107,7 +106,7 @@ CREATE TABLE `horse_racing`.`bet` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED NOT NULL,
   `bet_type_id` INT UNSIGNED NOT NULL,
-  `status` ENUM('scheduled', 'win', 'lose') NOT NULL,
+  `status` ENUM('scheduled', 'win', 'lose', 'rejected') NOT NULL,
   `bet_size` DECIMAL(12, 2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
@@ -134,7 +133,7 @@ CREATE TABLE `horse_racing`.`role` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `idnew_table_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC));
 
 CREATE TABLE `horse_racing`.`application_user_role` (
@@ -273,9 +272,9 @@ ADD CONSTRAINT `race_going_id_fkey`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `horse_racing`.`price` 
+ALTER TABLE `horse_racing`.`prize`
 ADD INDEX `race_price_race_id_fkey_idx` (`race_id` ASC);
-ALTER TABLE `horse_racing`.`price` 
+ALTER TABLE `horse_racing`.`prize`
 ADD CONSTRAINT `race_price_racecourse_id_fkey`
   FOREIGN KEY (`race_id`)
   REFERENCES `horse_racing`.`race` (`id`)
@@ -343,6 +342,3 @@ INSERT INTO horse_racing.bet_type (name) VALUES ('Exacta');
 INSERT INTO horse_racing.bet_type (name) VALUES ('Trifecta');
 INSERT INTO horse_racing.bet_type (name) VALUES ('Superfecta');
 INSERT INTO horse_racing.bet_type (name) VALUES ('Daily Double');
-INSERT INTO horse_racing.bet_type (name) VALUES ('Pick 3');
-INSERT INTO horse_racing.bet_type (name) VALUES ('Pick 4');
-INSERT INTO horse_racing.bet_type (name) VALUES ('Pick 6');
