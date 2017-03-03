@@ -35,30 +35,23 @@ public class JdbcCrudExecutor<T> {
         }
     }
 
-    public List<T> findAll(String tableName) throws DalException {
-        String sqlStatement = "SELECT * FROM ?";
-
+    public List<T> findAll(String sqlStatement) throws DalException {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-
             return getResultList(statement, mapper);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, tableName);
+            String message = defaultErrorMessage(sqlStatement);
             throw new DalException(message, e);
         }
     }
 
-    public List<T> findAll(String tableName, long limit, long offset) throws DalException {
-        String sqlStatement = "SELECT * FROM ? LIMIT ? OFFSET ?";
-
+    public List<T> findAll(String sqlStatement, long limit, long offset) throws DalException {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
             statement.setLong(2, limit);
             statement.setLong(3, offset);
 
             return getResultList(statement, mapper);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, tableName, limit, offset);
+            String message = defaultErrorMessage(sqlStatement, limit, offset);
             throw new DalException(message, e);
         }
     }

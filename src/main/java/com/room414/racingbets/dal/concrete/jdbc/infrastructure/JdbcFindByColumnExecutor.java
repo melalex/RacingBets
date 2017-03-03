@@ -33,13 +33,9 @@ public class JdbcFindByColumnExecutor<T> extends JdbcCrudExecutor<T> {
         }
     }
 
-    public long findByColumnPartCount(String tableName, String columnName, String namePart) throws DalException {
-        final String sqlStatement = "SELECT COUNT(*) AS count FROM ? WHERE ? LIKE ?";
-
+    public long findByColumnPartCount(String sqlStatement, String namePart) throws DalException {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-            statement.setString(2, columnName);
-            statement.setString(3, startsWith(namePart));
+            statement.setString(1, startsWith(namePart));
 
             return getResult(statement, JdbcMapHelper::mapCount);
         } catch (SQLException e) {

@@ -44,9 +44,9 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        final String columnName = "racecourse.name";
+        final String sqlStatement = "SELECT COUNT(*) AS count FROM racecourse WHERE name LIKE ?";
 
-        return executor.findByColumnPartCount(TABLE_NAME, columnName, namePart);
+        return executor.findByColumnPartCount(sqlStatement, namePart);
     }
 
     @Override
@@ -89,12 +89,19 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public List<Racecourse> findAll() throws DalException {
-        return executor.findAll(TABLE_NAME);
+        final String sqlStatement = "SELECT * FROM racecourse " +
+                "INNER JOIN country ON country.id = racecourse.country_id";
+
+        return executor.findAll(sqlStatement);
     }
 
     @Override
     public List<Racecourse> findAll(long offset, long limit) throws DalException {
-        return executor.findAll(TABLE_NAME, limit, offset);
+        final String sqlStatement = "SELECT * FROM racecourse " +
+                "INNER JOIN country ON country.id = racecourse.country_id " +
+                "LIMIT ? OFFSET ?";
+
+        return executor.findAll(sqlStatement, limit, offset);
     }
 
     @Override
