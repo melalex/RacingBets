@@ -4,6 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.PersonDao;
 import com.room414.racingbets.dal.abstraction.entities.Person;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper;
+import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +26,6 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     protected abstract T mapResultSet(ResultSet resultSet) throws SQLException;
 
-
     @Override
     public void create(T entity) throws DalException {
         String sqlStatement = "INSERT INTO ? (first_name, last_name, birthday, country_id) VALUES (?, ?, ?, ?)";
@@ -37,7 +37,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
             statement.setDate(4, entity.getBirthday());
             statement.setLong(5, entity.getCountry().getId());
 
-            JdbcDaoHelper.setId(statement, entity::setId);
+            JdbcDaoHelper.createEntity(statement, entity::setId);
 
         } catch (SQLException e) {
             String message = defaultErrorMessage(
@@ -91,7 +91,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
             statement.setString(2, startsWith(namePart));
             statement.setString(3, startsWith(namePart));
 
-            return getResult(statement, JdbcDaoHelper::countMapper);
+            return getResult(statement, JdbcMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
@@ -162,7 +162,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
 
-            return getResult(statement, JdbcDaoHelper::countMapper);
+            return getResult(statement, JdbcMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, getTableName());
             throw new DalException(message, e);

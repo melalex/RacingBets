@@ -32,7 +32,7 @@ public class Racecourse implements Serializable {
     public Racecourse() {
     }
 
-    private static RacecourseBuilder builder() {
+    public static RacecourseBuilder builder() {
         return new RacecourseBuilder();
     }
 

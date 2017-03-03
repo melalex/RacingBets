@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
  * @version 1.0 28 Feb 2017
  */
 public class BuildHelper {
+    private BuildHelper() {
+
+    }
+
     public static List<Participant> mapIdsToParticipants(List<Integer> ids) {
         if (ids != null) {
             return ids.stream().map((id) -> {

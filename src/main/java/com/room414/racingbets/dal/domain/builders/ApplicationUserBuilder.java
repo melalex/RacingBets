@@ -6,6 +6,7 @@ import com.room414.racingbets.dal.domain.enums.Role;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Simplify creating ApplicationUser instance using builder pattern.
@@ -81,8 +82,24 @@ public class ApplicationUserBuilder {
         return this;
     }
 
+    public ApplicationUserBuilder setRolesStrings(Set<String> roles) {
+        if (roles != null) {
+            this.roles = roles.stream()
+                    .map(Role::getRole)
+                    .collect(Collectors.toSet());
+        } else {
+            this.roles = null;
+        }
+        return this;
+    }
+
     public ApplicationUserBuilder addRole(Role role) {
         getRoles().add(role);
+        return this;
+    }
+
+    public ApplicationUserBuilder addRole(String role) {
+        getRoles().add(Role.getRole(role));
         return this;
     }
 

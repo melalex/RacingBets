@@ -27,6 +27,7 @@ public class HorseLazyLoadProxy extends Horse {
         this.horseDao = horseDao;
     }
 
+    // TODO: is good?
     private Horse getHorse() {
         if (horse == null) {
             try {

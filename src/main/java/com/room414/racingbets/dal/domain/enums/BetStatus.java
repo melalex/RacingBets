@@ -26,7 +26,7 @@ public enum BetStatus {
         return name;
     }
 
-    public static BetStatus getGender(String name) {
+    public static BetStatus getStatus(String name) {
         for(BetStatus v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {
                 return v;

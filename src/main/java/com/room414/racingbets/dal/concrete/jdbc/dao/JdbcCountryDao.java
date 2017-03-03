@@ -2,12 +2,11 @@ package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.CountryDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper;
+import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
 import com.room414.racingbets.dal.domain.entities.Country;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,25 +21,10 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  */
 // TODO: queries as constants
 public class JdbcCountryDao implements CountryDao {
-    private final String TABLE_NAME = "country";
-
-    // TODO: is should be local
-    private final String ID_COLUMN = "country.id";
-    private final String NAME_COLUMN = "country.name";
-    private final String CODE_COLUMN = "country.code";
-
     private Connection connection;
 
     JdbcCountryDao(Connection connection) {
         this.connection = connection;
-    }
-
-
-    private Country mapResultSet(ResultSet resultSet) throws SQLException {
-        long id = resultSet.getLong(ID_COLUMN);
-        String name = resultSet.getString(NAME_COLUMN);
-        String code = resultSet.getString(CODE_COLUMN);
-        return new Country(id, name, code);
     }
 
     @Override
@@ -51,7 +35,7 @@ public class JdbcCountryDao implements CountryDao {
             statement.setString(1, entity.getName());
             statement.setString(2, entity.getCode());
 
-            JdbcDaoHelper.setId(statement, entity::setId);
+            createEntity(statement, entity::setId);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, entity.getName(), entity.getCode());
             throw new DalException(message, e);
@@ -62,14 +46,7 @@ public class JdbcCountryDao implements CountryDao {
     public Country find(Long id) throws DalException {
         String sqlStatement = "SELECT * FROM country WHERE id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-
-            return getResult(statement, this::mapResultSet);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return finnd(id, sqlStatement, connection, JdbcMapHelper::mapCountry);
     }
 
     @Override
@@ -77,7 +54,7 @@ public class JdbcCountryDao implements CountryDao {
         String sqlStatement = "SELECT * FROM country";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return getResultList(statement, this::mapResultSet);
+            return getResultList(statement, JdbcMapHelper::mapCountry);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement);
             throw new DalException(message, e);
@@ -92,7 +69,7 @@ public class JdbcCountryDao implements CountryDao {
             statement.setLong(1, limit);
             statement.setLong(2, offset);
 
-            return getResultList(statement, this::mapResultSet);
+            return getResultList(statement, JdbcMapHelper::mapCountry);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, limit, offset);
             throw new DalException(message, e);
@@ -104,7 +81,7 @@ public class JdbcCountryDao implements CountryDao {
         String sqlStatement = "SELECT COUNT(*) AS count FROM country";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return getResult(statement, JdbcDaoHelper::countMapper);
+            return getResult(statement, JdbcMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement);
             throw new DalException(message, e);
@@ -150,9 +127,9 @@ public class JdbcCountryDao implements CountryDao {
     public List<Country> findByNamePart(String namePart, long offset, long limit) throws DalException {
         String sqlStatement = "SELECT * FROM country WHERE name LIKE ? LIMIT ? OFFSET ?";
 
-        return JdbcDaoHelper.findByColumnPart(
+        return findByColumnPart(
                 connection,
-                this::mapResultSet,
+                JdbcMapHelper::mapCountry,
                 sqlStatement,
                 namePart,
                 offset,
@@ -164,13 +141,6 @@ public class JdbcCountryDao implements CountryDao {
     public long findByNamePartCount(String namePart) throws DalException {
         String sqlStatement = "SELECT COUNT(*) AS count FROM country WHERE name LIKE ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, startsWith(namePart));
-
-            return getResult(statement, JdbcDaoHelper::countMapper);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, startsWith(namePart));
-            throw new DalException(message, e);
-        }
+        return findByColumnPartCount(connection, sqlStatement, namePart);
     }
 }

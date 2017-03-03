@@ -59,8 +59,18 @@ public class BetBuilder {
         return this;
     }
 
+    public BetBuilder setBetType(String betType) {
+        this.betType = BetType.getBetType(betType);
+        return this;
+    }
+
     public BetBuilder setBetStatus(BetStatus betStatus) {
         this.betStatus = betStatus;
+        return this;
+    }
+
+    public BetBuilder setBetStatus(String betStatus) {
+        this.betStatus = BetStatus.getStatus(betStatus);
         return this;
     }
 

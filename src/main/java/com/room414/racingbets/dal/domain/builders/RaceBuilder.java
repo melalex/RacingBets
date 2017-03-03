@@ -94,13 +94,28 @@ public class RaceBuilder {
         return this;
     }
 
+    public RaceBuilder setTrackCondition(String trackCondition) {
+        this.trackCondition = TrackCondition.getTrackCondition(trackCondition);
+        return this;
+    }
+
     public RaceBuilder setRaceType(RaceType raceType) {
         this.raceType = raceType;
         return this;
     }
 
+    public RaceBuilder setRaceType(String raceType) {
+        this.raceType = RaceType.getRaceType(raceType);
+        return this;
+    }
+
     public RaceBuilder setRaceStatus(RaceStatus raceStatus) {
         this.raceStatus = raceStatus;
+        return this;
+    }
+
+    public RaceBuilder setRaceStatus(String raceStatus) {
+        this.raceStatus = RaceStatus.getRaceStatus(raceStatus);
         return this;
     }
 

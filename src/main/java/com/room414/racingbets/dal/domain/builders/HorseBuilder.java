@@ -67,6 +67,11 @@ public class HorseBuilder {
         return this;
     }
 
+    public HorseBuilder setGender(String gender) {
+        this.gender = Gender.getGender(gender);
+        return this;
+    }
+
     public HorseBuilder setSir(Horse sir) {
         this.sir = sir;
         return this;

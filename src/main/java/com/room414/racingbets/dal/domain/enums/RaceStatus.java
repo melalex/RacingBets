@@ -32,7 +32,7 @@ public enum  RaceStatus {
         return name;
     }
 
-    public static RaceStatus getGender(String name) {
+    public static RaceStatus getRaceStatus(String name) {
         for(RaceStatus v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {
                 return v;
