@@ -96,4 +96,8 @@ public class JdbcMapHelper {
                 .setContact(resultSet.getString(RACECOURSE_CONTACT_COLUMN))
                 .build();
     }
+
+    public static ApplicationUser mapApplicationUser(ResultSet resultSet) throws SQLException {
+        return null;
+    }
 }

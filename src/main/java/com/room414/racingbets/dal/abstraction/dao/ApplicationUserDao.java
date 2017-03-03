@@ -38,13 +38,6 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
     ApplicationUser findByLogin(String login);
 
     /**
-     * @param id ApplicationUser id
-     * @param password ApplicationUser password
-     * @return checks if ApplicationUser's password is password param
-     */
-    boolean checkPassword(long id, String password);
-
-    /**
      * Set ApplicationUser isEmailConfirmed field to true to user with id == id param
      *
      * @param id ApplicationUser id
