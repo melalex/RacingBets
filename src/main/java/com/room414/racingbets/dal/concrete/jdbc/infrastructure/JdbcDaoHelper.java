@@ -15,6 +15,7 @@ import java.util.function.Consumer;
  * @version 1.0 02 Mar 2017
  */
 // TODO: is good place
+// TODO: usage comments
 public class JdbcDaoHelper {
     private final static String DEFAULT_ERROR_MESSAGE = "Exception during execution statement '%s'";
 

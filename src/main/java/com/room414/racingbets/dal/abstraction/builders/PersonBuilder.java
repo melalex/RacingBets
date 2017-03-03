@@ -11,42 +11,55 @@ import java.sql.Date;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public abstract class PersonBuilder {
+public abstract class PersonBuilder<T extends Person> {
     protected long id;
     protected String firstName;
     protected String secondName;
     protected Date birthday;
     protected Country country;
 
-    public void setId(long id) {
+    protected abstract T getPerson();
+
+    public PersonBuilder<T> setId(long id) {
         this.id = id;
+        return this;
     }
 
-    public PersonBuilder setFirstName(String firstName) {
+    public PersonBuilder<T> setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
 
-    public PersonBuilder setSecondName(String secondName) {
+    public PersonBuilder<T> setSecondName(String secondName) {
         this.secondName = secondName;
         return this;
     }
 
-    public PersonBuilder setBirthday(Date birthday) {
+    public PersonBuilder<T> setBirthday(Date birthday) {
         this.birthday = birthday;
         return this;
     }
 
-    public PersonBuilder setCountry(Country country) {
+    public PersonBuilder<T> setCountry(Country country) {
         this.country = country;
         return this;
     }
 
-    public PersonBuilder setCountryById(int id) {
+    public PersonBuilder<T> setCountryById(int id) {
         this.country = new Country();
         this.country.setId(id);
         return this;
     }
 
-    public abstract Person build();
+    public T build() {
+        T person = getPerson();
+
+        person.setId(id);
+        person.setFirstName(firstName);
+        person.setLastName(secondName);
+        person.setBirthday(birthday);
+        person.setCountry(country);
+
+        return person;
+    }
 }

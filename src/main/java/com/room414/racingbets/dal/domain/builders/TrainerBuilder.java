@@ -10,17 +10,10 @@ import com.room414.racingbets.dal.domain.entities.Trainer;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class TrainerBuilder extends PersonBuilder {
+public class TrainerBuilder extends PersonBuilder<Trainer> {
+
     @Override
-    public Trainer build() {
-        Trainer trainer = new Trainer();
-
-        trainer.setId(id);
-        trainer.setFirstName(firstName);
-        trainer.setLastName(secondName);
-        trainer.setBirthday(birthday);
-        trainer.setCountry(country);
-
-        return trainer;
+    protected Trainer getPerson() {
+        return new Trainer();
     }
 }

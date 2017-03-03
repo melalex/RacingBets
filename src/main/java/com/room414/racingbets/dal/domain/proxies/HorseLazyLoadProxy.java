@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.domain.proxies;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.domain.enums.Gender;
@@ -28,7 +29,11 @@ public class HorseLazyLoadProxy extends Horse {
 
     private Horse getHorse() {
         if (horse == null) {
-            horse = horseDao.find(id);
+            try {
+                horse = horseDao.find(id);
+            } catch (DalException e) {
+                throw new RuntimeException("Can not lazy load horse");
+            }
         }
         return horse;
     }

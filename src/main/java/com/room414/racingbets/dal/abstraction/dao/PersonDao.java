@@ -21,5 +21,5 @@ public interface PersonDao<T extends Person> extends CrudDao<Long, T> {
     /**
      * @return count of Persons whose name starts with namePart
      */
-    int findByNamePartCount(String namePart);
+    long findByNamePartCount(String namePart) throws DalException;
 }

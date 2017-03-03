@@ -10,17 +10,10 @@ import com.room414.racingbets.dal.domain.entities.Owner;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class OwnerBuilder extends PersonBuilder {
+public class OwnerBuilder extends PersonBuilder<Owner> {
+
     @Override
-    public Owner build() {
-        Owner owner = new Owner();
-
-        owner.setId(id);
-        owner.setFirstName(firstName);
-        owner.setLastName(secondName);
-        owner.setBirthday(birthday);
-        owner.setCountry(country);
-
-        return owner;
+    protected Owner getPerson() {
+        return new Owner();
     }
 }
