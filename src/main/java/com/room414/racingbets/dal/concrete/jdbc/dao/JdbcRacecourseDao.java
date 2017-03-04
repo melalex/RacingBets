@@ -50,7 +50,6 @@ public class JdbcRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    // TODO: remove copy & paste
     public void create(Racecourse entity) throws DalException {
         final String sqlStatement = "INSERT INTO racecourse (name, country_id, latitude, longitude, contact, clerk) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";

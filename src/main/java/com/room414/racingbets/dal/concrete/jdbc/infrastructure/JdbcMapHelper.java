@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
 
+import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.*;
 
 import java.sql.ResultSet;
@@ -98,6 +99,10 @@ public class JdbcMapHelper {
     }
 
     public static ApplicationUser mapApplicationUser(ResultSet resultSet) throws SQLException {
+        return null;
+    }
+
+    public static Horse mapHorse(ResultSet resultSet) throws SQLException {
         return null;
     }
 }

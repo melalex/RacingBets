@@ -16,6 +16,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
+// TODO: ordered
 public class JdbcRaceDao implements RaceDao {
     Connection connection;
 
