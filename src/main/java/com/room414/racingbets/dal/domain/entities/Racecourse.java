@@ -17,7 +17,6 @@ public class Racecourse implements Serializable {
 
     private long id;
     private String name;
-    private Country country;
     private double latitude;
     private double longitude;
     /**
@@ -50,14 +49,6 @@ public class Racecourse implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
     }
 
     public double getLatitude() {
@@ -120,10 +111,6 @@ public class Racecourse implements Serializable {
             return false;
         }
 
-        if (country != null ? !country.equals(that.country) : that.country != null) {
-            return false;
-        }
-
         if (contact != null ? !contact.equals(that.contact) : that.contact != null) {
             return false;
         }
@@ -142,7 +129,6 @@ public class Racecourse implements Serializable {
 
         result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (country != null ? country.hashCode() : 0);
 
         temp = Double.doubleToLongBits(latitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -161,7 +147,6 @@ public class Racecourse implements Serializable {
         return "Racecourse{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", country=" + country +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", contact='" + contact + '\'' +

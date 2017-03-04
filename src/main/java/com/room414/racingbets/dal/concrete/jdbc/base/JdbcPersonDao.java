@@ -28,14 +28,13 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public void create(T entity) throws DalException {
-        String sqlStatement = "INSERT INTO ? (first_name, last_name, birthday, country_id) VALUES (?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO ? (first_name, last_name, birthday) VALUES (?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
             statement.setString(2, entity.getFirstName());
             statement.setString(3, entity.getLastName());
             statement.setDate(4, entity.getBirthday());
-            statement.setLong(5, entity.getCountry().getId());
 
             JdbcDaoHelper.createEntity(statement, entity::setId);
 
@@ -45,8 +44,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
                     getTableName(),
                     entity.getFirstName(),
                     entity.getLastName(),
-                    entity.getBirthday(),
-                    entity.getCountry().getId()
+                    entity.getBirthday()
             );
             throw new DalException(message, e);
         }
@@ -54,17 +52,14 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public List<T> findByNamePart(String namePart, long offset, long limit) throws DalException {
-        String sqlStatement = "SELECT * FROM ? " +
-                "INNER JOIN country ON country.id = ?.country_id " +
-                "WHERE first_name LIKE ? OR last_name LIKE ? LIMIT ? OFFSET ?";
+        String sqlStatement = "SELECT * FROM ? WHERE first_name LIKE ? OR last_name LIKE ? LIMIT ? OFFSET ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
-            statement.setString(2, getTableName());
+            statement.setString(2, startsWith(namePart));
             statement.setString(3, startsWith(namePart));
-            statement.setString(4, startsWith(namePart));
-            statement.setLong(5, limit);
-            statement.setLong(6, offset);
+            statement.setLong(4, limit);
+            statement.setLong(5, offset);
 
             return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
@@ -83,8 +78,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        String sqlStatement = "SELECT COUNT(*) FROM ? " +
-                "WHERE first_name LIKE ? OR last_name LIKE ?";
+        String sqlStatement = "SELECT COUNT(*) FROM ? WHERE first_name LIKE ? OR last_name LIKE ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
@@ -105,14 +99,11 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public T find(Long id) throws DalException {
-        String sqlStatement = "SELECT * FROM ? " +
-                "INNER JOIN country ON country.id = ?.country_id " +
-                "WHERE id = ?";
+        String sqlStatement = "SELECT * FROM ? WHERE id = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
-            statement.setString(2, getTableName());
-            statement.setLong(3, id);
+            statement.setLong(2, id);
 
             return getResult(statement, this::mapResultSet);
         } catch (SQLException e) {
@@ -123,12 +114,10 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public List<T> findAll() throws DalException {
-        String sqlStatement = "SELECT * FROM ? " +
-                "INNER JOIN country ON country.id = ?.country_id";
+        String sqlStatement = "SELECT * FROM ? ";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
-            statement.setString(2, getTableName());
 
             return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
@@ -138,15 +127,12 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public List<T> findAll(long offset, long limit) throws DalException {
-        String sqlStatement = "SELECT * FROM ? " +
-                "INNER JOIN country ON country.id = ?.country_id " +
-                "LIMIT ? OFFSET ?";
+        String sqlStatement = "SELECT * FROM ? LIMIT ? OFFSET ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
-            statement.setString(2, getTableName());
-            statement.setLong(3, limit);
-            statement.setLong(4, offset);
+            statement.setLong(2, limit);
+            statement.setLong(2, offset);
 
             return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
@@ -171,7 +157,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public long update(T entity) throws DalException {
-        String sqlStatement = "UPDATE ? SET first_name = ?, last_name = ?, birthday = ?, country_id = ? WHERE id = ?";
+        String sqlStatement = "UPDATE ? SET first_name = ?, last_name = ?, birthday = ? WHERE id = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
@@ -179,10 +165,6 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
             statement.setString(2, entity.getFirstName());
             statement.setString(3, entity.getLastName());
             statement.setDate(4, entity.getBirthday());
-            statement.setLong(5, entity.getCountry().getId());
-
-            statement.setLong(6, entity.getId());
-
 
             return statement.executeUpdate();
         } catch (SQLException e) {
@@ -192,7 +174,6 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
                     entity.getFirstName(),
                     entity.getLastName(),
                     entity.getBirthday(),
-                    entity.getCountry().getId(),
                     entity.getId()
             );
             throw new DalException(message, e);

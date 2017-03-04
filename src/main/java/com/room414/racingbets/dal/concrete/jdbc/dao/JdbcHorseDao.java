@@ -40,7 +40,6 @@ public class JdbcHorseDao implements HorseDao {
                 "SELECT * FROM horse " +
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id " +
-                "INNER JOIN country ON owner.country_id = country.id " +
                 "INNER JOIN trainer " +
                 "   ON horse.trainer_id = trainer.id " +
                 "WHERE horse.name LIKE ? " +

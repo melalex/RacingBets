@@ -22,17 +22,6 @@ public class JdbcMapHelper {
         return resultSet.getLong(COUNT_COLUMN);
     }
 
-    public static Country mapCountry(ResultSet resultSet) throws SQLException {
-        final String COUNTRY_ID_COLUMN = "country.id";
-        final String COUNTRY_NAME_COLUMN = "country.name";
-        final String COUNTRY_CODE_COLUMN = "country.code";
-
-        long id = resultSet.getLong(COUNTRY_ID_COLUMN);
-        String name = resultSet.getString(COUNTRY_NAME_COLUMN);
-        String code = resultSet.getString(COUNTRY_CODE_COLUMN);
-        return new Country(id, name, code);
-    }
-
     public static Jockey mapJockey(ResultSet resultSet) throws SQLException {
         final String PERSON_ID_COLUMN = "jockey.id";
         final String PERSON_FIRST_NAME_COLUMN = "jockey.first_name";
@@ -44,7 +33,6 @@ public class JdbcMapHelper {
                 .setFirstName(resultSet.getString(PERSON_FIRST_NAME_COLUMN))
                 .setSecondName(resultSet.getString(PERSON_LAST_NAME_COLUMN))
                 .setBirthday(resultSet.getDate(PERSON_BIRTHDAY_COLUMN))
-                .setCountry(mapCountry(resultSet))
                 .build();
 
     }
@@ -60,7 +48,6 @@ public class JdbcMapHelper {
                 .setFirstName(resultSet.getString(PERSON_FIRST_NAME_COLUMN))
                 .setSecondName(resultSet.getString(PERSON_LAST_NAME_COLUMN))
                 .setBirthday(resultSet.getDate(PERSON_BIRTHDAY_COLUMN))
-                .setCountry(mapCountry(resultSet))
                 .build();
     }
 
@@ -75,7 +62,6 @@ public class JdbcMapHelper {
                 .setFirstName(resultSet.getString(PERSON_FIRST_NAME_COLUMN))
                 .setSecondName(resultSet.getString(PERSON_LAST_NAME_COLUMN))
                 .setBirthday(resultSet.getDate(PERSON_BIRTHDAY_COLUMN))
-                .setCountry(mapCountry(resultSet))
                 .build();
     }
 
@@ -91,7 +77,6 @@ public class JdbcMapHelper {
         return Racecourse.builder()
                 .setId(resultSet.getLong(RACECOURSE_ID_COLUMN))
                 .setName(resultSet.getString(RACECOURSE_NAME_COLUMN))
-                .setCountry(mapCountry(resultSet))
                 .setLatitude(resultSet.getDouble(RACECOURSE_LATITUDE_COLUMN))
                 .setLongitude(resultSet.getDouble(RACECOURSE_LONGITUDE_COLUMN))
                 .setClerk(resultSet.getString(RACECOURSE_CLERK_COLUMN))

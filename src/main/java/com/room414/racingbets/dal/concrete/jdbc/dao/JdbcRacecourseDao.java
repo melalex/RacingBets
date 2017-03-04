@@ -36,10 +36,7 @@ public class JdbcRacecourseDao implements RacecourseDao {
     @Override
     public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
         //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM racecourse " +
-                "INNER JOIN country ON racecourse.country_id = country.id " +
-                "WHERE racecourse.name LIKE ? LIMIT ? OFFSET ?";
+        final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.name LIKE ? LIMIT ? OFFSET ?";
 
         return executor.findByColumnPart(sqlStatement, namePart, offset, limit);
     }
@@ -56,23 +53,21 @@ public class JdbcRacecourseDao implements RacecourseDao {
     public void create(Racecourse entity) throws DalException {
         final String sqlStatement =
                 "INSERT INTO racecourse " +
-                "   (name, country_id, latitude, longitude, contact, clerk) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "   (name, latitude, longitude, contact, clerk) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, entity.getName());
-            statement.setLong(2, entity.getCountry().getId());
-            statement.setDouble(3, entity.getLatitude());
-            statement.setDouble(4, entity.getLongitude());
-            statement.setString(5, entity.getContact());
-            statement.setString(6, entity.getClerk());
+            statement.setDouble(2, entity.getLatitude());
+            statement.setDouble(3, entity.getLongitude());
+            statement.setString(4, entity.getContact());
+            statement.setString(5, entity.getClerk());
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
                     entity.getName(),
-                    entity.getCountry().getId(),
                     entity.getLatitude(),
                     entity.getLongitude(),
                     entity.getContact(),
@@ -85,11 +80,7 @@ public class JdbcRacecourseDao implements RacecourseDao {
     @Override
     public Racecourse find(Long id) throws DalException {
         //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM racecourse " +
-                "INNER JOIN country " +
-                "   ON country.id = racecourse.country_id " +
-                "WHERE racecourse.id = ?";
+        final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.id = ?";
 
         return executor.find(id, sqlStatement);
     }
@@ -97,10 +88,7 @@ public class JdbcRacecourseDao implements RacecourseDao {
     @Override
     public List<Racecourse> findAll() throws DalException {
         //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM racecourse " +
-                "INNER JOIN country " +
-                "   ON country.id = racecourse.country_id";
+        final String sqlStatement = "SELECT * FROM racecourse";
 
         return executor.findAll(sqlStatement);
     }
@@ -108,11 +96,7 @@ public class JdbcRacecourseDao implements RacecourseDao {
     @Override
     public List<Racecourse> findAll(long offset, long limit) throws DalException {
         //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM racecourse " +
-                "INNER JOIN country " +
-                "   ON country.id = racecourse.country_id " +
-                "LIMIT ? OFFSET ?";
+        final String sqlStatement = "SELECT * FROM racecourse LIMIT ? OFFSET ?";
 
         return executor.findAll(sqlStatement, limit, offset);
     }
@@ -126,24 +110,22 @@ public class JdbcRacecourseDao implements RacecourseDao {
     public long update(Racecourse entity) throws DalException {
         String sqlStatement =
                 "UPDATE racecourse " +
-                "SET name = ?, country_id = ?, latitude = ?, longitude = ?, contact = ?, clerk = ? " +
+                "SET name = ?, latitude = ?, longitude = ?, contact = ?, clerk = ? " +
                 "WHERE id = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, entity.getName());
-            statement.setLong(2, entity.getCountry().getId());
-            statement.setDouble(3, entity.getLatitude());
-            statement.setDouble(4, entity.getLongitude());
-            statement.setString(5, entity.getContact());
-            statement.setString(6, entity.getClerk());
-            statement.setLong(7, entity.getId());
+            statement.setDouble(2, entity.getLatitude());
+            statement.setDouble(3, entity.getLongitude());
+            statement.setString(4, entity.getContact());
+            statement.setString(5, entity.getClerk());
+            statement.setLong(6, entity.getId());
 
             return statement.executeUpdate();
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
                     entity.getName(),
-                    entity.getCountry().getId(),
                     entity.getLatitude(),
                     entity.getLongitude(),
                     entity.getContact(),

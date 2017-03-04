@@ -1,7 +1,5 @@
 package com.room414.racingbets.dal.abstraction.entities;
 
-import com.room414.racingbets.dal.domain.entities.Country;
-
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -18,7 +16,6 @@ public abstract class Person implements Serializable {
     protected String firstName;
     protected String lastName;
     protected Date birthday;
-    protected Country country;
 
     public Person() {
     }
@@ -55,14 +52,6 @@ public abstract class Person implements Serializable {
         this.birthday = birthday;
     }
 
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,10 +80,6 @@ public abstract class Person implements Serializable {
             return false;
         }
 
-        if (country != null ? !country.equals(person.country) : person.country != null) {
-            return false;
-        }
-
         return true;
     }
 
@@ -105,7 +90,6 @@ public abstract class Person implements Serializable {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + (country != null ? country.hashCode() : 0);
 
         return result;
     }
@@ -117,7 +101,6 @@ public abstract class Person implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
-                ", country=" + country +
                 '}';
     }
 }

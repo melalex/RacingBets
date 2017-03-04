@@ -1,7 +1,6 @@
 package com.room414.racingbets.dal.abstraction.builders;
 
 import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.domain.entities.Country;
 
 import java.sql.Date;
 
@@ -16,7 +15,6 @@ public abstract class PersonBuilder<T extends Person> {
     protected String firstName;
     protected String secondName;
     protected Date birthday;
-    protected Country country;
 
     protected abstract T getPerson();
 
@@ -40,17 +38,6 @@ public abstract class PersonBuilder<T extends Person> {
         return this;
     }
 
-    public PersonBuilder<T> setCountry(Country country) {
-        this.country = country;
-        return this;
-    }
-
-    public PersonBuilder<T> setCountryById(int id) {
-        this.country = new Country();
-        this.country.setId(id);
-        return this;
-    }
-
     public T build() {
         T person = getPerson();
 
@@ -58,7 +45,6 @@ public abstract class PersonBuilder<T extends Person> {
         person.setFirstName(firstName);
         person.setLastName(secondName);
         person.setBirthday(birthday);
-        person.setCountry(country);
 
         return person;
     }
