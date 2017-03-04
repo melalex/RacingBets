@@ -20,7 +20,6 @@ public interface UnitOfWork extends AutoCloseable {
     ParticipantDao getParticipantDao();
     RaceDao getRaceDao();
 
-    CountryDao getCountryDao();
     RacecourseDao getRacecourseDao();
 
     void commit() throws DalException;

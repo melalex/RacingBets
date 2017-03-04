@@ -21,6 +21,7 @@ CREATE TABLE `horse_racing`.`trainer` (
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `birthday` DATE,
+  PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 CREATE TABLE `horse_racing`.`horse` (
@@ -67,7 +68,7 @@ CREATE TABLE `horse_racing`.`role` (
   `name` ENUM('Handicapper', 'Bookmaker', 'Admin') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (application_user_id) REFERENCES application_user(id));
+  FOREIGN KEY (application_user_id) REFERENCES application_user(id) ON DELETE CASCADE);
 
 CREATE TABLE `horse_racing`.`race` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -95,7 +96,7 @@ CREATE TABLE `horse_racing`.`prize` (
   `place` INT(2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (race_id) REFERENCES race(id));
+  FOREIGN KEY (race_id) REFERENCES race(id) ON DELETE CASCADE);
 
 CREATE TABLE `horse_racing`.`participant` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -112,27 +113,28 @@ CREATE TABLE `horse_racing`.`participant` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (horse_id) REFERENCES horse(id),
-  FOREIGN KEY (race_id) REFERENCES race(id),
+  FOREIGN KEY (race_id) REFERENCES race(id) ON DELETE CASCADE,
   FOREIGN KEY (jockey_id) REFERENCES jockey(id),
   FOREIGN KEY (trainer_id) REFERENCES trainer(id));
 
 CREATE TABLE `horse_racing`.`bet` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED NOT NULL,
+  'race_id' INT UNSIGNED NOT NULL,
   `bet_type` ENUM('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta') NOT NULL,
   `status` ENUM('scheduled', 'win', 'lose', 'rejected') NOT NULL,
   `bet_size` DECIMAL(12, 2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (application_user_id) REFERENCES application_user(id));
+  FOREIGN KEY (application_user_id) REFERENCES application_user(id) ON DELETE CASCADE,
+  FOREIGN KEY (race_id) REFERENCES race(id) ON DELETE CASCADE);
 
 CREATE TABLE `horse_racing`.`bet_participant` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `race_id` INT UNSIGNED NOT NULL,
   `bet_id` INT UNSIGNED NOT NULL,
   `participant_id` INT UNSIGNED NOT NULL,
   `place` INT(2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (race_id) REFERENCES race(id),
-  FOREIGN KEY (bet_id) REFERENCES bet(id));
+  FOREIGN KEY (bet_id) REFERENCES bet(id) ON DELETE CASCADE,
+  FOREIGN KEY (participant_id) REFERENCES participant(id) ON DELETE CASCADE);

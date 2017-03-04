@@ -121,7 +121,7 @@ public class JdbcRaceDao implements RaceDao {
             for (int i = 0; i < prizes.size(); i++) {
                 statement.setLong(1, entity.getId());
                 statement.setBigDecimal(2, prizes.get(i));
-                statement.setInt(3, i);
+                statement.setInt(3, i + 1);
 
                 statement.addBatch();
             }

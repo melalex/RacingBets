@@ -27,7 +27,6 @@ public class JdbcUnitOfWork implements UnitOfWork {
     private ParticipantDao participantDao;
     private RaceDao raceDao;
 
-    private CountryDao countryDao;
     private RacecourseDao racecourseDao;
 
     public JdbcUnitOfWork(Connection connection) {
@@ -101,14 +100,6 @@ public class JdbcUnitOfWork implements UnitOfWork {
             raceDao = new JdbcRaceDao(connection);
         }
         return raceDao;
-    }
-
-    @Override
-    public CountryDao getCountryDao() {
-        if (countryDao == null) {
-            countryDao = new JdbcCountryDao(connection);
-        }
-        return countryDao;
     }
 
     @Override

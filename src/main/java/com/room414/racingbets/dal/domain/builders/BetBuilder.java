@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class BetBuilder {
     private long id;
+    private long raceId;
     private ApplicationUser user;
     private BigDecimal betSize;
     private BetType betType;
@@ -35,6 +36,11 @@ public class BetBuilder {
 
     public BetBuilder setId(long id) {
         this.id = id;
+        return this;
+    }
+
+    public BetBuilder setRaceId(long raceId) {
+        this.raceId = raceId;
         return this;
     }
 
@@ -104,6 +110,7 @@ public class BetBuilder {
         Bet bet = new Bet();
 
         bet.setId(id);
+        bet.setRaceId(raceId);
         bet.setUser(user);
         bet.setBetSize(betSize);
         bet.setBetType(betType);

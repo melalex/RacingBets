@@ -21,6 +21,8 @@ public class Bet implements Serializable {
     private static final long serialVersionUID = -5253938704091728335L;
 
     private long id;
+    // TODO: make proxy
+    private long raceId;
     private ApplicationUser user;
     private BigDecimal betSize;
     private BetType betType;
@@ -40,6 +42,14 @@ public class Bet implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getRaceId() {
+        return raceId;
+    }
+
+    public void setRaceId(long raceId) {
+        this.raceId = raceId;
     }
 
     public ApplicationUser getUser() {
@@ -106,6 +116,10 @@ public class Bet implements Serializable {
             return false;
         }
 
+        if (raceId != bet.raceId) {
+            return false;
+        }
+
         if (user != null ? !user.equals(bet.user) : bet.user != null) {
             return false;
         }
@@ -133,6 +147,7 @@ public class Bet implements Serializable {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
 
+        result = 31 * result + (int) (raceId ^ (raceId >>> 32));
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (betSize != null ? betSize.hashCode() : 0);
         result = 31 * result + (betType != null ? betType.hashCode() : 0);
@@ -146,6 +161,7 @@ public class Bet implements Serializable {
     public String toString() {
         return "Bet{" +
                 "id=" + id +
+                ", raceId=" + raceId +
                 ", user=" + user +
                 ", betSize=" + betSize +
                 ", betType=" + betType +

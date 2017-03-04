@@ -67,9 +67,9 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     private void createRoles(ApplicationUser entity) throws DalException {
         final String sqlStatement =
-                "INSERT INTO application_user_role " +
-                "   (application_user_role.role_id, application_user_role.application_user_id) " +
-                "SELECT role.id, ? FROM role WHERE role.name = ?";
+                "INSERT INTO role " +
+                "   (application_user_id, name) " +
+                "VALUES (?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             for (Role role : entity.getRoles()) {
@@ -98,10 +98,8 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
                 "   application_user.password, application_user.balance, role.name " +
                 "FROM application_user " +
-                "LEFT OUTER JOIN application_user_role " +
-                "   ON application_user.id = application_user_role.application_user_id " +
-                "INNER JOIN role " +
-                "   ON application_user_role.role_id = role.id " +
+                "LEFT OUTER JOIN role " +
+                "   ON application_user.id = role.application_user_id " +
                 "WHERE application_user.id = ?";
 
 
@@ -116,10 +114,8 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
                 "   application_user.password, application_user.balance, role.name " +
                 "FROM application_user " +
-                "LEFT OUTER JOIN application_user_role " +
-                "   ON application_user.id = application_user_role.application_user_id " +
-                "INNER JOIN role " +
-                "   ON application_user_role.role_id = role.id";
+                "LEFT OUTER JOIN role " +
+                "   ON application_user.id = role.application_user_id";
 
         return executor.findAll(sqlStatement);
     }
@@ -132,10 +128,8 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
                 "   application_user.password, application_user.balance, role.name " +
                 "FROM (SELECT * FROM application_user LIMIT ? OFFSET ?) AS application_user " +
-                "LEFT OUTER JOIN application_user_role " +
-                "   ON application_user.id = application_user_role.application_user_id " +
-                "INNER JOIN role " +
-                "   ON application_user_role.role_id = role.id";
+                "LEFT OUTER JOIN role " +
+                "   ON application_user.id = role.application_user_id";
 
         return executor.findAll(sqlStatement, limit, offset);
     }
@@ -200,10 +194,8 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "   WHERE application_user.login LIKE ? " +
                 "   LIMIT ? OFFSET ?" +
                 ") AS application_user " +
-                "LEFT OUTER JOIN application_user_role " +
-                "   ON application_user.id = application_user_role.application_user_id " +
-                "INNER JOIN role " +
-                "   ON application_user_role.role_id = role.id";
+                "LEFT OUTER JOIN role " +
+                "   ON application_user.id = role.application_user_id";
 
         return executor.findByColumnPart(sqlStatement, loginPart, offset, limit);
     }
@@ -226,10 +218,8 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "   SELECT * FROM application_user " +
                 "   WHERE application_user.login = ? AND application_user.password = ?" +
                 ") AS application_user " +
-                "LEFT OUTER JOIN application_user_role " +
-                "   ON application_user.id = application_user_role.application_user_id " +
-                "INNER JOIN role " +
-                "   ON application_user_role.role_id = role.id";
+                "LEFT OUTER JOIN role " +
+                "   ON application_user.id = role.application_user_id";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, login);

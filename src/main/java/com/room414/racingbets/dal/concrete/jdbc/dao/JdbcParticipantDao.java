@@ -26,10 +26,12 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     private Connection connection;
     private JdbcCrudExecutor<Participant> executor;
+    private JdbcCrudExecutor<Pair<Participant, Timestamp>> foreignExecutor;
 
     JdbcParticipantDao(Connection connection) {
         this.connection = connection;
         this.executor = new JdbcCrudExecutor<>(connection, JdbcMapHelper::mapParticipant);
+        this.foreignExecutor = new JdbcCrudExecutor<>(connection, this::mapWhoAndWhen);
     }
 
 
@@ -155,33 +157,6 @@ public class JdbcParticipantDao implements ParticipantDao {
         return result;
     }
 
-    private List<Pair<Participant, Timestamp>> findByForeignKey(String sqlStatement, long key, long offset, long limit) throws DalException {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, key);
-            statement.setLong(2, limit);
-            statement.setLong(3, offset);
-
-            return getResultList(statement, this::mapWhoAndWhen);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, key);
-            throw new DalException(message, e);
-        }
-    }
-
-    private long findByForeignKeyCount(String columnName, long key) throws DalException {
-        final String sqlStatement = "SELECT Count(*) FROM participant WHERE ? = ?";
-
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, columnName);
-            statement.setLong(2, key);
-
-            return getResult(statement, JdbcMapHelper::mapCount);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, key);
-            throw new DalException(message, e);
-        }
-    }
-
     @Override
     public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) throws DalException {
         //language=MySQL
@@ -198,14 +173,14 @@ public class JdbcParticipantDao implements ParticipantDao {
                 "WHERE horse.id = ? " +
                 "   LIMIT ? OFFSET ?";
 
-        return findByForeignKey(sqlStatement, id, offset, limit);
+        return foreignExecutor.findByForeignKey(sqlStatement, id, offset, limit);
     }
 
     @Override
     public long findByHorseIdCount(long id) throws DalException {
         final String columnName = "horse_id";
 
-        return findByForeignKeyCount(columnName, id);
+        return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
     }
 
     @Override
@@ -224,14 +199,14 @@ public class JdbcParticipantDao implements ParticipantDao {
                 "WHERE owner.id = ? " +
                 "   LIMIT ? OFFSET ?";
 
-        return findByForeignKey(sqlStatement, id, offset, limit);
+        return foreignExecutor.findByForeignKey(sqlStatement, id, offset, limit);
     }
 
     @Override
     public long findByOwnerIdCount(long id) throws DalException {
         final String columnName = "owner_id";
 
-        return findByForeignKeyCount(columnName, id);
+        return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
     }
 
     @Override
@@ -250,14 +225,14 @@ public class JdbcParticipantDao implements ParticipantDao {
                 "WHERE jockey.id = ? " +
                 "   LIMIT ? OFFSET ?";
 
-        return findByForeignKey(sqlStatement, id, offset, limit);
+        return foreignExecutor.findByForeignKey(sqlStatement, id, offset, limit);
     }
 
     @Override
     public long findByJockeyIdCount(long id) throws DalException {
         final String columnName = "jockey_id";
 
-        return findByForeignKeyCount(columnName, id);
+        return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
     }
 
     @Override
@@ -276,13 +251,13 @@ public class JdbcParticipantDao implements ParticipantDao {
                 "WHERE trainer.id = ? " +
                 "   LIMIT ? OFFSET ?";
 
-        return findByForeignKey(sqlStatement, id, offset, limit);
+        return foreignExecutor.findByForeignKey(sqlStatement, id, offset, limit);
     }
 
     @Override
     public long findByTrainerIdCount(long id) throws DalException {
         final String columnName = "trainer_id";
 
-        return findByForeignKeyCount(columnName, id);
+        return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
     }
 }

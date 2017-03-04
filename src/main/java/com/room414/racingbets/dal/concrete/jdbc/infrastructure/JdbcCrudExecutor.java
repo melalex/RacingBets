@@ -82,4 +82,32 @@ public class JdbcCrudExecutor<T> {
             throw new DalException(message, e);
         }
     }
+
+    public List<T> findByForeignKey(String sqlStatement, long key, long offset, long limit) throws DalException {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, key);
+            statement.setLong(2, limit);
+            statement.setLong(3, offset);
+
+            return getResultList(statement, mapper);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, key);
+            throw new DalException(message, e);
+        }
+    }
+
+    public long findByForeignKeyCount(String tableName, String columnName, long key) throws DalException {
+        final String sqlStatement = "SELECT Count(*) FROM ? WHERE ? = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setString(1, tableName);
+            statement.setString(2, columnName);
+            statement.setLong(3, key);
+
+            return getResult(statement, JdbcMapHelper::mapCount);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, key);
+            throw new DalException(message, e);
+        }
+    }
 }
