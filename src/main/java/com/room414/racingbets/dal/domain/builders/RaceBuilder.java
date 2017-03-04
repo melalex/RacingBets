@@ -32,7 +32,6 @@ public class RaceBuilder {
     private RaceStatus raceStatus;
     private int raceClass;
     private int minAge;
-    private int maxAge;
     private int minRating;
     private int maxRating;
     private float distance;
@@ -129,11 +128,6 @@ public class RaceBuilder {
         return this;
     }
 
-    public RaceBuilder setMaxAge(int maxAge) {
-        this.maxAge = maxAge;
-        return this;
-    }
-
     public RaceBuilder setMinRating(int minRating) {
         this.minRating = minRating;
         return this;
@@ -203,7 +197,6 @@ public class RaceBuilder {
         race.setRaceStatus(raceStatus);
         race.setRaceClass(raceClass);
         race.setMinAge(minAge);
-        race.setMaxAge(maxAge);
         race.setMinRating(minRating);
         race.setMaxRating(maxRating);
         race.setDistance(distance);

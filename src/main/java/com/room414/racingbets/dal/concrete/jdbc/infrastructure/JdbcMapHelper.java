@@ -99,10 +99,27 @@ public class JdbcMapHelper {
     }
 
     public static ApplicationUser mapApplicationUser(ResultSet resultSet) throws SQLException {
+        // TODO: implementation
         return null;
     }
 
     public static Horse mapHorse(ResultSet resultSet) throws SQLException {
+        // TODO: implementation
+        return null;
+    }
+
+    public static Bet mapBet(ResultSet resultSet) throws SQLException {
+        // TODO: implementation
+        return null;
+    }
+
+    public static Race mapRace(ResultSet resultSet) throws SQLException {
+        // TODO: implementation
+        return null;
+    }
+
+    public static Participant mapParticipant(ResultSet resultSet) throws SQLException {
+        // TODO: implementation
         return null;
     }
 }

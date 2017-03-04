@@ -35,7 +35,8 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
-        final String sqlStatement = "SELECT * FROM racecourse " +
+        final String sqlStatement =
+                "SELECT * FROM racecourse " +
                 "INNER JOIN country ON racecourse.country_id = country.id " +
                 "WHERE racecourse.name LIKE ? LIMIT ? OFFSET ?";
 

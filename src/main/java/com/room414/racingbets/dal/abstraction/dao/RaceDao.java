@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 
@@ -14,27 +15,27 @@ import java.util.List;
  * @version 1.0 27 Feb 2017
  */
 // TODO: names is to long
-public interface RaceDao extends CrudDao<Integer, Race> {
+public interface RaceDao extends CrudDao<Long, Race> {
     /**
-     * @return List of Races that scheduled on Racecourse with id == id param
+     * @return List of Races that scheduled on Racecourse with name starts with racecourse param
      */
-    List<Race> findScheduledByRacecourseId(long id, long offset, long limit);
+    List<Race> findScheduledByRacecourse(String racecourse, long offset, long limit) throws DalException;
 
     /**
-     * @return Count of Races that scheduled on Racecourse with id == id param
+     * @return Count of Races that scheduled on Racecourse with name starts with racecourse param
      */
-    long findScheduledByRacecourseIdCount(long id);
+    long findScheduledByRacecourseCount(long id);
 
 
     /**
-     * @return List of Races that finished on Racecourse with id == id param
+     * @return List of Races that finished on Racecourse with name starts with racecourse param
      */
-    List<Race> findFinishedByRacecourseId(long id, long offset, long limit);
+    List<Race> findFinishedByRacecourse(String racecourse, long offset, long limit);
 
     /**
-     * @return Count of Races that finished on Racecourse with id == id param
+     * @return Count of Races that finished on Racecourse with name starts with racecourse param
      */
-    long findFinishedByRacecourseIdCount(long id);
+    long findFinishedByRacecourseCount(long id);
 
 
     /**
@@ -60,44 +61,48 @@ public interface RaceDao extends CrudDao<Integer, Race> {
 
 
     /**
-     * @return List of Races that scheduled on timestamp between begin and end param on Racecourse with id == id param
+     * @return List of Races that scheduled on timestamp between begin and end param
+     *      on Racecourse with name starts with racecourse param
      */
     List<Race> findScheduledInTimestampDiapasonOnRacecourse(
-            long racecourseId, Timestamp begin, Timestamp end, long offset, long limit
+            String racecourse, Timestamp begin, Timestamp end, long offset, long limit
     );
 
     /**
-     * @return Count of Races that scheduled on timestamp between begin and end param on Racecourse with id == id param
+     * @return Count of Races that scheduled on timestamp between begin and end param
+     *      on Racecourse with name starts with racecourse param
      */
     long findScheduledInTimestampDiapasonOnRacecourseCount(
-            long racecourseId, Timestamp begin, Timestamp end
+            String racecourse, Timestamp begin, Timestamp end
     );
 
 
     /**
-     * @return List of Races that finished on timestamp between begin and end param on Racecourse with id == id param
+     * @return List of Races that finished on timestamp between begin and end param
+     *      on Racecourse with name starts with racecourse param
      */
     List<Race> findFinishedInTimestampDiapasonOnRacecourse(
-            long racecourseId, Timestamp begin, Timestamp end, long offset, long limit
+            String racecourse, Timestamp begin, Timestamp end, long offset, long limit
     );
 
     /**
-     * @return Count of Races that finished on timestamp between begin and end param on Racecourse with id == id param
+     * @return Count of Races that finished on timestamp between begin and end param
+     *      on Racecourse with name starts with racecourse param
      */
     long findFinishedInTimestampDiapasonOnRacecourseCount(
-            long racecourseId, Timestamp begin, Timestamp end
+            String racecourse, Timestamp begin, Timestamp end
     );
 
 
     /**
      * @return List of Races which names starts with namePart or empty list if no found.
      */
-    List<Race> findByNamePart(String namePart, long offset, long limit);
+    List<Race> findByNamePart(String namePart, long offset, long limit) throws DalException;
 
     /**
      * @return count of Races which names starts with namePart
      */
-    int findByNamePartCount(String namePart);
+    long findByNamePartCount(String namePart) throws DalException;
 
-    void updateStatus(long id, RaceStatus status);
+    boolean updateStatus(long id, RaceStatus status) throws DalException;
 }

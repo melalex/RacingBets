@@ -47,10 +47,6 @@ public class Race implements Serializable {
      * Horse min age.
      */
     private int minAge;
-    /**
-     * Horse max age.
-     */
-    private int maxAge;
 
     /**
      * Horse
@@ -168,14 +164,6 @@ public class Race implements Serializable {
         this.minAge = minAge;
     }
 
-    public int getMaxAge() {
-        return maxAge;
-    }
-
-    public void setMaxAge(int maxAge) {
-        this.maxAge = maxAge;
-    }
-
     public int getMinRating() {
         return minRating;
     }
@@ -260,10 +248,6 @@ public class Race implements Serializable {
             return false;
         }
 
-        if (maxAge != race.maxAge) {
-            return false;
-        }
-
         if (minRating != race.minRating) {
             return false;
         }
@@ -331,7 +315,6 @@ public class Race implements Serializable {
         result = 31 * result + (raceStatus != null ? raceStatus.hashCode() : 0);
         result = 31 * result + raceClass;
         result = 31 * result + minAge;
-        result = 31 * result + maxAge;
         result = 31 * result + minRating;
         result = 31 * result + maxRating;
         result = 31 * result + (distance != +0.0f ? Float.floatToIntBits(distance) : 0);
@@ -354,7 +337,6 @@ public class Race implements Serializable {
                 ", raceStatus=" + raceStatus +
                 ", raceClass=" + raceClass +
                 ", minAge=" + minAge +
-                ", maxAge=" + maxAge +
                 ", minRating=" + minRating +
                 ", maxRating=" + maxRating +
                 ", distance=" + distance +
