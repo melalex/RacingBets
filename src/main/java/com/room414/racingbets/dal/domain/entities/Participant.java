@@ -39,13 +39,9 @@ public class Participant implements Serializable {
      */
     private int officialRating;
     /**
-     * Latest betting odds numerator.
+     * Latest betting odds.
      */
-    private int oddsNumerator;
-    /**
-     * Latest betting odds denominator.
-     */
-    private int oddsDenominator;
+    private double odds;
     /**
      * Horse's jockey.
      */
@@ -114,20 +110,12 @@ public class Participant implements Serializable {
         this.officialRating = officialRating;
     }
 
-    public int getOddsNumerator() {
-        return oddsNumerator;
+    public double getOdds() {
+        return odds;
     }
 
-    public void setOddsNumerator(int oddsNumerator) {
-        this.oddsNumerator = oddsNumerator;
-    }
-
-    public int getOddsDenominator() {
-        return oddsDenominator;
-    }
-
-    public void setOddsDenominator(int oddsDenominator) {
-        this.oddsDenominator = oddsDenominator;
+    public void setOdds(double odds) {
+        this.odds = odds;
     }
 
     public Jockey getJockey() {
@@ -186,11 +174,7 @@ public class Participant implements Serializable {
             return false;
         }
 
-        if (oddsNumerator != that.oddsNumerator) {
-            return false;
-        }
-
-        if (oddsDenominator != that.oddsDenominator) {
+        if (Double.compare(that.odds, odds) != 0) {
             return false;
         }
 
@@ -215,15 +199,19 @@ public class Participant implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result;
+        long temp;
 
+        result = (int) (id ^ (id >>> 32));
         result = 31 * result + number;
         result = 31 * result + (horse != null ? horse.hashCode() : 0);
         result = 31 * result + (carriedWeight != +0.0f ? Float.floatToIntBits(carriedWeight) : 0);
         result = 31 * result + topSpeed;
         result = 31 * result + officialRating;
-        result = 31 * result + oddsNumerator;
-        result = 31 * result + oddsDenominator;
+
+        temp = Double.doubleToLongBits(odds);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         result = 31 * result + (jockey != null ? jockey.hashCode() : 0);
         result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
         result = 31 * result + place;
@@ -240,8 +228,7 @@ public class Participant implements Serializable {
                 ", carriedWeight=" + carriedWeight +
                 ", topSpeed=" + topSpeed +
                 ", officialRating=" + officialRating +
-                ", oddsNumerator=" + oddsNumerator +
-                ", oddsDenominator=" + oddsDenominator +
+                ", odds=" + odds +
                 ", jockey=" + jockey +
                 ", trainer=" + trainer +
                 ", place=" + place +

@@ -20,8 +20,7 @@ public class ParticipantBuilder {
     private float carriedWeight;
     private int topSpeed;
     private int officialRating;
-    private int oddsNumerator;
-    private int oddsDenominator;
+    private double odds;
     private Jockey jockey;
     private Trainer trainer;
     private int place;
@@ -63,12 +62,7 @@ public class ParticipantBuilder {
     }
 
     public ParticipantBuilder setOddsNumerator(int oddsNumerator) {
-        this.oddsNumerator = oddsNumerator;
-        return this;
-    }
-
-    public ParticipantBuilder setOddsDenominator(int oddsDenominator) {
-        this.oddsDenominator = oddsDenominator;
+        this.odds = oddsNumerator;
         return this;
     }
 
@@ -108,8 +102,7 @@ public class ParticipantBuilder {
         participant.setCarriedWeight(carriedWeight);
         participant.setTopSpeed(topSpeed);
         participant.setOfficialRating(officialRating);
-        participant.setOddsNumerator(oddsNumerator);
-        participant.setOddsDenominator(oddsDenominator);
+        participant.setOdds(odds);
         participant.setJockey(jockey);
         participant.setTrainer(trainer);
         participant.setPlace(place);
