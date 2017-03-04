@@ -35,6 +35,7 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM racecourse " +
                 "INNER JOIN country ON racecourse.country_id = country.id " +
@@ -45,6 +46,7 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
+        //language=MySQL
         final String sqlStatement = "SELECT COUNT(*) AS count FROM racecourse WHERE name LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, namePart);
@@ -52,7 +54,9 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public void create(Racecourse entity) throws DalException {
-        final String sqlStatement = "INSERT INTO racecourse (name, country_id, latitude, longitude, contact, clerk) " +
+        final String sqlStatement =
+                "INSERT INTO racecourse " +
+                "   (name, country_id, latitude, longitude, contact, clerk) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -80,8 +84,11 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public Racecourse find(Long id) throws DalException {
-        final String sqlStatement = "SELECT * FROM racecourse " +
-                "INNER JOIN country ON country.id = racecourse.country_id " +
+        //language=MySQL
+        final String sqlStatement =
+                "SELECT * FROM racecourse " +
+                "INNER JOIN country " +
+                "   ON country.id = racecourse.country_id " +
                 "WHERE racecourse.id = ?";
 
         return executor.find(id, sqlStatement);
@@ -89,16 +96,22 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public List<Racecourse> findAll() throws DalException {
-        final String sqlStatement = "SELECT * FROM racecourse " +
-                "INNER JOIN country ON country.id = racecourse.country_id";
+        //language=MySQL
+        final String sqlStatement =
+                "SELECT * FROM racecourse " +
+                "INNER JOIN country " +
+                "   ON country.id = racecourse.country_id";
 
         return executor.findAll(sqlStatement);
     }
 
     @Override
     public List<Racecourse> findAll(long offset, long limit) throws DalException {
-        final String sqlStatement = "SELECT * FROM racecourse " +
-                "INNER JOIN country ON country.id = racecourse.country_id " +
+        //language=MySQL
+        final String sqlStatement =
+                "SELECT * FROM racecourse " +
+                "INNER JOIN country " +
+                "   ON country.id = racecourse.country_id " +
                 "LIMIT ? OFFSET ?";
 
         return executor.findAll(sqlStatement, limit, offset);
@@ -111,7 +124,8 @@ public class JdbcRacecourseDao implements RacecourseDao {
 
     @Override
     public long update(Racecourse entity) throws DalException {
-        String sqlStatement = "UPDATE racecourse " +
+        String sqlStatement =
+                "UPDATE racecourse " +
                 "SET name = ?, country_id = ?, latitude = ?, longitude = ?, contact = ?, clerk = ? " +
                 "WHERE id = ?";
 

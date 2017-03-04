@@ -49,6 +49,7 @@ public class JdbcCountryDao implements CountryDao {
 
     @Override
     public Country find(Long id) throws DalException {
+        //language=MySQL
         String sqlStatement = "SELECT * FROM country WHERE id = ?";
 
         return executor.find(id, sqlStatement);
@@ -63,6 +64,7 @@ public class JdbcCountryDao implements CountryDao {
 
     @Override
     public List<Country> findAll(long offset, long limit) throws DalException {
+        //language=MySQL
         String sqlStatement = "SELECT * FROM country LIMIT ? OFFSET ?";
 
         return executor.findAll(sqlStatement, limit, offset);
@@ -101,6 +103,7 @@ public class JdbcCountryDao implements CountryDao {
 
     @Override
     public List<Country> findByNamePart(String namePart, long offset, long limit) throws DalException {
+        //language=MySQL
         String sqlStatement = "SELECT * FROM country WHERE name LIKE ? LIMIT ? OFFSET ?";
 
         return executor.findByColumnPart(sqlStatement, namePart, offset, limit);
@@ -108,6 +111,7 @@ public class JdbcCountryDao implements CountryDao {
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
+        //language=MySQL
         String sqlStatement = "SELECT COUNT(*) AS count FROM country WHERE name LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, namePart);

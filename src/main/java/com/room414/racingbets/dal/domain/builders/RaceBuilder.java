@@ -36,7 +36,7 @@ public class RaceBuilder {
     private int maxRating;
     private float distance;
     private List<Participant> participants;
-    private List<BigDecimal> prices;
+    private List<BigDecimal> prizes;
 
     private List<Participant> getParticipants() {
         if (participants == null) {
@@ -45,11 +45,11 @@ public class RaceBuilder {
         return participants;
     }
 
-    private List<BigDecimal> getPrices() {
-        if (prices == null) {
-            prices = new ArrayList<>();
+    private List<BigDecimal> getPrizes() {
+        if (prizes == null) {
+            prizes = new ArrayList<>();
         }
-        return prices;
+        return prizes;
     }
 
     public RaceBuilder setId(long id) {
@@ -169,17 +169,17 @@ public class RaceBuilder {
         return this;
     }
 
-    public RaceBuilder setPrices(List<BigDecimal> prices) {
-        if (prices != null) {
-            this.prices = new ArrayList<>(prices);
+    public RaceBuilder setPrizes(List<BigDecimal> prizes) {
+        if (prizes != null) {
+            this.prizes = new ArrayList<>(prizes);
         } else {
-            this.prices = null;
+            this.prizes = null;
         }
         return this;
     }
 
     public RaceBuilder setPrice(int place, BigDecimal size) {
-        getPrices().set(place, size);
+        getPrizes().set(place, size);
         return this;
     }
 
@@ -201,7 +201,7 @@ public class RaceBuilder {
         race.setMaxRating(maxRating);
         race.setDistance(distance);
         race.setParticipants(getParticipants());
-        race.setPrices(getPrices());
+        race.setPrizes(getPrizes());
 
         return race;
     }

@@ -35,10 +35,12 @@ public class JdbcHorseDao implements HorseDao {
 
     @Override
     public List<Horse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id " +
+                "INNER JOIN country ON owner.country_id = country.id " +
                 "INNER JOIN trainer " +
                 "   ON horse.trainer_id = trainer.id " +
                 "WHERE horse.name LIKE ? " +
@@ -81,6 +83,7 @@ public class JdbcHorseDao implements HorseDao {
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
+        //language=MySQL
         final String sqlStatement = "SELECT COUNT(*) AS count FROM horse WHERE name LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, namePart);
@@ -88,6 +91,7 @@ public class JdbcHorseDao implements HorseDao {
 
     @Override
     public Horse find(Long id) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN owner " +
@@ -101,6 +105,7 @@ public class JdbcHorseDao implements HorseDao {
 
     @Override
     public List<Horse> findAll() throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN owner " +
@@ -113,6 +118,7 @@ public class JdbcHorseDao implements HorseDao {
 
     @Override
     public List<Horse> findAll(long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN owner " +

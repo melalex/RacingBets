@@ -40,6 +40,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     @Override
     public Participant find(Long id) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -57,6 +58,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     @Override
     public List<Participant> findAll() throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -73,6 +75,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     @Override
     public List<Participant> findAll(long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -181,6 +184,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     @Override
     public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -206,6 +210,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     @Override
     public List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -231,6 +236,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     @Override
     public List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -256,6 +262,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
     @Override
     public List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +

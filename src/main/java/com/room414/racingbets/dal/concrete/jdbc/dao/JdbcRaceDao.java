@@ -4,9 +4,11 @@ import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcFindByColumnExecutor;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -35,13 +37,14 @@ public class JdbcRaceDao implements RaceDao {
         this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapRace);
     }
 
-    @Override
-    public void create(Race entity) throws DalException {
+    private void createRace(Race entity) throws DalException {
         final String sqlStatement =
                 "INSERT INTO race " +
                 "   (name, status, racecourse_id, start_date_time, min_bet, commission, going_id, " +
                 "   race_type, race_class, min_age, min_rating, max_rating, distance) " +
-                "SELECT ?, ?, ?, ?, ?, ?, going.name, ?, ?, ?, ?, ?, ? FROM going WHERE name = ?";
+                "SELECT ?, ?, ?, ?, ?, ?, going.name, ?, ?, ?, ?, ?, ? " +
+                "FROM going " +
+                "WHERE name = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, entity.getName());
@@ -80,36 +83,113 @@ public class JdbcRaceDao implements RaceDao {
         }
     }
 
+    private void createParticipants(Race entity) throws DalException {
+        final String sqlStatement = "INSERT INTO participant " +
+                "(number, horse_id, race_id, carried_weight, topspeed, " +
+                "official_rating, jockey_id, trainer_id, place, odds)  " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            for (Participant participant : entity.getParticipants()) {
+                statement.setInt(1, participant.getNumber());
+                statement.setLong(2, participant.getHorse().getId());
+                statement.setLong(3, entity.getId());
+                statement.setFloat(4, participant.getCarriedWeight());
+                statement.setInt(5, participant.getTopSpeed());
+                statement.setInt(6, participant.getOfficialRating());
+                statement.setLong(7, participant.getJockey().getId());
+                statement.setLong(8, participant.getTrainer().getId());
+                statement.setInt(9, participant.getPlace());
+                statement.setDouble(10, participant.getOdds());
+
+                statement.addBatch();
+            }
+            statement.executeBatch();
+        } catch (SQLException e) {
+            String message = "Exception during adding participant faze while creating race " + entity.toString();
+            throw new DalException(message, e);
+        }
+
+    }
+
+    private void createPrizes(Race entity) throws DalException {
+        final String sqlStatement = "INSERT INTO prize (race_id, prize_size, place) VALUES (?, ?, ?)";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            List<BigDecimal> prizes = entity.getPrizes();
+
+            for (int i = 0; i < prizes.size(); i++) {
+                statement.setLong(1, entity.getId());
+                statement.setBigDecimal(2, prizes.get(i));
+                statement.setInt(3, i);
+
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+        } catch (SQLException e) {
+            String message = "Exception during adding prizes faze while creating race " + entity.toString();
+            throw new DalException(message, e);
+        }
+
+    }
+
+    @Override
+    public void create(Race entity) throws DalException {
+        createRace(entity);
+        createParticipants(entity);
+        createPrizes(entity);
+    }
+
     @Override
     public Race find(Long id) throws DalException {
+        //language=MySQL
         final String sqlStatement =
-                "SELECT * FROM (SELECT * FROM race WHERE id = ?) as race " +
-                "INNER JOIN going " +
-                "   ON race.going_id = going.id " +
-                "INNER JOIN racecourse " +
-                "   ON race.racecourse_id = racecourse.id LEFT OUTER JOIN participant "
+                "SELECT race.id, race.start_date_time, race.commission, race.distance, race.max_rating, " +
+                "   race.min_age, race.min_bet, race.min_rating, race.name, race.race_class, " +
+                "   race.race_type, race.status, going.name, racecourse.id, racecourse.name, " +
+                "   racecourse.clerk, racecourse.contact " +
+                "FROM (" +
+                "   SELECT * FROM race " +
+                "   INNER JOIN going " +
+                "       ON race.going_id = going.id " +
+                "   INNER JOIN racecourse " +
+                "       ON race.racecourse_id = racecourse.id " +
+                "   INNER JOIN country " +
+                "       ON racecourse.country_id = country.id  " +
+                "   WHERE race.id = ?" +
+                ") AS race " +
+                "UNION " +
+                "SELECT * " +
+                "FROM (" +
+                "   SELECT * FROM race as race " +
+                "   INNER JOIN going " +
+                "       ON race.going_id = going.id " +
+                "   INNER JOIN racecourse " +
+                "       ON race.racecourse_id = racecourse.id " +
+                "   WHERE race.id = ?" +
+                ") ";
 
         connection.prepareStatement(sqlStatement)
-
         return executor.find(id, sqlStatement);
     }
 
     @Override
     public List<Race> findAll() throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM race " +
                 "INNER JOIN going " +
                 "   ON race.going_id = going.id " +
                 "INNER JOIN racecourse " +
-                "   ON race.racecourse_id = racecourse.id " +
-
-        connection.prepareStatement(sqlStatement)
+                "   ON race.racecourse_id = racecourse.id " ;
 
         return executor.findAll(sqlStatement);
     }
 
     @Override
     public List<Race> findAll(long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM race " +
                 "INNER JOIN going " +
@@ -118,7 +198,6 @@ public class JdbcRaceDao implements RaceDao {
                 "   ON race.racecourse_id = racecourse.id " +
                 "LIMIT ? OFFSET ?";
 
-connection.prepareStatement(sqlStatement)
         return executor.findAll(sqlStatement, limit, offset);
     }
 
@@ -184,6 +263,7 @@ connection.prepareStatement(sqlStatement)
 
     @Override
     public List<Race> findScheduledByRacecourse(String racecourse, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM race " +
                 "INNER JOIN going " +
@@ -191,7 +271,6 @@ connection.prepareStatement(sqlStatement)
                 "WHERE race.name LIKE ? " +
                 "LIMIT ? OFFSET ?";
 
-connection.prepareStatement(sqlStatement)
         return executor.findByColumnPart(sqlStatement, racecourse, offset, limit);
     }
 
@@ -252,13 +331,13 @@ connection.prepareStatement(sqlStatement)
 
     @Override
     public List<Race> findByNamePart(String namePart, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM race " +
                 "INNER JOIN going " +
                 "   ON race.going_id = going.id " +
                 "WHERE race.name LIKE ? " +
                 "LIMIT ? OFFSET ?";
-        connection.prepareStatement(sqlStatement)
 
         return executor.findByColumnPart(sqlStatement, namePart, offset, limit);
 
@@ -266,6 +345,7 @@ connection.prepareStatement(sqlStatement)
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
+        //language=MySQL
         final String sqlStatement = "SELECT * FROM race WHERE race.name LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, namePart);

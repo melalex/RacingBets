@@ -92,6 +92,7 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public ApplicationUser find(Long id) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -109,6 +110,7 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findAll() throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -124,6 +126,7 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findAll(long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -187,6 +190,7 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -206,6 +210,7 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public long findByLoginPartCount(String loginPart) throws DalException {
+        //language=MySQL
         final String sqlStatement = "SELECT COUNT(*) FROM application_user WHERE login LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, loginPart);

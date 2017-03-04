@@ -67,7 +67,7 @@ public class Race implements Serializable {
     /**
      * Map place -> price
      */
-    private List<BigDecimal> prices;
+    private List<BigDecimal> prizes;
 
     public Race() {
     }
@@ -188,19 +188,19 @@ public class Race implements Serializable {
         this.distance = distance;
     }
 
-    public List<BigDecimal> getPrices() {
-        if (prices != null) {
-            return new ArrayList<>(prices);
+    public List<BigDecimal> getPrizes() {
+        if (prizes != null) {
+            return new ArrayList<>(prizes);
         } else {
             return new ArrayList<>();
         }
     }
 
-    public void setPrices(List<BigDecimal> prices) {
-        if (prices != null) {
-            this.prices = new ArrayList<>(prices);
+    public void setPrizes(List<BigDecimal> prizes) {
+        if (prizes != null) {
+            this.prizes = new ArrayList<>(prizes);
         } else {
-            this.prices = null;
+            this.prizes = null;
         }
     }
 
@@ -292,7 +292,7 @@ public class Race implements Serializable {
             return false;
         }
 
-        if (prices != null ? !prices.equals(race.prices) : race.prices != null) {
+        if (prizes != null ? !prizes.equals(race.prizes) : race.prizes != null) {
             return false;
         }
 
@@ -319,7 +319,7 @@ public class Race implements Serializable {
         result = 31 * result + maxRating;
         result = 31 * result + (distance != +0.0f ? Float.floatToIntBits(distance) : 0);
         result = 31 * result + (participants != null ? participants.hashCode() : 0);
-        result = 31 * result + (prices != null ? prices.hashCode() : 0);
+        result = 31 * result + (prizes != null ? prizes.hashCode() : 0);
         return result;
     }
 
@@ -341,7 +341,7 @@ public class Race implements Serializable {
                 ", maxRating=" + maxRating +
                 ", distance=" + distance +
                 ", participants=" + participants +
-                ", prices=" + prices +
+                ", prizes=" + prizes +
                 '}';
     }
 }
