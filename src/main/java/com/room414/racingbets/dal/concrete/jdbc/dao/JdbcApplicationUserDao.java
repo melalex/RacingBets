@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.*;
 
 /**
  * Implementation of ApplicationUserDao that uses JDBC as data source.
@@ -24,6 +24,8 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @version 1.0 28 Feb 2017
  */
 public class JdbcApplicationUserDao implements ApplicationUserDao {
+    private static String TABLE_NAME = "application_user";
+
     private Connection connection;
     private JdbcFindByColumnExecutor<ApplicationUser> executor;
 
@@ -32,10 +34,10 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
         this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapApplicationUser);
     }
 
-    @Override
-    public void create(ApplicationUser entity) throws DalException {
-        final String sqlStatement = "INSERT INTO application_user " +
-                "(login, password, first_name, last_name, email, is_email_confirmed, balance) " +
+    private void createApplicationUser(ApplicationUser entity) throws DalException {
+        final String sqlStatement =
+                "INSERT INTO application_user " +
+                "   (login, password, first_name, last_name, email, is_email_confirmed, balance) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -44,8 +46,8 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
             statement.setString(3, entity.getFirstName());
             statement.setString(4, entity.getLastName());
             statement.setString(5, entity.getEmail());
-            statement.setBoolean(1, entity.isEmailConfirmed());
-            statement.setBigDecimal(1, entity.getBalance());
+            statement.setBoolean(6, entity.isEmailConfirmed());
+            statement.setBigDecimal(7, entity.getBalance());
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {
@@ -63,31 +65,92 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
         }
     }
 
+    private void createRoles(ApplicationUser entity) throws DalException {
+        final String sqlStatement =
+                "INSERT INTO application_user_role " +
+                "   (application_user_role.role_id, application_user_role.application_user_id) " +
+                "SELECT role.id, ? FROM role WHERE role.name = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            for (Role role : entity.getRoles()) {
+                statement.setLong(1, entity.getId());
+                statement.setString(2, role.getName());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+        } catch (SQLException e) {
+            String message = "Exception during adding role faze while creating user " + entity.toString();
+            throw new DalException(message, e);
+        }
+    }
+
     @Override
-    public ApplicationUser find(Long id) {
-        return null;
+    public void create(ApplicationUser entity) throws DalException {
+        createApplicationUser(entity);
+        createRoles(entity);
+    }
+
+    @Override
+    public ApplicationUser find(Long id) throws DalException {
+        final String sqlStatement =
+                "SELECT application_user.id, application_user.login, application_user.first_name, " +
+                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
+                "   application_user.password, application_user.balance, role.name " +
+                "FROM application_user " +
+                "LEFT OUTER JOIN application_user_role " +
+                "   ON application_user.id = application_user_role.application_user_id " +
+                "INNER JOIN role " +
+                "   ON application_user_role.role_id = role.id " +
+                "WHERE application_user.id = ?";
+
+
+        return executor.find(id, sqlStatement);
     }
 
     @Override
     public List<ApplicationUser> findAll() throws DalException {
-        return null;
+        final String sqlStatement =
+                "SELECT application_user.id, application_user.login, application_user.first_name, " +
+                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
+                "   application_user.password, application_user.balance, role.name " +
+                "FROM application_user " +
+                "LEFT OUTER JOIN application_user_role " +
+                "   ON application_user.id = application_user_role.application_user_id " +
+                "INNER JOIN role " +
+                "   ON application_user_role.role_id = role.id";
+
+        return executor.findAll(sqlStatement);
     }
 
     @Override
-    public List<ApplicationUser> findAll(long offset, long limit) {
-        return null;
+    public List<ApplicationUser> findAll(long offset, long limit) throws DalException {
+        final String sqlStatement =
+                "SELECT application_user.id, application_user.login, application_user.first_name, " +
+                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
+                "   application_user.password, application_user.balance, role.name " +
+                "FROM (SELECT * FROM application_user LIMIT ? OFFSET ?) AS application_user " +
+                "LEFT OUTER JOIN application_user_role " +
+                "   ON application_user.id = application_user_role.application_user_id " +
+                "INNER JOIN role " +
+                "   ON application_user_role.role_id = role.id";
+
+        return executor.findAll(sqlStatement, limit, offset);
     }
 
     @Override
-    public long count() {
-        return 0;
+    public long count() throws DalException {
+        return executor.count(TABLE_NAME);
     }
 
+    /**
+     * This method didn't update user roles
+     */
     @Override
     public long update(ApplicationUser entity) throws DalException {
-        final String sqlStatement = "UPDATE application_user SET " +
-                "login = ?, password = ?, first_name = ?, last_name = ?, " +
-                "email = ?, is_email_confirmed = ?, balance = ? " +
+        final String sqlStatement =
+                "UPDATE application_user " +
+                "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
+                "    email = ?, is_email_confirmed = ?, balance = ? " +
                 "WHERE id = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -118,33 +181,72 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public boolean delete(Long id) {
-        return false;
+    public boolean delete(Long id) throws DalException {
+        return executor.delete(TABLE_NAME, id);
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
-        return null;
+    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException {
+        final String sqlStatement =
+                "SELECT application_user.id, application_user.login, application_user.first_name, " +
+                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
+                "   application_user.password, application_user.balance, role.name " +
+                "FROM (" +
+                "   SELECT * FROM application_user " +
+                "   WHERE application_user.login LIKE ? " +
+                "   LIMIT ? OFFSET ?" +
+                ") AS application_user " +
+                "LEFT OUTER JOIN application_user_role " +
+                "   ON application_user.id = application_user_role.application_user_id " +
+                "INNER JOIN role " +
+                "   ON application_user_role.role_id = role.id";
+
+        return executor.findByColumnPart(sqlStatement, loginPart, offset, limit);
     }
 
     @Override
-    public int findByLoginPartCount(String loginPart) {
-        return 0;
+    public long findByLoginPartCount(String loginPart) throws DalException {
+        final String sqlStatement = "SELECT COUNT(*) FROM application_user WHERE login LIKE ?";
+
+        return executor.findByColumnPartCount(sqlStatement, loginPart);
     }
 
     @Override
-    public ApplicationUser findByLogin(String login) {
-        return null;
+    public ApplicationUser findByLoginAndPassword(String login, String password) throws DalException {
+        final String sqlStatement =
+                "SELECT application_user.id, application_user.login, application_user.first_name, " +
+                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
+                "   application_user.password, application_user.balance, role.name " +
+                "FROM (" +
+                "   SELECT * FROM application_user " +
+                "   WHERE application_user.login = ? AND application_user.password = ?" +
+                ") AS application_user " +
+                "LEFT OUTER JOIN application_user_role " +
+                "   ON application_user.id = application_user_role.application_user_id " +
+                "INNER JOIN role " +
+                "   ON application_user_role.role_id = role.id";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setString(1, login);
+            statement.setString(1, password);
+
+            return getResult(statement, JdbcMapHelper::mapApplicationUser);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, login, password);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
-    public void confirmEmail(long id) {
+    public boolean confirmEmail(long id) throws DalException {
+        final String sqlStatement = "UPDATE application_user SET is_email_confirmed = TRUE WHERE id = ?";
 
-    }
-
-    @Override
-    public boolean isEmailConfirmed(long id) {
-        return false;
+        try(Statement statement = connection.createStatement()) {
+            return statement.executeUpdate(sqlStatement) > 0;
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement);
+            throw new DalException(message, e);
+        }
     }
 
     @Override

@@ -180,12 +180,12 @@ ALTER TABLE `horse_racing`.`application_user_role`
 ADD CONSTRAINT `application_user_role_application_user_id_fkey`
   FOREIGN KEY (`application_user_id`)
   REFERENCES `horse_racing`.`application_user` (`id`)
-  ON DELETE NO ACTION
+  ON DELETE CASCADE
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `application_user_role_role_id_fkey`
   FOREIGN KEY (`role_id`)
   REFERENCES `horse_racing`.`role` (`id`)
-  ON DELETE NO ACTION
+  ON DELETE CASCADE
   ON UPDATE NO ACTION;
 
 ALTER TABLE `horse_racing`.`bet` 

@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 
@@ -23,32 +24,27 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param limit elements count in result
      * @return List of ApplicationUsers whose login starts with loginPart or empty if no found.
      */
-    List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit);
+    List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException;
 
     /**
      * @param loginPart begin of ApplicationUser login
      * @return count ApplicationUsers whose login starts with loginPart
      */
-    int findByLoginPartCount(String loginPart);
+    long findByLoginPartCount(String loginPart) throws DalException;
 
     /**
      * @param login ApplicationUser login
+     * @param password ApplicationUser password
      * @return ApplicationUser with login == login param
      */
-    ApplicationUser findByLogin(String login);
+    ApplicationUser findByLoginAndPassword(String login, String password) throws DalException;
 
     /**
      * Set ApplicationUser isEmailConfirmed field to true to user with id == id param
      *
      * @param id ApplicationUser id
      */
-    void confirmEmail(long id);
-
-    /**
-     * @param id ApplicationUser id
-     * @return ApplicationUser isEmailConfirmed field
-     */
-    boolean isEmailConfirmed(long id);
+    boolean confirmEmail(long id) throws DalException;
 
     /**
      * Add role to ApplicationUser
