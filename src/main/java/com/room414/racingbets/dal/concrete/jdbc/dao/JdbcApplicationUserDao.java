@@ -8,10 +8,7 @@ import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.*;
@@ -245,22 +242,73 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void addRole(long userId, Role role) {
+    public void addRole(long userId, Role role) throws DalException {
+        final String call = "{ CALL add_role(?, ?) }";
 
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, userId);
+            statement.setString(2, role.getName());
+
+            statement.execute();
+        } catch (SQLException e) {
+            String message = String.format(
+                    "Exception during adding role %s to user with id  %d", role.getName(), userId
+            );
+            throw new DalException(message, e);
+        }
     }
 
     @Override
-    public void removeRole(long userId, Role role) {
+    public void removeRole(long userId, Role role) throws DalException {
+        final String sqlStatement = "DELETE FROM role WHERE application_user_id = ? AND name = ?";
 
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, userId);
+            statement.setString(2, role.getName());
+
+            statement.execute();
+        } catch (SQLException e) {
+            String message = String.format(
+                    "Exception during removing role %s from user with id  %d", role.getName(), userId
+            );
+            throw new DalException(message, e);
+        }
     }
 
     @Override
-    public boolean tryGetMoney(long id, BigDecimal amount) {
-        return false;
+    public boolean tryGetMoney(long id, BigDecimal amount) throws DalException {
+        final String sqlStatement =
+                "UPDATE application_user " +
+                "   SET application_user.balance = application_user.balance - ? " +
+                "WHERE application_user.id = ? AND application_user.balance > ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setBigDecimal(1, amount);
+            statement.setLong(2, id);
+            statement.setBigDecimal(3, amount);
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, amount, id, amount);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
-    public void putMoney(long id, BigDecimal amount) {
+    public void putMoney(long id, BigDecimal amount) throws DalException {
+        final String sqlStatement =
+                "UPDATE application_user " +
+                "   SET application_user.balance = application_user.balance + ? " +
+                "WHERE application_user.id = ?";
 
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setBigDecimal(1, amount);
+            statement.setLong(2, id);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, amount, id);
+            throw new DalException(message, e);
+        }
     }
 }

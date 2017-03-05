@@ -57,7 +57,7 @@ CREATE TABLE `horse_racing`.`application_user` (
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `is_email_confirmed` TINYINT(1) NOT NULL,
+  `is_email_confirmed` BOOL NOT NULL,
   `balance` DECIMAL(12, 2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
@@ -138,3 +138,16 @@ CREATE TABLE `horse_racing`.`bet_participant` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (bet_id) REFERENCES bet(id) ON DELETE CASCADE,
   FOREIGN KEY (participant_id) REFERENCES participant(id) ON DELETE CASCADE);
+
+CREATE PROCEDURE add_role(IN application_user_id INT UNSIGNED, IN role_name ENUM('Handicapper', 'Bookmaker', 'Admin'))
+BEGIN
+  DECLARE is_exists BOOL;
+  SET is_exists = EXISTS(
+      SELECT * FROM role WHERE role.application_user_id = application_user_id AND role.name = role_name
+  );
+
+  CASE
+    WHEN is_exists = FALSE
+      THEN INSERT INTO role (application_user_id, name) VALUES (application_user_id, role_name);
+  END CASE;
+END;

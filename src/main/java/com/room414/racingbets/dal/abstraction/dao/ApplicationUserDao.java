@@ -52,7 +52,7 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param userId ApplicationUser id
      * @param role role
      */
-    void addRole(long userId, Role role);
+    void addRole(long userId, Role role) throws DalException;
 
     /**
      * Remove role from ApplicationUser
@@ -60,14 +60,14 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param userId ApplicationUser id
      * @param role role
      */
-    void removeRole(long userId, Role role);
+    void removeRole(long userId, Role role) throws DalException;
 
     /**
      * @param id ApplicationUser id
      * @param amount amount of money
      * @return true if the money were removed successfully, false if not enough money on the balance sheet
      */
-    boolean tryGetMoney(long id, BigDecimal amount);
+    boolean tryGetMoney(long id, BigDecimal amount) throws DalException;
 
     /**
      * Add amount param to ApplicationUser balance field
@@ -75,5 +75,5 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param id ApplicationUser id
      * @param amount amount of money
      */
-    void putMoney(long id, BigDecimal amount);
+    void putMoney(long id, BigDecimal amount) throws DalException;
 }
