@@ -8,9 +8,8 @@ import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Participant;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -288,23 +287,27 @@ public class JdbcBetDao implements BetDao {
     }
 
     @Override
-    public Odds getOdds(Bet bet) throws DalException {
-        final String sqlStatement = "SELECT prize_pool, SUM(bet_size) event_pool, race.commission " +
-                "FROM (" +
-                "   SELECT Sum(bet_size) prize_pool, race.commission, bet.bet_size, bet.id " +
-                "   FROM bet " +
-                "   INNER JOIN race " +
-                "       ON bet.race_id = race.id" +
-                "    WHERE bet.race_id = ? AND bet_type = ? " +
-                ") AS bet " +
-                "LEFT OUTER JOIN bet_participant " +
-                "   ON bet_participant.bet_id = bet.id " +
-                "WHERE bet_participant.participant_id = ";
+    public Odds getOdds(long bet) throws DalException {
+        final String call = "{ CALL get_odds(?, ?, ?, ?) }";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, bet);
+            statement.registerOutParameter(2, Types.DECIMAL);
+            statement.registerOutParameter(3, Types.DECIMAL);
+            statement.registerOutParameter(4, Types.DOUBLE);
 
+            if (statement.execute()) {
+                ResultSet resultSet = statement.getResultSet();
+                BigDecimal prizePool = resultSet.getBigDecimal("prize_pool");
+                BigDecimal eventPool = resultSet.getBigDecimal("event_pool");
+                double commission = resultSet.getDouble("commission");
+
+                return new Odds(prizePool, eventPool, commission);
+            } else {
+                throw new SQLException("ResultSet is empty");
+            }
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
+            String message = "Exception during calculating odds for bet with id " + bet;
             throw new DalException(message, e);
         }
     }

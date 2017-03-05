@@ -3,7 +3,6 @@ package com.room414.racingbets.dal.abstraction.dao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
-import com.room414.racingbets.dal.domain.enums.BetStatus;
 
 import java.util.List;
 
@@ -48,5 +47,5 @@ public interface BetDao extends CrudDao<Long, Bet> {
      *          Odds calculation example
      *      </a>
      */
-    Odds getOdds(Bet bet) throws DalException;
+    Odds getOdds(long bet) throws DalException;
 }
