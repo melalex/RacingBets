@@ -46,8 +46,8 @@ public class JdbcCrudExecutor<T> {
 
     public List<T> findAll(String sqlStatement, long limit, long offset) throws DalException {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(2, limit);
-            statement.setLong(3, offset);
+            statement.setLong(1, limit);
+            statement.setLong(2, offset);
 
             return getResultList(statement, mapper);
         } catch (SQLException e) {

@@ -170,7 +170,6 @@ public class JdbcRaceDao implements RaceDao {
                 "   WHERE race.id = ?" +
                 ") ";
 
-        connection.prepareStatement(sqlStatement)
         return executor.find(id, sqlStatement);
     }
 

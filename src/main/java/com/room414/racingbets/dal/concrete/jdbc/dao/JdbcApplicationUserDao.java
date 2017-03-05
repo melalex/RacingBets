@@ -36,50 +36,52 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
         this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapApplicationUser);
     }
 
-    private List<ApplicationUser> mapUsers(ResultSet resultSet) throws SQLException {
-        Map<Long, ApplicationUserBuilder> builderById = new HashMap<>();
+    private List<ApplicationUser> mapUsers(PreparedStatement statement) throws SQLException {
+        try(ResultSet resultSet = statement.executeQuery()) {
+            Map<Long, ApplicationUserBuilder> builderById = new HashMap<>();
 
-        final String idColumnName = "application_user.id";
-        final String loginColumnName = "application_user.login";
-        final String firstNameColumnName = "application_user.first_name";
-        final String lastNameColumnName = "application_user.last_name";
-        final String emailColumnName = "application_user.email";
-        final String isEmailConfirmedColumnName = "application_user.is_email_confirmed";
-        final String passwordColumnName = "application_user.password";
-        final String balanceColumnName = "application_user.balance";
-        final String roleNameColumnName = "role.name";
+            final String idColumnName = "application_user.id";
+            final String loginColumnName = "application_user.login";
+            final String firstNameColumnName = "application_user.first_name";
+            final String lastNameColumnName = "application_user.last_name";
+            final String emailColumnName = "application_user.email";
+            final String isEmailConfirmedColumnName = "application_user.is_email_confirmed";
+            final String passwordColumnName = "application_user.password";
+            final String balanceColumnName = "application_user.balance";
+            final String roleNameColumnName = "role.name";
 
-        ApplicationUserBuilder builder;
-        long id;
+            ApplicationUserBuilder builder;
+            long id;
 
-        while (resultSet.next()) {
-            id = resultSet.getLong(idColumnName);
-            builder = builderById.get(id);
-            if (builder == null) {
-                builder = ApplicationUser.builder()
-                        .setId(id)
-                        .setLogin(resultSet.getString(loginColumnName))
-                        .setFirstName(resultSet.getString(firstNameColumnName))
-                        .setLastName(resultSet.getString(lastNameColumnName))
-                        .setEmail(resultSet.getString(emailColumnName))
-                        .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
-                        .setPassword(resultSet.getString(passwordColumnName))
-                        .setBalance(resultSet.getBigDecimal(balanceColumnName));
+            while (resultSet.next()) {
+                id = resultSet.getLong(idColumnName);
+                builder = builderById.get(id);
+                if (builder == null) {
+                    builder = ApplicationUser.builder()
+                            .setId(id)
+                            .setLogin(resultSet.getString(loginColumnName))
+                            .setFirstName(resultSet.getString(firstNameColumnName))
+                            .setLastName(resultSet.getString(lastNameColumnName))
+                            .setEmail(resultSet.getString(emailColumnName))
+                            .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
+                            .setPassword(resultSet.getString(passwordColumnName))
+                            .setBalance(resultSet.getBigDecimal(balanceColumnName));
 
-                builderById.put(id, builder);
+                    builderById.put(id, builder);
+                }
+                builder.addRole(resultSet.getString(roleNameColumnName));
             }
-            builder.addRole(resultSet.getString(roleNameColumnName));
-        }
 
-        return builderById
-                .values()
-                .stream()
-                .map(ApplicationUserBuilder::build)
-                .collect(Collectors.toList());
+            return builderById
+                    .values()
+                    .stream()
+                    .map(ApplicationUserBuilder::build)
+                    .collect(Collectors.toList());
+        }
     }
 
-    private ApplicationUser mapUser(ResultSet resultSet) throws SQLException {
-        return mapUsers(resultSet).get(0);
+    private ApplicationUser mapUser(PreparedStatement statement) throws SQLException {
+        return mapUsers(statement).get(0);
     }
 
     private void createApplicationUser(ApplicationUser entity) throws DalException {
@@ -150,8 +152,14 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "   ON application_user.id = role.application_user_id " +
                 "WHERE application_user.id = ?";
 
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, id);
 
-        return executor.find(id, sqlStatement);
+            return mapUser(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, id);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
@@ -165,7 +173,12 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        return executor.findAll(sqlStatement);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            return mapUsers(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
@@ -179,7 +192,15 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        return executor.findAll(sqlStatement, limit, offset);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, limit);
+            statement.setLong(2, offset);
+
+            return mapUsers(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, limit, offset);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
@@ -245,7 +266,16 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        return executor.findByColumnPart(sqlStatement, loginPart, offset, limit);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setString(1, startsWith(loginPart));
+            statement.setLong(2, limit);
+            statement.setLong(3, offset);
+
+            return mapUsers(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, startsWith(loginPart), limit, offset);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
@@ -273,7 +303,7 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
             statement.setString(1, login);
             statement.setString(1, password);
 
-            return getResult(statement, JdbcMapHelper::mapApplicationUser);
+            return mapUser(statement);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, login, password);
             throw new DalException(message, e);
