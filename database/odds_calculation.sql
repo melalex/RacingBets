@@ -112,8 +112,6 @@ CREATE PROCEDURE get_odds_for_exacta(
   IN id_of_race INT UNSIGNED,
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,
-  IN participant1_place INT(2) UNSIGNED,
-  IN participant2_place INT(2) UNSIGNED,
   OUT prize_pool DECIMAL(12, 2),
   OUT event_pool DECIMAL(12, 2),
   OUT commission DOUBLE
@@ -133,8 +131,8 @@ CREATE PROCEDURE get_odds_for_exacta(
            ) AS b1
         LEFT JOIN bet_participant
           ON bet_participant.bet_id = bet.id
-      WHERE (bet_participant.participant_id = participant1 AND bet_participant.place = participant1_place) OR
-            (bet_participant.participant_id = participant2 AND bet_participant.place = participant2_place)
+      WHERE (bet_participant.participant_id = participant1 AND bet_participant.place = 1) OR
+            (bet_participant.participant_id = participant2 AND bet_participant.place = 2)
       GROUP BY bet.id
       HAVING COUNT(*) = 2
     );
@@ -145,9 +143,6 @@ CREATE PROCEDURE get_odds_for_exacta(
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,
   IN participant3 INT UNSIGNED,
-  IN participant1_place INT(2) UNSIGNED,
-  IN participant2_place INT(2) UNSIGNED,
-  IN participant3_place INT(2) UNSIGNED,
   OUT prize_pool DECIMAL(12, 2),
   OUT event_pool DECIMAL(12, 2),
   OUT commission DOUBLE
@@ -167,9 +162,9 @@ CREATE PROCEDURE get_odds_for_exacta(
            ) AS b1
         LEFT JOIN bet_participant
           ON bet_participant.bet_id = bet.id
-      WHERE (bet_participant.participant_id = participant1 AND bet_participant.place = participant1_place) OR
-            (bet_participant.participant_id = participant2 AND bet_participant.place = participant2_place) OR
-            (bet_participant.participant_id = participant3 AND bet_participant.place = participant3_place)
+      WHERE (bet_participant.participant_id = participant1 AND bet_participant.place = 1) OR
+            (bet_participant.participant_id = participant2 AND bet_participant.place = 2) OR
+            (bet_participant.participant_id = participant3 AND bet_participant.place = 3)
       GROUP BY bet.id
       HAVING COUNT(*) = 3
     );

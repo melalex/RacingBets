@@ -288,6 +288,23 @@ public class JdbcBetDao implements BetDao {
 
     @Override
     public Odds getOdds(Bet bet) throws DalException {
+        switch (bet.getBetType()) {
+            case SHOW:
+                return getShowOdds(bet);
+            case PLACE:
+                return getPlaceOdds(bet);
+            case WIN:
+                return getWinOdds(bet);
+            case QUINELLA:
+                return getQuinellaOdds(bet);
+            case EXACTA:
+                return getExactaOdds(bet);
+            case TRIFECTA:
+                return getTrifectaOdds(bet);
+            case SUPERFECTA:
+                return getSuperfectaOdds(bet);
+        }
+
         final String call = "{ CALL get_odds(?, ?, ?, ?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {
@@ -303,6 +320,142 @@ public class JdbcBetDao implements BetDao {
                 double commission = resultSet.getDouble("commission");
 
                 return new Odds(prizePool, eventPool, commission);
+            } else {
+                throw new SQLException("ResultSet is empty");
+            }
+        } catch (SQLException e) {
+            String message = "Exception during calculating odds for bet with id " + bet;
+            throw new DalException(message, e);
+        }
+    }
+
+    private Odds mapOdds(ResultSet resultSet) throws SQLException {
+        BigDecimal prizePool = resultSet.getBigDecimal("prize_pool");
+        BigDecimal eventPool = resultSet.getBigDecimal("event_pool");
+        double commission = resultSet.getDouble("commission");
+
+        return new Odds(prizePool, eventPool, commission);
+    }
+
+    private Odds getShowOdds(Bet bet) throws DalException {
+        //language=MySQL
+        final String call = "{ CALL get_odds_show(?, ?, ?, ?, ?) }";
+
+        return getOddsOneParticipant(bet, call);
+    }
+
+    private Odds getPlaceOdds(Bet bet) throws DalException {
+        //language=MySQL
+        final String call = "{ CALL get_odds_place(?, ?, ?, ?, ?) }";
+
+        return getOddsOneParticipant(bet, call);
+    }
+
+    private Odds getWinOdds(Bet bet) throws DalException {
+        //language=MySQL
+        final String call = "{ CALL get_odds_win(?, ?, ?, ?, ?) }";
+
+        return getOddsOneParticipant(bet, call);
+    }
+
+    private Odds getOddsOneParticipant(Bet bet, String call) throws DalException {
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, bet.getRaceId());
+            statement.setLong(2, bet.getParticipants().get(0).getId());
+            statement.registerOutParameter(3, Types.DECIMAL);
+            statement.registerOutParameter(4, Types.DECIMAL);
+            statement.registerOutParameter(5, Types.DOUBLE);
+
+            if (statement.execute()) {
+                return mapOdds(statement.getResultSet());
+            } else {
+                throw new SQLException("ResultSet is empty");
+            }
+        } catch (SQLException e) {
+            String message = "Exception during calculating odds for bet with id " + bet;
+            throw new DalException(message, e);
+        }
+    }
+
+    private Odds getQuinellaOdds(Bet bet) throws DalException {
+        //language=MySQL
+        final String call = "{ CALL get_odds_win(?, ?, ?, ?, ?, ?) }";
+
+        return getOddsTwoParticipant(bet, call);
+    }
+
+    private Odds getExactaOdds(Bet bet) throws DalException {
+        //language=MySQL
+        final String call = "{ CALL get_odds_win(?, ?, ?, ?, ?, ?) }";
+
+        return getOddsTwoParticipant(bet, call);
+    }
+
+    private Odds getOddsTwoParticipant(Bet bet, String call) throws DalException {
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, bet.getRaceId());
+
+            statement.setLong(2, bet.getParticipants().get(0).getId());
+            statement.setLong(3, bet.getParticipants().get(1).getId());
+
+            statement.registerOutParameter(4, Types.DECIMAL);
+            statement.registerOutParameter(5, Types.DECIMAL);
+            statement.registerOutParameter(6, Types.DOUBLE);
+
+            if (statement.execute()) {
+                return mapOdds(statement.getResultSet());
+            } else {
+                throw new SQLException("ResultSet is empty");
+            }
+        } catch (SQLException e) {
+            String message = "Exception during calculating odds for bet with id " + bet;
+            throw new DalException(message, e);
+        }
+    }
+
+
+    private Odds getTrifectaOdds(Bet bet) throws DalException {
+        final String call = "{ CALL get_odds_win(?, ?, ?, ?, ?, ?, ?) }";
+
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, bet.getRaceId());
+
+            statement.setLong(2, bet.getParticipants().get(0).getId());
+            statement.setLong(3, bet.getParticipants().get(1).getId());
+            statement.setLong(4, bet.getParticipants().get(2).getId());
+
+            statement.registerOutParameter(5, Types.DECIMAL);
+            statement.registerOutParameter(6, Types.DECIMAL);
+            statement.registerOutParameter(7, Types.DOUBLE);
+
+            if (statement.execute()) {
+                return mapOdds(statement.getResultSet());
+            } else {
+                throw new SQLException("ResultSet is empty");
+            }
+        } catch (SQLException e) {
+            String message = "Exception during calculating odds for bet with id " + bet;
+            throw new DalException(message, e);
+        }
+    }
+
+    private Odds getSuperfectaOdds(Bet bet) throws DalException {
+        final String call = "{ CALL get_odds_win(?, ?, ?, ?, ?, ?, ?, ?) }";
+
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, bet.getRaceId());
+
+            statement.setLong(2, bet.getParticipants().get(0).getId());
+            statement.setLong(3, bet.getParticipants().get(1).getId());
+            statement.setLong(4, bet.getParticipants().get(2).getId());
+            statement.setLong(5, bet.getParticipants().get(2).getId());
+
+            statement.registerOutParameter(6, Types.DECIMAL);
+            statement.registerOutParameter(7, Types.DECIMAL);
+            statement.registerOutParameter(8, Types.DOUBLE);
+
+            if (statement.execute()) {
+                return mapOdds(statement.getResultSet());
             } else {
                 throw new SQLException("ResultSet is empty");
             }
