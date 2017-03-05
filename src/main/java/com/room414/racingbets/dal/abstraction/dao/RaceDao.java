@@ -17,6 +17,28 @@ import java.util.List;
 // TODO: names is to long
 public interface RaceDao extends CrudDao<Long, Race> {
     /**
+     * @return List of Races that scheduled on Racecourse with id == racecourse param
+     */
+    List<Race> findScheduledByRacecourseId(long racecourse, long offset, long limit) throws DalException;
+
+    /**
+     * @return Count of Races that scheduled on Racecourse with id == racecourse param
+     */
+    long findScheduledByRacecourseIdCount(long racecourse);
+
+
+    /**
+     * @return List of Races that finished on Racecourse with id == racecourse param
+     */
+    List<Race> findFinishedByIdRacecourse(long racecourse, long offset, long limit);
+
+    /**
+     * @return Count of Races that finished on Racecourse with id == racecourse param
+     */
+    long findFinishedByIdRacecourseCount(long racecourse);
+
+
+    /**
      * @return List of Races that scheduled on Racecourse with name starts with racecourse param
      */
     List<Race> findScheduledByRacecourse(String racecourse, long offset, long limit) throws DalException;
@@ -24,7 +46,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
     /**
      * @return Count of Races that scheduled on Racecourse with name starts with racecourse param
      */
-    long findScheduledByRacecourseCount(long id);
+    long findScheduledByRacecourseCount(String racecourse);
 
 
     /**
@@ -35,7 +57,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
     /**
      * @return Count of Races that finished on Racecourse with name starts with racecourse param
      */
-    long findFinishedByRacecourseCount(long id);
+    long findFinishedByRacecourseCount(String racecourse);
 
 
     /**
@@ -62,35 +84,35 @@ public interface RaceDao extends CrudDao<Long, Race> {
 
     /**
      * @return List of Races that scheduled on timestamp between begin and end param
-     *      on Racecourse with name starts with racecourse param
+     *      on Racecourse with id == racecourse param
      */
     List<Race> findScheduledInTimestampDiapasonOnRacecourse(
-            String racecourse, Timestamp begin, Timestamp end, long offset, long limit
+            long racecourse, Timestamp begin, Timestamp end, long offset, long limit
     );
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param
-     *      on Racecourse with name starts with racecourse param
+     *      on Racecourse id == racecourse param
      */
     long findScheduledInTimestampDiapasonOnRacecourseCount(
-            String racecourse, Timestamp begin, Timestamp end
+            long racecourse, Timestamp begin, Timestamp end
     );
 
 
     /**
      * @return List of Races that finished on timestamp between begin and end param
-     *      on Racecourse with name starts with racecourse param
+     *      on Racecourse with id == racecourse param
      */
     List<Race> findFinishedInTimestampDiapasonOnRacecourse(
-            String racecourse, Timestamp begin, Timestamp end, long offset, long limit
+            long racecourse, Timestamp begin, Timestamp end, long offset, long limit
     );
 
     /**
      * @return Count of Races that finished on timestamp between begin and end param
-     *      on Racecourse with name starts with racecourse param
+     *      on Racecourse with id == racecourse param
      */
     long findFinishedInTimestampDiapasonOnRacecourseCount(
-            String racecourse, Timestamp begin, Timestamp end
+            long racecourse, Timestamp begin, Timestamp end
     );
 
 
