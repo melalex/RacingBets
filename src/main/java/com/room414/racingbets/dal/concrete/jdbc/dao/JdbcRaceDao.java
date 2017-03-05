@@ -40,11 +40,9 @@ public class JdbcRaceDao implements RaceDao {
     private void createRace(Race entity) throws DalException {
         final String sqlStatement =
                 "INSERT INTO race " +
-                "   (name, status, racecourse_id, start_date_time, min_bet, commission, going_id, " +
+                "   (name, status, racecourse_id, start_date_time, min_bet, commission, going, " +
                 "   race_type, race_class, min_age, min_rating, max_rating, distance) " +
-                "SELECT ?, ?, ?, ?, ?, ?, going.name, ?, ?, ?, ?, ?, ? " +
-                "FROM going " +
-                "WHERE name = ?";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, entity.getName());
@@ -53,13 +51,13 @@ public class JdbcRaceDao implements RaceDao {
             statement.setTimestamp(4, entity.getStart());
             statement.setBigDecimal(5, entity.getMinBet());
             statement.setDouble(6, entity.getCommission());
-            statement.setString(7, entity.getRaceType().getName());
-            statement.setInt(8, entity.getRaceClass());
-            statement.setInt(9, entity.getMinAge());
-            statement.setInt(10, entity.getMinRating());
-            statement.setInt(11, entity.getMaxRating());
-            statement.setFloat(11, entity.getDistance());
-            statement.setString(13, entity.getTrackCondition().getName());
+            statement.setString(7, entity.getTrackCondition().getName());
+            statement.setString(8, entity.getRaceType().getName());
+            statement.setInt(9, entity.getRaceClass());
+            statement.setInt(10, entity.getMinAge());
+            statement.setInt(11, entity.getMinRating());
+            statement.setInt(12, entity.getMaxRating());
+            statement.setFloat(13, entity.getDistance());
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {
@@ -147,7 +145,7 @@ public class JdbcRaceDao implements RaceDao {
         final String sqlStatement =
                 "SELECT race.id, race.start_date_time, race.commission, race.distance, race.max_rating, " +
                 "   race.min_age, race.min_bet, race.min_rating, race.name, race.race_class, " +
-                "   race.race_type, race.status, going.name, racecourse.id, racecourse.name, " +
+                "   race.race_type, race.status, race.going, racecourse.id, racecourse.name, " +
                 "   racecourse.clerk, racecourse.contact " +
                 "FROM (" +
                 "   SELECT * FROM race " +

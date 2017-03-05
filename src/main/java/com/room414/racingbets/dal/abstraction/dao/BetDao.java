@@ -40,7 +40,7 @@ public interface BetDao extends CrudDao<Long, Bet> {
      *
      * @return number of updates
      */
-    long update(List<Bet> bets);
+    long update(List<Bet> bets) throws DalException;
 
     /**
      * @return Odds of concrete Bet.
@@ -48,5 +48,5 @@ public interface BetDao extends CrudDao<Long, Bet> {
      *          Odds calculation example
      *      </a>
      */
-    Odds getOdds(Bet bet);
+    Odds getOdds(Bet bet) throws DalException;
 }
