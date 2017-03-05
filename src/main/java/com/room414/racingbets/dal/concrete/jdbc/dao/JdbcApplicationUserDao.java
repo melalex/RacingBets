@@ -4,12 +4,17 @@ import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcFindByColumnExecutor;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.*;
 
@@ -29,6 +34,52 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
     JdbcApplicationUserDao(Connection connection) {
         this.connection = connection;
         this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapApplicationUser);
+    }
+
+    private List<ApplicationUser> mapUsers(ResultSet resultSet) throws SQLException {
+        Map<Long, ApplicationUserBuilder> builderById = new HashMap<>();
+
+        final String idColumnName = "application_user.id";
+        final String loginColumnName = "application_user.login";
+        final String firstNameColumnName = "application_user.first_name";
+        final String lastNameColumnName = "application_user.last_name";
+        final String emailColumnName = "application_user.email";
+        final String isEmailConfirmedColumnName = "application_user.is_email_confirmed";
+        final String passwordColumnName = "application_user.password";
+        final String balanceColumnName = "application_user.balance";
+        final String roleNameColumnName = "role.name";
+
+        ApplicationUserBuilder builder;
+        long id;
+
+        while (resultSet.next()) {
+            id = resultSet.getLong(idColumnName);
+            builder = builderById.get(id);
+            if (builder == null) {
+                builder = ApplicationUser.builder()
+                        .setId(id)
+                        .setLogin(resultSet.getString(loginColumnName))
+                        .setFirstName(resultSet.getString(firstNameColumnName))
+                        .setLastName(resultSet.getString(lastNameColumnName))
+                        .setEmail(resultSet.getString(emailColumnName))
+                        .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
+                        .setPassword(resultSet.getString(passwordColumnName))
+                        .setBalance(resultSet.getBigDecimal(balanceColumnName));
+
+                builderById.put(id, builder);
+            }
+            builder.addRole(resultSet.getString(roleNameColumnName));
+        }
+
+        return builderById
+                .values()
+                .stream()
+                .map(ApplicationUserBuilder::build)
+                .collect(Collectors.toList());
+    }
+
+    private ApplicationUser mapUser(ResultSet resultSet) throws SQLException {
+        return mapUsers(resultSet).get(0);
     }
 
     private void createApplicationUser(ApplicationUser entity) throws DalException {

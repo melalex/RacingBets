@@ -66,7 +66,7 @@ public class JdbcMapHelper {
     }
 
     public static Racecourse mapRacecourse(ResultSet resultSet) throws SQLException {
-        // TODO: is should be upper
+        // TODO: is should be upper?
         final String RACECOURSE_ID_COLUMN = "racecourse.id";
         final String RACECOURSE_NAME_COLUMN = "racecourse.name";
         final String RACECOURSE_LATITUDE_COLUMN = "racecourse.latitude";

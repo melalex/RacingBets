@@ -10,8 +10,7 @@ import com.room414.racingbets.dal.domain.entities.Participant;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
