@@ -46,6 +46,7 @@ public interface BetDao extends CrudDao<Long, Bet> {
      * @see <a href="https://en.wikipedia.org/wiki/Parimutuel_betting#Example">
      *          Odds calculation example
      *      </a>
+     * @param bet
      */
-    Odds getOdds(long bet) throws DalException;
+    Odds getOdds(Bet bet) throws DalException;
 }

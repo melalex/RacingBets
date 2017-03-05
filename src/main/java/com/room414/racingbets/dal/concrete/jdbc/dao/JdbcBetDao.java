@@ -287,11 +287,11 @@ public class JdbcBetDao implements BetDao {
     }
 
     @Override
-    public Odds getOdds(long bet) throws DalException {
+    public Odds getOdds(Bet bet) throws DalException {
         final String call = "{ CALL get_odds(?, ?, ?, ?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {
-            statement.setLong(1, bet);
+            statement.setLong(1, bet.getId());
             statement.registerOutParameter(2, Types.DECIMAL);
             statement.registerOutParameter(3, Types.DECIMAL);
             statement.registerOutParameter(4, Types.DOUBLE);
