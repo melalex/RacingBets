@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.getResultList;
 
 /**
  * Implementation of BetDao that uses JDBC as data source.
@@ -141,7 +142,8 @@ public class JdbcBetDao implements BetDao {
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
-                "   WHERE application_user_id = ?" +
+                "   WHERE application_user_id = ? " +
+                "   LIMIT ? OFFSET ?" +
                 ") AS bet  " +
                 "INNER JOIN application_user " +
                 "   ON bet.application_user_id = application_user.id " +
@@ -157,7 +159,7 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        return executor.findByForeignKey(sqlStatement, id, offset, limit);
+        return findByForeignKey(sqlStatement, id, offset, limit);
     }
 
     @Override
@@ -170,7 +172,6 @@ public class JdbcBetDao implements BetDao {
     @Override
     // TODO: comment about user role
     public Bet find(Long id) throws DalException {
-        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -190,12 +191,18 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        return executor.find(id, sqlStatement);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, id);
+
+            return mapBet(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, id);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
     public List<Bet> findAll() throws DalException {
-        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -214,7 +221,12 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        return executor.findAll(sqlStatement);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            return mapBets(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
@@ -223,7 +235,8 @@ public class JdbcBetDao implements BetDao {
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
-                "   WHERE race_id = ?" +
+                "   WHERE race_id = ? " +
+                "   LIMIT ? OFFSET ?" +
                 ") AS bet  " +
                 "INNER JOIN application_user " +
                 "   ON bet.application_user_id = application_user.id " +
@@ -239,7 +252,20 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        return executor.findByForeignKey(sqlStatement, id, offset, limit);
+        return findByForeignKey(sqlStatement, id, offset, limit);
+    }
+
+    private List<Bet> findByForeignKey(String sqlStatement, long id, long offset, long limit) throws DalException {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, id);
+            statement.setLong(2, limit);
+            statement.setLong(3, offset);
+
+            return mapBets(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, id, limit, offset);
+            throw new DalException(message, e);
+        }
     }
 
     @Override

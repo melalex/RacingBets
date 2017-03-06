@@ -91,7 +91,7 @@ public class JdbcCrudExecutor<T> {
 
             return getResultList(statement, mapper);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, key);
+            String message = defaultErrorMessage(sqlStatement, key, limit, offset);
             throw new DalException(message, e);
         }
     }

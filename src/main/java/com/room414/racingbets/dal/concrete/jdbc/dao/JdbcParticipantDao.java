@@ -27,10 +27,12 @@ public class JdbcParticipantDao implements ParticipantDao {
     private Connection connection;
     private JdbcCrudExecutor<Participant> executor;
     private JdbcCrudExecutor<Pair<Participant, Timestamp>> foreignExecutor;
+    private JdbcHorseDao horseDao;
 
-    JdbcParticipantDao(Connection connection) {
+    JdbcParticipantDao(Connection connection, JdbcHorseDao horseDao) {
         this.connection = connection;
-        this.executor = new JdbcCrudExecutor<>(connection, JdbcMapHelper::mapParticipant);
+        this.horseDao = horseDao;
+        this.executor = new JdbcCrudExecutor<>(connection, rs -> JdbcMapHelper.mapParticipant(rs, horseDao));
         this.foreignExecutor = new JdbcCrudExecutor<>(connection, this::mapWhoAndWhen);
     }
 
@@ -151,7 +153,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
         Pair<Participant, Timestamp> result = new Pair<>();
 
-        result.setFirstElement(JdbcMapHelper.mapParticipant(resultSet));
+        result.setFirstElement(JdbcMapHelper.mapParticipant(resultSet, horseDao));
         result.setSecondElement(resultSet.getTimestamp(RACE_START_COLUMN));
 
         return result;
