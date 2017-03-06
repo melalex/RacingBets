@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.getResultList;
 
 /**
  * Implementation of BetDao that uses JDBC as data source.
@@ -35,7 +34,7 @@ public class JdbcBetDao implements BetDao {
     JdbcBetDao(Connection connection, JdbcHorseDao horseDao) {
         this.connection = connection;
         this.horseDao = horseDao;
-        this.executor = new JdbcCrudExecutor<>(connection, JdbcMapHelper::mapBet);
+        this.executor = new JdbcCrudExecutor<>(connection, this::mapBet);
     }
 
     private List<Bet> mapBets(PreparedStatement statement) throws SQLException {

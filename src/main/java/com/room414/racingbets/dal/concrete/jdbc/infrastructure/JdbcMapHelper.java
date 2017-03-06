@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.concrete.jdbc.dao.JdbcHorseDao;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 
@@ -92,17 +91,28 @@ public class JdbcMapHelper {
         return null;
     }
 
-    public static Bet mapBet(ResultSet resultSet) throws SQLException {
-        // TODO: implementation
-        return null;
+    public static Horse mapHorse(ResultSet resultSet, HorseDao horseDao) throws SQLException {
+        final String idColumnName = "horse.id";
+        final String nameColumnName = "horse.name";
+        final String birthdayColumnName = "horse.birthday";
+        final String genderColumnName = "horse.gender";
+        final String sirColumnName = "horse.sir_id";
+        final String damColumnName = "horse.dam_id";
+
+        return Horse
+                .builder()
+                .setId(resultSet.getLong(idColumnName))
+                .setName(resultSet.getString(nameColumnName))
+                .setBirthday(resultSet.getDate(birthdayColumnName))
+                .setGender(resultSet.getString(genderColumnName))
+                .setSir(new HorseLazyLoadProxy(resultSet.getLong(sirColumnName), horseDao))
+                .setDam(new HorseLazyLoadProxy(resultSet.getLong(damColumnName), horseDao))
+                .setOwner(JdbcMapHelper.mapOwner(resultSet))
+                .setTrainer(JdbcMapHelper.mapTrainer(resultSet))
+                .build();
     }
 
-    public static Race mapRace(ResultSet resultSet) throws SQLException {
-        // TODO: implementation
-        return null;
-    }
-
-    public static Participant mapParticipant(ResultSet resultSet, JdbcHorseDao horseDao) throws SQLException {
+    public static Participant mapParticipant(ResultSet resultSet, HorseDao horseDao) throws SQLException {
         final String idColumnName = "participant.id";
         final String numberColumnName = "participant.number";
         final String carriedWeightColumnName = "participant.carried_weight";
@@ -115,7 +125,7 @@ public class JdbcMapHelper {
                 .builder()
                 .setId(resultSet.getLong(idColumnName))
                 .setNumber(resultSet.getInt(numberColumnName))
-                .setHorse(horseDao.mapHorse(resultSet))
+                .setHorse(mapHorse(resultSet, horseDao))
                 .setCarriedWeight(resultSet.getFloat(carriedWeightColumnName))
                 .setTopSpeed(resultSet.getInt(topSpeedColumnName))
                 .setOfficialRating(resultSet.getInt(officialRatingColumnName))

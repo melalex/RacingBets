@@ -29,30 +29,10 @@ public class JdbcHorseDao implements HorseDao {
     private Connection connection;
     private JdbcFindByColumnExecutor<Horse> executor;
 
+    // TODO: lazy load vs caching
     JdbcHorseDao(Connection connection) {
         this.connection = connection;
-        this.executor = new JdbcFindByColumnExecutor<>(connection, this::mapHorse);
-    }
-
-    public Horse mapHorse(ResultSet resultSet) throws SQLException {
-        final String idColumnName = "horse.id";
-        final String nameColumnName = "horse.name";
-        final String birthdayColumnName = "horse.birthday";
-        final String genderColumnName = "horse.gender";
-        final String sirColumnName = "horse.sir_id";
-        final String damColumnName = "horse.dam_id";
-
-        return Horse
-                .builder()
-                .setId(resultSet.getLong(idColumnName))
-                .setName(resultSet.getString(nameColumnName))
-                .setBirthday(resultSet.getDate(birthdayColumnName))
-                .setGender(resultSet.getString(genderColumnName))
-                .setSir(new HorseLazyLoadProxy(resultSet.getLong(sirColumnName), this))
-                .setDam(new HorseLazyLoadProxy(resultSet.getLong(damColumnName), this))
-                .setOwner(JdbcMapHelper.mapOwner(resultSet))
-                .setTrainer(JdbcMapHelper.mapTrainer(resultSet))
-                .build();
+        this.executor = new JdbcFindByColumnExecutor<>(connection, rs -> JdbcMapHelper.mapHorse(rs, this));
     }
 
     @Override

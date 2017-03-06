@@ -37,8 +37,6 @@ public class JdbcRaceDao implements RaceDao {
         this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapRace);
     }
 
-
-
     private void createRace(Race entity) throws DalException {
         final String sqlStatement =
                 "INSERT INTO race " +
