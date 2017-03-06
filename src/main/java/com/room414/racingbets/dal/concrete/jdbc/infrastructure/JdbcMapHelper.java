@@ -1,7 +1,10 @@
 package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
 
+import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
+import com.room414.racingbets.dal.concrete.jdbc.dao.JdbcHorseDao;
 import com.room414.racingbets.dal.domain.entities.*;
+import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -89,11 +92,6 @@ public class JdbcMapHelper {
         return null;
     }
 
-    public static Horse mapHorse(ResultSet resultSet) throws SQLException {
-        // TODO: implementation
-        return null;
-    }
-
     public static Bet mapBet(ResultSet resultSet) throws SQLException {
         // TODO: implementation
         return null;
@@ -104,8 +102,27 @@ public class JdbcMapHelper {
         return null;
     }
 
-    public static Participant mapParticipant(ResultSet resultSet) throws SQLException {
-        // TODO: implementation
-        return null;
+    public static Participant mapParticipant(ResultSet resultSet, JdbcHorseDao horseDao) throws SQLException {
+        final String idColumnName = "participant.id";
+        final String numberColumnName = "participant.number";
+        final String carriedWeightColumnName = "participant.carried_weight";
+        final String topSpeedColumnName = "participant.top_speed";
+        final String officialRatingColumnName = "participant.official_rating";
+        final String oddsColumnName = "participant.odds";
+        final String placeColumnName = "participant.place";
+
+        return Participant
+                .builder()
+                .setId(resultSet.getLong(idColumnName))
+                .setNumber(resultSet.getInt(numberColumnName))
+                .setHorse(horseDao.mapHorse(resultSet))
+                .setCarriedWeight(resultSet.getFloat(carriedWeightColumnName))
+                .setTopSpeed(resultSet.getInt(topSpeedColumnName))
+                .setOfficialRating(resultSet.getInt(officialRatingColumnName))
+                .setOdds(resultSet.getDouble(oddsColumnName))
+                .setJockey(mapJockey(resultSet))
+                .setTrainer(mapTrainer(resultSet))
+                .setPlace(resultSet.getInt(placeColumnName))
+                .build();
     }
 }

@@ -61,8 +61,8 @@ public class ParticipantBuilder {
         return this;
     }
 
-    public ParticipantBuilder setOddsNumerator(int oddsNumerator) {
-        this.odds = oddsNumerator;
+    public ParticipantBuilder setOdds(double odds) {
+        this.odds = odds;
         return this;
     }
 

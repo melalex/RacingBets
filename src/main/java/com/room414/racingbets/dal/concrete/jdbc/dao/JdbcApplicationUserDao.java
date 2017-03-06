@@ -10,7 +10,6 @@ import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +141,6 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public ApplicationUser find(Long id) throws DalException {
-        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -164,7 +162,6 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findAll() throws DalException {
-        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -183,7 +180,6 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findAll(long offset, long limit) throws DalException {
-        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -253,7 +249,6 @@ public class JdbcApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException {
-        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +

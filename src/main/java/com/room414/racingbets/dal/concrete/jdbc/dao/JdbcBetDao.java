@@ -4,6 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcCrudExecutor;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Participant;
@@ -11,6 +12,7 @@ import com.room414.racingbets.dal.domain.entities.Participant;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
 import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
@@ -27,10 +29,53 @@ public class JdbcBetDao implements BetDao {
 
     private Connection connection;
     private JdbcCrudExecutor<Bet> executor;
+    private JdbcHorseDao horseDao;
 
-    JdbcBetDao(Connection connection) {
+    JdbcBetDao(Connection connection, JdbcHorseDao horseDao) {
         this.connection = connection;
+        this.horseDao = horseDao;
         this.executor = new JdbcCrudExecutor<>(connection, JdbcMapHelper::mapBet);
+    }
+
+    private List<Bet> mapBets(PreparedStatement statement) throws SQLException {
+        try(ResultSet resultSet = statement.executeQuery()) {
+            Map<Long, BetBuilder> builderById = new HashMap<>();
+
+            final String idColumnName = "bet.id";
+            final String raceIdColumnName = "bet.race_id";
+            final String betSizeColumnName = "bet.bet_size";
+            final String betTypeColumnName = "bet.bet_type";
+            final String betStatusColumnName = "bet.bet_status";
+
+            BetBuilder builder;
+            long id;
+
+            while (resultSet.next()) {
+                id = resultSet.getLong(idColumnName);
+                builder = builderById.get(id);
+                if (builder == null) {
+                    builder = Bet.builder()
+                            .setId(resultSet.getLong(idColumnName))
+                            .setRaceId(resultSet.getLong(raceIdColumnName))
+                            .setUser(JdbcMapHelper.mapApplicationUser(resultSet))
+                            .setBetSize(resultSet.getBigDecimal(betSizeColumnName))
+                            .setBetType(resultSet.getString(betTypeColumnName))
+                            .setBetStatus(resultSet.getString(betStatusColumnName));
+                    builderById.put(id, builder);
+                }
+                builder.addParticipant(JdbcMapHelper.mapParticipant(resultSet, horseDao));
+            }
+
+            return builderById
+                    .values()
+                    .stream()
+                    .map(BetBuilder::build)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    private Bet mapBet(PreparedStatement statement) throws SQLException {
+        return mapBets(statement).get(0);
     }
 
     private void createBet(Bet entity) throws DalException {
@@ -108,7 +153,9 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
-                "   ON participant.horse_id = horse.id";
+                "   ON participant.horse_id = horse.id " +
+                "INNER JOIN owner " +
+                "   ON horse.owner_id = owner.id";
 
         return executor.findByForeignKey(sqlStatement, id, offset, limit);
     }
@@ -139,7 +186,9 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
-                "   ON participant.horse_id = horse.id";
+                "   ON participant.horse_id = horse.id " +
+                "INNER JOIN owner " +
+                "   ON horse.owner_id = owner.id";
 
         return executor.find(id, sqlStatement);
     }
@@ -161,7 +210,9 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
-                "   ON participant.horse_id = horse.id";
+                "   ON participant.horse_id = horse.id " +
+                "INNER JOIN owner " +
+                "   ON horse.owner_id = owner.id";
 
         return executor.findAll(sqlStatement);
     }
@@ -184,7 +235,9 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
-                "   ON participant.horse_id = horse.id";
+                "   ON participant.horse_id = horse.id " +
+                "INNER JOIN owner " +
+                "   ON horse.owner_id = owner.id";
 
         return executor.findByForeignKey(sqlStatement, id, offset, limit);
     }
@@ -207,7 +260,9 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
-                "   ON participant.horse_id = horse.id";
+                "   ON participant.horse_id = horse.id " +
+                "INNER JOIN owner " +
+                "   ON horse.owner_id = owner.id";
 
         return executor.findAll(sqlStatement, limit, offset);
     }
@@ -302,29 +357,8 @@ public class JdbcBetDao implements BetDao {
                 return getTrifectaOdds(bet);
             case SUPERFECTA:
                 return getSuperfectaOdds(bet);
-        }
-
-        final String call = "{ CALL get_odds(?, ?, ?, ?) }";
-
-        try(CallableStatement statement = connection.prepareCall(call)) {
-            statement.setLong(1, bet.getId());
-            statement.registerOutParameter(2, Types.DECIMAL);
-            statement.registerOutParameter(3, Types.DECIMAL);
-            statement.registerOutParameter(4, Types.DOUBLE);
-
-            if (statement.execute()) {
-                ResultSet resultSet = statement.getResultSet();
-                BigDecimal prizePool = resultSet.getBigDecimal("prize_pool");
-                BigDecimal eventPool = resultSet.getBigDecimal("event_pool");
-                double commission = resultSet.getDouble("commission");
-
-                return new Odds(prizePool, eventPool, commission);
-            } else {
-                throw new SQLException("ResultSet is empty");
-            }
-        } catch (SQLException e) {
-            String message = "Exception during calculating odds for bet with id " + bet;
-            throw new DalException(message, e);
+            default:
+                throw new DalException("IMPOSABLE!!!");
         }
     }
 
