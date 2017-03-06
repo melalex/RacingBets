@@ -1,9 +1,10 @@
 package com.room414.racingbets.dal.concrete.jdbc.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
+import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcCrudExecutor;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcSimpleQueryExecutor;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
@@ -28,13 +29,13 @@ public class JdbcBetDao implements BetDao {
     private static final String TABLE_NAME = "bet";
 
     private Connection connection;
-    private JdbcCrudExecutor<Bet> executor;
-    private JdbcHorseDao horseDao;
+    private JdbcSimpleQueryExecutor executor;
+    private HorseDao horseDao;
 
-    JdbcBetDao(Connection connection, JdbcHorseDao horseDao) {
+    JdbcBetDao(Connection connection, HorseDao horseDao) {
         this.connection = connection;
         this.horseDao = horseDao;
-        this.executor = new JdbcCrudExecutor<>(connection, this::mapBet);
+        this.executor = new JdbcSimpleQueryExecutor(connection);
     }
 
     private List<Bet> mapBets(PreparedStatement statement) throws SQLException {
@@ -289,7 +290,15 @@ public class JdbcBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        return executor.findAll(sqlStatement, limit, offset);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, limit);
+            statement.setLong(2, offset);
+
+            return mapBets(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, limit, offset);
+            throw new DalException(message, e);
+        }
     }
 
     @Override

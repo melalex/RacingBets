@@ -49,7 +49,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public BetDao getBetDao() {
         if (betDao == null) {
-            betDao = new JdbcBetDao(connection);
+            betDao = new JdbcBetDao(connection, getHorseDao());
         }
         return betDao;
     }
@@ -89,7 +89,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public ParticipantDao getParticipantDao() {
         if (participantDao == null) {
-            participantDao = new JdbcParticipantDao(connection);
+            participantDao = new JdbcParticipantDao(connection, getHorseDao());
         }
         return participantDao;
     }

@@ -15,12 +15,12 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @author Alexander Melashchenko
  * @version 1.0 03 Mar 2017
  */
-public class JdbcCrudExecutor<T> {
+public class JdbcCrudExecutor<T> extends JdbcSimpleQueryExecutor {
     protected Connection connection;
     protected Mapper<T> mapper;
 
     public JdbcCrudExecutor(Connection connection, Mapper<T> mapper) {
-        this.connection = connection;
+        super(connection);
         this.mapper = mapper;
     }
 
@@ -56,33 +56,6 @@ public class JdbcCrudExecutor<T> {
         }
     }
 
-    public long count(String tableName) throws DalException {
-        String sqlStatement = "SELECT COUNT(*) AS count FROM ?";
-
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-
-            return getResult(statement, JdbcMapHelper::mapCount);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, tableName);
-            throw new DalException(message, e);
-        }
-    }
-
-    public boolean delete(String tableName, Long id) throws DalException {
-        String sqlStatement = "DELETE FROM ? WHERE id = ?";
-
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-            statement.setLong(2, id);
-
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
-    }
-
     public List<T> findByForeignKey(String sqlStatement, long key, long offset, long limit) throws DalException {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setLong(1, key);
@@ -92,21 +65,6 @@ public class JdbcCrudExecutor<T> {
             return getResultList(statement, mapper);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, key, limit, offset);
-            throw new DalException(message, e);
-        }
-    }
-
-    public long findByForeignKeyCount(String tableName, String columnName, long key) throws DalException {
-        final String sqlStatement = "SELECT Count(*) FROM ? WHERE ? = ?";
-
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-            statement.setString(2, columnName);
-            statement.setLong(3, key);
-
-            return getResult(statement, JdbcMapHelper::mapCount);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, key);
             throw new DalException(message, e);
         }
     }

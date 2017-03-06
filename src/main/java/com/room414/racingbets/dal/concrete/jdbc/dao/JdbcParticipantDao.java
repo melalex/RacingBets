@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.concrete.jdbc.dao;
 
+import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcCrudExecutor;
@@ -27,9 +28,9 @@ public class JdbcParticipantDao implements ParticipantDao {
     private Connection connection;
     private JdbcCrudExecutor<Participant> executor;
     private JdbcCrudExecutor<Pair<Participant, Timestamp>> foreignExecutor;
-    private JdbcHorseDao horseDao;
+    private HorseDao horseDao;
 
-    JdbcParticipantDao(Connection connection, JdbcHorseDao horseDao) {
+    JdbcParticipantDao(Connection connection, HorseDao horseDao) {
         this.connection = connection;
         this.horseDao = horseDao;
         this.executor = new JdbcCrudExecutor<>(connection, rs -> JdbcMapHelper.mapParticipant(rs, horseDao));

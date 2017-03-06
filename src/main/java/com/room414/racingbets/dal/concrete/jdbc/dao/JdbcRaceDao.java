@@ -4,6 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcFindByColumnExecutor;
 import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcSimpleQueryExecutor;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
@@ -30,11 +31,11 @@ public class JdbcRaceDao implements RaceDao {
     private static String TABLE_NAME = "race";
 
     private Connection connection;
-    private JdbcFindByColumnExecutor<Race> executor;
+    private JdbcSimpleQueryExecutor executor;
 
     JdbcRaceDao(Connection connection) {
         this.connection = connection;
-        this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapRace);
+        this.executor = new JdbcSimpleQueryExecutor(connection);
     }
 
     private void createRace(Race entity) throws DalException {
@@ -168,7 +169,7 @@ public class JdbcRaceDao implements RaceDao {
                 "   WHERE race.id = ?" +
                 ") ";
 
-        return executor.find(id, sqlStatement);
+        return null;
     }
 
     @Override
@@ -181,7 +182,7 @@ public class JdbcRaceDao implements RaceDao {
                 "INNER JOIN racecourse " +
                 "   ON race.racecourse_id = racecourse.id " ;
 
-        return executor.findAll(sqlStatement);
+        return null;
     }
 
     @Override
@@ -195,7 +196,7 @@ public class JdbcRaceDao implements RaceDao {
                 "   ON race.racecourse_id = racecourse.id " +
                 "LIMIT ? OFFSET ?";
 
-        return executor.findAll(sqlStatement, limit, offset);
+        return null;
     }
 
     @Override
@@ -288,7 +289,7 @@ public class JdbcRaceDao implements RaceDao {
                 "WHERE race.name LIKE ? " +
                 "LIMIT ? OFFSET ?";
 
-        return executor.findByColumnPart(sqlStatement, racecourse, offset, limit);
+        return null;
     }
 
     @Override
@@ -356,7 +357,7 @@ public class JdbcRaceDao implements RaceDao {
                 "WHERE race.name LIKE ? " +
                 "LIMIT ? OFFSET ?";
 
-        return executor.findByColumnPart(sqlStatement, namePart, offset, limit);
+        return null;
 
     }
 
@@ -365,7 +366,7 @@ public class JdbcRaceDao implements RaceDao {
         //language=MySQL
         final String sqlStatement = "SELECT * FROM race WHERE race.name LIKE ?";
 
-        return executor.findByColumnPartCount(sqlStatement, namePart);
+        return 0;
     }
 
     @Override
