@@ -1,10 +1,10 @@
-package com.room414.racingbets.dal.concrete.jdbc.base;
+package com.room414.racingbets.dal.concrete.mysql.base;
 
 import com.room414.racingbets.dal.abstraction.dao.PersonDao;
 import com.room414.racingbets.dal.abstraction.entities.Person;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,14 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.*;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 02 Mar 2017
  */
 // TODO: cascading comment
-public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
+public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     protected Connection connection;
 
     protected abstract String getTableName();
@@ -36,7 +36,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
             statement.setString(3, entity.getLastName());
             statement.setDate(4, entity.getBirthday());
 
-            JdbcDaoHelper.createEntity(statement, entity::setId);
+            MySqlDaoHelper.createEntity(statement, entity::setId);
 
         } catch (SQLException e) {
             String message = defaultErrorMessage(
@@ -85,7 +85,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
             statement.setString(2, startsWith(namePart));
             statement.setString(3, startsWith(namePart));
 
-            return getResult(statement, JdbcMapHelper::mapCount);
+            return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
@@ -148,7 +148,7 @@ public abstract class JdbcPersonDao<T extends Person> implements PersonDao<T> {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, getTableName());
 
-            return getResult(statement, JdbcMapHelper::mapCount);
+            return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, getTableName());
             throw new DalException(message, e);

@@ -1,6 +1,4 @@
-package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
-
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,10 +13,10 @@ import java.util.function.Consumer;
  */
 // TODO: is good place
 // TODO: usage comments
-public class JdbcDaoHelper {
+public class MySqlDaoHelper {
     private final static String DEFAULT_ERROR_MESSAGE = "Exception during execution statement '%s'";
 
-    private JdbcDaoHelper() {
+    private MySqlDaoHelper() {
 
     }
 

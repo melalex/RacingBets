@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
+package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 
@@ -7,15 +7,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.*;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 03 Mar 2017
  */
-public class JdbcFindByColumnExecutor<T> extends JdbcCrudExecutor<T> {
+public class MySqlFindByColumnExecutor<T> extends MySqlCrudExecutor<T> {
 
-    public JdbcFindByColumnExecutor(Connection connection, Mapper<T> mapper) {
+    public MySqlFindByColumnExecutor(Connection connection, Mapper<T> mapper) {
         super(connection, mapper);
     }
 
@@ -37,7 +37,7 @@ public class JdbcFindByColumnExecutor<T> extends JdbcCrudExecutor<T> {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, startsWith(namePart));
 
-            return getResult(statement, JdbcMapHelper::mapCount);
+            return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, startsWith(namePart));
             throw new DalException(message, e);

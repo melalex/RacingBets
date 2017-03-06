@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
+package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
@@ -12,9 +12,9 @@ import java.sql.SQLException;
  * @author Alexander Melashchenko
  * @version 1.0 03 Mar 2017
  */
-public class JdbcMapHelper {
+public class MySqlMapHelper {
 
-    private JdbcMapHelper() {
+    private MySqlMapHelper() {
 
     }
 
@@ -107,8 +107,8 @@ public class JdbcMapHelper {
                 .setGender(resultSet.getString(genderColumnName))
                 .setSir(new HorseLazyLoadProxy(resultSet.getLong(sirColumnName), horseDao))
                 .setDam(new HorseLazyLoadProxy(resultSet.getLong(damColumnName), horseDao))
-                .setOwner(JdbcMapHelper.mapOwner(resultSet))
-                .setTrainer(JdbcMapHelper.mapTrainer(resultSet))
+                .setOwner(MySqlMapHelper.mapOwner(resultSet))
+                .setTrainer(MySqlMapHelper.mapTrainer(resultSet))
                 .build();
     }
 

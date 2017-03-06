@@ -1,8 +1,8 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.JockeyDao;
-import com.room414.racingbets.dal.concrete.jdbc.base.JdbcPersonDao;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.base.MySqlPersonDao;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Jockey;
 
 import java.sql.Connection;
@@ -16,10 +16,10 @@ import java.sql.SQLException;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcJockeyDao extends JdbcPersonDao<Jockey> implements JockeyDao {
+public class MySqlJockeyDao extends MySqlPersonDao<Jockey> implements JockeyDao {
     private static final String TABLE_NAME = "jockey";
 
-    JdbcJockeyDao(Connection connection) {
+    MySqlJockeyDao(Connection connection) {
         this.connection = connection;
     }
 
@@ -30,6 +30,6 @@ public class JdbcJockeyDao extends JdbcPersonDao<Jockey> implements JockeyDao {
 
     @Override
     protected Jockey mapResultSet(ResultSet resultSet) throws SQLException {
-        return JdbcMapHelper.mapJockey(resultSet);
+        return MySqlMapHelper.mapJockey(resultSet);
     }
 }

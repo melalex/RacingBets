@@ -1,20 +1,18 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcFindByColumnExecutor;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
-import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlFindByColumnExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
 
 /**
  * Implementation of HorseDao that uses JDBC as data source.
@@ -23,16 +21,16 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcHorseDao implements HorseDao {
+public class MySqlHorseDao implements HorseDao {
     private static String TABLE_NAME = "horse";
 
     private Connection connection;
-    private JdbcFindByColumnExecutor<Horse> executor;
+    private MySqlFindByColumnExecutor<Horse> executor;
 
     // TODO: lazy load vs caching
-    JdbcHorseDao(Connection connection) {
+    MySqlHorseDao(Connection connection) {
         this.connection = connection;
-        this.executor = new JdbcFindByColumnExecutor<>(connection, rs -> JdbcMapHelper.mapHorse(rs, this));
+        this.executor = new MySqlFindByColumnExecutor<>(connection, rs -> MySqlMapHelper.mapHorse(rs, this));
     }
 
     @Override

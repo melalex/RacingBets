@@ -1,9 +1,9 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.RacecourseDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcFindByColumnExecutor;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlFindByColumnExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Racecourse;
 
 import java.sql.Connection;
@@ -11,8 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
 
 
 /**
@@ -22,15 +22,15 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcRacecourseDao implements RacecourseDao {
+public class MySqlRacecourseDao implements RacecourseDao {
     private static final String TABLE_NAME = "racecourse";
 
     private Connection connection;
-    private JdbcFindByColumnExecutor<Racecourse> executor;
+    private MySqlFindByColumnExecutor<Racecourse> executor;
 
-    JdbcRacecourseDao(Connection connection) {
+    MySqlRacecourseDao(Connection connection) {
         this.connection = connection;
-        this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapRacecourse);
+        this.executor = new MySqlFindByColumnExecutor<>(connection, MySqlMapHelper::mapRacecourse);
     }
 
     @Override

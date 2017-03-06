@@ -1,10 +1,8 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcFindByColumnExecutor;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcSimpleQueryExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleQueryExecutor;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
@@ -16,8 +14,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
 
 /**
  * Implementation of RaceDao that uses JDBC as data source.
@@ -27,15 +25,15 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @version 1.0 28 Feb 2017
  */
 // TODO: ordered
-public class JdbcRaceDao implements RaceDao {
+public class MySqlRaceDao implements RaceDao {
     private static String TABLE_NAME = "race";
 
     private Connection connection;
-    private JdbcSimpleQueryExecutor executor;
+    private MySqlSimpleQueryExecutor executor;
 
-    JdbcRaceDao(Connection connection) {
+    MySqlRaceDao(Connection connection) {
         this.connection = connection;
-        this.executor = new JdbcSimpleQueryExecutor(connection);
+        this.executor = new MySqlSimpleQueryExecutor(connection);
     }
 
     private void createRace(Race entity) throws DalException {

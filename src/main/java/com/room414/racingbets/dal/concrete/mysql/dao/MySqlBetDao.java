@@ -1,10 +1,10 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcSimpleQueryExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleQueryExecutor;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
@@ -15,8 +15,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.createEntity;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
 
 /**
  * Implementation of BetDao that uses JDBC as data source.
@@ -25,17 +25,17 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcBetDao implements BetDao {
+public class MySqlBetDao implements BetDao {
     private static final String TABLE_NAME = "bet";
 
     private Connection connection;
-    private JdbcSimpleQueryExecutor executor;
+    private MySqlSimpleQueryExecutor executor;
     private HorseDao horseDao;
 
-    JdbcBetDao(Connection connection, HorseDao horseDao) {
+    MySqlBetDao(Connection connection, HorseDao horseDao) {
         this.connection = connection;
         this.horseDao = horseDao;
-        this.executor = new JdbcSimpleQueryExecutor(connection);
+        this.executor = new MySqlSimpleQueryExecutor(connection);
     }
 
     private List<Bet> mapBets(PreparedStatement statement) throws SQLException {
@@ -58,13 +58,13 @@ public class JdbcBetDao implements BetDao {
                     builder = Bet.builder()
                             .setId(resultSet.getLong(idColumnName))
                             .setRaceId(resultSet.getLong(raceIdColumnName))
-                            .setUser(JdbcMapHelper.mapApplicationUser(resultSet))
+                            .setUser(MySqlMapHelper.mapApplicationUser(resultSet))
                             .setBetSize(resultSet.getBigDecimal(betSizeColumnName))
                             .setBetType(resultSet.getString(betTypeColumnName))
                             .setBetStatus(resultSet.getString(betStatusColumnName));
                     builderById.put(id, builder);
                 }
-                builder.addParticipant(JdbcMapHelper.mapParticipant(resultSet, horseDao));
+                builder.addParticipant(MySqlMapHelper.mapParticipant(resultSet, horseDao));
             }
 
             return builderById

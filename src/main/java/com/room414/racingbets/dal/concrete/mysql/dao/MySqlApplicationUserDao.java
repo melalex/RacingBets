@@ -1,9 +1,9 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcFindByColumnExecutor;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlFindByColumnExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.*;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
 /**
  * Implementation of ApplicationUserDao that uses JDBC as data source.
@@ -24,15 +24,15 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcApplicationUserDao implements ApplicationUserDao {
+public class MySqlApplicationUserDao implements ApplicationUserDao {
     private static String TABLE_NAME = "application_user";
 
     private Connection connection;
-    private JdbcFindByColumnExecutor<ApplicationUser> executor;
+    private MySqlFindByColumnExecutor<ApplicationUser> executor;
 
-    JdbcApplicationUserDao(Connection connection) {
+    MySqlApplicationUserDao(Connection connection) {
         this.connection = connection;
-        this.executor = new JdbcFindByColumnExecutor<>(connection, JdbcMapHelper::mapApplicationUser);
+        this.executor = new MySqlFindByColumnExecutor<>(connection, MySqlMapHelper::mapApplicationUser);
     }
 
     private List<ApplicationUser> mapUsers(PreparedStatement statement) throws SQLException {

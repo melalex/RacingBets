@@ -1,8 +1,8 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.TrainerDao;
-import com.room414.racingbets.dal.concrete.jdbc.base.JdbcPersonDao;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.base.MySqlPersonDao;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 
 import java.sql.Connection;
@@ -16,10 +16,10 @@ import java.sql.SQLException;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcTrainerDao extends JdbcPersonDao<Trainer> implements TrainerDao {
+public class MySqlTrainerDao extends MySqlPersonDao<Trainer> implements TrainerDao {
     private static final String TABLE_NAME = "trainer";
 
-    JdbcTrainerDao(Connection connection) {
+    MySqlTrainerDao(Connection connection) {
         this.connection = connection;
     }
 
@@ -30,6 +30,6 @@ public class JdbcTrainerDao extends JdbcPersonDao<Trainer> implements TrainerDao
 
     @Override
     protected Trainer mapResultSet(ResultSet resultSet) throws SQLException {
-        return JdbcMapHelper.mapTrainer(resultSet);
+        return MySqlMapHelper.mapTrainer(resultSet);
     }
 }

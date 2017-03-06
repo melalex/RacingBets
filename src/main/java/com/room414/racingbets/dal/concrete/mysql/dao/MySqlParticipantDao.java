@@ -1,19 +1,17 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcCrudExecutor;
-import com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlCrudExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 
 import java.sql.*;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.getResult;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.getResultList;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
 
 /**
  * Implementation of ParticipantDao that uses JDBC as data source.
@@ -22,19 +20,19 @@ import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHel
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcParticipantDao implements ParticipantDao {
+public class MySqlParticipantDao implements ParticipantDao {
     private static String TABLE_NAME = "participant";
 
     private Connection connection;
-    private JdbcCrudExecutor<Participant> executor;
-    private JdbcCrudExecutor<Pair<Participant, Timestamp>> foreignExecutor;
+    private MySqlCrudExecutor<Participant> executor;
+    private MySqlCrudExecutor<Pair<Participant, Timestamp>> foreignExecutor;
     private HorseDao horseDao;
 
-    JdbcParticipantDao(Connection connection, HorseDao horseDao) {
+    MySqlParticipantDao(Connection connection, HorseDao horseDao) {
         this.connection = connection;
         this.horseDao = horseDao;
-        this.executor = new JdbcCrudExecutor<>(connection, rs -> JdbcMapHelper.mapParticipant(rs, horseDao));
-        this.foreignExecutor = new JdbcCrudExecutor<>(connection, this::mapWhoAndWhen);
+        this.executor = new MySqlCrudExecutor<>(connection, rs -> MySqlMapHelper.mapParticipant(rs, horseDao));
+        this.foreignExecutor = new MySqlCrudExecutor<>(connection, this::mapWhoAndWhen);
     }
 
 
@@ -154,7 +152,7 @@ public class JdbcParticipantDao implements ParticipantDao {
 
         Pair<Participant, Timestamp> result = new Pair<>();
 
-        result.setFirstElement(JdbcMapHelper.mapParticipant(resultSet, horseDao));
+        result.setFirstElement(MySqlMapHelper.mapParticipant(resultSet, horseDao));
         result.setSecondElement(resultSet.getTimestamp(RACE_START_COLUMN));
 
         return result;

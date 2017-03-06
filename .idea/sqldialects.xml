@@ -4,6 +4,6 @@
     <file url="file://$PROJECT_DIR$/database/application_user.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/database/horse_racing.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/database/odds_calculation.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/room414/racingbets/dal/concrete/jdbc" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/room414/racingbets/dal/concrete/mysql" dialect="MySQL" />
   </component>
 </project>

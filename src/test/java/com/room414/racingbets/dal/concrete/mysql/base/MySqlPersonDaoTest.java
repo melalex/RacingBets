@@ -1,14 +1,12 @@
-package com.room414.racingbets.dal.concrete.jdbc.base;
+package com.room414.racingbets.dal.concrete.mysql.base;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 06 Mar 2017
  */
-class JdbcPersonDaoTest {
+class MySqlPersonDaoTest {
     @Test
     void create() {
 

@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
+package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 
@@ -6,17 +6,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.defaultErrorMessage;
-import static com.room414.racingbets.dal.concrete.jdbc.infrastructure.JdbcDaoHelper.getResult;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.getResult;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 06 Mar 2017
  */
-public class JdbcSimpleQueryExecutor {
+public class MySqlSimpleQueryExecutor {
     protected Connection connection;
 
-    public JdbcSimpleQueryExecutor(Connection connection) {
+    public MySqlSimpleQueryExecutor(Connection connection) {
         this.connection = connection;
     }
 
@@ -26,7 +26,7 @@ public class JdbcSimpleQueryExecutor {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, tableName);
 
-            return getResult(statement, JdbcMapHelper::mapCount);
+            return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, tableName);
             throw new DalException(message, e);
@@ -56,7 +56,7 @@ public class JdbcSimpleQueryExecutor {
             statement.setString(2, columnName);
             statement.setLong(3, key);
 
-            return getResult(statement, JdbcMapHelper::mapCount);
+            return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, key);
             throw new DalException(message, e);

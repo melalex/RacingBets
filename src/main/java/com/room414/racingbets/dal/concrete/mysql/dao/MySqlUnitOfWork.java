@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.jdbc.dao;
+package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.*;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-public class JdbcUnitOfWork implements UnitOfWork {
+public class MySqlUnitOfWork implements UnitOfWork {
     private Connection connection;
 
     private ApplicationUserDao applicationUserDao;
@@ -29,19 +29,19 @@ public class JdbcUnitOfWork implements UnitOfWork {
 
     private RacecourseDao racecourseDao;
 
-    public JdbcUnitOfWork(Connection connection) {
+    public MySqlUnitOfWork(Connection connection) {
         this.connection = connection;
     }
 
-    public static JdbcUnitOfWork create(Connection connection) throws SQLException {
+    public static MySqlUnitOfWork create(Connection connection) throws SQLException {
         connection.setAutoCommit(false);
-        return new JdbcUnitOfWork(connection);
+        return new MySqlUnitOfWork(connection);
     }
 
     @Override
     public ApplicationUserDao getApplicationUserDao() {
         if (applicationUserDao == null) {
-            applicationUserDao = new JdbcApplicationUserDao(connection);
+            applicationUserDao = new MySqlApplicationUserDao(connection);
         }
         return applicationUserDao;
     }
@@ -49,7 +49,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public BetDao getBetDao() {
         if (betDao == null) {
-            betDao = new JdbcBetDao(connection, getHorseDao());
+            betDao = new MySqlBetDao(connection, getHorseDao());
         }
         return betDao;
     }
@@ -57,7 +57,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public HorseDao getHorseDao() {
         if (horseDao == null) {
-            horseDao = new JdbcHorseDao(connection);
+            horseDao = new MySqlHorseDao(connection);
         }
         return horseDao;
     }
@@ -65,7 +65,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public JockeyDao getJockeyDao() {
         if (jockeyDao == null) {
-            jockeyDao = new JdbcJockeyDao(connection);
+            jockeyDao = new MySqlJockeyDao(connection);
         }
         return jockeyDao;
     }
@@ -73,7 +73,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public OwnerDao getOwnerDao() {
         if (ownerDao == null) {
-            ownerDao = new JdbcOwnerDao(connection);
+            ownerDao = new MySqlOwnerDao(connection);
         }
         return ownerDao;
     }
@@ -81,7 +81,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public TrainerDao getTrainerDao() {
         if (trainerDao == null) {
-            trainerDao = new JdbcTrainerDao(connection);
+            trainerDao = new MySqlTrainerDao(connection);
         }
         return trainerDao;
     }
@@ -89,7 +89,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public ParticipantDao getParticipantDao() {
         if (participantDao == null) {
-            participantDao = new JdbcParticipantDao(connection, getHorseDao());
+            participantDao = new MySqlParticipantDao(connection, getHorseDao());
         }
         return participantDao;
     }
@@ -97,7 +97,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public RaceDao getRaceDao() {
         if (raceDao == null) {
-            raceDao = new JdbcRaceDao(connection);
+            raceDao = new MySqlRaceDao(connection);
         }
         return raceDao;
     }
@@ -105,7 +105,7 @@ public class JdbcUnitOfWork implements UnitOfWork {
     @Override
     public RacecourseDao getRacecourseDao() {
         if (racecourseDao == null) {
-            racecourseDao = new JdbcRacecourseDao(connection);
+            racecourseDao = new MySqlRacecourseDao(connection);
         }
         return racecourseDao;
     }

@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.jdbc.infrastructure;
+package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
