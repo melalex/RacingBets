@@ -1,3 +1,5 @@
+DELIMITER //
+
 CREATE PROCEDURE get_odds_for_win(
   IN id_of_race INT UNSIGNED,
   IN participant INT UNSIGNED,
@@ -23,8 +25,8 @@ CREATE PROCEDURE get_odds_for_win(
       WHERE bet_participant.participant_id = participant AND
             bet_participant.place = 1
     );
-  END;
-
+  END; //
+  
 CREATE PROCEDURE get_odds_for_place(
   IN id_of_race INT UNSIGNED,
   IN participant INT UNSIGNED,
@@ -50,8 +52,8 @@ CREATE PROCEDURE get_odds_for_place(
       WHERE bet_participant.participant_id = participant AND
             (bet_participant.place = 1 OR bet_participant.place = 2)
     );
-  END;
-
+  END; //
+  
 CREATE PROCEDURE get_odds_for_show(
   IN id_of_race INT UNSIGNED,
   IN participant INT UNSIGNED,
@@ -61,7 +63,7 @@ CREATE PROCEDURE get_odds_for_show(
 )
   BEGIN
     DECLARE type ENUM('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta');
-    SET type = 'Place';
+    SET type = 'Show';
     SET prize_pool = (SELECT SUM(bet_size) FROM bet WHERE bet.bet_type = type AND bet.race_id = id_of_race);
     SET commission = (SELECT commission FROM race WHERE id = id_of_race);
 
@@ -77,7 +79,7 @@ CREATE PROCEDURE get_odds_for_show(
       WHERE bet_participant.participant_id = participant AND
             (bet_participant.place = 1 OR bet_participant.place = 2 OR bet_participant.place = 3)
     );
-  END;
+  END; //
 
 CREATE PROCEDURE get_odds_for_quinella(
   IN id_of_race INT UNSIGNED,
@@ -89,7 +91,7 @@ CREATE PROCEDURE get_odds_for_quinella(
 )
   BEGIN
     DECLARE type ENUM('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta');
-    SET type = 'Place';
+    SET type = 'Quinella';
     SET prize_pool = (SELECT SUM(bet_size) FROM bet WHERE bet.bet_type = type AND bet.race_id = id_of_race);
     SET commission = (SELECT commission FROM race WHERE id = id_of_race);
 
@@ -106,7 +108,7 @@ CREATE PROCEDURE get_odds_for_quinella(
       GROUP BY bet.id
       HAVING COUNT(*) = 2
     );
-  END;
+  END; //
 
 CREATE PROCEDURE get_odds_for_exacta(
   IN id_of_race INT UNSIGNED,
@@ -118,7 +120,7 @@ CREATE PROCEDURE get_odds_for_exacta(
 )
   BEGIN
     DECLARE type ENUM('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta');
-    SET type = 'Place';
+    SET type = 'Exacta';
     SET prize_pool = (SELECT SUM(bet_size) FROM bet WHERE bet.bet_type = type AND bet.race_id = id_of_race);
     SET commission = (SELECT commission FROM race WHERE id = id_of_race);
 
@@ -136,9 +138,9 @@ CREATE PROCEDURE get_odds_for_exacta(
       GROUP BY bet.id
       HAVING COUNT(*) = 2
     );
-  END;
+  END; //
 
-CREATE PROCEDURE get_odds_for_exacta(
+CREATE PROCEDURE get_odds_for_trifecta(
   IN id_of_race INT UNSIGNED,
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,
@@ -149,7 +151,7 @@ CREATE PROCEDURE get_odds_for_exacta(
 )
   BEGIN
     DECLARE type ENUM('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta');
-    SET type = 'Place';
+    SET type = 'Trifecta';
     SET prize_pool = (SELECT SUM(bet_size) FROM bet WHERE bet.bet_type = type AND bet.race_id = id_of_race);
     SET commission = (SELECT commission FROM race WHERE id = id_of_race);
 
@@ -168,9 +170,9 @@ CREATE PROCEDURE get_odds_for_exacta(
       GROUP BY bet.id
       HAVING COUNT(*) = 3
     );
-  END;
+  END; //
 
-CREATE PROCEDURE get_odds_for_exacta(
+CREATE PROCEDURE get_odds_for_superfecta(
   IN id_of_race INT UNSIGNED,
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,
@@ -182,7 +184,7 @@ CREATE PROCEDURE get_odds_for_exacta(
 )
   BEGIN
     DECLARE type ENUM('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta');
-    SET type = 'Place';
+    SET type = 'Superfecta';
     SET prize_pool = (SELECT SUM(bet_size) FROM bet WHERE bet.bet_type = type AND bet.race_id = id_of_race);
     SET commission = (SELECT commission FROM race WHERE id = id_of_race);
 
@@ -199,4 +201,4 @@ CREATE PROCEDURE get_odds_for_exacta(
       GROUP BY bet.id
       HAVING COUNT(*) = 4
     );
-  END;
+  END;//
