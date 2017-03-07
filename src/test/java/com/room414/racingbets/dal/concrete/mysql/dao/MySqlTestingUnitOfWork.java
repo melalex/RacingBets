@@ -4,6 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.*;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author Alexander Melashchenko
@@ -12,53 +13,98 @@ import java.sql.Connection;
 public class MySqlTestingUnitOfWork implements UnitOfWork {
     private Connection connection;
 
+    private ApplicationUserDao applicationUserDao;
+    private BetDao betDao;
+
+    private HorseDao horseDao;
+    private JockeyDao jockeyDao;
+    private OwnerDao ownerDao;
+    private TrainerDao trainerDao;
+
+    private ParticipantDao participantDao;
+    private RaceDao raceDao;
+
+    private RacecourseDao racecourseDao;
+
     public MySqlTestingUnitOfWork(Connection connection) {
         this.connection = connection;
     }
 
+    public static MySqlUnitOfWork create(Connection connection) throws SQLException {
+        connection.setAutoCommit(false);
+        return new MySqlUnitOfWork(connection);
+    }
+
     @Override
     public ApplicationUserDao getApplicationUserDao() {
-        return new MySqlApplicationUserDao(connection);
+        if (applicationUserDao == null) {
+            applicationUserDao = new MySqlApplicationUserDao(connection);
+        }
+        return applicationUserDao;
     }
 
     @Override
     public BetDao getBetDao() {
-        return null;
+        if (betDao == null) {
+            betDao = new MySqlBetDao(connection, getHorseDao());
+        }
+        return betDao;
     }
 
     @Override
     public HorseDao getHorseDao() {
-        return null;
+        if (horseDao == null) {
+            horseDao = new MySqlHorseDao(connection);
+        }
+        return horseDao;
     }
 
     @Override
     public JockeyDao getJockeyDao() {
-        return null;
+        if (jockeyDao == null) {
+            jockeyDao = new MySqlJockeyDao(connection);
+        }
+        return jockeyDao;
     }
 
     @Override
     public OwnerDao getOwnerDao() {
-        return null;
+        if (ownerDao == null) {
+            ownerDao = new MySqlOwnerDao(connection);
+        }
+        return ownerDao;
     }
 
     @Override
     public TrainerDao getTrainerDao() {
-        return null;
+        if (trainerDao == null) {
+            trainerDao = new MySqlTrainerDao(connection);
+        }
+        return trainerDao;
     }
 
     @Override
     public ParticipantDao getParticipantDao() {
-        return null;
+        if (participantDao == null) {
+            participantDao = new MySqlParticipantDao(connection, getHorseDao());
+        }
+        return participantDao;
     }
 
     @Override
     public RaceDao getRaceDao() {
-        return null;
+        if (raceDao == null) {
+            raceDao = new MySqlRaceDao(connection);
+        }
+        return raceDao;
     }
 
     @Override
     public RacecourseDao getRacecourseDao() {
-        return null;
+        if (racecourseDao == null) {
+            racecourseDao = new MySqlRacecourseDao(connection);
+        }
+        return racecourseDao;
     }
 
     @Override
