@@ -5,7 +5,9 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.mysql.dao.MySqlTestingUnitOfWork;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -19,7 +21,15 @@ import java.util.Properties;
  * @version 1.0 07 Mar 2017
  */
 public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
-    private static final Path CONFIG_FILE_PATH = Paths.get("webproject", "config", "testDbConfig", "properties");
+    private static final Path CONFIG_FILE_PATH = Paths.get(
+            System.getProperty("user.dir"),
+            "src",
+            "test",
+            "resources",
+            "webproject",
+            "config",
+            "testDbConfig.properties"
+    );
     private static MySqlTestingUnitOfWorkFactory ourInstance = createFactory();
 
     private String url;
@@ -34,7 +44,8 @@ public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
     private static MySqlTestingUnitOfWorkFactory createFactory()  {
         try {
             Properties properties = new Properties();
-            properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(CONFIG_FILE_PATH.toString()));
+            InputStream is = new FileInputStream(CONFIG_FILE_PATH.toString());
+            properties.load(is);
             String url = properties.getProperty("jdbc.url");
             String driver = properties.getProperty("jdbc.driver");
             String username = properties.getProperty("jdbc.username");

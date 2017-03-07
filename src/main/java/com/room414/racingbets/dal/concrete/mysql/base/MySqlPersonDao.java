@@ -107,7 +107,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
 
             return getResult(statement, this::mapResultSet);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, getTableName(), getTableName(), id);
+            String message = defaultErrorMessage(sqlStatement, getTableName(), id);
             throw new DalException(message, e);
         }
     }

@@ -1,7 +1,7 @@
 
 # Created by https://www.gitignore.io/api/maven,java,linux,intellij
 
-### database folder ###
+### webproject.database folder ###
 horse_racing.mwb.bak
 
 ### Intellij ###
@@ -115,3 +115,12 @@ src/main/java/com/room414/racingbets/web/
 src/main/resources/
 src/main/webapp/
 /database/horse_racing.mwb.beforefix
+!/webproject/database/application_user.sql
+!/webproject/database/odds_calculation.sql
+!/database/create_shema.sql
+!/webproject/database/horse_racing.mwb
+!/webproject/database/create_shema.sql
+!/src/main/resources/webproject/database/create_shema.sql
+!/src/main/resources/webproject/database/application_user.sql
+!/src/main/resources/webproject/database/horse_racing.mwb
+!/src/main/resources/webproject/database/odds_calculation.sql

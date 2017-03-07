@@ -25,7 +25,6 @@ public class Jockey extends Person {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
-                ", country=" + country +
                 '}';
     }
 }

@@ -1,9 +1,12 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
+import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
+import com.room414.racingbets.dal.domain.entities.Jockey;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.sql.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,19 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(UnitOfWorkParameterResolver.class)
 class JockeyDaoTest {
-    private UnitOfWork unitOfWork;
+    private UnitOfWorkFactory unitOfWorkFactory;
 
-    public JockeyDaoTest(UnitOfWork unitOfWork) {
-        this.unitOfWork = unitOfWork;
-    }
-
-    private JockeyDao getJockeyDao() {
-        return unitOfWork.getJockeyDao();
-    }
-
-    @AfterAll
-    void tearDown() throws Exception {
-        unitOfWork.close();
+    public JockeyDaoTest(UnitOfWorkFactory unitOfWorkFactory) {
+        this.unitOfWorkFactory = unitOfWorkFactory;
     }
 
     @Test
@@ -34,8 +28,20 @@ class JockeyDaoTest {
     }
 
     @Test
-    void find() {
+    void find() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            Jockey expectedResult = Jockey.builder()
+                    .setId(1)
+                    .setFirstName("Ruby")
+                    .setSecondName("Nichols")
+                    .setBirthday(new Date(388195200))
+                    .build();
 
+            Jockey jockey = jockeyDao.find(1L);
+
+            assert jockey.equals(expectedResult) : "jockey != expectedResult";
+        }
     }
 
     @Test

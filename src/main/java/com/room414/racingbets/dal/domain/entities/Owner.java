@@ -25,7 +25,6 @@ public class Owner extends Person {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
-                ", country=" + country +
                 '}';
     }
 }

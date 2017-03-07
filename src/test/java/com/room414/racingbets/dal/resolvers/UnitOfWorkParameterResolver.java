@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.abstraction.dao.OwnerDao;
 import com.room414.racingbets.dal.abstraction.dao.TrainerDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlTestingUnitOfWorkFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -20,15 +21,11 @@ public class UnitOfWorkParameterResolver implements ParameterResolver {
     public boolean supports(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Class<?> type = parameterContext.getParameter().getType();
 
-        return type == UnitOfWork.class;
+        return type == UnitOfWorkFactory.class;
     }
 
     @Override
     public Object resolve(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        try {
-            return MySqlTestingUnitOfWorkFactory.getInstance().create();
-        } catch (DalException e) {
-            throw new ParameterResolutionException("Exception during UnitOfWork creating", e);
-        }
+        return MySqlTestingUnitOfWorkFactory.getInstance();
     }
 }

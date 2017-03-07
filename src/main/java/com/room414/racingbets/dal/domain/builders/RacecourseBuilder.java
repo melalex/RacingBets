@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.domain.builders;
 
-import com.room414.racingbets.dal.domain.entities.Country;
 import com.room414.racingbets.dal.domain.entities.Racecourse;
 
 /**
@@ -13,7 +12,6 @@ import com.room414.racingbets.dal.domain.entities.Racecourse;
 public class RacecourseBuilder {
     private long id;
     private String name;
-    private Country country;
     private double latitude;
     private double longitude;
     private String contact;
@@ -26,17 +24,6 @@ public class RacecourseBuilder {
 
     public RacecourseBuilder setName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public RacecourseBuilder setCountry(Country country) {
-        this.country = country;
-        return this;
-    }
-
-    public RacecourseBuilder setCountryById(int id) {
-        this.country = new Country();
-        this.country.setId(id);
         return this;
     }
 
@@ -65,7 +52,6 @@ public class RacecourseBuilder {
 
         racecourse.setId(id);
         racecourse.setName(name);
-        racecourse.setCountry(country);
         racecourse.setLatitude(latitude);
         racecourse.setLongitude(longitude);
         racecourse.setContact(contact);

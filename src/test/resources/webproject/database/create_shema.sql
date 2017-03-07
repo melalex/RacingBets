@@ -1,14 +1,6 @@
-CREATE SCHEMA `horse_racing` DEFAULT CHARACTER SET utf8;
+CREATE SCHEMA `horse_racing_test` DEFAULT CHARACTER SET utf8;
 
-CREATE TABLE `horse_racing`.`jockey` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(45) NOT NULL,
-  `last_name` VARCHAR(45) NOT NULL,
-  `birthday` DATE,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
-  
-CREATE TABLE `horse_racing`.`owner` (
+CREATE TABLE `horse_racing_test`.`jockey` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -16,7 +8,7 @@ CREATE TABLE `horse_racing`.`owner` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
-CREATE TABLE `horse_racing`.`trainer` (
+CREATE TABLE `horse_racing_test`.`owner` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -24,7 +16,15 @@ CREATE TABLE `horse_racing`.`trainer` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
-CREATE TABLE `horse_racing`.`horse` (
+CREATE TABLE `horse_racing_test`.`trainer` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `birthday` DATE,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+CREATE TABLE `horse_racing_test`.`horse` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `trainer_id` INT UNSIGNED NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `horse_racing`.`horse` (
   FOREIGN KEY (sire_id) REFERENCES horse(id),
   FOREIGN KEY (dam_id) REFERENCES horse(id));
 
-CREATE TABLE `horse_racing`.`racecourse` (
+CREATE TABLE `horse_racing_test`.`racecourse` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `latitude` DOUBLE NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `horse_racing`.`racecourse` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
-CREATE TABLE `horse_racing`.`application_user` (
+CREATE TABLE `horse_racing_test`.`application_user` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `login` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `horse_racing`.`application_user` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
-CREATE TABLE `horse_racing`.`role` (
+CREATE TABLE `horse_racing_test`.`role` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED NOT NULL,
   `name` ENUM('Handicapper', 'Bookmaker', 'Admin') NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE `horse_racing`.`role` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (application_user_id) REFERENCES application_user(id) ON DELETE CASCADE);
 
-CREATE TABLE `horse_racing`.`race` (
+CREATE TABLE `horse_racing_test`.`race` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `status` ENUM('scheduled', 'riding', 'finished', 'rejected') NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE `horse_racing`.`race` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (racecourse_id) REFERENCES racecourse(id));
 
-CREATE TABLE `horse_racing`.`prize` (
+CREATE TABLE `horse_racing_test`.`prize` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `race_id` INT UNSIGNED NOT NULL,
   `prize_size` DECIMAL(12, 2) UNSIGNED NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE `horse_racing`.`prize` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (race_id) REFERENCES race(id) ON DELETE CASCADE);
 
-CREATE TABLE `horse_racing`.`participant` (
+CREATE TABLE `horse_racing_test`.`participant` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `number` INT NOT NULL,
   `horse_id` INT UNSIGNED NOT NULL,
@@ -117,10 +117,10 @@ CREATE TABLE `horse_racing`.`participant` (
   FOREIGN KEY (jockey_id) REFERENCES jockey(id),
   FOREIGN KEY (trainer_id) REFERENCES trainer(id));
 
-CREATE TABLE `horse_racing`.`bet` (
+CREATE TABLE `horse_racing_test`.`bet` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED NOT NULL,
-  'race_id' INT UNSIGNED NOT NULL,
+  `race_id` INT UNSIGNED NOT NULL,
   `bet_type` ENUM('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta') NOT NULL,
   `status` ENUM('scheduled', 'win', 'lose', 'rejected') NOT NULL,
   `bet_size` DECIMAL(12, 2) NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE `horse_racing`.`bet` (
   FOREIGN KEY (application_user_id) REFERENCES application_user(id) ON DELETE CASCADE,
   FOREIGN KEY (race_id) REFERENCES race(id) ON DELETE CASCADE);
 
-CREATE TABLE `horse_racing`.`bet_participant` (
+CREATE TABLE `horse_racing_test`.`bet_participant` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `bet_id` INT UNSIGNED NOT NULL,
   `participant_id` INT UNSIGNED NOT NULL,

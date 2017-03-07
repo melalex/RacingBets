@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/database/application_user.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/database/horse_racing.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/database/odds_calculation.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/room414/racingbets/dal/concrete/mysql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/webproject/database/application_user.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/webproject/database/create_shema.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/webproject/database/odds_calculation.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/test/resources/webproject/database" dialect="MySQL" />
   </component>
 </project>
