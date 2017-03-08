@@ -21,11 +21,15 @@ public class UnitOfWorkParameterResolver implements ParameterResolver {
     public boolean supports(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Class<?> type = parameterContext.getParameter().getType();
 
-        return type == UnitOfWorkFactory.class;
+        return type == UnitOfWork.class;
     }
 
     @Override
     public Object resolve(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return MySqlTestingUnitOfWorkFactory.getInstance();
+        try {
+            return MySqlTestingUnitOfWorkFactory.getInstance().create();
+        } catch (DalException e) {
+            throw new ParameterResolutionException("Exception during creating MySqlTestingUnitOfWork instance", e);
+        }
     }
 }
