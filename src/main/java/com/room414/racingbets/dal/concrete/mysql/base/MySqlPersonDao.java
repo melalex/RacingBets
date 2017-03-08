@@ -171,6 +171,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
             statement.setString(1, entity.getFirstName());
             statement.setString(2, entity.getLastName());
             statement.setDate(3, entity.getBirthday());
+            statement.setLong(4, entity.getId());
 
             return statement.executeUpdate();
         } catch (SQLException e) {

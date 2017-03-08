@@ -2,4 +2,4 @@ INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('
 INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Nichols', 'Ruby', '1962-05-19');
 INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Doris', 'Franklin', '1984-03-16');
 INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Thomas', 'West', '1980-01-19');
-INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Matthew', 'Taylor', '1995-01-15');
+INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Alex', 'Strutynski', '1980-04-21');

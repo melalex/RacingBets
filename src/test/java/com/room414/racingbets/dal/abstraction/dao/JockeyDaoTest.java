@@ -143,8 +143,31 @@ class JockeyDaoTest {
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            final long targetId = 5L;
 
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            Jockey jockey = jockeyDao.find(targetId);
+            Jockey updated = Jockey.builder()
+                    .setId(jockey.getId())
+                    .setFirstName("Matthew")
+                    .setSecondName("Taylor")
+                    .setBirthday(sqlDateFromString("1995-01-15"))
+                    .build();
+
+            assert !updated.equals(jockey) : "jockey and updated already same";
+
+            jockeyDao.update(updated);
+
+            Jockey afterSave = jockeyDao.find(targetId);
+
+            assert updated.equals(afterSave) : "updated != afterSave";
+
+            // rollback
+
+            jockeyDao.update(jockey);
+        }
     }
 
     @Test
