@@ -27,12 +27,7 @@ class JockeyDaoTest {
     }
 
     @Test
-    void create() {
-
-    }
-
-    @Test
-    void find() throws Exception {
+    void find_existent_returnedPerson() throws Exception {
         try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
             JockeyDao jockeyDao = unitOfWork.getJockeyDao();
             Jockey expectedResult = Jockey.builder()
@@ -45,6 +40,17 @@ class JockeyDaoTest {
             Jockey jockey = jockeyDao.find(1L);
 
             assert jockey.equals(expectedResult) : "jockey != expectedResult";
+        }
+    }
+
+    @Test
+    void find_nonexistent_returnedNull() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+
+            Jockey jockey = jockeyDao.find(300L);
+
+            assert jockey == null : "jockey != null";
         }
     }
 
@@ -143,40 +149,7 @@ class JockeyDaoTest {
     }
 
     @Test
-    void update() throws Exception {
-        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
-            final long targetId = 5L;
-
-            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
-            Jockey jockey = jockeyDao.find(targetId);
-            Jockey updated = Jockey.builder()
-                    .setId(jockey.getId())
-                    .setFirstName("Matthew")
-                    .setSecondName("Taylor")
-                    .setBirthday(sqlDateFromString("1995-01-15"))
-                    .build();
-
-            assert !updated.equals(jockey) : "jockey and updated already same";
-
-            jockeyDao.update(updated);
-
-            Jockey afterSave = jockeyDao.find(targetId);
-
-            assert updated.equals(afterSave) : "updated != afterSave";
-
-            // rollback
-
-            jockeyDao.update(jockey);
-        }
-    }
-
-    @Test
-    void delete() {
-
-    }
-
-    @Test
-    void findByNamePart() throws Exception {
+    void findByNamePart_existent_returnedList() throws Exception {
         try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
             JockeyDao jockeyDao = unitOfWork.getJockeyDao();
             List<Jockey> expectedResult1 = new LinkedList<>();
@@ -204,7 +177,17 @@ class JockeyDaoTest {
 
             assert jockeysFirstSet.equals(expectedResult1) : "jockeysFirstSet != expectedResult1";
             assert jockeysSecondSet.equals(expectedResult2) : "jockeysSecondSet != expectedResult2";
+        }
+    }
 
+    @Test
+    void findByNamePart_nonexistent_returnedEmptyList() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+
+            List<Jockey> result = jockeyDao.findByNamePart("bla-bla-bla", 0, 300);
+
+            assert result.isEmpty() : "result is not empty";
         }
     }
 
@@ -217,6 +200,58 @@ class JockeyDaoTest {
             long count = jockeyDao.findByNamePartCount("Ru");
 
             assert expectedResult == count : "count != expectedResult";
+        }
+    }
+
+    @Test
+    void createAndDelete() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            Jockey newPerson = Jockey.builder()
+                    .setFirstName("Alexander")
+                    .setSecondName("Barchenko")
+                    .setBirthday(sqlDateFromString("1996-11-30"))
+                    .build();
+
+            jockeyDao.create(newPerson);
+
+            Jockey person1 = jockeyDao.find(newPerson.getId());
+
+            assert newPerson.equals(person1) : "Dao did not create Person";
+
+            jockeyDao.delete(newPerson.getId());
+
+            Jockey person2 = jockeyDao.find(newPerson.getId());
+
+            assert person2 == null : "Dao did not delete Person";
+        }
+    }
+
+    @Test
+    void update() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            final long targetId = 5L;
+
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            Jockey jockey = jockeyDao.find(targetId);
+            Jockey updated = Jockey.builder()
+                    .setId(jockey.getId())
+                    .setFirstName("Matthew")
+                    .setSecondName("Taylor")
+                    .setBirthday(sqlDateFromString("1995-01-15"))
+                    .build();
+
+            assert !updated.equals(jockey) : "jockey and updated already same";
+
+            jockeyDao.update(updated);
+
+            Jockey afterSave = jockeyDao.find(targetId);
+
+            assert updated.equals(afterSave) : "updated != afterSave";
+
+            // rollback
+
+            jockeyDao.update(jockey);
         }
     }
 }

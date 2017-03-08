@@ -1,9 +1,6 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -63,7 +60,7 @@ public class MySqlDaoHelper {
     public static long createEntity(PreparedStatement statement, Consumer<Long> idSetter) throws SQLException {
         long affectedRows = statement.executeUpdate();
 
-        if (affectedRows != 0) {
+        if (affectedRows == 0) {
             throw new SQLException("Creating entity failed, no rows affected.");
         }
 
