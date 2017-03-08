@@ -13,20 +13,14 @@ import java.sql.SQLException;
  * @version 1.0 02 Mar 2017
  */
 public class MySqlUnitOfWorkFactory implements UnitOfWorkFactory {
-    private static MySqlUnitOfWorkFactory ourInstance = new MySqlUnitOfWorkFactory();
-
     // TODO: add connection pool initialization
     private DataSource connectionPool;
 
-    public static MySqlUnitOfWorkFactory getInstance() {
-        return ourInstance;
-    }
-
-    private MySqlUnitOfWorkFactory() {
+    public MySqlUnitOfWorkFactory() {
     }
 
     @Override
-    public UnitOfWork create() throws DalException {
+    public UnitOfWork createUnitOfWork() throws DalException {
         try {
             return new MySqlUnitOfWork(connectionPool.getConnection());
         } catch (SQLException e) {

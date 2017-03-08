@@ -473,7 +473,7 @@ class PersonDaoTest {
 
         T person1 = personDao.find(newPerson.getId());
 
-        assert newPerson.equals(person1) : "Dao did not create Person";
+        assert newPerson.equals(person1) : "Dao did not createUnitOfWorkFactory Person";
 
         personDao.delete(newPerson.getId());
 
@@ -496,7 +496,7 @@ class PersonDaoTest {
 
         T person1 = personDao.find(newPerson.getId());
 
-        assert newPerson.equals(person1) : "Dao did not create Person";
+        assert newPerson.equals(person1) : "Dao did not createUnitOfWorkFactory Person";
 
         personDao.delete(newPerson.getId());
 

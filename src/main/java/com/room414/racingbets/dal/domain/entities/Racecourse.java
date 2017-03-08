@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * Stores information about racecourse.
- * To create instances of Race is recommended to use the RaceBuilder.
+ * To createUnitOfWorkFactory instances of Race is recommended to use the RaceBuilder.
  *
  * @see RacecourseBuilder
  * @author Alexander Melashchenko

@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * Class that represents a bet of handicapper.
- * To create instances of Bet is recommended to use the BetBuilder
+ * To createUnitOfWorkFactory instances of Bet is recommended to use the BetBuilder
  *
  * @see BetBuilder
  * @author Alexander Melashchenko

@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.domain.builders.JockeyBuilder;
 
 /**
  * Horse jockey.
- * To create instances of Jockey is recommended to use the JockeyBuilder.
+ * To createUnitOfWorkFactory instances of Jockey is recommended to use the JockeyBuilder.
  *
  * @see JockeyBuilder
  * @author Alexander Melashchenko

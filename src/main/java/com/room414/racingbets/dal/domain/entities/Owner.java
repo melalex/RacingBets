@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.domain.builders.OwnerBuilder;
 
 /**
  * Horse owner.
- * To create instances of Owner is recommended to use the OwnerBuilder.
+ * To createUnitOfWorkFactory instances of Owner is recommended to use the OwnerBuilder.
  *
  * @see OwnerBuilder
  * @author Alexander Melashchenko

@@ -38,7 +38,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public void create(Participant entity) throws DalException {
-        throw new DalException("It is impossible to create a Participant separate from the Race");
+        throw new DalException("It is impossible to createUnitOfWorkFactory a Participant separate from the Race");
     }
 
     @Override

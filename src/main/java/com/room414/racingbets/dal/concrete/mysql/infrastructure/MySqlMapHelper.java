@@ -96,7 +96,7 @@ public class MySqlMapHelper {
         final String nameColumnName = "horse.name";
         final String birthdayColumnName = "horse.birthday";
         final String genderColumnName = "horse.gender";
-        final String sirColumnName = "horse.sir_id";
+        final String sirColumnName = "horse.sire_id";
         final String damColumnName = "horse.dam_id";
 
         return Horse
@@ -105,8 +105,8 @@ public class MySqlMapHelper {
                 .setName(resultSet.getString(nameColumnName))
                 .setBirthday(resultSet.getDate(birthdayColumnName))
                 .setGender(resultSet.getString(genderColumnName))
-                .setSir(new HorseLazyLoadProxy(resultSet.getLong(sirColumnName), horseDao))
-                .setDam(new HorseLazyLoadProxy(resultSet.getLong(damColumnName), horseDao))
+                .setSir(HorseLazyLoadProxy.create(resultSet.getLong(sirColumnName)))
+                .setDam(HorseLazyLoadProxy.create(resultSet.getLong(damColumnName)))
                 .setOwner(MySqlMapHelper.mapOwner(resultSet))
                 .setTrainer(MySqlMapHelper.mapTrainer(resultSet))
                 .build();

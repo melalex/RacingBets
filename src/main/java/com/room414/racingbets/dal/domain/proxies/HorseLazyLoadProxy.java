@@ -1,8 +1,10 @@
 package com.room414.racingbets.dal.domain.proxies;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
+import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.concrete.DalFactory;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.domain.enums.Gender;
@@ -20,20 +22,28 @@ public class HorseLazyLoadProxy extends Horse {
 
     private long id;
     private Horse horse;
-    private HorseDao horseDao;
 
-    public HorseLazyLoadProxy(long id, HorseDao horseDao) {
+    private HorseLazyLoadProxy(long id) {
         this.id = id;
-        this.horseDao = horseDao;
+    }
+
+    public static HorseLazyLoadProxy create(long id) {
+        if (id == 0) {
+            return null;
+        }
+
+        return new HorseLazyLoadProxy(id);
     }
 
     // TODO: is good?
     private Horse getHorse() {
         if (horse == null) {
-            try {
-                horse = horseDao.find(id);
+            try(UnitOfWork unitOfWork = DalFactory.getInstance().createUnitOfWorkFactory().createUnitOfWork()) {
+                horse = unitOfWork.getHorseDao().find(id);
             } catch (DalException e) {
                 throw new RuntimeException("Can not lazy load horse");
+            } catch (Exception e) {
+                throw new RuntimeException("Can not close UnitOfWork instance");
             }
         }
         return horse;

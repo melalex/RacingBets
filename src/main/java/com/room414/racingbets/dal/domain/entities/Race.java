@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Class that represent race.
- * To create instances of Race is recommended to use the RaceBuilder.
+ * To createUnitOfWorkFactory instances of Race is recommended to use the RaceBuilder.
  *
  * @see RaceBuilder
  * @author Alexander Melashchenko

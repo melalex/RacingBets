@@ -1,16 +1,13 @@
 package com.room414.racingbets.dal.domain.proxies;
 
-import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.builders.HorseBuilder;
 import com.room414.racingbets.dal.domain.enums.Gender;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.sql.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * @author Alexander Melashchenko
@@ -18,7 +15,7 @@ import static org.mockito.Mockito.*;
  */
 class HorseLazyLoadProxyTest {
     @Test
-    void equals_proxyToProxy_true() throws DalException {
+    void equals_proxyToProxy_true() throws DalException, NoSuchFieldException, IllegalAccessException {
         HorseBuilder horseBuilder = new HorseBuilder();
         Horse horse = horseBuilder
                 .setBirthday(new Date(1488299335))
@@ -29,17 +26,19 @@ class HorseLazyLoadProxyTest {
                 .setTrainerById(1)
                 .build();
 
-        HorseDao mockDao = mock(HorseDao.class);
-        when(mockDao.find(1L)).thenReturn(horse);
+        HorseLazyLoadProxy proxy1 = HorseLazyLoadProxy.create(1);
+        HorseLazyLoadProxy proxy2 = HorseLazyLoadProxy.create(1);
 
-        HorseLazyLoadProxy proxy1 = new HorseLazyLoadProxy(1, mockDao);
-        HorseLazyLoadProxy proxy2 = new HorseLazyLoadProxy(1, mockDao);
+        Field f = HorseLazyLoadProxy.class.getDeclaredField("horse");
+        f.setAccessible(true);
+        f.set(proxy1, horse);
+        f.set(proxy2, horse);
 
         assert proxy1.equals(proxy2);
     }
 
     @Test
-    void equals_proxyToProxy_false() throws DalException {
+    void equals_proxyToProxy_false() throws DalException, NoSuchFieldException, IllegalAccessException {
         HorseBuilder horseBuilder = new HorseBuilder();
         Horse horse1 = horseBuilder
                 .setBirthday(new Date(1488299335))
@@ -58,18 +57,19 @@ class HorseLazyLoadProxyTest {
                 .setTrainerById(1)
                 .build();
 
-        HorseDao mockDao = mock(HorseDao.class);
-        when(mockDao.find(1L)).thenReturn(horse1);
-        when(mockDao.find(2L)).thenReturn(horse2);
+        HorseLazyLoadProxy proxy1 = HorseLazyLoadProxy.create(1);
+        HorseLazyLoadProxy proxy2 = HorseLazyLoadProxy.create(2);
 
-        HorseLazyLoadProxy proxy1 = new HorseLazyLoadProxy(1, mockDao);
-        HorseLazyLoadProxy proxy2 = new HorseLazyLoadProxy(2, mockDao);
+        Field f = HorseLazyLoadProxy.class.getDeclaredField("horse");
+        f.setAccessible(true);
+        f.set(proxy1, horse1);
+        f.set(proxy2, horse2);
 
         assert !proxy1.equals(proxy2);
     }
 
     @Test
-    void equals_proxyToHorse_true() throws DalException {
+    void equals_proxyToHorse_true() throws DalException, NoSuchFieldException, IllegalAccessException {
         HorseBuilder horseBuilder = new HorseBuilder();
         Horse horse = horseBuilder
                 .setBirthday(new Date(1488299335))
@@ -80,16 +80,17 @@ class HorseLazyLoadProxyTest {
                 .setTrainerById(1)
                 .build();
 
-        HorseDao mockDao = mock(HorseDao.class);
-        when(mockDao.find(1L)).thenReturn(horse);
+        HorseLazyLoadProxy proxy1 = HorseLazyLoadProxy.create(1);
 
-        HorseLazyLoadProxy proxy1 = new HorseLazyLoadProxy(1, mockDao);
+        Field f = HorseLazyLoadProxy.class.getDeclaredField("horse");
+        f.setAccessible(true);
+        f.set(proxy1, horse);
 
         assert proxy1.equals(horse);
     }
 
     @Test
-    void equals_proxyToHorse_false() throws DalException {
+    void equals_proxyToHorse_false() throws DalException, NoSuchFieldException, IllegalAccessException {
         HorseBuilder horseBuilder = new HorseBuilder();
         Horse horse1 = horseBuilder
                 .setBirthday(new Date(1488299335))
@@ -108,11 +109,19 @@ class HorseLazyLoadProxyTest {
                 .setTrainerById(1)
                 .build();
 
-        HorseDao mockDao = mock(HorseDao.class);
-        when(mockDao.find(1L)).thenReturn(horse1);
+        HorseLazyLoadProxy proxy1 = HorseLazyLoadProxy.create(1);
 
-        HorseLazyLoadProxy proxy1 = new HorseLazyLoadProxy(1, mockDao);
+        Field f = HorseLazyLoadProxy.class.getDeclaredField("horse");
+        f.setAccessible(true);
+        f.set(proxy1, horse1);
 
         assert !proxy1.equals(horse2);
+    }
+
+    @Test
+    void create_zeroId_returnedNull() {
+        HorseLazyLoadProxy proxy = HorseLazyLoadProxy.create(0);
+
+        assert proxy == null : "proxy != null";
     }
 }

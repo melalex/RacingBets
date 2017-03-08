@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.domain.builders.TrainerBuilder;
 
 /**
  * Horse trainer.
- * To create instances of Trainer is recommended to use the TrainerBuilder.
+ * To createUnitOfWorkFactory instances of Trainer is recommended to use the TrainerBuilder.
  *
  * @see TrainerBuilder
  * @author Alexander Melashchenko

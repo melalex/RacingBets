@@ -2,6 +2,8 @@ package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.domain.entities.Owner;
+import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +33,38 @@ class HorseDaoTest {
 
     private static HorseDao getHorseDao() {
         return unitOfWork.getHorseDao();
+    }
+
+    @Test
+    void find_damAndSirNull_returnedEntity() throws ParseException, DalException {
+        HorseDao horseDao = getHorseDao();
+
+        Owner owner = Owner.builder()
+                .setId(1)
+                .setFirstName("Ruby")
+                .setSecondName("Nichols")
+                .setBirthday(sqlDateFromString("1982-04-21"))
+                .build();
+
+        Trainer trainer = Trainer.builder()
+                .setId(5)
+                .setFirstName("Alex")
+                .setSecondName("Strutynski")
+                .setBirthday(sqlDateFromString("1980-04-21"))
+                .build();
+
+        Horse expectedResult = Horse.builder()
+                .setId(1)
+                .setName("Fixflex")
+                .setBirthday(sqlDateFromString("2008-02-22"))
+                .setGender("mare")
+                .setTrainer(trainer)
+                .setOwner(owner)
+                .build();
+
+        Horse result = horseDao.find(1L);
+
+        assert result.equals(expectedResult) : "result != expectedResult";
     }
 
     @Test
