@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
+import com.mysql.cj.api.jdbc.Statement;
 import com.room414.racingbets.dal.abstraction.dao.RacecourseDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlFindByColumnExecutor;
@@ -56,7 +57,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
                 "   (name, latitude, longitude, contact, clerk) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getName());
             statement.setDouble(2, entity.getLatitude());
             statement.setDouble(3, entity.getLongitude());

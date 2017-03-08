@@ -41,8 +41,8 @@ class RacecourseDaoTest {
         Racecourse expectedResult = Racecourse.builder()
                 .setId(1)
                 .setName("Ronstring")
-                .setLongitude(-22.72528)
-                .setLatitude(-47.64917)
+                .setLatitude(-22.72528)
+                .setLongitude(-47.64917)
                 .setClerk("Stephen Cook")
                 .setContact("scook0@hud.gov")
                 .build();
@@ -69,8 +69,8 @@ class RacecourseDaoTest {
         expectedResult.add(Racecourse.builder()
                 .setId(1)
                 .setName("Ronstring")
-                .setLongitude(-22.72528)
-                .setLatitude(-47.64917)
+                .setLatitude(-22.72528)
+                .setLongitude(-47.64917)
                 .setClerk("Stephen Cook")
                 .setContact("scook0@hud.gov")
                 .build()
@@ -100,8 +100,8 @@ class RacecourseDaoTest {
         expectedResult.add(Racecourse.builder()
                 .setId(1)
                 .setName("Ronstring")
-                .setLongitude(-22.72528)
-                .setLatitude(-47.64917)
+                .setLatitude(-22.72528)
+                .setLongitude(-47.64917)
                 .setContact("scook0@hud.gov")
                 .setClerk("Stephen Cook")
                 .build()
@@ -110,8 +110,8 @@ class RacecourseDaoTest {
         expectedResult.add(Racecourse.builder()
                 .setId(2)
                 .setName("Fintone")
-                .setLongitude(29.95033)
-                .setLatitude(121.74293)
+                .setLatitude(29.95033)
+                .setLongitude(121.74293)
                 .setContact("ncunningham1@merriam-webster.com")
                 .setClerk("Nicole Cunningham")
                 .build()
@@ -120,8 +120,8 @@ class RacecourseDaoTest {
         expectedResult.add(Racecourse.builder()
                 .setId(3)
                 .setName("Flowdesk")
-                .setLongitude(-20.26889)
-                .setLatitude(-50.54583)
+                .setLatitude(-20.26889)
+                .setLongitude(-50.54583)
                 .setContact("ajames2@amazon.co.jp")
                 .setClerk("Annie James")
                 .build()
@@ -152,8 +152,8 @@ class RacecourseDaoTest {
         expectedResult.add(Racecourse.builder()
                 .setId(1)
                 .setName("Ronstring")
-                .setLongitude(-22.72528)
-                .setLatitude(-47.64917)
+                .setLatitude(-22.72528)
+                .setLongitude(-47.64917)
                 .setContact("scook0@hud.gov")
                 .setClerk("Stephen Cook")
                 .build()
@@ -191,8 +191,8 @@ class RacecourseDaoTest {
 
         Racecourse newEntity = Racecourse.builder()
                 .setName("Stronghold")
-                .setLongitude(14.64361)
-                .setLatitude(120.58083)
+                .setLatitude(14.64361)
+                .setLongitude(120.58083)
                 .setContact("jandrews6@spiegel.de")
                 .setClerk("Joyce Andrews")
                 .build();
@@ -212,16 +212,16 @@ class RacecourseDaoTest {
 
     @Test
     void update() throws DalException, ParseException {
-        final long targetId = 6L;
+        final long targetId = 3L;
 
         RacecourseDao dao = getRacecourseDao();
 
         Racecourse entity = dao.find(targetId);
         Racecourse updated = Racecourse.builder()
-                .setId(3)
+                .setId(entity.getId())
                 .setName("Stim")
-                .setLongitude(49.38858)
-                .setLatitude(16.1096)
+                .setLatitude(49.38858)
+                .setLongitude(16.1096)
                 .setContact("gsnyder1a@aboutads.info")
                 .setClerk("Gary Snyder")
                 .build();
