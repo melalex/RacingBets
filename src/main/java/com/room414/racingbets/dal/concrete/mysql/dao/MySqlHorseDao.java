@@ -171,7 +171,7 @@ public class MySqlHorseDao implements HorseDao {
             } else {
                 statement.setNull(7, java.sql.Types.INTEGER);
             }
-            
+
             statement.setLong(8, entity.getId());
 
             return statement.executeUpdate();

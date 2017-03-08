@@ -58,3 +58,17 @@ VALUES ('Aerified', 2, 4, '2010-11-27', 'stallion', 2, 1);
 INSERT INTO horse_racing_test.horse
   (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
 VALUES ('Prob', 3, 3, '2014-05-01', 'mare', 3, 4);
+
+# racecourse table
+
+INSERT INTO horse_racing_test.racecourse
+  (name, latitude, longitude, contact, clerk)
+VALUES ('Ronstring', -22.72528, -47.64917, 'scook0@hud.gov', 'Stephen Cook');
+
+INSERT INTO horse_racing_test.racecourse
+  (name, latitude, longitude, contact, clerk)
+VALUES ('Fintone', 29.95033, 121.74293, 'ncunningham1@merriam-webster.com', 'Nicole Cunningham');
+
+INSERT INTO horse_racing_test.racecourse
+  (name, latitude, longitude, contact, clerk)
+VALUES ('Flowdesk', -20.26889, -50.54583, 'ajames2@amazon.co.jp', 'Annie James');

@@ -499,7 +499,7 @@ class HorseDaoTest {
 
         Horse entity1 = horseDao.find(newEntity.getId());
 
-        assert newEntity.equals(entity1) : "Dao did not createUnitOfWorkFactory Person";
+        assert newEntity.equals(entity1) : "Dao did not create Horse";
 
         horseDao.delete(newEntity.getId());
 
