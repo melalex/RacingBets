@@ -49,8 +49,32 @@ class JockeyDaoTest {
     }
 
     @Test
-    void findAllLimitOffset() {
+    void findAllLimitOffset() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            List<Jockey> expectedResult = new LinkedList<>();
 
+            expectedResult.add(
+                    Jockey.builder()
+                            .setId(1)
+                            .setFirstName("Ruby")
+                            .setSecondName("Nichols")
+                            .setBirthday(sqlDateFromString("1982-04-21"))
+                            .build()
+            );
+            expectedResult.add(
+                    Jockey.builder()
+                            .setId(2)
+                            .setFirstName("Nichols")
+                            .setSecondName("Ruby")
+                            .setBirthday(sqlDateFromString("1962-05-19"))
+                            .build()
+            );
+
+            List<Jockey> jockeys = jockeyDao.findAll(0, 2);
+
+            assert jockeys.equals(expectedResult) : "jockeys != expectedResult";
+        }
     }
 
     @Test
@@ -107,8 +131,15 @@ class JockeyDaoTest {
     }
 
     @Test
-    void count() {
+    void count() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            long expectedResult = 5;
 
+            long count = jockeyDao.count();
+
+            assert expectedResult == count : "count != expectedResult";
+        }
     }
 
     @Test
@@ -122,12 +153,47 @@ class JockeyDaoTest {
     }
 
     @Test
-    void findByNamePart() {
+    void findByNamePart() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            List<Jockey> expectedResult1 = new LinkedList<>();
+            List<Jockey> expectedResult2 = new LinkedList<>();
 
+            expectedResult1.add(
+                    Jockey.builder()
+                            .setId(1)
+                            .setFirstName("Ruby")
+                            .setSecondName("Nichols")
+                            .setBirthday(sqlDateFromString("1982-04-21"))
+                            .build()
+            );
+            expectedResult2.add(
+                    Jockey.builder()
+                            .setId(2)
+                            .setFirstName("Nichols")
+                            .setSecondName("Ruby")
+                            .setBirthday(sqlDateFromString("1962-05-19"))
+                            .build()
+            );
+
+            List<Jockey> jockeysFirstSet = jockeyDao.findByNamePart("Ru", 0, 1);
+            List<Jockey> jockeysSecondSet = jockeyDao.findByNamePart("Ru", 1, 1);
+
+            assert jockeysFirstSet.equals(expectedResult1) : "jockeysFirstSet != expectedResult1";
+            assert jockeysSecondSet.equals(expectedResult2) : "jockeysSecondSet != expectedResult2";
+
+        }
     }
 
     @Test
-    void findByNamePartCount() {
+    void findByNamePartCount() throws Exception {
+        try (UnitOfWork unitOfWork = unitOfWorkFactory.create()) {
+            JockeyDao jockeyDao = unitOfWork.getJockeyDao();
+            long expectedResult = 2;
 
+            long count = jockeyDao.findByNamePartCount("Ru");
+
+            assert expectedResult == count : "count != expectedResult";
+        }
     }
 }

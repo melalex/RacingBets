@@ -82,7 +82,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
         String sqlStatement = String.format(
-                "SELECT COUNT(*) FROM %s WHERE first_name LIKE ? OR last_name LIKE ?",
+                "SELECT COUNT(*) as count FROM %s WHERE first_name LIKE ? OR last_name LIKE ?",
                 getTableName()
         );
 
