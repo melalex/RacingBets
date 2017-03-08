@@ -19,6 +19,8 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 02 Mar 2017
  */
 // TODO: cascading comment
+// TODO: remove copy&paste
+// TODO: sql injection
 public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     protected Connection connection;
 
@@ -28,20 +30,21 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public void create(T entity) throws DalException {
-        String sqlStatement = "INSERT INTO ? (first_name, last_name, birthday) VALUES (?, ?, ?)";
+        String sqlStatement = String.format(
+                "INSERT INTO %s (first_name, last_name, birthday) VALUES (?, ?, ?)",
+                getTableName()
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
-            statement.setString(2, entity.getFirstName());
-            statement.setString(3, entity.getLastName());
-            statement.setDate(4, entity.getBirthday());
+            statement.setString(1, entity.getFirstName());
+            statement.setString(2, entity.getLastName());
+            statement.setDate(3, entity.getBirthday());
 
             MySqlDaoHelper.createEntity(statement, entity::setId);
 
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
-                    getTableName(),
                     entity.getFirstName(),
                     entity.getLastName(),
                     entity.getBirthday()
@@ -52,21 +55,21 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public List<T> findByNamePart(String namePart, long offset, long limit) throws DalException {
-        String sqlStatement = "SELECT * FROM ? WHERE first_name LIKE ? OR last_name LIKE ? LIMIT ? OFFSET ?";
+        String sqlStatement = String.format(
+                "SELECT * FROM %s WHERE first_name LIKE ? OR last_name LIKE ? LIMIT ? OFFSET ?",
+                getTableName()
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
+            statement.setString(1, startsWith(namePart));
             statement.setString(2, startsWith(namePart));
-            statement.setString(3, startsWith(namePart));
-            statement.setLong(4, limit);
-            statement.setLong(5, offset);
+            statement.setLong(3, limit);
+            statement.setLong(4, offset);
 
             return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
-                    getTableName(),
-                    getTableName(),
                     startsWith(namePart),
                     startsWith(namePart),
                     limit,
@@ -78,18 +81,19 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        String sqlStatement = "SELECT COUNT(*) FROM ? WHERE first_name LIKE ? OR last_name LIKE ?";
+        String sqlStatement = String.format(
+                "SELECT COUNT(*) FROM %s WHERE first_name LIKE ? OR last_name LIKE ?",
+                getTableName()
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
+            statement.setString(1, startsWith(namePart));
             statement.setString(2, startsWith(namePart));
-            statement.setString(3, startsWith(namePart));
 
             return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
-                    getTableName(),
                     startsWith(namePart),
                     startsWith(namePart)
             );
@@ -99,78 +103,79 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public T find(Long id) throws DalException {
-        String sqlStatement = "SELECT * FROM ? WHERE id = ?";
+        String sqlStatement = String.format(
+                "SELECT * FROM %s WHERE id = ?",
+                getTableName()
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
-            statement.setLong(2, id);
+            statement.setLong(1, id);
 
             return getResult(statement, this::mapResultSet);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, getTableName(), id);
+            String message = defaultErrorMessage(sqlStatement, id);
             throw new DalException(message, e);
         }
     }
 
     @Override
     public List<T> findAll() throws DalException {
-        String sqlStatement = "SELECT * FROM ? ";
+        String sqlStatement = String.format("SELECT * FROM %s", getTableName());
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
-
             return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, getTableName(), getTableName());
+            String message = defaultErrorMessage(sqlStatement);
             throw new DalException(message, e);
-        }    }
+        }
+    }
 
     @Override
     public List<T> findAll(long offset, long limit) throws DalException {
-        String sqlStatement = "SELECT * FROM ? LIMIT ? OFFSET ?";
+        String sqlStatement = String.format(
+                "SELECT * FROM %s LIMIT ? OFFSET ?", getTableName()
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
-            statement.setLong(2, limit);
+            statement.setLong(1, limit);
             statement.setLong(2, offset);
 
             return getResultList(statement, this::mapResultSet);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, getTableName(), getTableName(), limit, offset);
+            String message = defaultErrorMessage(sqlStatement, limit, offset);
             throw new DalException(message, e);
         }
     }
 
     @Override
     public long count() throws DalException {
-        String sqlStatement = "SELECT COUNT(*) AS count FROM ?";
+        String sqlStatement = String.format(
+                "SELECT COUNT(*) AS count FROM %s", getTableName()
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
-
             return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, getTableName());
+            String message = defaultErrorMessage(sqlStatement);
             throw new DalException(message, e);
         }
     }
 
     @Override
     public long update(T entity) throws DalException {
-        String sqlStatement = "UPDATE ? SET first_name = ?, last_name = ?, birthday = ? WHERE id = ?";
+        String sqlStatement = String.format(
+                "UPDATE %s SET first_name = ?, last_name = ?, birthday = ? WHERE id = ?", getTableName()
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
-
-            statement.setString(2, entity.getFirstName());
-            statement.setString(3, entity.getLastName());
-            statement.setDate(4, entity.getBirthday());
+            statement.setString(1, entity.getFirstName());
+            statement.setString(2, entity.getLastName());
+            statement.setDate(3, entity.getBirthday());
 
             return statement.executeUpdate();
         } catch (SQLException e) {
             String message = defaultErrorMessage(
                     sqlStatement,
-                    getTableName(),
                     entity.getFirstName(),
                     entity.getLastName(),
                     entity.getBirthday(),
@@ -182,15 +187,14 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public boolean delete(Long id) throws DalException {
-        String sqlStatement = "DELETE FROM ? WHERE id = ?";
+        String sqlStatement = String.format("DELETE FROM %s WHERE id = ?", getTableName());
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, getTableName());
-            statement.setLong(2, id);
+            statement.setLong(1, id);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, getTableName(), id);
+            String message = defaultErrorMessage(sqlStatement, id);
             throw new DalException(message, e);
         }
     }
