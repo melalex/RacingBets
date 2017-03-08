@@ -9,6 +9,7 @@ import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLType;
 import java.util.List;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
@@ -61,8 +62,18 @@ public class MySqlHorseDao implements HorseDao {
             statement.setLong(3, entity.getOwner().getId());
             statement.setDate(4, entity.getBirthday());
             statement.setString(5, entity.getGender().getName());
-            statement.setLong(6, entity.getSir().getId());
-            statement.setLong(7, entity.getDam().getId());
+
+            if (entity.getSir() != null) {
+                statement.setLong(6, entity.getSir().getId());
+            } else {
+                statement.setNull(6, java.sql.Types.INTEGER);
+            }
+
+            if (entity.getDam() != null) {
+                statement.setLong(7, entity.getDam().getId());
+            } else {
+                statement.setNull(7, java.sql.Types.INTEGER);
+            }
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {

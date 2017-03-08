@@ -16,7 +16,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 03 Mar 2017
  */
 public class MySqlCrudExecutor<T> extends MySqlSimpleQueryExecutor {
-    protected Connection connection;
     protected Mapper<T> mapper;
 
     public MySqlCrudExecutor(Connection connection, Mapper<T> mapper) {

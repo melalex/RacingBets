@@ -36,6 +36,24 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    List<DynamicTest> find_withNullBirthday_returnedPerson_tests() throws Exception {
+        return Arrays.asList(
+                DynamicTest.dynamicTest(
+                        "find_withNullBirthday_returnedPerson for Jockey",
+                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getJockeyDao(), Jockey.builder())
+                ),
+                DynamicTest.dynamicTest(
+                        "find_withNullBirthday_returnedPerson for Trainer",
+                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getTrainerDao(), Trainer.builder())
+                ),
+                DynamicTest.dynamicTest(
+                        "find_withNullBirthday_returnedPerson for Owner",
+                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getOwnerDao(), Owner.builder())
+                )
+        );
+    }
+
+    @TestFactory
     List<DynamicTest> find_existent_returnedPerson_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -198,6 +216,33 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    List<DynamicTest> createAndDelete_withNullBirthday_createdAndDeleted_tests() throws Exception {
+        return Arrays.asList(
+                DynamicTest.dynamicTest(
+                        "createAndDelete_withNullBirthday_createdAndDeleted for Jockey",
+                        () -> createAndDelete_withNullBirthday_createdAndDeleted(
+                                unitOfWork.getJockeyDao(),
+                                Jockey.builder()
+                        )
+                ),
+                DynamicTest.dynamicTest(
+                        "createAndDelete_withNullBirthday_createdAndDeleted for Trainer",
+                        () -> createAndDelete_withNullBirthday_createdAndDeleted(
+                                unitOfWork.getTrainerDao(),
+                                Trainer.builder()
+                        )
+                ),
+                DynamicTest.dynamicTest(
+                        "createAndDelete_withNullBirthday_createdAndDeleted for Owner",
+                        () -> createAndDelete_withNullBirthday_createdAndDeleted(
+                                unitOfWork.getOwnerDao(),
+                                Owner.builder()
+                        )
+                )
+        );
+    }
+
+    @TestFactory
     List<DynamicTest> createAndDelete_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -232,6 +277,22 @@ class PersonDaoTest {
                 )
         );
     }
+
+    private <T extends Person> void find_withNullBirthday_returnedPerson(PersonDao<T> personDao, PersonBuilder<T> builder)
+            throws DalException, ParseException {
+        T expectedResult = builder
+                .setId(6)
+                .setFirstName("Vova")
+                .setSecondName("Bog")
+                .setBirthday(null)
+                .build();
+
+        T result = personDao.find(6L);
+
+        assert result.equals(expectedResult) : "result != expectedResult";
+
+    }
+
 
     private <T extends Person> void find_existent_returnedPerson(PersonDao<T> personDao, PersonBuilder<T> builder)
             throws DalException, ParseException {
@@ -333,6 +394,14 @@ class PersonDaoTest {
                         .setBirthday(sqlDateFromString("1980-04-21"))
                         .build()
         );
+        expectedResult.add(
+                builder
+                        .setId(6)
+                        .setFirstName("Vova")
+                        .setSecondName("Bog")
+                        .setBirthday(null)
+                        .build()
+        );
 
         List<T> result = personDao.findAll();
 
@@ -340,7 +409,7 @@ class PersonDaoTest {
     }
 
     private <T extends Person> void count(PersonDao<T> personDao) throws DalException {
-        long expectedResult = 5;
+        long expectedResult = 6;
 
         long result = personDao.count();
 
@@ -398,6 +467,29 @@ class PersonDaoTest {
                 .setFirstName("Alexander")
                 .setSecondName("Barchenko")
                 .setBirthday(sqlDateFromString("1996-11-30"))
+                .build();
+
+        personDao.create(newPerson);
+
+        T person1 = personDao.find(newPerson.getId());
+
+        assert newPerson.equals(person1) : "Dao did not create Person";
+
+        personDao.delete(newPerson.getId());
+
+        T person2 = personDao.find(newPerson.getId());
+
+        assert person2 == null : "Dao did not delete Person";
+    }
+
+    private <T extends Person> void createAndDelete_withNullBirthday_createdAndDeleted(
+            PersonDao<T> personDao, PersonBuilder<T> builder
+    ) throws DalException, ParseException {
+
+        T newPerson = builder
+                .setFirstName("Alexander")
+                .setSecondName("Barchenko")
+                .setBirthday(null)
                 .build();
 
         personDao.create(newPerson);
