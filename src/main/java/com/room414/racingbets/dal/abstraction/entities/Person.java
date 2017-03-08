@@ -76,7 +76,7 @@ public abstract class Person implements Serializable {
             return false;
         }
 
-        if (birthday != null ? !birthday.equals(person.birthday) : person.birthday != null) {
+        if (birthday != null ? !birthday.toString().equals(person.birthday.toString()) : person.birthday != null) {
             return false;
         }
 
@@ -89,7 +89,7 @@ public abstract class Person implements Serializable {
 
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        result = 31 * result + (birthday != null ? birthday.toString().hashCode() : 0);
 
         return result;
     }

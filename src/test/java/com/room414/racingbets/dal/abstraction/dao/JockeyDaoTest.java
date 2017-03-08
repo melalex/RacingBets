@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.sql.Date;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromString;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -35,7 +36,7 @@ class JockeyDaoTest {
                     .setId(1)
                     .setFirstName("Ruby")
                     .setSecondName("Nichols")
-                    .setBirthday(new Date(388195200))
+                    .setBirthday(sqlDateFromString("1982-04-21"))
                     .build();
 
             Jockey jockey = jockeyDao.find(1L);
