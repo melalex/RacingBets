@@ -13,6 +13,7 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @author Alexander Melashchenko
  * @version 1.0 06 Mar 2017
  */
+// TODO: comment about sql injection
 public class MySqlSimpleQueryExecutor {
     protected Connection connection;
 
@@ -21,24 +22,21 @@ public class MySqlSimpleQueryExecutor {
     }
 
     public long count(String tableName) throws DalException {
-        String sqlStatement = "SELECT COUNT(*) AS count FROM ?";
+        String sqlStatement = String.format("SELECT COUNT(*) AS count FROM %s", tableName);
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-
             return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, tableName);
+            String message = defaultErrorMessage(sqlStatement);
             throw new DalException(message, e);
         }
     }
 
     public boolean delete(String tableName, Long id) throws DalException {
-        String sqlStatement = "DELETE FROM ? WHERE id = ?";
+        String sqlStatement = String.format("DELETE FROM %s WHERE id = ?", tableName);
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-            statement.setLong(2, id);
+            statement.setLong(1, id);
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -49,12 +47,12 @@ public class MySqlSimpleQueryExecutor {
 
 
     public long findByForeignKeyCount(String tableName, String columnName, long key) throws DalException {
-        final String sqlStatement = "SELECT Count(*) FROM ? WHERE ? = ?";
+        final String sqlStatement = String.format(
+                "SELECT Count(*) AS count FROM %s WHERE %s = ?", tableName, columnName
+        );
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, tableName);
-            statement.setString(2, columnName);
-            statement.setLong(3, key);
+            statement.setLong(1, key);
 
             return getResult(statement, MySqlMapHelper::mapCount);
         } catch (SQLException e) {

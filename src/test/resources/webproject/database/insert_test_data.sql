@@ -37,7 +37,7 @@ VALUES ('Wrapsafe', 4, 2, '2005-08-04', 'stallion', NULL, NULL);
 
 INSERT INTO horse_racing_test.horse
   (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Prodder', 3, 3, '2011-12-26', 'Mare', 2, 1);
+VALUES ('Prodder', 3, 3, '2011-12-26', 'mare', 2, 1);
 
 INSERT INTO horse_racing_test.horse
   (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
@@ -45,12 +45,16 @@ VALUES ('Span', 2, 4, '2011-03-27', 'stallion', 2, 1);
 
 INSERT INTO horse_racing_test.horse
   (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Treeflex', 1, 5, '2013-05-01', 'Mare', 3, 4);
+VALUES ('Treeflex', 1, 5, '2013-05-01', 'mare', 3, 4);
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
+  (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
 VALUES ('Alphazap', 4, 2, '2000-10-25', 'stallion', NULL, NULL);
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
+  (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
 VALUES ('Aerified', 2, 4, '2010-11-27', 'stallion', 2, 1);
+
+INSERT INTO horse_racing_test.horse
+  (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
+VALUES ('Prob', 3, 3, '2014-05-01', 'mare', 3, 4);

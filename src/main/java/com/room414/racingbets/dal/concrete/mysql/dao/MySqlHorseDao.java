@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
+import com.mysql.cj.api.jdbc.Statement;
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
@@ -56,7 +57,7 @@ public class MySqlHorseDao implements HorseDao {
                 "   (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getName());
             statement.setLong(2, entity.getTrainer().getId());
             statement.setLong(3, entity.getOwner().getId());
@@ -84,8 +85,8 @@ public class MySqlHorseDao implements HorseDao {
                     entity.getOwner().getId(),
                     entity.getBirthday(),
                     entity.getGender().getName(),
-                    entity.getSir().getId(),
-                    entity.getDam().getId()
+                    entity.getSir() != null ? entity.getSir().getId() : "NULL",
+                    entity.getDam() != null ? entity.getDam().getId() : "NULL"
             );
             throw new DalException(message, e);
         }
@@ -158,8 +159,19 @@ public class MySqlHorseDao implements HorseDao {
             statement.setLong(3, entity.getOwner().getId());
             statement.setDate(4, entity.getBirthday());
             statement.setString(5, entity.getGender().getName());
-            statement.setLong(6, entity.getSir().getId());
-            statement.setLong(7, entity.getDam().getId());
+
+            if (entity.getSir() != null) {
+                statement.setLong(6, entity.getSir().getId());
+            } else {
+                statement.setNull(6, java.sql.Types.INTEGER);
+            }
+
+            if (entity.getDam() != null) {
+                statement.setLong(7, entity.getDam().getId());
+            } else {
+                statement.setNull(7, java.sql.Types.INTEGER);
+            }
+            
             statement.setLong(8, entity.getId());
 
             return statement.executeUpdate();
@@ -171,8 +183,8 @@ public class MySqlHorseDao implements HorseDao {
                     entity.getOwner().getId(),
                     entity.getBirthday(),
                     entity.getGender().getName(),
-                    entity.getSir().getId(),
-                    entity.getDam().getId(),
+                    entity.getSir() != null ? entity.getSir().getId() : "NULL",
+                    entity.getDam() != null ? entity.getDam().getId() : "NULL",
                     entity.getId()
             );
             throw new DalException(message, e);

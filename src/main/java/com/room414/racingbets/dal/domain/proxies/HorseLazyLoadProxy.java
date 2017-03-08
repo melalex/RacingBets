@@ -136,25 +136,18 @@ public class HorseLazyLoadProxy extends Horse {
             return true;
         }
 
-        if (o == null) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        if (getClass() == o.getClass()) {
-            HorseLazyLoadProxy that = (HorseLazyLoadProxy) o;
+        HorseLazyLoadProxy proxy = (HorseLazyLoadProxy) o;
 
-            return getHorse() != null
-                    ? getHorse().equals(that.getHorse())
-                    : that.getHorse() == null;
-
-        }
-
-        return getHorse().equals(o);
+        return id == proxy.id;
     }
 
     @Override
     public int hashCode() {
-        return getHorse() != null ? getHorse().hashCode() : 0;
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override
