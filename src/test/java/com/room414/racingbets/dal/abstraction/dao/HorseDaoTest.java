@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
+import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,8 @@ import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromSt
 @ExtendWith(UnitOfWorkParameterResolver.class)
 class HorseDaoTest {
     private static UnitOfWork unitOfWork;
+
+    private EntityStorage storage = EntityStorage.getInstance();
 
     @BeforeAll
     static void setUp(UnitOfWork unitOfWork) {
@@ -41,28 +44,7 @@ class HorseDaoTest {
     void find_damAndSireNull_returnedEntity() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
-        Owner owner = Owner.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
-
-        Trainer trainer = Trainer.builder()
-                .setId(5)
-                .setFirstName("Alex")
-                .setSecondName("Strutynski")
-                .setBirthday(sqlDateFromString("1980-04-21"))
-                .build();
-
-        Horse expectedResult = Horse.builder()
-                .setId(1)
-                .setName("Fixflex")
-                .setBirthday(sqlDateFromString("2008-02-22"))
-                .setGender("mare")
-                .setTrainer(trainer)
-                .setOwner(owner)
-                .build();
+        Horse expectedResult = storage.getHorse(1);
 
         Horse result = horseDao.find(1L);
 
@@ -73,30 +55,7 @@ class HorseDaoTest {
     void find_existent_returnedEntity() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
-        Owner owner = Owner.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
-        Trainer trainer = Trainer.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
-        Horse expectedResult = Horse.builder()
-                .setId(3)
-                .setName("Prodder")
-                .setBirthday(sqlDateFromString("2011-12-26"))
-                .setGender("mare")
-                .setTrainer(trainer)
-                .setOwner(owner)
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
-                .build();
+        Horse expectedResult = storage.getHorse(3);
 
         Horse result = horseDao.find(3L);
 
@@ -115,56 +74,11 @@ class HorseDaoTest {
     void findAllLimitOffset() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
-        Owner owner1 = Owner.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
-
-        Trainer trainer1 = Trainer.builder()
-                .setId(5)
-                .setFirstName("Alex")
-                .setSecondName("Strutynski")
-                .setBirthday(sqlDateFromString("1980-04-21"))
-                .build();
-
-        Owner owner2 = Owner.builder()
-                .setId(2)
-                .setFirstName("Nichols")
-                .setSecondName("Ruby")
-                .setBirthday(sqlDateFromString("1962-05-19"))
-                .build();
-
-        Trainer trainer2 = Trainer.builder()
-                .setId(4)
-                .setFirstName("Thomas")
-                .setSecondName("West")
-                .setBirthday(sqlDateFromString("1980-01-19"))
-                .build();
-
-
         List<Horse> expectedResult = new LinkedList<>();
 
-        expectedResult.add(Horse.builder()
-                .setId(1)
-                .setName("Fixflex")
-                .setBirthday(sqlDateFromString("2008-02-22"))
-                .setGender("mare")
-                .setTrainer(trainer1)
-                .setOwner(owner1)
-                .build()
-        );
+        expectedResult.add(storage.getHorse(1));
 
-        expectedResult.add(Horse.builder()
-                .setId(2)
-                .setName("Wrapsafe")
-                .setBirthday(sqlDateFromString("2005-08-04"))
-                .setGender("stallion")
-                .setTrainer(trainer2)
-                .setOwner(owner2)
-                .build()
-        );
+        expectedResult.add(storage.getHorse(2));
 
         List<Horse> result = horseDao.findAll(0, 2);
 
@@ -181,167 +95,7 @@ class HorseDaoTest {
 
     @Test
     void findAll() throws ParseException, DalException {
-        Trainer trainer1 = Trainer.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
-
-        Trainer trainer2 = Trainer.builder()
-                .setId(2)
-                .setFirstName("Nichols")
-                .setSecondName("Ruby")
-                .setBirthday(sqlDateFromString("1962-05-19"))
-                .build();
-
-        Trainer trainer3 = Trainer.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
-        Trainer trainer4 = Trainer.builder()
-                .setId(4)
-                .setFirstName("Thomas")
-                .setSecondName("West")
-                .setBirthday(sqlDateFromString("1980-01-19"))
-                .build();
-
-        Trainer trainer5 = Trainer.builder()
-                .setId(5)
-                .setFirstName("Alex")
-                .setSecondName("Strutynski")
-                .setBirthday(sqlDateFromString("1980-04-21"))
-                .build();
-
-        Owner owner1 = Owner.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
-
-        Owner owner2 = Owner.builder()
-                .setId(2)
-                .setFirstName("Nichols")
-                .setSecondName("Ruby")
-                .setBirthday(sqlDateFromString("1962-05-19"))
-                .build();
-
-        Owner owner3 = Owner.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
-        Owner owner4 = Owner.builder()
-                .setId(4)
-                .setFirstName("Thomas")
-                .setSecondName("West")
-                .setBirthday(sqlDateFromString("1980-01-19"))
-                .build();
-
-        Owner owner5 = Owner.builder()
-                .setId(5)
-                .setFirstName("Alex")
-                .setSecondName("Strutynski")
-                .setBirthday(sqlDateFromString("1980-04-21"))
-                .build();
-
-        List<Horse> expectedResult = new LinkedList<>();
-
-        expectedResult.add(Horse.builder()
-                .setId(1)
-                .setName("Fixflex")
-                .setBirthday(sqlDateFromString("2008-02-22"))
-                .setGender("mare")
-                .setTrainer(trainer5)
-                .setOwner(owner1)
-                .build()
-        );
-
-        expectedResult.add(Horse.builder()
-                .setId(2)
-                .setName("Wrapsafe")
-                .setBirthday(sqlDateFromString("2005-08-04"))
-                .setGender("stallion")
-                .setTrainer(trainer4)
-                .setOwner(owner2)
-                .build()
-        );
-
-        expectedResult.add(Horse.builder()
-                .setId(3)
-                .setName("Prodder")
-                .setBirthday(sqlDateFromString("2011-12-26"))
-                .setGender("mare")
-                .setTrainer(trainer3)
-                .setOwner(owner3)
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
-                .build()
-        );
-
-        expectedResult.add(Horse.builder()
-                .setId(4)
-                .setName("Span")
-                .setBirthday(sqlDateFromString("2011-03-27"))
-                .setGender("stallion")
-                .setTrainer(trainer2)
-                .setOwner(owner4)
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
-                .build()
-        );
-
-        expectedResult.add(Horse.builder()
-                .setId(5)
-                .setName("Treeflex")
-                .setBirthday(sqlDateFromString("2013-05-01"))
-                .setGender("mare")
-                .setTrainer(trainer1)
-                .setOwner(owner5)
-                .setSir(HorseLazyLoadProxy.create(3))
-                .setDam(HorseLazyLoadProxy.create(4))
-                .build()
-        );
-
-        expectedResult.add(Horse.builder()
-                .setId(6)
-                .setName("Alphazap")
-                .setBirthday(sqlDateFromString("2000-10-25"))
-                .setGender("stallion")
-                .setTrainer(trainer4)
-                .setOwner(owner2)
-                .build()
-        );
-
-        expectedResult.add(Horse.builder()
-                .setId(7)
-                .setName("Aerified")
-                .setBirthday(sqlDateFromString("2010-11-27"))
-                .setGender("stallion")
-                .setTrainer(trainer2)
-                .setOwner(owner4)
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
-                .build()
-        );
-
-        expectedResult.add(Horse.builder()
-                .setId(8)
-                .setName("Prob")
-                .setBirthday(sqlDateFromString("2014-05-01"))
-                .setGender("mare")
-                .setTrainer(trainer3)
-                .setOwner(owner3)
-                .setSir(HorseLazyLoadProxy.create(3))
-                .setDam(HorseLazyLoadProxy.create(4))
-                .build()
-        );
+        List<Horse> expectedResult = storage.getAllHorses();
 
         List<Horse> result = getHorseDao().findAll();
 
@@ -362,46 +116,12 @@ class HorseDaoTest {
     void findByNamePart_existent_returnedList() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
-        Trainer trainer3 = Trainer.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
-        Owner owner3 = Owner.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
         List<Horse> expectedResult1 = new LinkedList<>();
         List<Horse> expectedResult2 = new LinkedList<>();
 
-        expectedResult1.add(Horse.builder()
-                .setId(3)
-                .setName("Prodder")
-                .setBirthday(sqlDateFromString("2011-12-26"))
-                .setGender("mare")
-                .setTrainer(trainer3)
-                .setOwner(owner3)
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
-                .build()
-        );
+        expectedResult1.add(storage.getHorse(3));
 
-        expectedResult2.add(Horse.builder()
-                .setId(8)
-                .setName("Prob")
-                .setBirthday(sqlDateFromString("2014-05-01"))
-                .setGender("mare")
-                .setTrainer(trainer3)
-                .setOwner(owner3)
-                .setSir(HorseLazyLoadProxy.create(3))
-                .setDam(HorseLazyLoadProxy.create(4))
-                .build()
-        );
+        expectedResult2.add(storage.getHorse(8));
 
         List<Horse> result1 = horseDao.findByNamePart("Pro", 0, 1);
         List<Horse> result2 = horseDao.findByNamePart("Pro", 1, 1);
@@ -432,19 +152,8 @@ class HorseDaoTest {
     void createAndDelete_nullSireAndDam_createdDeleted() throws DalException, ParseException {
         HorseDao horseDao = getHorseDao();
 
-        Trainer trainer3 = Trainer.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
-        Owner owner3 = Owner.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
+        Trainer trainer3 = storage.getTrainer(3);
+        Owner owner3 = storage.getOwner(3);
 
         Horse newEntity = Horse.builder()
                 .setName("Prodder")
@@ -471,19 +180,8 @@ class HorseDaoTest {
     void createAndDelete_notNullSireAndDam_createdDeleted() throws DalException, ParseException {
         HorseDao horseDao = getHorseDao();
 
-        Trainer trainer3 = Trainer.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
-
-        Owner owner3 = Owner.builder()
-                .setId(3)
-                .setFirstName("Doris")
-                .setSecondName("Franklin")
-                .setBirthday(sqlDateFromString("1984-03-16"))
-                .build();
+        Trainer trainer3 = storage.getTrainer(3);
+        Owner owner3 = storage.getOwner(3);
 
         Horse newEntity = Horse.builder()
                 .setName("Prodder")
@@ -514,19 +212,9 @@ class HorseDaoTest {
 
         HorseDao horseDao = getHorseDao();
 
-        Trainer trainer1 = Trainer.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
+        Trainer trainer1 = storage.getTrainer(1);
 
-        Owner owner2 = Owner.builder()
-                .setId(2)
-                .setFirstName("Nichols")
-                .setSecondName("Ruby")
-                .setBirthday(sqlDateFromString("1962-05-19"))
-                .build();
+        Owner owner2 = storage.getOwner(2);
 
         Horse entity = horseDao.find(targetId);
         Horse updated = Horse.builder()

@@ -447,6 +447,5 @@ class PersonDaoTest {
         // rollback
 
         personDao.update(person);
-
     }
 }
