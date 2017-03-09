@@ -9,6 +9,7 @@ import com.room414.racingbets.dal.domain.infrastructure.BuildHelper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class BetBuilder {
 
     private List<Participant> getParticipants() {
         if (participants == null) {
-            participants = new ArrayList<>();
+            participants = Arrays.asList(new Participant[4]);
         }
         return participants;
     }
@@ -94,15 +95,15 @@ public class BetBuilder {
         return this;
     }
 
-    public BetBuilder addParticipant(Participant participant) {
-        getParticipants().add(participant);
+    public BetBuilder setParticipant(int place, Participant participant) {
+        getParticipants().set(place - 1, participant);
         return this;
     }
 
-    public BetBuilder addParticipantById(int id) {
+    public BetBuilder setParticipantById(int place, int id) {
         Participant participant = new Participant();
         participant.setId(id);
-        getParticipants().add(participant);
+        getParticipants().set(place - 1, participant);
         return this;
     }
 

@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -41,14 +42,14 @@ public class RaceBuilder {
 
     private List<Participant> getParticipants() {
         if (participants == null) {
-            participants = new ArrayList<>();
+            participants = new LinkedList<>();
         }
         return participants;
     }
 
     private List<BigDecimal> getPrizes() {
         if (prizes == null) {
-            prizes = Arrays.asList(new BigDecimal[10]);
+            prizes = Arrays.asList(new BigDecimal[20]);
         }
         return prizes;
     }
@@ -180,7 +181,7 @@ public class RaceBuilder {
     }
 
     public RaceBuilder setPrize(int place, BigDecimal size) {
-        getPrizes().set(place, size);
+        getPrizes().set(place - 1, size);
         return this;
     }
 

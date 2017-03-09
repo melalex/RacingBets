@@ -3,6 +3,9 @@ package com.room414.racingbets.dal.infrastructure;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.entities.*;
+import com.room414.racingbets.dal.domain.enums.BetStatus;
+import com.room414.racingbets.dal.domain.enums.BetType;
+import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 
 import java.math.BigDecimal;
@@ -592,11 +595,306 @@ public class EntityStorage {
     }
 
     private void initApplicationUserMap() {
+        applicationUserMap.put(
+                1L,
+                ApplicationUser.builder()
+                        .setId(1)
+                        .setLogin("pgordon0")
+                        .setPassword("kJ182n")
+                        .setFirstName("Paula")
+                        .setLastName("Gordon")
+                        .setEmail("pgordon0@google.ru")
+                        .setEmailConfirmed(true)
+                        .setBalance(BigDecimal.valueOf(827.32))
+                        .addRole(Role.ADMIN)
+                        .addRole(Role.BOOKMAKER)
+                        .addRole(Role.HANDICAPPER)
+                        .build()
+        );
 
+        applicationUserMap.put(
+                2L,
+                ApplicationUser.builder()
+                        .setId(2)
+                        .setLogin("slawrence1")
+                        .setPassword("tBHdVXlvv")
+                        .setFirstName("Shirley")
+                        .setLastName("Lawrence")
+                        .setEmail("slawrence1@geocities.com")
+                        .setEmailConfirmed(true)
+                        .setBalance(BigDecimal.valueOf(924.23))
+                        .addRole(Role.BOOKMAKER)
+                        .addRole(Role.HANDICAPPER)
+                        .build()
+        );
+
+        applicationUserMap.put(
+                3L,
+                ApplicationUser.builder()
+                        .setId(3)
+                        .setLogin("hbanks2")
+                        .setPassword("RgoMu22lO")
+                        .setFirstName("Harold")
+                        .setLastName("Banks")
+                        .setEmail("hbanks2@adobe.com")
+                        .setEmailConfirmed(true)
+                        .setBalance(BigDecimal.valueOf(256.71))
+                        .addRole(Role.HANDICAPPER)
+                        .build()
+        );
+
+        applicationUserMap.put(
+                4L,
+                ApplicationUser.builder()
+                        .setId(4)
+                        .setLogin("lallen3")
+                        .setPassword("WCeXA5")
+                        .setFirstName("Lois")
+                        .setLastName("Allen")
+                        .setEmail("lallen3@virginia.edu")
+                        .setEmailConfirmed(true)
+                        .setBalance(BigDecimal.valueOf(385.59))
+                        .addRole(Role.HANDICAPPER)
+                        .build()
+        );
+
+        applicationUserMap.put(
+                5L,
+                ApplicationUser.builder()
+                        .setId(5)
+                        .setLogin("pandrews4")
+                        .setPassword("uRKNaCqj2B")
+                        .setFirstName("Paula")
+                        .setLastName("Andrews")
+                        .setEmail("pandrews4@artisteer.com")
+                        .setEmailConfirmed(true)
+                        .setBalance(BigDecimal.valueOf(749.38))
+                        .addRole(Role.HANDICAPPER)
+                        .build()
+        );
     }
 
     private void initBetMap() {
 
+        // Place
+
+        betMap.put(
+                1L,
+                Bet.builder()
+                        .setId(1)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(3))
+                        .setBetType(BetType.PLACE)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(100))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(1))
+                        .build()
+        );
+
+        betMap.put(
+                2L,
+                Bet.builder()
+                        .setId(2)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(4))
+                        .setBetType(BetType.PLACE)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(200))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(1))
+                        .build()
+        );
+
+        betMap.put(
+                3L,
+                Bet.builder()
+                        .setId(3)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(5))
+                        .setBetType(BetType.PLACE)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(300))
+                        .setParticipant(1, getParticipant(3))
+                        .setParticipant(2, getParticipant(3))
+                        .build()
+        );
+
+        // Win
+
+        betMap.put(
+                4L,
+                Bet.builder()
+                        .setId(4)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(3))
+                        .setBetType(BetType.WIN)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(100))
+                        .setParticipant(1, getParticipant(1))
+                        .build()
+        );
+
+        betMap.put(
+                5L,
+                Bet.builder()
+                        .setId(5)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(4))
+                        .setBetType(BetType.WIN)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(200))
+                        .setParticipant(1, getParticipant(1))
+                        .build()
+        );
+
+        betMap.put(
+                6L,
+                Bet.builder()
+                        .setId(6)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(5))
+                        .setBetType(BetType.WIN)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(300))
+                        .setParticipant(1, getParticipant(3))
+                        .build()
+        );
+
+        // Qeinella
+
+        betMap.put(
+                7L,
+                Bet.builder()
+                        .setId(7)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(3))
+                        .setBetType(BetType.QUINELLA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(100))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(2))
+                        .build()
+        );
+
+        betMap.put(
+                8L,
+                Bet.builder()
+                        .setId(8)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(4))
+                        .setBetType(BetType.QUINELLA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(200))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(2))
+                        .build()
+        );
+
+        betMap.put(
+                9L,
+                Bet.builder()
+                        .setId(9)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(5))
+                        .setBetType(BetType.QUINELLA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(300))
+                        .setParticipant(1, getParticipant(3))
+                        .setParticipant(2, getParticipant(1))
+                        .build()
+        );
+
+        // Exacta
+
+        betMap.put(
+                10L,
+                Bet.builder()
+                        .setId(10)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(3))
+                        .setBetType(BetType.EXACTA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(100))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(2))
+                        .build()
+        );
+
+        betMap.put(
+                11L,
+                Bet.builder()
+                        .setId(11)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(4))
+                        .setBetType(BetType.EXACTA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(200))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(2))
+                        .build()
+        );
+
+        betMap.put(
+                12L,
+                Bet.builder()
+                        .setId(12)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(5))
+                        .setBetType(BetType.EXACTA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(300))
+                        .setParticipant(1, getParticipant(3))
+                        .setParticipant(2, getParticipant(1))
+                        .build()
+        );
+
+        // Trifecta
+
+        betMap.put(
+                13L,
+                Bet.builder()
+                        .setId(13)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(3))
+                        .setBetType(BetType.TRIFECTA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(100))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(2))
+                        .setParticipant(3, getParticipant(3))
+                        .build()
+        );
+
+        betMap.put(
+                14L,
+                Bet.builder()
+                        .setId(14)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(4))
+                        .setBetType(BetType.TRIFECTA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(200))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(2))
+                        .setParticipant(3, getParticipant(3))
+                        .build()
+        );
+
+        betMap.put(
+                15L,
+                Bet.builder()
+                        .setId(15)
+                        .setRaceId(1)
+                        .setUser(getApplicationUser(5))
+                        .setBetType(BetType.TRIFECTA)
+                        .setBetStatus(BetStatus.SCHEDULED)
+                        .setBetSize(BigDecimal.valueOf(300))
+                        .setParticipant(1, getParticipant(1))
+                        .setParticipant(2, getParticipant(2))
+                        .setParticipant(3, getParticipant(3))
+                        .build()
+        );
     }
 
     public Jockey getJockey(long o) {
