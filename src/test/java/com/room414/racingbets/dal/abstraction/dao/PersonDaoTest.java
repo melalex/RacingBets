@@ -6,6 +6,8 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Jockey;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
+import com.room414.racingbets.dal.infrastructure.EntityStorage;
+import com.room414.racingbets.dal.infrastructure.ListProducer;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromString;
 
@@ -24,6 +27,8 @@ import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromSt
 @ExtendWith(UnitOfWorkParameterResolver.class)
 class PersonDaoTest {
     private static UnitOfWork unitOfWork;
+
+    private EntityStorage storage = EntityStorage.getInstance();
 
     @BeforeAll
     static void setUp(UnitOfWork unitOfWork) {
@@ -40,15 +45,15 @@ class PersonDaoTest {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
                         "find_withNullBirthday_returnedPerson for Jockey",
-                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getJockeyDao(), Jockey.builder())
+                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
                         "find_withNullBirthday_returnedPerson for Trainer",
-                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getTrainerDao(), Trainer.builder())
+                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
                         "find_withNullBirthday_returnedPerson for Owner",
-                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getOwnerDao(), Owner.builder())
+                        () -> find_withNullBirthday_returnedPerson(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
     }
@@ -58,15 +63,15 @@ class PersonDaoTest {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
                         "find_existent_returnedPerson for Jockey",
-                        () -> find_existent_returnedPerson(unitOfWork.getJockeyDao(), Jockey.builder())
+                        () -> find_existent_returnedPerson(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
                         "find_existent_returnedPerson for Trainer",
-                        () -> find_existent_returnedPerson(unitOfWork.getTrainerDao(), Trainer.builder())
+                        () -> find_existent_returnedPerson(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
                         "find_existent_returnedPerson for Owner",
-                        () -> find_existent_returnedPerson(unitOfWork.getOwnerDao(), Owner.builder())
+                        () -> find_existent_returnedPerson(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
     }
@@ -94,15 +99,15 @@ class PersonDaoTest {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
                         "findAllLimitOffset for Jockey",
-                        () -> findAllLimitOffset(unitOfWork.getJockeyDao(), Jockey.builder())
+                        () -> findAllLimitOffset(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
                         "findAllLimitOffset for Trainer",
-                        () -> findAllLimitOffset(unitOfWork.getTrainerDao(), Trainer.builder())
+                        () -> findAllLimitOffset(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
                         "findAllLimitOffset for Owner",
-                        () -> findAllLimitOffset(unitOfWork.getOwnerDao(), Owner.builder())
+                        () -> findAllLimitOffset(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
     }
@@ -130,15 +135,15 @@ class PersonDaoTest {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
                         "findAll for Jockey",
-                        () -> findAll(unitOfWork.getJockeyDao(), Jockey.builder())
+                        () -> findAll(unitOfWork.getJockeyDao(), storage::getAllJockeys)
                 ),
                 DynamicTest.dynamicTest(
                         "findAll for Trainer",
-                        () -> findAll(unitOfWork.getTrainerDao(), Trainer.builder())
+                        () -> findAll(unitOfWork.getTrainerDao(), storage::getAllTrainers)
                 ),
                 DynamicTest.dynamicTest(
                         "findAll for Owner",
-                        () -> findAll(unitOfWork.getOwnerDao(), Owner.builder())
+                        () -> findAll(unitOfWork.getOwnerDao(), storage::getAllOwners)
                 )
         );
     }
@@ -166,15 +171,15 @@ class PersonDaoTest {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
                         "findByNamePart_existent_returnedList for Jockey",
-                        () -> findByNamePart_existent_returnedList(unitOfWork.getJockeyDao(), Jockey.builder())
+                        () -> findByNamePart_existent_returnedList(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
                         "findByNamePart_existent_returnedList for Trainer",
-                        () -> findByNamePart_existent_returnedList(unitOfWork.getTrainerDao(), Trainer.builder())
+                        () -> findByNamePart_existent_returnedList(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
                         "findByNamePart_existent_returnedList for Owner",
-                        () -> findByNamePart_existent_returnedList(unitOfWork.getOwnerDao(), Owner.builder())
+                        () -> findByNamePart_existent_returnedList(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
     }
@@ -278,14 +283,9 @@ class PersonDaoTest {
         );
     }
 
-    private <T extends Person> void find_withNullBirthday_returnedPerson(PersonDao<T> personDao, PersonBuilder<T> builder)
+    private <T extends Person> void find_withNullBirthday_returnedPerson(PersonDao<T> personDao, Function<Long, T> getter)
             throws DalException, ParseException {
-        T expectedResult = builder
-                .setId(6)
-                .setFirstName("Vova")
-                .setSecondName("Bog")
-                .setBirthday(null)
-                .build();
+        T expectedResult = getter.apply(6L);
 
         T result = personDao.find(6L);
 
@@ -294,14 +294,9 @@ class PersonDaoTest {
     }
 
 
-    private <T extends Person> void find_existent_returnedPerson(PersonDao<T> personDao, PersonBuilder<T> builder)
+    private <T extends Person> void find_existent_returnedPerson(PersonDao<T> personDao, Function<Long, T> getter)
             throws DalException, ParseException {
-        T expectedResult = builder
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
+        T expectedResult = getter.apply(1L);
 
         T result = personDao.find(1L);
 
@@ -316,27 +311,13 @@ class PersonDaoTest {
 
     }
 
-    private <T extends Person> void findAllLimitOffset(PersonDao<T> personDao, PersonBuilder<T> builder)
+    private <T extends Person> void findAllLimitOffset(PersonDao<T> personDao, Function<Long, T> getter)
             throws DalException, ParseException {
 
         List<T> expectedResult = new LinkedList<>();
 
-        expectedResult.add(
-                builder
-                        .setId(1)
-                        .setFirstName("Ruby")
-                        .setSecondName("Nichols")
-                        .setBirthday(sqlDateFromString("1982-04-21"))
-                        .build()
-        );
-        expectedResult.add(
-                builder
-                        .setId(2)
-                        .setFirstName("Nichols")
-                        .setSecondName("Ruby")
-                        .setBirthday(sqlDateFromString("1962-05-19"))
-                        .build()
-        );
+        expectedResult.add(getter.apply(1L));
+        expectedResult.add(getter.apply(2L));
 
         List<T> result = personDao.findAll(0, 2);
 
@@ -349,59 +330,10 @@ class PersonDaoTest {
         assert result.isEmpty() : "result is not empty";
     }
 
-    private <T extends Person> void findAll(PersonDao<T> personDao, PersonBuilder<T> builder)
+    private <T extends Person> void findAll(PersonDao<T> personDao, ListProducer<T> getter)
             throws DalException, ParseException {
 
-        List<T> expectedResult = new LinkedList<>();
-
-        expectedResult.add(
-                builder
-                        .setId(1)
-                        .setFirstName("Ruby")
-                        .setSecondName("Nichols")
-                        .setBirthday(sqlDateFromString("1982-04-21"))
-                        .build()
-        );
-        expectedResult.add(
-                builder
-                        .setId(2)
-                        .setFirstName("Nichols")
-                        .setSecondName("Ruby")
-                        .setBirthday(sqlDateFromString("1962-05-19"))
-                        .build()
-        );
-        expectedResult.add(
-                builder
-                        .setId(3)
-                        .setFirstName("Doris")
-                        .setSecondName("Franklin")
-                        .setBirthday(sqlDateFromString("1984-03-16"))
-                        .build()
-        );
-        expectedResult.add(
-                builder
-                        .setId(4)
-                        .setFirstName("Thomas")
-                        .setSecondName("West")
-                        .setBirthday(sqlDateFromString("1980-01-19"))
-                        .build()
-        );
-        expectedResult.add(
-                builder
-                        .setId(5)
-                        .setFirstName("Alex")
-                        .setSecondName("Strutynski")
-                        .setBirthday(sqlDateFromString("1980-04-21"))
-                        .build()
-        );
-        expectedResult.add(
-                builder
-                        .setId(6)
-                        .setFirstName("Vova")
-                        .setSecondName("Bog")
-                        .setBirthday(null)
-                        .build()
-        );
+        List<T> expectedResult = getter.invoke();
 
         List<T> result = personDao.findAll();
 
@@ -416,28 +348,14 @@ class PersonDaoTest {
         assert expectedResult == result : "result != expectedResult";
     }
 
-    private <T extends Person> void findByNamePart_existent_returnedList(PersonDao<T> personDao, PersonBuilder<T> builder)
+    private <T extends Person> void findByNamePart_existent_returnedList(PersonDao<T> personDao, Function<Long, T> getter)
             throws DalException, ParseException {
 
         List<T> expectedResult1 = new LinkedList<>();
         List<T> expectedResult2 = new LinkedList<>();
 
-        expectedResult1.add(
-                builder
-                        .setId(1)
-                        .setFirstName("Ruby")
-                        .setSecondName("Nichols")
-                        .setBirthday(sqlDateFromString("1982-04-21"))
-                        .build()
-        );
-        expectedResult2.add(
-                builder
-                        .setId(2)
-                        .setFirstName("Nichols")
-                        .setSecondName("Ruby")
-                        .setBirthday(sqlDateFromString("1962-05-19"))
-                        .build()
-        );
+        expectedResult1.add(getter.apply(1L));
+        expectedResult2.add(getter.apply(2L));
 
         List<T> result1 = personDao.findByNamePart("Ru", 0, 1);
         List<T> result2 = personDao.findByNamePart("Ru", 1, 1);
