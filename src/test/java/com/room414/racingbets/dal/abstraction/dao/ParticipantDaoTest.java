@@ -2,16 +2,20 @@ package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.*;
+import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromString;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(UnitOfWorkParameterResolver.class)
 class ParticipantDaoTest {
     private static UnitOfWork unitOfWork;
+
+    private EntityStorage storage = EntityStorage.getInstance();
 
     @BeforeAll
     static void setUp(UnitOfWork unitOfWork) {
@@ -42,58 +48,20 @@ class ParticipantDaoTest {
     void find_existent_returnedEntity() throws ParseException, DalException {
         ParticipantDao dao = getParticipantDao();
 
-        Trainer trainer1 = Trainer.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
-
-        Trainer trainer5 = Trainer.builder()
-                .setId(5)
-                .setFirstName("Alex")
-                .setSecondName("Strutynski")
-                .setBirthday(sqlDateFromString("1980-04-21"))
-                .build();
-
-        Owner owner1 = Owner.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
-
-        Jockey jockey1 = Jockey.builder()
-                .setId(1)
-                .setFirstName("Ruby")
-                .setSecondName("Nichols")
-                .setBirthday(sqlDateFromString("1982-04-21"))
-                .build();
-
-
-        Horse horse1 = Horse.builder()
-                .setId(1)
-                .setName("Fixflex")
-                .setBirthday(sqlDateFromString("2008-02-22"))
-                .setGender("mare")
-                .setTrainer(trainer5)
-                .setOwner(owner1)
-                .build();
-
-        Participant expectedResult = Participant.builder()
-                .setId(1)
-                .setNumber(1)
-                .setHorse(horse1)
-                .setCarriedWeight(50)
-                .setTopSpeed(70)
-                .setOfficialRating(70)
-                .setOdds(2.1)
-                .setJockey(jockey1)
-                .setTrainer(trainer1)
-                .setPlace(1)
-                .build();
+        Participant expectedResult = storage.getParticipant(1);
 
         Participant result = dao.find(1L);
+
+        assert result.equals(expectedResult) : "result != expectedResult";
+    }
+
+    @Test
+    void find_nullable_returnedEntity() throws ParseException, DalException {
+        ParticipantDao dao = getParticipantDao();
+
+        Participant expectedResult = storage.getParticipant(9);
+
+        Participant result = dao.find(9L);
 
         assert result.equals(expectedResult) : "result != expectedResult";
     }
@@ -109,23 +77,15 @@ class ParticipantDaoTest {
 
     @Test
     void findAllLimitOffset() throws ParseException, DalException {
-//        RacecourseDao dao = getRacecourseDao();
-//        List<Racecourse> expectedResult = new LinkedList<>();
-//
-//        expectedResult.add(Racecourse.builder()
-//                .setId(1)
-//                .setName("Ronstring")
-//                .setLatitude(-22.72528)
-//                .setLongitude(-47.64917)
-//                .setClerk("Stephen Cook")
-//                .setContact("scook0@hud.gov")
-//                .build()
-//        );
-//
-//
-//        List<Racecourse> result = dao.findAll(0, 1);
-//
-//        assert result.equals(expectedResult) : "result != expectedResult";
+        ParticipantDao dao = getParticipantDao();
+        List<Participant> expectedResult = new LinkedList<>();
+
+        expectedResult.add(storage.getParticipant(1));
+        expectedResult.add(storage.getParticipant(2));
+
+        List<Participant> result = dao.findAll(0, 2);
+
+        assert result.equals(expectedResult) : "result != expectedResult";
     }
 
     @Test
@@ -139,7 +99,11 @@ class ParticipantDaoTest {
 
     @Test
     void findAll() throws ParseException, DalException {
-        // TODO: findAll test
+        List<Participant> expectedResult = storage.getAllParticipants();
+
+        List<Participant> result = getParticipantDao().findAll();
+
+        assert result.equals(expectedResult) : "result != expectedResult";
     }
 
     @Test
@@ -154,42 +118,139 @@ class ParticipantDaoTest {
     }
 
     @Test
-    void findByHorseId() {
+    void findByHorseId() throws DalException {
+        final long targetId = 1;
 
+        ParticipantDao dao = getParticipantDao();
+        List<Participant> expectedResultParticipants = new LinkedList<>();
+        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+
+        expectedResultParticipants.add(storage.getParticipant(1));
+        expectedResultParticipants.add(storage.getParticipant(8));
+
+        expectedResultTimestamps.add(storage.getRace(1).getStart());
+        expectedResultTimestamps.add(storage.getRace(3).getStart());
+
+        List<Pair<Participant, Timestamp>> result = dao.findByHorseId(targetId, 0, 2);
+        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
+        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
+
+        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
+        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
     }
 
     @Test
-    void findByHorseIdCount() {
+    void findByHorseIdCount() throws DalException {
+        final long targetId = 1;
 
+        ParticipantDao dao = getParticipantDao();
+        long expectedResult = 2;
+
+        long result = dao.findByHorseIdCount(targetId);
+
+        assert expectedResult == result : "result != expectedResult";
     }
 
     @Test
-    void findByOwnerId() {
+    void findByOwnerId() throws DalException {
+        final long targetId = 1;
 
+        ParticipantDao dao = getParticipantDao();
+        List<Participant> expectedResultParticipants = new LinkedList<>();
+        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+
+        expectedResultParticipants.add(storage.getParticipant(1));
+        expectedResultParticipants.add(storage.getParticipant(8));
+
+        expectedResultTimestamps.add(storage.getRace(1).getStart());
+        expectedResultTimestamps.add(storage.getRace(3).getStart());
+
+        List<Pair<Participant, Timestamp>> result = dao.findByOwnerId(targetId, 0, 2);
+        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
+        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
+
+        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
+        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
     }
 
     @Test
-    void findByOwnerIdCount() {
+    void findByOwnerIdCount() throws DalException {
+        final long targetId = 1;
 
+        ParticipantDao dao = getParticipantDao();
+        long expectedResult = 2;
+
+        long result = dao.findByOwnerIdCount(targetId);
+
+        assert expectedResult == result : "result != expectedResult";
     }
 
     @Test
-    void findByJockeyId() {
+    void findByJockeyId() throws DalException {
+        final long targetId = 1;
 
+        ParticipantDao dao = getParticipantDao();
+        List<Participant> expectedResultParticipants = new LinkedList<>();
+        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+
+        expectedResultParticipants.add(storage.getParticipant(1));
+        expectedResultParticipants.add(storage.getParticipant(6));
+
+        expectedResultTimestamps.add(storage.getRace(1).getStart());
+        expectedResultTimestamps.add(storage.getRace(2).getStart());
+
+        List<Pair<Participant, Timestamp>> result = dao.findByJockeyId(targetId, 0, 2);
+        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
+        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
+
+        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
+        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
     }
 
     @Test
-    void findByJockeyIdCount() {
+    void findByJockeyIdCount() throws DalException {
+        final long targetId = 1;
 
+        ParticipantDao dao = getParticipantDao();
+        long expectedResult = 2;
+
+        long result = dao.findByJockeyIdCount(targetId);
+
+        assert expectedResult == result : "result != expectedResult";
     }
 
     @Test
-    void findByTrainerId() {
+    void findByTrainerId() throws DalException {
+        final long targetId = 1;
 
+        ParticipantDao dao = getParticipantDao();
+        List<Participant> expectedResultParticipants = new LinkedList<>();
+        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+
+        expectedResultParticipants.add(storage.getParticipant(1));
+        expectedResultParticipants.add(storage.getParticipant(6));
+
+        expectedResultTimestamps.add(storage.getRace(1).getStart());
+        expectedResultTimestamps.add(storage.getRace(2).getStart());
+
+        List<Pair<Participant, Timestamp>> result = dao.findByTrainerId(targetId, 0, 2);
+        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
+        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
+
+        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
+        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
     }
 
     @Test
-    void findByTrainerIdCount() {
+    void findByTrainerIdCount() throws DalException {
+        final long targetId = 1;
+
+        ParticipantDao dao = getParticipantDao();
+        long expectedResult = 2;
+
+        long result = dao.findByTrainerIdCount(targetId);
+
+        assert expectedResult == result : "result != expectedResult";
 
     }
 
