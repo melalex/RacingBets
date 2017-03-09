@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.*;
@@ -16,9 +15,6 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromString;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author melalex
@@ -255,56 +251,40 @@ class ParticipantDaoTest {
     }
 
     @Test
-    void createAndDelete() throws DalException, ParseException {
-//        RacecourseDao dao = getRacecourseDao();
-//
-//        Racecourse newEntity = Racecourse.builder()
-//                .setName("Stronghold")
-//                .setLatitude(14.64361)
-//                .setLongitude(120.58083)
-//                .setContact("jandrews6@spiegel.de")
-//                .setClerk("Joyce Andrews")
-//                .build();
-//
-//        dao.create(newEntity);
-//
-//        Racecourse entity1 = dao.find(newEntity.getId());
-//
-//        assert newEntity.equals(entity1) : "Dao did not create Entity";
-//
-//        dao.delete(newEntity.getId());
-//
-//        Racecourse entity2 = dao.find(newEntity.getId());
-//
-//        assert entity2 == null : "Dao did not delete Entity";
+    void delete() throws DalException, ParseException {
+        // TODO: test this shit
     }
 
     @Test
     void update() throws DalException, ParseException {
-//        final long targetId = 3L;
-//
-//        RacecourseDao dao = getRacecourseDao();
-//
-//        Racecourse entity = dao.find(targetId);
-//        Racecourse updated = Racecourse.builder()
-//                .setId(entity.getId())
-//                .setName("Stim")
-//                .setLatitude(49.38858)
-//                .setLongitude(16.1096)
-//                .setContact("gsnyder1a@aboutads.info")
-//                .setClerk("Gary Snyder")
-//                .build();
-//
-//        assert !updated.equals(entity) : "entity and updated are already same";
-//
-//        dao.update(updated);
-//
-//        Racecourse afterSave = dao.find(targetId);
-//
-//        assert updated.equals(afterSave) : "updated != afterSave";
-//
-//        // rollback
-//
-//        dao.update(entity);
+        final long targetId = 1L;
+
+        ParticipantDao dao = getParticipantDao();
+
+        Participant entity = dao.find(targetId);
+        Participant updated = Participant.builder()
+                .setId(entity.getId())
+                .setNumber(4)
+                .setHorse(storage.getHorse(2))
+                .setCarriedWeight(10)
+                .setTopSpeed(60)
+                .setOfficialRating(30)
+                .setOdds(3.1)
+                .setJockey(storage.getJockey(2))
+                .setTrainer(storage.getTrainer(3))
+                .setPlace(4)
+                .build();
+
+        assert !updated.equals(entity) : "entity and updated are already same";
+
+        dao.update(updated);
+
+        Participant afterSave = dao.find(entity.getId());
+
+        assert updated.equals(afterSave) : "updated != afterSave";
+
+        // rollback
+
+        dao.update(entity);
     }
 }
