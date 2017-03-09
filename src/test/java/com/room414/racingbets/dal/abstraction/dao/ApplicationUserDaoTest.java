@@ -159,13 +159,13 @@ class ApplicationUserDaoTest {
 
         ApplicationUser entity1 = dao.find(newEntity.getId());
 
-        assert newEntity.equals(entity1) : "Dao did not create Horse";
+        assert newEntity.equals(entity1) : "Dao did not create entity";
 
         dao.delete(newEntity.getId());
 
         ApplicationUser entity2 = dao.find(newEntity.getId());
 
-        assert entity2 == null : "Dao did not delete Person";
+        assert entity2 == null : "Dao did not delete entity";
     }
 
     @Test
