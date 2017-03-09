@@ -24,6 +24,10 @@ public class Odds implements Serializable {
         this.commission = commission;
     }
 
+    public Odds(double prizePool, double eventPool, double commission) {
+        this(BigDecimal.valueOf(prizePool), BigDecimal.valueOf(eventPool), commission);
+    }
+
     public BigDecimal getPrizePool() {
         return prizePool;
     }
