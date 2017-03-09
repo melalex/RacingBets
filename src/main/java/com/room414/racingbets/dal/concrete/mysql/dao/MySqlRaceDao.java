@@ -258,90 +258,42 @@ public class MySqlRaceDao implements RaceDao {
 
 
     @Override
-    public List<Race> findScheduledByRacecourseId(long racecourse, long offset, long limit) throws DalException {
+    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) throws DalException {
         return null;
     }
 
     @Override
-    public long findScheduledByRacecourseIdCount(long racecourse) {
+    public long findByRacecourseIdCount(RaceStatus status, long racecourse) {
         return 0;
     }
 
     @Override
-    public List<Race> findFinishedByIdRacecourse(long racecourse, long offset, long limit) {
+    public List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) throws DalException {
         return null;
     }
 
     @Override
-    public long findFinishedByIdRacecourseCount(long racecourse) {
+    public long findByRacecourseCount(RaceStatus status, String racecourse) {
         return 0;
     }
 
     @Override
-    public List<Race> findScheduledByRacecourse(String racecourse, long offset, long limit) throws DalException {
-        //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM race " +
-                "INNER JOIN going " +
-                "   ON race.going_id = going.id " +
-                "WHERE race.name LIKE ? " +
-                "LIMIT ? OFFSET ?";
-
+    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) {
         return null;
     }
 
     @Override
-    public long findScheduledByRacecourseCount(String racecourse) {
+    public long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) {
         return 0;
     }
 
     @Override
-    public List<Race> findFinishedByRacecourse(String racecourse, long offset, long limit) {
+    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit) {
         return null;
     }
 
     @Override
-    public long findFinishedByRacecourseCount(String racecourse) {
-        return 0;
-    }
-
-    @Override
-    public List<Race> findScheduledInTimestampDiapason(Timestamp begin, Timestamp end, long offset, long limit) {
-        return null;
-    }
-
-    @Override
-    public long findScheduledInTimestampDiapasonCount(Timestamp begin, Timestamp end) {
-        return 0;
-    }
-
-    @Override
-    public List<Race> findFinishedInTimestampDiapason(Timestamp begin, Timestamp end, long offset, long limit) {
-        return null;
-    }
-
-    @Override
-    public long findFinishedInTimestampDiapasonCount(Timestamp begin, Timestamp end) {
-        return 0;
-    }
-
-    @Override
-    public List<Race> findScheduledInTimestampDiapasonOnRacecourse(long racecourse, Timestamp begin, Timestamp end, long offset, long limit) {
-        return null;
-    }
-
-    @Override
-    public long findScheduledInTimestampDiapasonOnRacecourseCount(long racecourse, Timestamp begin, Timestamp end) {
-        return 0;
-    }
-
-    @Override
-    public List<Race> findFinishedInTimestampDiapasonOnRacecourse(long racecourse, Timestamp begin, Timestamp end, long offset, long limit) {
-        return null;
-    }
-
-    @Override
-    public long findFinishedInTimestampDiapasonOnRacecourseCount(long racecourse, Timestamp begin, Timestamp end) {
+    public long findInTimestampDiapasonOnRacecourseCount(RaceStatus status, long racecourse, Timestamp begin, Timestamp end) {
         return 0;
     }
 
