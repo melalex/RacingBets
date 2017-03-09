@@ -139,3 +139,157 @@ INSERT INTO horse_racing_test.prize (race_id, prize_size, place) VALUES (2, 100,
 INSERT INTO horse_racing_test.prize (race_id, prize_size, place) VALUES (3, 300, 1);
 INSERT INTO horse_racing_test.prize (race_id, prize_size, place) VALUES (3, 200, 2);
 INSERT INTO horse_racing_test.prize (race_id, prize_size, place) VALUES (3, 100, 3);
+
+# application_user table
+
+INSERT INTO horse_racing_test.application_user
+(login, password, first_name, last_name, email, is_email_confirmed, balance)
+VALUES ('pgordon0', 'kJ182n', 'Paula', 'Gordon', 'pgordon0@google.ru', TRUE, 827.32);
+
+INSERT INTO horse_racing_test.application_user
+(login, password, first_name, last_name, email, is_email_confirmed, balance)
+VALUES ('slawrence1', 'tBHdVXlvv', 'Shirley', 'Lawrence', 'slawrence1@geocities.com', TRUE, 924.23);
+
+INSERT INTO horse_racing_test.application_user
+(login, password, first_name, last_name, email, is_email_confirmed, balance)
+VALUES ('hbanks2', 'RgoMu22lO', 'Harold', 'Banks', 'hbanks2@adobe.com', TRUE, 256.71);
+
+INSERT INTO horse_racing_test.application_user
+(login, password, first_name, last_name, email, is_email_confirmed, balance)
+VALUES ('lallen3', 'WCeXA5', 'Lois', 'Allen', 'lallen3@virginia.edu', TRUE, 385.59);
+
+INSERT INTO horse_racing_test.application_user
+(login, password, first_name, last_name, email, is_email_confirmed, balance)
+VALUES ('pandrews4', 'uRKNaCqj2B', 'Paula', 'Andrews', 'pandrews4@artisteer.com', TRUE, 749.38);
+
+# role table
+
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (1, 'Admin');
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (1, 'Bookmaker');
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (1, 'Handicapper');
+
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (2, 'Bookmaker');
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (2, 'Handicapper');
+
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (3, 'Handicapper');
+
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (4, 'Handicapper');
+
+INSERT INTO horse_racing_test.role (application_user_id, name) VALUES (5, 'Handicapper');
+
+# bet table
+
+# (Place)
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (3, 1, 'Place', 'scheduled', 100);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (4, 1, 'Place', 'scheduled', 200);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (5, 1, 'Place', 'scheduled', 300);
+
+# (Win)
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (3, 1, 'Win', 'scheduled', 100);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (4, 1, 'Win', 'scheduled', 200);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (5, 1, 'Win', 'scheduled', 300);
+
+# (Qeinella)
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (3, 1, 'Quinella', 'scheduled', 100);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (4, 1, 'Quinella', 'scheduled', 200);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (5, 1, 'Quinella', 'scheduled', 300);
+
+# (Exacta)
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (3, 1, 'Exacta', 'scheduled', 100);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (4, 1, 'Exacta', 'scheduled', 200);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (5, 1, 'Exacta', 'scheduled', 300);
+
+# (Trifecta)
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (3, 1, 'Trifecta', 'scheduled', 100);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (3, 1, 'Trifecta', 'scheduled', 200);
+
+INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
+VALUES (3, 1, 'Trifecta', 'scheduled', 300);
+
+
+# bet_participant table
+
+# (Place)
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (1, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (1, 1, 2);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (2, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (2, 1, 2);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (3, 3, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (3, 3, 2);
+
+# (Win)
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (4, 1, 1);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (5, 1, 1);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (6, 3, 1);
+
+# (Qeinella)
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (7, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (7, 2, 2);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (8, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (8, 2, 2);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (9, 3, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (9, 1, 2);
+
+# (Exacta)
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (10, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (10, 2, 2);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (11, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (11, 2, 2);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (12, 3, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (12, 1, 2);
+
+# (Trifecta)
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (13, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (13, 2, 2);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (13, 3, 3);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (14, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (14, 2, 2);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (14, 3, 3);
+
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (15, 1, 1);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (15, 2, 2);
+INSERT INTO horse_racing_test.bet_participant (bet_id, participant_id, place) VALUES (15, 3, 3);
+
+
