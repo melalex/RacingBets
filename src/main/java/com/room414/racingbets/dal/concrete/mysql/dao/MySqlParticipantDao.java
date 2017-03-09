@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.List;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.getResult;
 
 /**
  * Implementation of ParticipantDao that uses JDBC as data source.
@@ -75,7 +76,12 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "INNER JOIN jockey " +
                 "   ON participant.jockey_id = jockey.id " +
                 "INNER JOIN horse " +
-                "   ON participant.horse_id = horse.id";
+                "   ON participant.horse_id = horse.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id ";
+        ;
 
         return executor.findAll(sqlStatement);
     }
@@ -93,6 +99,10 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "   ON participant.jockey_id = jockey.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "LIMIT ? OFFSET ?";
 
         return executor.findAll(sqlStatement, limit, offset);
@@ -175,6 +185,10 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "   ON participant.jockey_id = jockey.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "WHERE horse.id = ? " +
                 "   LIMIT ? OFFSET ?";
 
@@ -201,7 +215,11 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "   ON participant.jockey_id = jockey.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
-                "WHERE owner.id = ? " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
+                "WHERE horse_owner.id = ? " +
                 "   LIMIT ? OFFSET ?";
 
         return foreignExecutor.findByForeignKey(sqlStatement, id, offset, limit);
@@ -209,9 +227,23 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public long findByOwnerIdCount(long id) throws DalException {
-        final String columnName = "owner_id";
+        //language=MySQL
+        final String sqlStatement =
+                "SELECT COUNT(*) AS count " +
+                "FROM participant " +
+                "   INNER JOIN horse " +
+                "       ON horse.id = participant.horse_id " +
+                "   INNER JOIN owner AS horse_owner " +
+                "       ON horse.owner_id = horse_owner.id " +
+                "WHERE horse_owner.id = ?";
 
-        return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, id);
+            return getResult(statement, MySqlMapHelper::mapCount);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, id);
+            throw new DalException(message, e);
+        }
     }
 
     @Override
@@ -227,6 +259,10 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "   ON participant.jockey_id = jockey.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "WHERE jockey.id = ? " +
                 "   LIMIT ? OFFSET ?";
 
@@ -253,6 +289,10 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "   ON participant.jockey_id = jockey.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "WHERE trainer.id = ? " +
                 "   LIMIT ? OFFSET ?";
 

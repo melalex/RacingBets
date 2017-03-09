@@ -562,7 +562,7 @@ public class EntityStorage {
                 .setPrize(3, BigDecimal.valueOf(100));
 
         RaceBuilder race3Builder = Race.builder()
-                .setId(1)
+                .setId(3)
                 .setName("Duobam")
                 .setRaceStatus("scheduled")
                 .setCommission(0.14)

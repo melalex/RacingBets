@@ -11,6 +11,7 @@ import com.room414.racingbets.dal.domain.infrastructure.BuildHelper;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class RaceBuilder {
 
     private List<BigDecimal> getPrizes() {
         if (prizes == null) {
-            prizes = new ArrayList<>();
+            prizes = Arrays.asList(new BigDecimal[10]);
         }
         return prizes;
     }
