@@ -60,7 +60,9 @@ CREATE TABLE `horse_racing_test`.`application_user` (
   `is_email_confirmed` BOOL NOT NULL,
   `balance` DECIMAL(12, 2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `login_UNIQUE` (`login` ASC),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC));
 
 CREATE TABLE `horse_racing_test`.`role` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

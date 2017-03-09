@@ -125,6 +125,10 @@ public class ApplicationUser implements Serializable {
         }
     }
 
+    public boolean isInRole(Role role) {
+        return roles.contains(role);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

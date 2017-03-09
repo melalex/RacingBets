@@ -961,7 +961,7 @@ public class EntityStorage {
         return raceMap.values().stream().collect(Collectors.toList());
     }
 
-    public List<ApplicationUser> getAllApplicationUsers(long o) {
+    public List<ApplicationUser> getAllApplicationUsers() {
         return applicationUserMap.values().stream().collect(Collectors.toList());
     }
 
