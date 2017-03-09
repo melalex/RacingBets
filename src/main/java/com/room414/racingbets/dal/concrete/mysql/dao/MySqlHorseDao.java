@@ -10,7 +10,6 @@ import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.util.List;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
@@ -32,7 +31,7 @@ public class MySqlHorseDao implements HorseDao {
     // TODO: lazy load vs caching
     MySqlHorseDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlFindByColumnExecutor<>(connection, rs -> MySqlMapHelper.mapHorse(rs, this));
+        this.executor = new MySqlFindByColumnExecutor<>(connection, MySqlMapHelper::mapHorse);
     }
 
     @Override
@@ -40,10 +39,10 @@ public class MySqlHorseDao implements HorseDao {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id " +
-                "INNER JOIN trainer " +
-                "   ON horse.trainer_id = trainer.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "WHERE horse.name LIKE ? " +
                 "   LIMIT ? OFFSET ?";
 
@@ -105,10 +104,10 @@ public class MySqlHorseDao implements HorseDao {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id " +
-                "INNER JOIN trainer " +
-                "   ON horse.trainer_id = trainer.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "WHERE horse.id = ?";
 
         return executor.find(id, sqlStatement);
@@ -119,10 +118,10 @@ public class MySqlHorseDao implements HorseDao {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id " +
-                "INNER JOIN trainer " +
-                "   ON horse.trainer_id = trainer.id";
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id ";
 
         return executor.findAll(sqlStatement);
     }
@@ -132,10 +131,10 @@ public class MySqlHorseDao implements HorseDao {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id " +
-                "INNER JOIN trainer " +
-                "   ON horse.trainer_id = trainer.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "LIMIT ? OFFSET ?";
 
         return executor.findAll(sqlStatement, limit, offset);

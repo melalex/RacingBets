@@ -25,79 +25,124 @@ public class MySqlMapHelper {
     }
 
     public static Jockey mapJockey(ResultSet resultSet) throws SQLException {
-        final String PERSON_ID_COLUMN = "jockey.id";
-        final String PERSON_FIRST_NAME_COLUMN = "jockey.first_name";
-        final String PERSON_LAST_NAME_COLUMN = "jockey.last_name";
-        final String PERSON_BIRTHDAY_COLUMN = "jockey.birthday";
+        final String defaultNamespace = "jockey";
 
-        return Jockey.builder()
-                .setId(resultSet.getLong(PERSON_ID_COLUMN))
-                .setFirstName(resultSet.getString(PERSON_FIRST_NAME_COLUMN))
-                .setSecondName(resultSet.getString(PERSON_LAST_NAME_COLUMN))
-                .setBirthday(resultSet.getDate(PERSON_BIRTHDAY_COLUMN))
-                .build();
-
+        return mapJockey(defaultNamespace, resultSet);
     }
 
     public static Owner mapOwner(ResultSet resultSet) throws SQLException {
-        final String PERSON_ID_COLUMN = "owner.id";
-        final String PERSON_FIRST_NAME_COLUMN = "owner.first_name";
-        final String PERSON_LAST_NAME_COLUMN = "owner.last_name";
-        final String PERSON_BIRTHDAY_COLUMN = "owner.birthday";
+        final String defaultNamespace = "owner";
 
-        return Owner.builder()
-                .setId(resultSet.getLong(PERSON_ID_COLUMN))
-                .setFirstName(resultSet.getString(PERSON_FIRST_NAME_COLUMN))
-                .setSecondName(resultSet.getString(PERSON_LAST_NAME_COLUMN))
-                .setBirthday(resultSet.getDate(PERSON_BIRTHDAY_COLUMN))
-                .build();
+        return mapOwner(resultSet, defaultNamespace);
     }
 
     public static Trainer mapTrainer(ResultSet resultSet) throws SQLException {
-        final String PERSON_ID_COLUMN = "trainer.id";
-        final String PERSON_FIRST_NAME_COLUMN = "trainer.first_name";
-        final String PERSON_LAST_NAME_COLUMN = "trainer.last_name";
-        final String PERSON_BIRTHDAY_COLUMN = "trainer.birthday";
+        final String defaultNamespace = "trainer";
 
-        return Trainer.builder()
-                .setId(resultSet.getLong(PERSON_ID_COLUMN))
-                .setFirstName(resultSet.getString(PERSON_FIRST_NAME_COLUMN))
-                .setSecondName(resultSet.getString(PERSON_LAST_NAME_COLUMN))
-                .setBirthday(resultSet.getDate(PERSON_BIRTHDAY_COLUMN))
-                .build();
+        return mapTrainer(resultSet, defaultNamespace);
     }
 
     public static Racecourse mapRacecourse(ResultSet resultSet) throws SQLException {
-        // TODO: is should be upper?
-        final String RACECOURSE_ID_COLUMN = "racecourse.id";
-        final String RACECOURSE_NAME_COLUMN = "racecourse.name";
-        final String RACECOURSE_LATITUDE_COLUMN = "racecourse.latitude";
-        final String RACECOURSE_LONGITUDE_COLUMN = "racecourse.longitude";
-        final String RACECOURSE_CONTACT_COLUMN = "racecourse.contact";
-        final String RACECOURSE_CLERK_COLUMN = "racecourse.clerk";
+        final String defaultNamespace = "racecourse";
 
-        return Racecourse.builder()
-                .setId(resultSet.getLong(RACECOURSE_ID_COLUMN))
-                .setName(resultSet.getString(RACECOURSE_NAME_COLUMN))
-                .setLatitude(resultSet.getDouble(RACECOURSE_LATITUDE_COLUMN))
-                .setLongitude(resultSet.getDouble(RACECOURSE_LONGITUDE_COLUMN))
-                .setClerk(resultSet.getString(RACECOURSE_CLERK_COLUMN))
-                .setContact(resultSet.getString(RACECOURSE_CONTACT_COLUMN))
-                .build();
+        return mapRacecourse(resultSet, defaultNamespace);
     }
 
     public static ApplicationUser mapApplicationUser(ResultSet resultSet) throws SQLException {
+        final String defaultNamespace = "application_user";
+
+        return mapApplicationUser(resultSet, defaultNamespace);
+    }
+
+    public static Horse mapHorse(ResultSet resultSet) throws SQLException {
+        final String defaultNamespace = "horse";
+
+        return mapHorse(resultSet, defaultNamespace);
+    }
+
+    public static Participant mapParticipant(ResultSet resultSet, HorseDao horseDao) throws SQLException {
+        final String defaultNamespace = "participant";
+
+        return mapParticipant(resultSet, defaultNamespace);
+    }
+
+    public static Jockey mapJockey(String namespace, ResultSet resultSet) throws SQLException {
+        final String personIdColumn = namespace + ".id";
+        final String personFirstNameColumn = namespace + ".first_name";
+        final String personLastNameColumn = namespace + ".last_name";
+        final String personBirthdayColumn = namespace + ".birthday";
+
+        return Jockey.builder()
+                .setId(resultSet.getLong(personIdColumn))
+                .setFirstName(resultSet.getString(personFirstNameColumn))
+                .setSecondName(resultSet.getString(personLastNameColumn))
+                .setBirthday(resultSet.getDate(personBirthdayColumn))
+                .build();
+
+    }
+
+    public static Owner mapOwner(ResultSet resultSet, String namespace) throws SQLException {
+        final String personIdColumn = namespace + ".id";
+        final String personFirstNameColumn = namespace + ".first_name";
+        final String personLastNameColumn = namespace + ".last_name";
+        final String personBirthdayColumn = namespace + ".birthday";
+
+        return Owner.builder()
+                .setId(resultSet.getLong(personIdColumn))
+                .setFirstName(resultSet.getString(personFirstNameColumn))
+                .setSecondName(resultSet.getString(personLastNameColumn))
+                .setBirthday(resultSet.getDate(personBirthdayColumn))
+                .build();
+    }
+
+    public static Trainer mapTrainer(ResultSet resultSet, String namespace) throws SQLException {
+        final String personIdColumn = namespace + ".id";
+        final String personFirstNameColumn = namespace + ".first_name";
+        final String personLastNameColumn = namespace + ".last_name";
+        final String personBirthdayColumn = namespace + ".birthday";
+
+        return Trainer.builder()
+                .setId(resultSet.getLong(personIdColumn))
+                .setFirstName(resultSet.getString(personFirstNameColumn))
+                .setSecondName(resultSet.getString(personLastNameColumn))
+                .setBirthday(resultSet.getDate(personBirthdayColumn))
+                .build();
+    }
+
+    public static Racecourse mapRacecourse(ResultSet resultSet, String namespace) throws SQLException {
+        // TODO: is should be upper?
+        final String racecourseIdColumn = namespace + ".id";
+        final String racecourseNameColumn = namespace + ".name";
+        final String racecourseLatitudeColumn = namespace + ".latitude";
+        final String racecourseLongitudeColumn = namespace + ".longitude";
+        final String racecourseContactColumn = namespace + ".contact";
+        final String racecourseClerkColumn = namespace + ".clerk";
+
+        return Racecourse.builder()
+                .setId(resultSet.getLong(racecourseIdColumn))
+                .setName(resultSet.getString(racecourseNameColumn))
+                .setLatitude(resultSet.getDouble(racecourseLatitudeColumn))
+                .setLongitude(resultSet.getDouble(racecourseLongitudeColumn))
+                .setClerk(resultSet.getString(racecourseClerkColumn))
+                .setContact(resultSet.getString(racecourseContactColumn))
+                .build();
+    }
+
+    public static ApplicationUser mapApplicationUser(ResultSet resultSet, String namespace) throws SQLException {
         // TODO: implementation
         return null;
     }
 
-    public static Horse mapHorse(ResultSet resultSet, HorseDao horseDao) throws SQLException {
-        final String idColumnName = "horse.id";
-        final String nameColumnName = "horse.name";
-        final String birthdayColumnName = "horse.birthday";
-        final String genderColumnName = "horse.gender";
-        final String sirColumnName = "horse.sire_id";
-        final String damColumnName = "horse.dam_id";
+    public static Horse mapHorse(ResultSet resultSet, String namespace) throws SQLException {
+        final String idColumnName = namespace + ".id";
+        final String nameColumnName = namespace + ".name";
+        final String birthdayColumnName = namespace + ".birthday";
+        final String genderColumnName = namespace + ".gender";
+        final String sirColumnName = namespace + ".sire_id";
+        final String damColumnName = namespace + ".dam_id";
+
+        final String trainerNamespace = "horse_trainer";
+        final String ownerNamespace = "horse_owner";
 
         return Horse
                 .builder()
@@ -107,25 +152,25 @@ public class MySqlMapHelper {
                 .setGender(resultSet.getString(genderColumnName))
                 .setSir(HorseLazyLoadProxy.create(resultSet.getLong(sirColumnName)))
                 .setDam(HorseLazyLoadProxy.create(resultSet.getLong(damColumnName)))
-                .setOwner(MySqlMapHelper.mapOwner(resultSet))
-                .setTrainer(MySqlMapHelper.mapTrainer(resultSet))
+                .setOwner(mapOwner(resultSet, ownerNamespace))
+                .setTrainer(mapTrainer(resultSet, trainerNamespace))
                 .build();
     }
 
-    public static Participant mapParticipant(ResultSet resultSet, HorseDao horseDao) throws SQLException {
-        final String idColumnName = "participant.id";
-        final String numberColumnName = "participant.number";
-        final String carriedWeightColumnName = "participant.carried_weight";
-        final String topSpeedColumnName = "participant.top_speed";
-        final String officialRatingColumnName = "participant.official_rating";
-        final String oddsColumnName = "participant.odds";
-        final String placeColumnName = "participant.place";
+    public static Participant mapParticipant(ResultSet resultSet, String namespace) throws SQLException {
+        final String idColumnName = namespace + ".id";
+        final String numberColumnName = namespace + ".number";
+        final String carriedWeightColumnName = namespace + ".carried_weight";
+        final String topSpeedColumnName = namespace + ".topspeed";
+        final String officialRatingColumnName = namespace + ".official_rating";
+        final String oddsColumnName = namespace + ".odds";
+        final String placeColumnName = namespace + ".place";
 
         return Participant
                 .builder()
                 .setId(resultSet.getLong(idColumnName))
                 .setNumber(resultSet.getInt(numberColumnName))
-                .setHorse(mapHorse(resultSet, horseDao))
+                .setHorse(mapHorse(resultSet))
                 .setCarriedWeight(resultSet.getFloat(carriedWeightColumnName))
                 .setTopSpeed(resultSet.getInt(topSpeedColumnName))
                 .setOfficialRating(resultSet.getInt(officialRatingColumnName))

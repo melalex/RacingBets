@@ -54,6 +54,10 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "   ON participant.jockey_id = jockey.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id " +
                 "WHERE participant.id = ?";
 
         return executor.find(id, sqlStatement);

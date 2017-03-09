@@ -6,6 +6,7 @@ import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleQuery
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
+import com.room414.racingbets.dal.domain.enums.RaceType;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -298,24 +299,12 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findByNamePart(String namePart, long offset, long limit) throws DalException {
-        //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM race " +
-                "INNER JOIN going " +
-                "   ON race.going_id = going.id " +
-                "WHERE race.name LIKE ? " +
-                "LIMIT ? OFFSET ?";
-
+    public List<Race> findByNamePart(RaceStatus raceStatus, String namePart, long offset, long limit) throws DalException {
         return null;
-
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
-        //language=MySQL
-        final String sqlStatement = "SELECT * FROM race WHERE race.name LIKE ?";
-
+    public long findByNamePartCount(RaceStatus raceStatus, String namePart) throws DalException {
         return 0;
     }
 

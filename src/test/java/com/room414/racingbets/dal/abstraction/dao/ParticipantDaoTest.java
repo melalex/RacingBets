@@ -3,9 +3,11 @@ package com.room414.racingbets.dal.abstraction.dao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.*;
+import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.text.ParseException;
 import java.util.LinkedList;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author melalex
  * @version 1.0 09 Mar 2017
  */
+@ExtendWith(UnitOfWorkParameterResolver.class)
 class ParticipantDaoTest {
     private static UnitOfWork unitOfWork;
 

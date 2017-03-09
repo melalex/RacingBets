@@ -21,7 +21,7 @@ public class MySqlDaoHelper {
     }
 
     public static String sqlFormat(String sqlPattern, Object ... arguments) {
-        String sqlStatement = sqlPattern.replaceAll("\\?", "%s");
+        String sqlStatement = sqlPattern.replaceAll("\\?", "%s").replaceAll("\\s+", " ");
         return String.format(sqlStatement, arguments);
     }
 
