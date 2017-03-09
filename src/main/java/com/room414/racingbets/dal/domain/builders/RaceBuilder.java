@@ -178,7 +178,7 @@ public class RaceBuilder {
         return this;
     }
 
-    public RaceBuilder setPrice(int place, BigDecimal size) {
+    public RaceBuilder setPrize(int place, BigDecimal size) {
         getPrizes().set(place, size);
         return this;
     }

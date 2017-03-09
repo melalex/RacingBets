@@ -1,9 +1,12 @@
 package com.room414.racingbets.dal.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
+import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -506,7 +509,86 @@ public class EntityStorage {
     }
 
     private void initRaceMap() {
+        RaceBuilder race1Builder = Race.builder()
+                .setId(1)
+                .setName("Gembucket")
+                .setRaceStatus("finished")
+                .setCommission(0.14)
+                .setMinBet(BigDecimal.valueOf(2))
+                .setRacecourse(getRacecourse(1))
+                .setStart(Timestamp.valueOf("2017-03-08 10:32:36"))
+                .setTrackCondition("Hard")
+                .setRaceType("flat")
+                .setRaceClass(1)
+                .setMinAge(3)
+                .setMinRating(50)
+                .setMaxRating(70)
+                .setDistance(8.1f);
 
+        race1Builder
+                .addParticipant(getParticipant(1))
+                .addParticipant(getParticipant(2))
+                .addParticipant(getParticipant(3));
+
+        race1Builder
+                .setPrize(1, BigDecimal.valueOf(300))
+                .setPrize(2, BigDecimal.valueOf(200))
+                .setPrize(3, BigDecimal.valueOf(100));
+
+        RaceBuilder race2Builder = Race.builder()
+                .setId(2)
+                .setName("Ventosanzap")
+                .setRaceStatus("riding")
+                .setCommission(0.14)
+                .setMinBet(BigDecimal.valueOf(2))
+                .setRacecourse(getRacecourse(1))
+                .setStart(Timestamp.valueOf("2017-03-09 13:44:56"))
+                .setTrackCondition("Firm")
+                .setRaceType("jump")
+                .setRaceClass(2)
+                .setMinAge(2)
+                .setMinRating(0)
+                .setMaxRating(70)
+                .setDistance(8.1f);
+
+        race2Builder
+                .addParticipant(getParticipant(4))
+                .addParticipant(getParticipant(5))
+                .addParticipant(getParticipant(6));
+
+        race2Builder
+                .setPrize(1, BigDecimal.valueOf(300))
+                .setPrize(2, BigDecimal.valueOf(200))
+                .setPrize(3, BigDecimal.valueOf(100));
+
+        RaceBuilder race3Builder = Race.builder()
+                .setId(1)
+                .setName("Duobam")
+                .setRaceStatus("scheduled")
+                .setCommission(0.14)
+                .setMinBet(BigDecimal.valueOf(2))
+                .setRacecourse(getRacecourse(2))
+                .setStart(Timestamp.valueOf("2017-03-10 12:00:00"))
+                .setRaceType("harness")
+                .setRaceClass(2)
+                .setMinAge(2)
+                .setMinRating(0)
+                .setMaxRating(60)
+                .setDistance(10.1f);
+
+        race3Builder
+                .addParticipant(getParticipant(7))
+                .addParticipant(getParticipant(8))
+                .addParticipant(getParticipant(9));
+
+        race3Builder
+                .setPrize(1, BigDecimal.valueOf(300))
+                .setPrize(2, BigDecimal.valueOf(200))
+                .setPrize(3, BigDecimal.valueOf(100));
+
+        raceMap.put(1L, race1Builder.build());
+        raceMap.put(2L, race2Builder.build());
+        raceMap.put(3L, race3Builder.build());
     }
 
     private void initApplicationUserMap() {
