@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Racecourse;
+import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +20,8 @@ import java.util.List;
 @ExtendWith(UnitOfWorkParameterResolver.class)
 class RacecourseDaoTest {
     private static UnitOfWork unitOfWork;
+
+    private EntityStorage storage = EntityStorage.getInstance();
 
     @BeforeAll
     static void setUp(UnitOfWork unitOfWork) {
@@ -38,14 +41,7 @@ class RacecourseDaoTest {
     void find_existent_returnedEntity() throws ParseException, DalException {
         RacecourseDao dao = getRacecourseDao();
 
-        Racecourse expectedResult = Racecourse.builder()
-                .setId(1)
-                .setName("Ronstring")
-                .setLatitude(-22.72528)
-                .setLongitude(-47.64917)
-                .setClerk("Stephen Cook")
-                .setContact("scook0@hud.gov")
-                .build();
+        Racecourse expectedResult = storage.getRacecourse(1);
 
         Racecourse result = dao.find(1L);
 
@@ -66,16 +62,7 @@ class RacecourseDaoTest {
         RacecourseDao dao = getRacecourseDao();
         List<Racecourse> expectedResult = new LinkedList<>();
 
-        expectedResult.add(Racecourse.builder()
-                .setId(1)
-                .setName("Ronstring")
-                .setLatitude(-22.72528)
-                .setLongitude(-47.64917)
-                .setClerk("Stephen Cook")
-                .setContact("scook0@hud.gov")
-                .build()
-        );
-
+        expectedResult.add(storage.getRacecourse(1));
 
         List<Racecourse> result = dao.findAll(0, 1);
 
@@ -95,37 +82,7 @@ class RacecourseDaoTest {
     void findAll() throws ParseException, DalException {
         RacecourseDao dao = getRacecourseDao();
 
-        List<Racecourse> expectedResult = new LinkedList<>();
-
-        expectedResult.add(Racecourse.builder()
-                .setId(1)
-                .setName("Ronstring")
-                .setLatitude(-22.72528)
-                .setLongitude(-47.64917)
-                .setContact("scook0@hud.gov")
-                .setClerk("Stephen Cook")
-                .build()
-        );
-
-        expectedResult.add(Racecourse.builder()
-                .setId(2)
-                .setName("Fintone")
-                .setLatitude(29.95033)
-                .setLongitude(121.74293)
-                .setContact("ncunningham1@merriam-webster.com")
-                .setClerk("Nicole Cunningham")
-                .build()
-        );
-
-        expectedResult.add(Racecourse.builder()
-                .setId(3)
-                .setName("Flowdesk")
-                .setLatitude(-20.26889)
-                .setLongitude(-50.54583)
-                .setContact("ajames2@amazon.co.jp")
-                .setClerk("Annie James")
-                .build()
-        );
+        List<Racecourse> expectedResult = storage.getAllRacecourses();
 
         List<Racecourse> result = dao.findAll();
 
@@ -149,15 +106,7 @@ class RacecourseDaoTest {
 
         List<Racecourse> expectedResult = new LinkedList<>();
 
-        expectedResult.add(Racecourse.builder()
-                .setId(1)
-                .setName("Ronstring")
-                .setLatitude(-22.72528)
-                .setLongitude(-47.64917)
-                .setContact("scook0@hud.gov")
-                .setClerk("Stephen Cook")
-                .build()
-        );
+        expectedResult.add(storage.getRacecourse(1));
 
         List<Racecourse> result = dao.findByNamePart("Ron", 0, 1);
 
