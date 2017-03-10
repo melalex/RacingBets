@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE add_role(IN application_user_id INT UNSIGNED, IN role_name ENUM('Handicapper', 'Bookmaker', 'Admin'))
+CREATE PROCEDURE horse_racing_test.add_role(IN application_user_id INT UNSIGNED, IN role_name ENUM('Handicapper', 'Bookmaker', 'Admin'))
   BEGIN
     DECLARE is_exists BOOL;
     SET is_exists = EXISTS(

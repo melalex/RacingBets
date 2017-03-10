@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE get_odds_for_win(
+CREATE PROCEDURE horse_racing_test.get_odds_for_win(
   IN id_of_race INT UNSIGNED,
   IN participant INT UNSIGNED,
   OUT prize_pool DECIMAL(12, 2),
@@ -27,7 +27,7 @@ CREATE PROCEDURE get_odds_for_win(
     );
   END; //
   
-CREATE PROCEDURE get_odds_for_place(
+CREATE PROCEDURE horse_racing_test.get_odds_for_place(
   IN id_of_race INT UNSIGNED,
   IN participant INT UNSIGNED,
   OUT prize_pool DECIMAL(12, 2),
@@ -54,7 +54,7 @@ CREATE PROCEDURE get_odds_for_place(
     );
   END; //
   
-CREATE PROCEDURE get_odds_for_show(
+CREATE PROCEDURE horse_racing_test.get_odds_for_show(
   IN id_of_race INT UNSIGNED,
   IN participant INT UNSIGNED,
   OUT prize_pool DECIMAL(12, 2),
@@ -81,7 +81,7 @@ CREATE PROCEDURE get_odds_for_show(
     );
   END; //
 
-CREATE PROCEDURE get_odds_for_quinella(
+CREATE PROCEDURE horse_racing_test.get_odds_for_quinella(
   IN id_of_race INT UNSIGNED,
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,
@@ -110,7 +110,7 @@ CREATE PROCEDURE get_odds_for_quinella(
     );
   END; //
 
-CREATE PROCEDURE get_odds_for_exacta(
+CREATE PROCEDURE horse_racing_test.get_odds_for_exacta(
   IN id_of_race INT UNSIGNED,
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,
@@ -140,7 +140,7 @@ CREATE PROCEDURE get_odds_for_exacta(
     );
   END; //
 
-CREATE PROCEDURE get_odds_for_trifecta(
+CREATE PROCEDURE horse_racing_test.get_odds_for_trifecta(
   IN id_of_race INT UNSIGNED,
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,
@@ -172,7 +172,7 @@ CREATE PROCEDURE get_odds_for_trifecta(
     );
   END; //
 
-CREATE PROCEDURE get_odds_for_superfecta(
+CREATE PROCEDURE horse_racing_test.get_odds_for_superfecta(
   IN id_of_race INT UNSIGNED,
   IN participant1 INT UNSIGNED,
   IN participant2 INT UNSIGNED,

@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
+import com.mysql.cj.api.jdbc.*;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
@@ -9,6 +10,7 @@ import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +88,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 "   (login, password, first_name, last_name, email, is_email_confirmed, balance) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getLogin());
             statement.setString(2, entity.getPassword());
             statement.setString(3, entity.getFirstName());
@@ -248,7 +250,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     @Override
     public long findByLoginPartCount(String loginPart) throws DalException {
         //language=MySQL
-        final String sqlStatement = "SELECT COUNT(*) FROM application_user WHERE login LIKE ?";
+        final String sqlStatement = "SELECT COUNT(*) AS count FROM application_user WHERE login LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, loginPart);
     }

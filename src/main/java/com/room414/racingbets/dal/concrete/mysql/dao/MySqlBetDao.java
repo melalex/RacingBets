@@ -82,7 +82,7 @@ public class MySqlBetDao implements BetDao {
                 "   (application_user_id, status, bet_size, bet_type, race_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, entity.getUser().getId());
             statement.setString(2, entity.getBetStatus().getName());
             statement.setBigDecimal(3, entity.getBetSize());

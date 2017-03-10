@@ -181,6 +181,7 @@ class ApplicationUserDaoTest {
 
         ApplicationUser entity = dao.find(targetId);
         ApplicationUser updated = ApplicationUser.builder()
+                .setId(entity.getId())
                 .setLogin("melalex")
                 .setPassword("fortuna322")
                 .setFirstName("Alex")
@@ -188,6 +189,9 @@ class ApplicationUserDaoTest {
                 .setEmail("melalex490@virginia.edu")
                 .setEmailConfirmed(true)
                 .setBalance(BigDecimal.valueOf(385.59))
+                .addRole(Role.ADMIN)
+                .addRole(Role.BOOKMAKER)
+                .addRole(Role.HANDICAPPER)
                 .build();
 
         assert !updated.equals(entity) : "entity and updated are already same";
@@ -210,7 +214,7 @@ class ApplicationUserDaoTest {
 
     @Test
     void addRoleAndRemoveRole() throws DalException {
-        final long targetId = 1L;
+        final long targetId = 3L;
         Role newRole = Role.ADMIN;
         ApplicationUserDao dao = getDao();
 

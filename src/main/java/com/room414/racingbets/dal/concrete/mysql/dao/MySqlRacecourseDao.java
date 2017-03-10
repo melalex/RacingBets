@@ -42,7 +42,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
         //language=MySQL
         final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.name LIKE ? LIMIT ? OFFSET ?";
 
-        return executor.findByColumnPart(sqlStatement, namePart, offset, limit);
+        return executor.findByColumnPart(sqlStatement, namePart, limit, offset);
     }
 
     @Override

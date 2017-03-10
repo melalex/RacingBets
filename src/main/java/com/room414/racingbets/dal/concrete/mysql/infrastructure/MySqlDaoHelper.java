@@ -51,7 +51,12 @@ public class MySqlDaoHelper {
 
     public static <T> T getResultWithArray(PreparedStatement statement, Mapper<List<T>> mapper) throws SQLException {
         try (ResultSet resultSet = statement.executeQuery()) {
-            return mapper.apply(resultSet).get(0);
+            List<T> result = mapper.apply(resultSet);
+            if (!result.isEmpty()) {
+                return result.get(0);
+            } else {
+                return null;
+            }
         }
     }
 

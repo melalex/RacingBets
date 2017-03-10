@@ -49,7 +49,7 @@ public class MySqlHorseDao implements HorseDao {
                 "WHERE horse.name LIKE ? " +
                 "   LIMIT ? OFFSET ?";
 
-        return executor.findByColumnPart(sqlStatement, namePart, offset, limit);
+        return executor.findByColumnPart(sqlStatement, namePart, limit, offset);
     }
 
     @Override

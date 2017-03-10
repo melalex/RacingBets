@@ -48,7 +48,7 @@ public class MySqlRaceDao implements RaceDao {
                 "   race_type, race_class, min_age, min_rating, max_rating, distance) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getName());
             statement.setString(2, entity.getRaceStatus().getName());
             statement.setLong(3, entity.getRacecourse().getId());
