@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.abstraction.entities.Person;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 
 import java.sql.*;
 import java.util.List;
@@ -16,10 +17,19 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 02 Mar 2017
  */
 // TODO: cascading comment
-// TODO: remove copy&paste
 // TODO: sql injection
 public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
-    protected Connection connection;
+    private Connection connection;
+    private MySqlSharedExecutor<T> executor;
+
+    public MySqlPersonDao(Connection connection) {
+        this.connection = connection;
+        this.executor = new MySqlSharedExecutor<>(
+                connection,
+                statement -> MySqlDaoHelper.getResult(statement, this::mapResultSet),
+                statement -> MySqlDaoHelper.getResultList(statement, this::mapResultSet)
+        );
+    }
 
     protected abstract String getTableName();
 
@@ -105,26 +115,14 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
                 getTableName()
         );
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-
-            return getResult(statement, this::mapResultSet);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return executor.find(id, sqlStatement);
     }
 
     @Override
     public List<T> findAll() throws DalException {
         String sqlStatement = String.format("SELECT * FROM %s", getTableName());
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return getResultList(statement, this::mapResultSet);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
-            throw new DalException(message, e);
-        }
+        return executor.findAll(sqlStatement);
     }
 
     @Override
@@ -133,29 +131,12 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
                 "SELECT * FROM %s LIMIT ? OFFSET ?", getTableName()
         );
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, limit);
-            statement.setLong(2, offset);
-
-            return getResultList(statement, this::mapResultSet);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, limit, offset);
-            throw new DalException(message, e);
-        }
+        return executor.findAll(sqlStatement, limit, offset);
     }
 
     @Override
     public long count() throws DalException {
-        String sqlStatement = String.format(
-                "SELECT COUNT(*) AS count FROM %s", getTableName()
-        );
-
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return getResult(statement, MySqlMapHelper::mapCount);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
-            throw new DalException(message, e);
-        }
+        return executor.count(getTableName());
     }
 
     @Override
@@ -185,15 +166,6 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
 
     @Override
     public boolean delete(Long id) throws DalException {
-        String sqlStatement = String.format("DELETE FROM %s WHERE id = ?", getTableName());
-
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return executor.delete(getTableName(), id);
     }
 }

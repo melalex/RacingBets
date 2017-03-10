@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * @author melalex
@@ -8,5 +9,5 @@ import java.sql.PreparedStatement;
  */
 @FunctionalInterface
 public interface QueryExecutor<T> {
-    T apply(PreparedStatement statement);
+    T apply(PreparedStatement statement) throws SQLException;
 }
