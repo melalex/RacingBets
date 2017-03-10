@@ -10,8 +10,7 @@ import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import java.sql.*;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.getResult;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
 /**
  * Implementation of ParticipantDao that uses JDBC as data source.
@@ -29,8 +28,16 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     MySqlParticipantDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSharedExecutor<>(connection, MySqlMapHelper::mapParticipant, );
-        this.foreignExecutor = new MySqlSharedExecutor<>(connection, this::mapWhoAndWhen, );
+        this.executor = new MySqlSharedExecutor<>(
+                connection,
+                statement -> getResult(statement, MySqlMapHelper::mapParticipant),
+                statement -> getResultList(statement, MySqlMapHelper::mapParticipant)
+        );
+        this.foreignExecutor = new MySqlSharedExecutor<>(
+                connection,
+                statement -> getResult(statement, this::mapWhoAndWhen),
+                statement -> getResultList(statement, this::mapWhoAndWhen)
+        );
     }
 
 
@@ -78,7 +85,6 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "   ON horse.trainer_id = horse_trainer.id " +
                 "INNER JOIN owner AS horse_owner " +
                 "   ON horse.owner_id = horse_owner.id ";
-        ;
 
         return executor.findAll(sqlStatement);
     }

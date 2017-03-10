@@ -4,16 +4,15 @@ import com.mysql.cj.api.jdbc.Statement;
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlFindByColumnExecutor;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
 /**
  * Implementation of HorseDao that uses JDBC as data source.
@@ -26,12 +25,16 @@ public class MySqlHorseDao implements HorseDao {
     private static String TABLE_NAME = "horse";
 
     private Connection connection;
-    private MySqlFindByColumnExecutor<Horse> executor;
+    private MySqlSharedExecutor<Horse> executor;
 
     // TODO: lazy load vs caching
     MySqlHorseDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlFindByColumnExecutor<>(connection, MySqlMapHelper::mapHorse);
+        this.executor = new MySqlSharedExecutor<>(
+                connection,
+                statement -> getResult(statement, MySqlMapHelper::mapHorse),
+                statement -> getResultList(statement, MySqlMapHelper::mapHorse)
+        );
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
@@ -14,8 +14,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
 /**
  * Implementation of BetDao that uses JDBC as data source.
@@ -28,54 +27,53 @@ public class MySqlBetDao implements BetDao {
     private static final String TABLE_NAME = "bet";
 
     private Connection connection;
-    private MySqlSimpleExecutor executor;
+    private MySqlSharedExecutor<Bet> executor;
 
     MySqlBetDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSimpleExecutor(connection);
+        this.executor = new MySqlSharedExecutor<>(
+                connection,
+                statement -> getResultWithArray(statement, this::mapBets),
+                statement -> getResultListWithArray(statement, this::mapBets)
+        );
     }
 
-    private List<Bet> mapBets(PreparedStatement statement) throws SQLException {
-        try(ResultSet resultSet = statement.executeQuery()) {
-            Map<Long, BetBuilder> builderById = new HashMap<>();
+    private List<Bet> mapBets(ResultSet resultSet) throws SQLException {
+        Map<Long, BetBuilder> builderById = new HashMap<>();
 
-            final String idColumnName = "bet.id";
-            final String raceIdColumnName = "bet.race_id";
-            final String betSizeColumnName = "bet.bet_size";
-            final String betTypeColumnName = "bet.bet_type";
-            final String betStatusColumnName = "bet.bet_status";
+        final String idColumnName = "bet.id";
+        final String raceIdColumnName = "bet.race_id";
+        final String betSizeColumnName = "bet.bet_size";
+        final String betTypeColumnName = "bet.bet_type";
+        final String betStatusColumnName = "bet.bet_status";
 
-            BetBuilder builder;
-            long id;
-            int place = 1;
+        BetBuilder builder;
+        long id;
+        int place = 1;
 
-            while (resultSet.next()) {
-                id = resultSet.getLong(idColumnName);
-                builder = builderById.get(id);
-                if (builder == null) {
-                    place = 1;
-                    builder = Bet.builder()
-                            .setId(resultSet.getLong(idColumnName))
-                            .setRaceId(resultSet.getLong(raceIdColumnName))
-                            .setUser(MySqlMapHelper.mapApplicationUser(resultSet))
-                            .setBetSize(resultSet.getBigDecimal(betSizeColumnName))
-                            .setBetType(resultSet.getString(betTypeColumnName))
-                            .setBetStatus(resultSet.getString(betStatusColumnName));
-                    builderById.put(id, builder);
-                }
-                builder.setParticipant(place, MySqlMapHelper.mapParticipant(resultSet));
+        while (resultSet.next()) {
+            id = resultSet.getLong(idColumnName);
+            builder = builderById.get(id);
+            if (builder == null) {
+                place = 1;
+                builder = Bet.builder()
+                        .setId(resultSet.getLong(idColumnName))
+                        .setRaceId(resultSet.getLong(raceIdColumnName))
+                        .setUser(MySqlMapHelper.mapApplicationUser(resultSet))
+                        .setBetSize(resultSet.getBigDecimal(betSizeColumnName))
+                        .setBetType(resultSet.getString(betTypeColumnName))
+                        .setBetStatus(resultSet.getString(betStatusColumnName));
+                builderById.put(id, builder);
             }
-
-            return builderById
-                    .values()
-                    .stream()
-                    .map(BetBuilder::build)
-                    .collect(Collectors.toList());
+            builder.setParticipant(place, MySqlMapHelper.mapParticipant(resultSet));
         }
-    }
 
-    private Bet mapBet(PreparedStatement statement) throws SQLException {
-        return mapBets(statement).get(0);
+        return builderById
+                .values()
+                .stream()
+                .map(BetBuilder::build)
+                .collect(Collectors.toList());
+
     }
 
     private void createBet(Bet entity) throws DalException {
@@ -158,7 +156,7 @@ public class MySqlBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        return findByForeignKey(sqlStatement, id, offset, limit);
+        return executor.findByForeignKey(sqlStatement, id, offset, limit);
     }
 
     @Override
@@ -171,6 +169,7 @@ public class MySqlBetDao implements BetDao {
     @Override
     // TODO: comment about user role
     public Bet find(Long id) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -190,18 +189,12 @@ public class MySqlBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-
-            return mapBet(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return executor.find(id, sqlStatement);
     }
 
     @Override
     public List<Bet> findAll() throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -220,12 +213,7 @@ public class MySqlBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return mapBets(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
-            throw new DalException(message, e);
-        }
+        return executor.findAll(sqlStatement);
     }
 
     @Override
@@ -251,20 +239,7 @@ public class MySqlBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        return findByForeignKey(sqlStatement, id, offset, limit);
-    }
-
-    private List<Bet> findByForeignKey(String sqlStatement, long id, long offset, long limit) throws DalException {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-            statement.setLong(2, limit);
-            statement.setLong(3, offset);
-
-            return mapBets(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id, limit, offset);
-            throw new DalException(message, e);
-        }
+        return executor.findByForeignKey(sqlStatement, id, offset, limit);
     }
 
     @Override
@@ -289,15 +264,7 @@ public class MySqlBetDao implements BetDao {
                 "INNER JOIN owner " +
                 "   ON horse.owner_id = owner.id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, limit);
-            statement.setLong(2, offset);
-
-            return mapBets(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, limit, offset);
-            throw new DalException(message, e);
-        }
+        return executor.findAll(sqlStatement, limit, offset);
     }
 
     @Override
@@ -391,7 +358,7 @@ public class MySqlBetDao implements BetDao {
             case SUPERFECTA:
                 return getSuperfectaOdds(bet);
             default:
-                throw new DalException("IMPOSABLE!!!");
+                throw new DalException("IMPOSSIBLE!!!");
         }
     }
 

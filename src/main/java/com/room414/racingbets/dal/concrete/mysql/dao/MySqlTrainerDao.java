@@ -20,7 +20,7 @@ public class MySqlTrainerDao extends MySqlPersonDao<Trainer> implements TrainerD
     private static final String TABLE_NAME = "trainer";
 
     MySqlTrainerDao(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     @Override

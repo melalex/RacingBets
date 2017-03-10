@@ -20,7 +20,7 @@ public class MySqlOwnerDao extends MySqlPersonDao<Owner> implements OwnerDao {
     private static final String TABLE_NAME = "owner";
 
     MySqlOwnerDao(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     @Override

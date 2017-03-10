@@ -2,8 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlFindByColumnExecutor;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
@@ -28,59 +27,57 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     private static String TABLE_NAME = "application_user";
 
     private Connection connection;
-    private MySqlFindByColumnExecutor<ApplicationUser> executor;
+    private MySqlSharedExecutor<ApplicationUser> executor;
 
     MySqlApplicationUserDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlFindByColumnExecutor<>(connection, MySqlMapHelper::mapApplicationUser);
+        this.executor = new MySqlSharedExecutor<>(
+                connection,
+                statement -> getResultWithArray(statement, this::mapUsers),
+                statement -> getResultListWithArray(statement, this::mapUsers)
+        );
     }
 
-    private List<ApplicationUser> mapUsers(PreparedStatement statement) throws SQLException {
-        try(ResultSet resultSet = statement.executeQuery()) {
-            Map<Long, ApplicationUserBuilder> builderById = new HashMap<>();
+    private List<ApplicationUser> mapUsers(ResultSet resultSet) throws SQLException {
+        Map<Long, ApplicationUserBuilder> builderById = new HashMap<>();
 
-            final String idColumnName = "application_user.id";
-            final String loginColumnName = "application_user.login";
-            final String firstNameColumnName = "application_user.first_name";
-            final String lastNameColumnName = "application_user.last_name";
-            final String emailColumnName = "application_user.email";
-            final String isEmailConfirmedColumnName = "application_user.is_email_confirmed";
-            final String passwordColumnName = "application_user.password";
-            final String balanceColumnName = "application_user.balance";
-            final String roleNameColumnName = "role.name";
+        final String idColumnName = "application_user.id";
+        final String loginColumnName = "application_user.login";
+        final String firstNameColumnName = "application_user.first_name";
+        final String lastNameColumnName = "application_user.last_name";
+        final String emailColumnName = "application_user.email";
+        final String isEmailConfirmedColumnName = "application_user.is_email_confirmed";
+        final String passwordColumnName = "application_user.password";
+        final String balanceColumnName = "application_user.balance";
+        final String roleNameColumnName = "role.name";
 
-            ApplicationUserBuilder builder;
-            long id;
+        ApplicationUserBuilder builder;
+        long id;
 
-            while (resultSet.next()) {
-                id = resultSet.getLong(idColumnName);
-                builder = builderById.get(id);
-                if (builder == null) {
-                    builder = ApplicationUser.builder()
-                            .setId(id)
-                            .setLogin(resultSet.getString(loginColumnName))
-                            .setFirstName(resultSet.getString(firstNameColumnName))
-                            .setLastName(resultSet.getString(lastNameColumnName))
-                            .setEmail(resultSet.getString(emailColumnName))
-                            .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
-                            .setPassword(resultSet.getString(passwordColumnName))
-                            .setBalance(resultSet.getBigDecimal(balanceColumnName));
+        while (resultSet.next()) {
+            id = resultSet.getLong(idColumnName);
+            builder = builderById.get(id);
+            if (builder == null) {
+                builder = ApplicationUser.builder()
+                        .setId(id)
+                        .setLogin(resultSet.getString(loginColumnName))
+                        .setFirstName(resultSet.getString(firstNameColumnName))
+                        .setLastName(resultSet.getString(lastNameColumnName))
+                        .setEmail(resultSet.getString(emailColumnName))
+                        .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
+                        .setPassword(resultSet.getString(passwordColumnName))
+                        .setBalance(resultSet.getBigDecimal(balanceColumnName));
 
-                    builderById.put(id, builder);
-                }
-                builder.addRole(resultSet.getString(roleNameColumnName));
+                builderById.put(id, builder);
             }
-
-            return builderById
-                    .values()
-                    .stream()
-                    .map(ApplicationUserBuilder::build)
-                    .collect(Collectors.toList());
+            builder.addRole(resultSet.getString(roleNameColumnName));
         }
-    }
 
-    private ApplicationUser mapUser(PreparedStatement statement) throws SQLException {
-        return mapUsers(statement).get(0);
+        return builderById
+                .values()
+                .stream()
+                .map(ApplicationUserBuilder::build)
+                .collect(Collectors.toList());
     }
 
     private void createApplicationUser(ApplicationUser entity) throws DalException {
@@ -141,6 +138,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public ApplicationUser find(Long id) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -150,18 +148,12 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 "   ON application_user.id = role.application_user_id " +
                 "WHERE application_user.id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-
-            return mapUser(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return executor.find(id, sqlStatement);
     }
 
     @Override
     public List<ApplicationUser> findAll() throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -170,16 +162,12 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return mapUsers(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
-            throw new DalException(message, e);
-        }
+        return executor.findAll(sqlStatement);
     }
 
     @Override
     public List<ApplicationUser> findAll(long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -188,15 +176,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, limit);
-            statement.setLong(2, offset);
-
-            return mapUsers(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, limit, offset);
-            throw new DalException(message, e);
-        }
+        return executor.findAll(sqlStatement, limit, offset);
     }
 
     @Override
@@ -249,6 +229,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException {
+        //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -261,16 +242,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, startsWith(loginPart));
-            statement.setLong(2, limit);
-            statement.setLong(3, offset);
-
-            return mapUsers(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, startsWith(loginPart), limit, offset);
-            throw new DalException(message, e);
-        }
+        return executor.findByColumnPart(sqlStatement, loginPart, limit, offset);
     }
 
     @Override
@@ -296,9 +268,9 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, login);
-            statement.setString(1, password);
+            statement.setString(2, password);
 
-            return mapUser(statement);
+            return getResultWithArray(statement, this::mapUsers);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, login, password);
             throw new DalException(message, e);

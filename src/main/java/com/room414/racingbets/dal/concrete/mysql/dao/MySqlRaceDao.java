@@ -2,20 +2,17 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.createEntity;
-import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.defaultErrorMessage;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
 /**
  * Implementation of RaceDao that uses JDBC as data source.
@@ -29,11 +26,19 @@ public class MySqlRaceDao implements RaceDao {
     private static String TABLE_NAME = "race";
 
     private Connection connection;
-    private MySqlSimpleExecutor executor;
+    private MySqlSharedExecutor executor;
 
     MySqlRaceDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSimpleExecutor(connection);
+        this.executor = new MySqlSharedExecutor<>(
+                connection,
+                statement -> getResultWithArray(statement, this::mapRace),
+                statement -> getResultList(statement, this::mapRace)
+        );
+    }
+
+    private List<Race> mapRace(ResultSet resultSet) {
+        return null;
     }
 
     private void createRace(Race entity) throws DalException {

@@ -20,7 +20,7 @@ public class MySqlJockeyDao extends MySqlPersonDao<Jockey> implements JockeyDao 
     private static final String TABLE_NAME = "jockey";
 
     MySqlJockeyDao(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     @Override
