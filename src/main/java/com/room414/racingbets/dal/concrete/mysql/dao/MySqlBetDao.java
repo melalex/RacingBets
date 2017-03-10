@@ -1,7 +1,6 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
-import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleQueryExecutor;
@@ -30,11 +29,9 @@ public class MySqlBetDao implements BetDao {
 
     private Connection connection;
     private MySqlSimpleQueryExecutor executor;
-    private HorseDao horseDao;
 
-    MySqlBetDao(Connection connection, HorseDao horseDao) {
+    MySqlBetDao(Connection connection) {
         this.connection = connection;
-        this.horseDao = horseDao;
         this.executor = new MySqlSimpleQueryExecutor(connection);
     }
 
@@ -50,11 +47,13 @@ public class MySqlBetDao implements BetDao {
 
             BetBuilder builder;
             long id;
+            int place = 1;
 
             while (resultSet.next()) {
                 id = resultSet.getLong(idColumnName);
                 builder = builderById.get(id);
                 if (builder == null) {
+                    place = 1;
                     builder = Bet.builder()
                             .setId(resultSet.getLong(idColumnName))
                             .setRaceId(resultSet.getLong(raceIdColumnName))
@@ -64,7 +63,7 @@ public class MySqlBetDao implements BetDao {
                             .setBetStatus(resultSet.getString(betStatusColumnName));
                     builderById.put(id, builder);
                 }
-                builder.setParticipant(, MySqlMapHelper.mapParticipant(resultSet, horseDao));
+                builder.setParticipant(place, MySqlMapHelper.mapParticipant(resultSet));
             }
 
             return builderById

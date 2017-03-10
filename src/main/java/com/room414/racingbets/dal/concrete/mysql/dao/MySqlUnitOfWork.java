@@ -49,7 +49,7 @@ public class MySqlUnitOfWork implements UnitOfWork {
     @Override
     public BetDao getBetDao() {
         if (betDao == null) {
-            betDao = new MySqlBetDao(connection, getHorseDao());
+            betDao = new MySqlBetDao(connection);
         }
         return betDao;
     }
@@ -89,7 +89,7 @@ public class MySqlUnitOfWork implements UnitOfWork {
     @Override
     public ParticipantDao getParticipantDao() {
         if (participantDao == null) {
-            participantDao = new MySqlParticipantDao(connection, getHorseDao());
+            participantDao = new MySqlParticipantDao(connection);
         }
         return participantDao;
     }

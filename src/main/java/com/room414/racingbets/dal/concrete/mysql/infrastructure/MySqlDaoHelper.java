@@ -1,8 +1,6 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;

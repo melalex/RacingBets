@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
-import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlCrudExecutor;
@@ -27,12 +26,10 @@ public class MySqlParticipantDao implements ParticipantDao {
     private Connection connection;
     private MySqlCrudExecutor<Participant> executor;
     private MySqlCrudExecutor<Pair<Participant, Timestamp>> foreignExecutor;
-    private HorseDao horseDao;
 
-    MySqlParticipantDao(Connection connection, HorseDao horseDao) {
+    MySqlParticipantDao(Connection connection) {
         this.connection = connection;
-        this.horseDao = horseDao;
-        this.executor = new MySqlCrudExecutor<>(connection, rs -> MySqlMapHelper.mapParticipant(rs, horseDao));
+        this.executor = new MySqlCrudExecutor<>(connection, MySqlMapHelper::mapParticipant);
         this.foreignExecutor = new MySqlCrudExecutor<>(connection, this::mapWhoAndWhen);
     }
 
@@ -166,7 +163,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
         Pair<Participant, Timestamp> result = new Pair<>();
 
-        result.setFirstElement(MySqlMapHelper.mapParticipant(resultSet, horseDao));
+        result.setFirstElement(MySqlMapHelper.mapParticipant(resultSet));
         result.setSecondElement(resultSet.getTimestamp(RACE_START_COLUMN));
 
         return result;

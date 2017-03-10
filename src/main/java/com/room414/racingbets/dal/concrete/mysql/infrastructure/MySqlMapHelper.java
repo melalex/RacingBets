@@ -60,7 +60,7 @@ public class MySqlMapHelper {
         return mapHorse(resultSet, defaultNamespace);
     }
 
-    public static Participant mapParticipant(ResultSet resultSet, HorseDao horseDao) throws SQLException {
+    public static Participant mapParticipant(ResultSet resultSet) throws SQLException {
         final String defaultNamespace = "participant";
 
         return mapParticipant(resultSet, defaultNamespace);

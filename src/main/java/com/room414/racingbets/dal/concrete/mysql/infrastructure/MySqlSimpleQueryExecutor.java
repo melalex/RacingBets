@@ -45,7 +45,6 @@ public class MySqlSimpleQueryExecutor {
         }
     }
 
-
     public long findByForeignKeyCount(String tableName, String columnName, long key) throws DalException {
         final String sqlStatement = String.format(
                 "SELECT Count(*) AS count FROM %s WHERE %s = ?", tableName, columnName
