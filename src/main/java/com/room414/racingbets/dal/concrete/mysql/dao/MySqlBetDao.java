@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleQueryExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleExecutor;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
@@ -28,11 +28,11 @@ public class MySqlBetDao implements BetDao {
     private static final String TABLE_NAME = "bet";
 
     private Connection connection;
-    private MySqlSimpleQueryExecutor executor;
+    private MySqlSimpleExecutor executor;
 
     MySqlBetDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSimpleQueryExecutor(connection);
+        this.executor = new MySqlSimpleExecutor(connection);
     }
 
     private List<Bet> mapBets(PreparedStatement statement) throws SQLException {

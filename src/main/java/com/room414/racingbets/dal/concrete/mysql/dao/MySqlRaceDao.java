@@ -2,11 +2,10 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleQueryExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSimpleExecutor;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
-import com.room414.racingbets.dal.domain.enums.RaceType;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -30,11 +29,11 @@ public class MySqlRaceDao implements RaceDao {
     private static String TABLE_NAME = "race";
 
     private Connection connection;
-    private MySqlSimpleQueryExecutor executor;
+    private MySqlSimpleExecutor executor;
 
     MySqlRaceDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSimpleQueryExecutor(connection);
+        this.executor = new MySqlSimpleExecutor(connection);
     }
 
     private void createRace(Race entity) throws DalException {

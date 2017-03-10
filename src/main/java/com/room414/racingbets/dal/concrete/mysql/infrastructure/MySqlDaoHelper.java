@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
+ * Class that stores common methods for Dao (prevents code duplication)
+ *
  * @author Alexander Melashchenko
  * @version 1.0 02 Mar 2017
  */
@@ -31,6 +33,10 @@ public class MySqlDaoHelper {
         return part + "%";
     }
 
+    public static long getCount(PreparedStatement statement) throws SQLException {
+        return getResult(statement, MySqlMapHelper::mapCount);
+    }
+
     public static <T> T getResult(PreparedStatement statement, Mapper<T> mapper) throws SQLException {
         try (ResultSet resultSet = statement.executeQuery()) {
             T result = null;
@@ -43,6 +49,12 @@ public class MySqlDaoHelper {
         }
     }
 
+    public static <T> T getResultWithArray(PreparedStatement statement, Mapper<List<T>> mapper) throws SQLException {
+        try (ResultSet resultSet = statement.executeQuery()) {
+            return mapper.apply(resultSet).get(0);
+        }
+    }
+
     public static <T> List<T> getResultList(PreparedStatement statement, Mapper<T> mapper) throws SQLException {
         try (ResultSet resultSet = statement.executeQuery()) {
             List<T> result = new LinkedList<>();
@@ -52,6 +64,12 @@ public class MySqlDaoHelper {
             }
 
             return result;
+        }
+    }
+
+    public static <T> List<T> getResultListWithArray(PreparedStatement statement, Mapper<List<T>> mapper) throws SQLException {
+        try (ResultSet resultSet = statement.executeQuery()) {
+            return mapper.apply(resultSet);
         }
     }
 

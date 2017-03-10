@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
-import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
@@ -9,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Class that stores common methods for entities mapping (prevents code duplication).
+ *
  * @author Alexander Melashchenko
  * @version 1.0 03 Mar 2017
  */
@@ -66,7 +67,7 @@ public class MySqlMapHelper {
         return mapParticipant(resultSet, defaultNamespace);
     }
 
-    public static Jockey mapJockey(String namespace, ResultSet resultSet) throws SQLException {
+    private static Jockey mapJockey(String namespace, ResultSet resultSet) throws SQLException {
         final String personIdColumn = namespace + ".id";
         final String personFirstNameColumn = namespace + ".first_name";
         final String personLastNameColumn = namespace + ".last_name";
@@ -81,7 +82,7 @@ public class MySqlMapHelper {
 
     }
 
-    public static Owner mapOwner(ResultSet resultSet, String namespace) throws SQLException {
+    private static Owner mapOwner(ResultSet resultSet, String namespace) throws SQLException {
         final String personIdColumn = namespace + ".id";
         final String personFirstNameColumn = namespace + ".first_name";
         final String personLastNameColumn = namespace + ".last_name";
@@ -95,7 +96,7 @@ public class MySqlMapHelper {
                 .build();
     }
 
-    public static Trainer mapTrainer(ResultSet resultSet, String namespace) throws SQLException {
+    private static Trainer mapTrainer(ResultSet resultSet, String namespace) throws SQLException {
         final String personIdColumn = namespace + ".id";
         final String personFirstNameColumn = namespace + ".first_name";
         final String personLastNameColumn = namespace + ".last_name";
@@ -109,8 +110,7 @@ public class MySqlMapHelper {
                 .build();
     }
 
-    public static Racecourse mapRacecourse(ResultSet resultSet, String namespace) throws SQLException {
-        // TODO: is should be upper?
+    private static Racecourse mapRacecourse(ResultSet resultSet, String namespace) throws SQLException {
         final String racecourseIdColumn = namespace + ".id";
         final String racecourseNameColumn = namespace + ".name";
         final String racecourseLatitudeColumn = namespace + ".latitude";
@@ -128,12 +128,12 @@ public class MySqlMapHelper {
                 .build();
     }
 
-    public static ApplicationUser mapApplicationUser(ResultSet resultSet, String namespace) throws SQLException {
+    private static ApplicationUser mapApplicationUser(ResultSet resultSet, String namespace) throws SQLException {
         // TODO: implementation
         return null;
     }
 
-    public static Horse mapHorse(ResultSet resultSet, String namespace) throws SQLException {
+    private static Horse mapHorse(ResultSet resultSet, String namespace) throws SQLException {
         final String idColumnName = namespace + ".id";
         final String nameColumnName = namespace + ".name";
         final String birthdayColumnName = namespace + ".birthday";
@@ -157,7 +157,7 @@ public class MySqlMapHelper {
                 .build();
     }
 
-    public static Participant mapParticipant(ResultSet resultSet, String namespace) throws SQLException {
+    private static Participant mapParticipant(ResultSet resultSet, String namespace) throws SQLException {
         final String idColumnName = namespace + ".id";
         final String numberColumnName = namespace + ".number";
         final String carriedWeightColumnName = namespace + ".carried_weight";

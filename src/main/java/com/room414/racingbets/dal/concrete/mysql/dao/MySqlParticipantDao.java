@@ -2,7 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlCrudExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
@@ -24,13 +24,13 @@ public class MySqlParticipantDao implements ParticipantDao {
     private static String TABLE_NAME = "participant";
 
     private Connection connection;
-    private MySqlCrudExecutor<Participant> executor;
-    private MySqlCrudExecutor<Pair<Participant, Timestamp>> foreignExecutor;
+    private MySqlSharedExecutor<Participant> executor;
+    private MySqlSharedExecutor<Pair<Participant, Timestamp>> foreignExecutor;
 
     MySqlParticipantDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlCrudExecutor<>(connection, MySqlMapHelper::mapParticipant);
-        this.foreignExecutor = new MySqlCrudExecutor<>(connection, this::mapWhoAndWhen);
+        this.executor = new MySqlSharedExecutor<>(connection, MySqlMapHelper::mapParticipant, );
+        this.foreignExecutor = new MySqlSharedExecutor<>(connection, this::mapWhoAndWhen, );
     }
 
 
