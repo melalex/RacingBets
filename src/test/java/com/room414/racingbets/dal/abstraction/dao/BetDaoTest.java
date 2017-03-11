@@ -162,7 +162,7 @@ class BetDaoTest {
     @Test
     void findByRaceIdCount() throws DalException {
         BetDao dao = getDao();
-        long expectedResult = 5;
+        long expectedResult = 15;
 
         long result = dao.findByRaceIdCount(1);
 
@@ -175,6 +175,7 @@ class BetDaoTest {
         Odds expectedResult = new Odds(600, 300, 0.14);
         Bet bet = Bet.builder()
                 .setUser(storage.getApplicationUser(3))
+                .setRaceId(1)
                 .setBetType(BetType.PLACE)
                 .setBetStatus(BetStatus.SCHEDULED)
                 .setBetSize(BigDecimal.valueOf(100))
@@ -246,7 +247,7 @@ class BetDaoTest {
     @Test
     void getOdds_trifecta() throws DalException {
         BetDao dao = getDao();
-        Odds expectedResult = new Odds(600, 300, 0.14);
+        Odds expectedResult = new Odds(600, 600, 0.14);
         Bet bet = Bet.builder()
                 .setRaceId(1)
                 .setUser(storage.getApplicationUser(3))

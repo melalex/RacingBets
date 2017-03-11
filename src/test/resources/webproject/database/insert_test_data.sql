@@ -125,7 +125,6 @@ INSERT INTO horse_racing_test.participant
 (number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (3, 3, 3, 4, 4, NULL, NULL, NULL, NULL, NULL);
 
-
 # prize table
 
 INSERT INTO horse_racing_test.prize (race_id, prize_size, place) VALUES (1, 300, 1);
@@ -229,11 +228,10 @@ INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, statu
 VALUES (3, 1, 'Trifecta', 'scheduled', 100);
 
 INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
-VALUES (3, 1, 'Trifecta', 'scheduled', 200);
+VALUES (4, 1, 'Trifecta', 'scheduled', 200);
 
 INSERT INTO horse_racing_test.bet (application_user_id, race_id, bet_type, status, bet_size)
-VALUES (3, 1, 'Trifecta', 'scheduled', 300);
-
+VALUES (5, 1, 'Trifecta', 'scheduled', 300);
 
 # bet_participant table
 

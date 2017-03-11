@@ -19,8 +19,8 @@ public class Odds implements Serializable {
     }
 
     public Odds(BigDecimal prizePool, BigDecimal eventPool, double commission) {
-        this.prizePool = prizePool;
-        this.eventPool = eventPool;
+        this.prizePool = prizePool != null ? prizePool : BigDecimal.valueOf(0);
+        this.eventPool = eventPool != null ? eventPool : BigDecimal.valueOf(0);
         this.commission = commission;
     }
 
@@ -33,7 +33,7 @@ public class Odds implements Serializable {
     }
 
     public void setPrizePool(BigDecimal prizePool) {
-        this.prizePool = prizePool;
+        this.prizePool = prizePool != null ? prizePool : BigDecimal.valueOf(0);
     }
 
     public double getCommission() {
@@ -49,7 +49,7 @@ public class Odds implements Serializable {
     }
 
     public void setEventPool(BigDecimal eventPool) {
-        this.eventPool = eventPool;
+        this.eventPool = eventPool != null ? eventPool : BigDecimal.valueOf(0);
     }
 
     public double getDoubleOdds() {
