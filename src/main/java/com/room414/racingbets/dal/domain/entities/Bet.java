@@ -124,7 +124,7 @@ public class Bet implements Serializable {
             return false;
         }
 
-        if (betSize != null ? !betSize.equals(bet.betSize) : bet.betSize != null) {
+        if (betSize != null ? betSize.compareTo(bet.betSize) != 0 : bet.betSize != null) {
             return false;
         }
 
@@ -145,10 +145,15 @@ public class Bet implements Serializable {
 
     @Override
     public int hashCode() {
+        long temp;
         int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (int) (raceId ^ (raceId >>> 32));
         result = 31 * result + (user != null ? user.hashCode() : 0);
+
+        temp = betSize != null ? Double.doubleToLongBits(betSize.doubleValue()) : 0;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         result = 31 * result + (betSize != null ? betSize.hashCode() : 0);
         result = 31 * result + (betType != null ? betType.hashCode() : 0);
         result = 31 * result + (betStatus != null ? betStatus.hashCode() : 0);

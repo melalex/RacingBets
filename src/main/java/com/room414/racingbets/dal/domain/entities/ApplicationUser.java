@@ -169,7 +169,7 @@ public class ApplicationUser implements Serializable {
             return false;
         }
 
-        if (balance != null ? !balance.equals(that.balance) : that.balance != null) {
+        if (balance != null ? balance.compareTo(that.balance) != 0 : that.balance != null) {
             return false;
         }
 
@@ -182,6 +182,7 @@ public class ApplicationUser implements Serializable {
 
     @Override
     public int hashCode() {
+        long temp;
         int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (login != null ? login.hashCode() : 0);
@@ -190,7 +191,10 @@ public class ApplicationUser implements Serializable {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (isEmailConfirmed ? 1 : 0);
-        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+
+        temp = balance != null ? Double.doubleToLongBits(balance.doubleValue()) : 0;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
 
         return result;

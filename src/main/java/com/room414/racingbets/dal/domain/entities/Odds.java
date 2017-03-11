@@ -79,11 +79,11 @@ public class Odds implements Serializable {
             return false;
         }
 
-        if (prizePool != null ? !prizePool.equals(odds.prizePool) : odds.prizePool != null) {
+        if (prizePool != null ? prizePool.compareTo(odds.prizePool) != 0 : odds.prizePool != null) {
             return false;
         }
 
-        if (eventPool != null ? !eventPool.equals(odds.eventPool) : odds.eventPool != null) {
+        if (eventPool != null ? eventPool.compareTo(odds.eventPool) != 0 : odds.eventPool != null) {
             return false;
         }
 
@@ -95,8 +95,12 @@ public class Odds implements Serializable {
         int result;
         long temp;
 
-        result = prizePool != null ? prizePool.hashCode() : 0;
-        result = 31 * result + (eventPool != null ? eventPool.hashCode() : 0);
+        temp = prizePool != null ? Double.doubleToLongBits(prizePool.doubleValue()) : 0;
+        result = (int) (temp ^ (temp >>> 32));
+
+        temp = prizePool != null ? Double.doubleToLongBits(eventPool.doubleValue()) : 0;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         temp = Double.doubleToLongBits(commission);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
 

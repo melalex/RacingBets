@@ -308,8 +308,10 @@ public class Race implements Serializable {
         result = 31 * result + (racecourse != null ? racecourse.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
         result = 31 * result + (minBet != null ? minBet.hashCode() : 0);
+        
         temp = Double.doubleToLongBits(commission);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         result = 31 * result + (trackCondition != null ? trackCondition.hashCode() : 0);
         result = 31 * result + (raceType != null ? raceType.hashCode() : 0);
         result = 31 * result + (raceStatus != null ? raceStatus.hashCode() : 0);

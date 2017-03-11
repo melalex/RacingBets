@@ -66,6 +66,7 @@ public class MySqlBetDao implements BetDao {
                 builderById.put(id, builder);
             }
             builder.setParticipant(place, MySqlMapHelper.mapParticipant(resultSet));
+            place++;
         }
 
         return builderById
