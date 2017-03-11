@@ -1,13 +1,15 @@
 package com.room414.racingbets.dal.domain.entities;
 
+import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Class that represents a bet of handicapper.
@@ -27,7 +29,7 @@ public class Bet implements Serializable {
     private BigDecimal betSize;
     private BetType betType;
     private BetStatus betStatus;
-    private List<Participant> participants;
+    private Set<Pair<Integer, Participant>> participants;
 
     public Bet() {
     }
@@ -84,19 +86,35 @@ public class Bet implements Serializable {
         this.betStatus = betStatus;
     }
 
-    public List<Participant> getParticipants() {
+    public Set<Pair<Integer, Participant>> getParticipants() {
         if (participants != null) {
-            return new ArrayList<>(participants);
+            return new HashSet<>(participants);
         } else {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
     }
 
-    public void setParticipants(List<Participant> participants) {
+    public void setParticipants(Set<Pair<Integer, Participant>> participants) {
         if (participants != null) {
-            this.participants = new ArrayList<>(participants);
+            this.participants = new HashSet<>(participants);
         } else {
             this.participants = null;
+        }
+    }
+
+    public Participant getParticipantByPlace(int place) {
+        if (participants != null) {
+            return participants.stream()
+                    .filter(p -> p.getFirstElement() == place)
+                    .map(Pair::getSecondElement)
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), l -> {
+                        if (!l.isEmpty()) {
+                            return l.get(0);
+                        }
+                        return null;
+                    }));
+        } else {
+            return null;
         }
     }
 

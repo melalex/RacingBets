@@ -58,6 +58,10 @@ public class Participant implements Serializable {
     public Participant() {
     }
 
+    public Participant(long id) {
+        this.id = id;
+    }
+
     public static ParticipantBuilder builder() {
         return new ParticipantBuilder();
     }
