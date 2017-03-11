@@ -6,9 +6,11 @@ import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
+import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -21,6 +23,7 @@ import java.util.List;
  * @author melalex
  * @version 1.0 09 Mar 2017
  */
+@ExtendWith(UnitOfWorkParameterResolver.class)
 class RaceDaoTest {
     private static UnitOfWork unitOfWork;
 

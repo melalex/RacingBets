@@ -5,20 +5,25 @@ import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.*;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
+import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
+
 /**
  * @author melalex
  * @version 1.0 09 Mar 2017
  */
 // TODO: tests for Show & Superfecta
+@ExtendWith(UnitOfWorkParameterResolver.class)
 class BetDaoTest {
     private static UnitOfWork unitOfWork;
 
@@ -46,7 +51,7 @@ class BetDaoTest {
 
         Bet result = dao.find(1L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -55,7 +60,7 @@ class BetDaoTest {
 
         Bet result = dao.find(300L);
 
-        assert result == null : "result != null";
+        assert result == null : defaultAssertionFailMessage(result, null);
     }
 
     @Test
@@ -68,7 +73,7 @@ class BetDaoTest {
 
         List<Bet> result = dao.findAll(0, 2);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -86,7 +91,7 @@ class BetDaoTest {
 
         List<Bet> result = getDao().findAll();
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -96,7 +101,7 @@ class BetDaoTest {
 
         long result = dao.count();
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -114,7 +119,7 @@ class BetDaoTest {
 
         List<Bet> result = dao.findByUserId(3, 0, 5);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -124,7 +129,7 @@ class BetDaoTest {
 
         long result = dao.findByUserIdCount(3);
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -151,7 +156,7 @@ class BetDaoTest {
 
         List<Bet> result = dao.findByRaceId(1, 0, 15);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -161,7 +166,7 @@ class BetDaoTest {
 
         long result = dao.findByRaceIdCount(1);
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -179,7 +184,7 @@ class BetDaoTest {
 
         Odds result = dao.getOdds(bet);
 
-        assert expectedResult.equals(result) : "result != expectedResult";
+        assert expectedResult.equals(result) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -197,7 +202,7 @@ class BetDaoTest {
 
         Odds result = dao.getOdds(bet);
 
-        assert expectedResult.equals(result) : "result != expectedResult";
+        assert expectedResult.equals(result) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -216,7 +221,7 @@ class BetDaoTest {
 
         Odds result = dao.getOdds(bet);
 
-        assert expectedResult.equals(result) : "result != expectedResult";
+        assert expectedResult.equals(result) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -235,7 +240,7 @@ class BetDaoTest {
 
         Odds result = dao.getOdds(bet);
 
-        assert expectedResult.equals(result) : "result != expectedResult";
+        assert expectedResult.equals(result) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -255,7 +260,7 @@ class BetDaoTest {
 
         Odds result = dao.getOdds(bet);
 
-        assert expectedResult.equals(result) : "result != expectedResult";
+        assert expectedResult.equals(result) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test

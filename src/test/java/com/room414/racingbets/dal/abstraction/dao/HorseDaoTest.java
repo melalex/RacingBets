@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
 import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromString;
 
 /**
@@ -48,7 +49,7 @@ class HorseDaoTest {
 
         Horse result = horseDao.find(1L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -59,7 +60,7 @@ class HorseDaoTest {
 
         Horse result = horseDao.find(3L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -67,7 +68,7 @@ class HorseDaoTest {
         HorseDao horseDao = getHorseDao();
         Horse result = horseDao.find(300L);
 
-        assert result == null : "result != null";
+        assert result == null : defaultAssertionFailMessage(result, null);
     }
 
     @Test
@@ -82,7 +83,7 @@ class HorseDaoTest {
 
         List<Horse> result = horseDao.findAll(0, 2);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -99,7 +100,7 @@ class HorseDaoTest {
 
         List<Horse> result = getHorseDao().findAll();
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -108,7 +109,7 @@ class HorseDaoTest {
 
         long result = getHorseDao().count();
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -126,8 +127,8 @@ class HorseDaoTest {
         List<Horse> result1 = horseDao.findByNamePart("Pro", 0, 1);
         List<Horse> result2 = horseDao.findByNamePart("Pro", 1, 1);
 
-        assert result1.equals(expectedResult1) : "result1 != expectedResult1";
-        assert result2.equals(expectedResult2) : "result2 != expectedResult2";
+        assert result1.equals(expectedResult1) : defaultAssertionFailMessage(result1, expectedResult1);
+        assert result2.equals(expectedResult2) : defaultAssertionFailMessage(result2, expectedResult2);
     }
 
     @Test
@@ -144,7 +145,7 @@ class HorseDaoTest {
 
         long result = getHorseDao().findByNamePartCount("Pro");
 
-        assert result == expectedResult : "result != expectedResult";
+        assert result == expectedResult : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -232,7 +233,7 @@ class HorseDaoTest {
 
         Horse afterSave = horseDao.find(targetId);
 
-        assert updated.equals(afterSave) : "updated != afterSave";
+        assert updated.equals(afterSave) : defaultAssertionFailMessage(afterSave, updated);
 
         // rollback
 

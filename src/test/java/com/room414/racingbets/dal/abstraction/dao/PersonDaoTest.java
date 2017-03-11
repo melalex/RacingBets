@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
 import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromString;
 
 /**
@@ -289,7 +290,7 @@ class PersonDaoTest {
 
         T result = personDao.find(6L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -300,14 +301,14 @@ class PersonDaoTest {
 
         T result = personDao.find(1L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
     private <T extends Person> void find_nonexistent_returnedNull(PersonDao<T> personDao) throws DalException {
         T result = personDao.find(300L);
 
-        assert result == null : "result != null";
+        assert result == null : defaultAssertionFailMessage(result, null);
 
     }
 
@@ -321,7 +322,7 @@ class PersonDaoTest {
 
         List<T> result = personDao.findAll(0, 2);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     private <T extends Person> void findAllLimitOffset_nonexistent_returnedEmptyList(PersonDao<T> personDao) throws DalException {
@@ -337,7 +338,7 @@ class PersonDaoTest {
 
         List<T> result = personDao.findAll();
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     private <T extends Person> void count(PersonDao<T> personDao) throws DalException {
@@ -345,7 +346,7 @@ class PersonDaoTest {
 
         long result = personDao.count();
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     private <T extends Person> void findByNamePart_existent_returnedList(PersonDao<T> personDao, Function<Long, T> getter)
@@ -360,8 +361,8 @@ class PersonDaoTest {
         List<T> result1 = personDao.findByNamePart("Ru", 0, 1);
         List<T> result2 = personDao.findByNamePart("Ru", 1, 1);
 
-        assert result1.equals(expectedResult1) : "result1 != expectedResult1";
-        assert result2.equals(expectedResult2) : "result2 != expectedResult2";
+        assert result1.equals(expectedResult1) : defaultAssertionFailMessage(result1, expectedResult1);
+        assert result2.equals(expectedResult2) : defaultAssertionFailMessage(result2, expectedResult2);
     }
 
     private <T extends Person> void findByNamePart_nonexistent_returnedEmptyList(PersonDao<T> personDao) throws DalException {
@@ -375,7 +376,7 @@ class PersonDaoTest {
 
         long result = personDao.findByNamePartCount("Ru");
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     private <T extends Person> void createAndDelete(PersonDao<T> personDao, PersonBuilder<T> builder)
@@ -442,7 +443,7 @@ class PersonDaoTest {
 
         T afterSave = personDao.find(targetId);
 
-        assert updated.equals(afterSave) : "updated != afterSave";
+        assert updated.equals(afterSave) : defaultAssertionFailMessage(afterSave, updated);
 
         // rollback
 

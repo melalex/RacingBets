@@ -13,6 +13,8 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
+
 /**
  * @author melalex
  * @version 1.0 09 Mar 2017
@@ -45,7 +47,7 @@ class RacecourseDaoTest {
 
         Racecourse result = dao.find(1L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -54,7 +56,7 @@ class RacecourseDaoTest {
 
         Racecourse result = dao.find(300L);
 
-        assert result == null : "result != null";
+        assert result == null : defaultAssertionFailMessage(result, null);
     }
 
     @Test
@@ -66,7 +68,7 @@ class RacecourseDaoTest {
 
         List<Racecourse> result = dao.findAll(0, 1);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -86,7 +88,7 @@ class RacecourseDaoTest {
 
         List<Racecourse> result = dao.findAll();
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -96,7 +98,7 @@ class RacecourseDaoTest {
 
         long result = dao.count();
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -110,7 +112,7 @@ class RacecourseDaoTest {
 
         List<Racecourse> result = dao.findByNamePart("Ron", 0, 1);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -130,7 +132,7 @@ class RacecourseDaoTest {
 
         long result = dao.findByNamePartCount("Ron");
 
-        assert result == expectedResult : "result != expectedResult";
+        assert result == expectedResult : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -181,7 +183,7 @@ class RacecourseDaoTest {
 
         Racecourse afterSave = dao.find(targetId);
 
-        assert updated.equals(afterSave) : "updated != afterSave";
+        assert updated.equals(afterSave) : defaultAssertionFailMessage(afterSave, updated);
 
         // rollback
 

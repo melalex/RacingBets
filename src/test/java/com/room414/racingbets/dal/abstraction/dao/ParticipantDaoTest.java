@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
+
 /**
  * @author melalex
  * @version 1.0 09 Mar 2017
@@ -48,7 +50,7 @@ class ParticipantDaoTest {
 
         Participant result = dao.find(1L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -59,7 +61,7 @@ class ParticipantDaoTest {
 
         Participant result = dao.find(9L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -68,7 +70,7 @@ class ParticipantDaoTest {
 
         Participant result = dao.find(300L);
 
-        assert result == null : "result != null";
+        assert result == null : defaultAssertionFailMessage(result, null);
     }
 
     @Test
@@ -81,7 +83,7 @@ class ParticipantDaoTest {
 
         List<Participant> result = dao.findAll(0, 2);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -99,7 +101,7 @@ class ParticipantDaoTest {
 
         List<Participant> result = getParticipantDao().findAll();
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -109,7 +111,7 @@ class ParticipantDaoTest {
 
         long result = dao.count();
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -131,8 +133,12 @@ class ParticipantDaoTest {
         List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
         List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
 
-        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
-        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
+        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
+                resultParticipants, expectedResultParticipants
+        );
+        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
+                resultTimestamps, expectedResultTimestamps
+        );
     }
 
     @Test
@@ -144,7 +150,7 @@ class ParticipantDaoTest {
 
         long result = dao.findByHorseIdCount(targetId);
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -165,8 +171,12 @@ class ParticipantDaoTest {
         List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
         List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
 
-        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
-        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
+        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
+                resultParticipants, expectedResultParticipants
+        );
+        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
+                resultTimestamps, expectedResultTimestamps
+        );
     }
 
     @Test
@@ -178,7 +188,7 @@ class ParticipantDaoTest {
 
         long result = dao.findByOwnerIdCount(targetId);
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -199,8 +209,12 @@ class ParticipantDaoTest {
         List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
         List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
 
-        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
-        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
+        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
+                resultParticipants, expectedResultParticipants
+        );
+        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
+                resultTimestamps, expectedResultTimestamps
+        );
     }
 
     @Test
@@ -212,7 +226,7 @@ class ParticipantDaoTest {
 
         long result = dao.findByJockeyIdCount(targetId);
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -233,8 +247,12 @@ class ParticipantDaoTest {
         List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
         List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
 
-        assert resultParticipants.equals(expectedResultParticipants) : "result != expectedResultParticipants";
-        assert resultTimestamps.equals(expectedResultTimestamps) : "result != expectedResultTimestamps";
+        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
+                resultParticipants, expectedResultParticipants
+        );
+        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
+                resultTimestamps, expectedResultTimestamps
+        );
     }
 
     @Test
@@ -246,7 +264,7 @@ class ParticipantDaoTest {
 
         long result = dao.findByTrainerIdCount(targetId);
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -281,7 +299,7 @@ class ParticipantDaoTest {
 
         Participant afterSave = dao.find(entity.getId());
 
-        assert updated.equals(afterSave) : "updated != afterSave";
+        assert updated.equals(afterSave) : defaultAssertionFailMessage(afterSave, updated);
 
         // rollback
 

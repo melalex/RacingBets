@@ -45,7 +45,7 @@ public class MySqlBetDao implements BetDao {
         final String raceIdColumnName = "bet.race_id";
         final String betSizeColumnName = "bet.bet_size";
         final String betTypeColumnName = "bet.bet_type";
-        final String betStatusColumnName = "bet.bet_status";
+        final String betStatusColumnName = "bet.status";
 
         BetBuilder builder;
         long id;
@@ -153,8 +153,10 @@ public class MySqlBetDao implements BetDao {
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id";
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id ";
 
         return executor.findByForeignKey(sqlStatement, id, offset, limit);
     }
@@ -186,8 +188,10 @@ public class MySqlBetDao implements BetDao {
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id";
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id ";
 
         return executor.find(id, sqlStatement);
     }
@@ -210,8 +214,10 @@ public class MySqlBetDao implements BetDao {
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id";
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id ";
 
         return executor.findAll(sqlStatement);
     }
@@ -236,8 +242,10 @@ public class MySqlBetDao implements BetDao {
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id";
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id ";
 
         return executor.findByForeignKey(sqlStatement, id, offset, limit);
     }
@@ -261,8 +269,10 @@ public class MySqlBetDao implements BetDao {
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN horse " +
                 "   ON participant.horse_id = horse.id " +
-                "INNER JOIN owner " +
-                "   ON horse.owner_id = owner.id";
+                "INNER JOIN trainer AS horse_trainer " +
+                "   ON horse.trainer_id = horse_trainer.id " +
+                "INNER JOIN owner AS horse_owner " +
+                "   ON horse.owner_id = horse_owner.id ";
 
         return executor.findAll(sqlStatement, limit, offset);
     }

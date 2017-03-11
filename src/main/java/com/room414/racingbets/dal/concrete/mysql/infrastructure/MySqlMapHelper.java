@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.*;
+import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 
 import java.sql.ResultSet;
@@ -129,8 +130,26 @@ public class MySqlMapHelper {
     }
 
     private static ApplicationUser mapApplicationUser(ResultSet resultSet, String namespace) throws SQLException {
-        // TODO: implementation
-        return null;
+        final String idColumnName = namespace + ".id";
+        final String loginColumnName = namespace + ".login";
+        final String firstNameColumnName = namespace + ".first_name";
+        final String lastNameColumnName = namespace + ".last_name";
+        final String emailColumnName = namespace + ".email";
+        final String isEmailConfirmedColumnName = namespace + ".is_email_confirmed";
+        final String passwordColumnName = namespace + ".password";
+        final String balanceColumnName = namespace + ".balance";
+
+        return ApplicationUser.builder()
+                .setId(resultSet.getLong(idColumnName))
+                .setLogin(resultSet.getString(loginColumnName))
+                .setFirstName(resultSet.getString(firstNameColumnName))
+                .setLastName(resultSet.getString(lastNameColumnName))
+                .setEmail(resultSet.getString(emailColumnName))
+                .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
+                .setPassword(resultSet.getString(passwordColumnName))
+                .setBalance(resultSet.getBigDecimal(balanceColumnName))
+                .addRole(Role.HANDICAPPER)
+                .build();
     }
 
     private static Horse mapHorse(ResultSet resultSet, String namespace) throws SQLException {

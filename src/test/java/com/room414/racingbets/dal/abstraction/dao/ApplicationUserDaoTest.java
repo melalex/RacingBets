@@ -15,6 +15,8 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
+
 
 /**
  * @author melalex
@@ -48,7 +50,7 @@ class ApplicationUserDaoTest {
 
         ApplicationUser result = dao.find(1L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -57,7 +59,7 @@ class ApplicationUserDaoTest {
 
         ApplicationUser result = dao.find(300L);
 
-        assert result == null : "result != null";
+        assert result == null : defaultAssertionFailMessage(result, null);
     }
 
     @Test
@@ -70,7 +72,7 @@ class ApplicationUserDaoTest {
 
         List<ApplicationUser> result = dao.findAll(0, 2);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -88,7 +90,7 @@ class ApplicationUserDaoTest {
 
         List<ApplicationUser> result = getDao().findAll();
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -98,7 +100,7 @@ class ApplicationUserDaoTest {
 
         long result = dao.count();
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -112,7 +114,7 @@ class ApplicationUserDaoTest {
 
         List<ApplicationUser> result = dao.findByLoginPart("pgor", 0, 1);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -123,7 +125,7 @@ class ApplicationUserDaoTest {
 
         long result = dao.findByLoginPartCount("pgor");
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -135,7 +137,7 @@ class ApplicationUserDaoTest {
 
         ApplicationUser result = dao.findByLoginAndPassword("pgordon0", "kJ182n");
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -200,7 +202,7 @@ class ApplicationUserDaoTest {
 
         ApplicationUser afterSave = dao.find(entity.getId());
 
-        assert updated.equals(afterSave) : "updated != afterSave";
+        assert updated.equals(afterSave) : defaultAssertionFailMessage(afterSave, updated);
 
         // rollback
 
