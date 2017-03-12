@@ -124,3 +124,4 @@ src/main/webapp/
 !/src/main/resources/webproject/database/application_user.sql
 !/src/main/resources/webproject/database/horse_racing.mwb
 !/src/main/resources/webproject/database/odds_calculation.sql
+!/src/main/resources/webproject/database/race.sql

@@ -10,10 +10,7 @@ import com.room414.racingbets.dal.domain.infrastructure.BuildHelper;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Simplify creating Race instance using builder pattern.
@@ -38,7 +35,7 @@ public class RaceBuilder {
     private int maxRating;
     private float distance;
     private List<Participant> participants;
-    private List<BigDecimal> prizes;
+    private Map<Integer, BigDecimal> prizes;
 
     private List<Participant> getParticipants() {
         if (participants == null) {
@@ -47,9 +44,9 @@ public class RaceBuilder {
         return participants;
     }
 
-    private List<BigDecimal> getPrizes() {
+    private Map<Integer, BigDecimal> getPrizes() {
         if (prizes == null) {
-            prizes = Arrays.asList(new BigDecimal[20]);
+            prizes = new HashMap<>();
         }
         return prizes;
     }
@@ -154,7 +151,7 @@ public class RaceBuilder {
         return this;
     }
 
-    public RaceBuilder setParticipantsByIds(List<Integer> ids) {
+    public RaceBuilder setParticipantsByIds(List<Long> ids) {
         this.participants = BuildHelper.mapIdsToParticipants(ids);
         return this;
     }
@@ -171,9 +168,9 @@ public class RaceBuilder {
         return this;
     }
 
-    public RaceBuilder setPrizes(List<BigDecimal> prizes) {
+    public RaceBuilder setPrizes(Map<Integer, BigDecimal> prizes) {
         if (prizes != null) {
-            this.prizes = new ArrayList<>(prizes);
+            this.prizes = new HashMap<>(prizes);
         } else {
             this.prizes = null;
         }
@@ -181,7 +178,7 @@ public class RaceBuilder {
     }
 
     public RaceBuilder setPrize(int place, BigDecimal size) {
-        getPrizes().set(place - 1, size);
+        getPrizes().put(place, size);
         return this;
     }
 

@@ -16,7 +16,7 @@ public class BuildHelper {
 
     }
 
-    public static List<Participant> mapIdsToParticipants(List<Integer> ids) {
+    public static List<Participant> mapIdsToParticipants(List<Long> ids) {
         if (ids != null) {
             return ids.stream().map((id) -> {
                 Participant participant = new Participant();

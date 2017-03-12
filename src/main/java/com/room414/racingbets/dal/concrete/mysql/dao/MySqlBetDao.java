@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
@@ -108,12 +107,12 @@ public class MySqlBetDao implements BetDao {
                 "VALUES (?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            Set<Pair<Integer, Participant>> participants = entity.getParticipants();
+            Map<Integer, Participant> participants = entity.getParticipants();
 
-            for (Pair<Integer, Participant> participant : participants) {
+            for (Integer place : participants.keySet()) {
                 statement.setLong(1, entity.getId());
-                statement.setLong(2, participant.getSecondElement().getId());
-                statement.setInt(3, participant.getFirstElement());
+                statement.setLong(2, participants.get(place).getId());
+                statement.setInt(3, place);
 
                 statement.addBatch();
             }

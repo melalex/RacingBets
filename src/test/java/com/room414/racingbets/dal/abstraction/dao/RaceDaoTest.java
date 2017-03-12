@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
+
 
 /**
  * @author melalex
@@ -51,7 +53,7 @@ class RaceDaoTest {
 
         Race result = dao.find(1L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -62,7 +64,7 @@ class RaceDaoTest {
 
         Race result = dao.find(3L);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -71,7 +73,7 @@ class RaceDaoTest {
 
         Race result = dao.find(300L);
 
-        assert result == null : "result != null";
+        assert result == null : defaultAssertionFailMessage(result, null);
     }
 
     @Test
@@ -84,7 +86,7 @@ class RaceDaoTest {
 
         List<Race> result = dao.findAll(0, 2);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -102,7 +104,7 @@ class RaceDaoTest {
 
         List<Race> result = getDao().findAll();
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -112,7 +114,7 @@ class RaceDaoTest {
 
         long result = dao.count();
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
@@ -126,17 +128,17 @@ class RaceDaoTest {
 
         List<Race> result = dao.findByRacecourseId(RaceStatus.FINISHED,  1, 0, 1);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
-    void findByRacecourseIdCount() {
+    void findByRacecourseIdCount() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
         long result = dao.findByRacecourseIdCount(RaceStatus.FINISHED, 1);
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -149,18 +151,18 @@ class RaceDaoTest {
 
         List<Race> result = dao.findByRacecourse(RaceStatus.FINISHED,  "Ron", 0, 1);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
 
     }
 
     @Test
-    void findByRacecourseCount() {
+    void findByRacecourseCount() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
         long result = dao.findByRacecourseCount(RaceStatus.FINISHED, "Ron");
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -179,7 +181,7 @@ class RaceDaoTest {
                 1
         );
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -193,7 +195,7 @@ class RaceDaoTest {
                 Timestamp.valueOf("2017-03-08 23:59:59")
         );
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -213,7 +215,7 @@ class RaceDaoTest {
                 1
         );
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -228,7 +230,7 @@ class RaceDaoTest {
                 Timestamp.valueOf("2017-03-08 23:59:59")
         );
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -241,7 +243,7 @@ class RaceDaoTest {
 
         List<Race> result = dao.findByNamePart(RaceStatus.FINISHED,  "Gem", 0, 1);
 
-        assert result.equals(expectedResult) : "result != expectedResult";
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -251,7 +253,7 @@ class RaceDaoTest {
 
         long result = dao.findByNamePartCount(RaceStatus.FINISHED, "Gem");
 
-        assert expectedResult == result : "result != expectedResult";
+        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -324,7 +326,7 @@ class RaceDaoTest {
 
         Race afterSave = dao.find(entity.getId());
 
-        assert updated.equals(afterSave) : "updated != afterSave";
+        assert updated.equals(afterSave) : defaultAssertionFailMessage(afterSave, updated);
 
         // rollback
 
@@ -346,7 +348,9 @@ class RaceDaoTest {
 
         Race afterSave = dao.find(entity.getId());
 
-        assert afterSave.getRaceStatus() == newStatus : "updated != afterSave";
+        assert afterSave.getRaceStatus() == newStatus : defaultAssertionFailMessage(
+                afterSave.getRaceStatus(), newStatus
+        );
 
         // rollback
 

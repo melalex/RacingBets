@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
-import com.mysql.cj.api.jdbc.*;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;

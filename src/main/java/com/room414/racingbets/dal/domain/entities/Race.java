@@ -4,12 +4,12 @@ import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
+import com.room414.racingbets.dal.domain.infrastructure.EntityHelper;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class that represent race.
@@ -67,7 +67,7 @@ public class Race implements Serializable {
     /**
      * Map place -> price
      */
-    private List<BigDecimal> prizes;
+    private Map<Integer, BigDecimal> prizes;
 
     public Race() {
     }
@@ -188,20 +188,24 @@ public class Race implements Serializable {
         this.distance = distance;
     }
 
-    public List<BigDecimal> getPrizes() {
+    public Map<Integer, BigDecimal> getPrizes() {
         if (prizes != null) {
-            return new ArrayList<>(prizes);
+            return new HashMap<>(prizes);
         } else {
-            return new ArrayList<>();
+            return new HashMap<>();
         }
     }
 
-    public void setPrizes(List<BigDecimal> prizes) {
+    public void setPrizes(Map<Integer, BigDecimal> prizes) {
         if (prizes != null) {
-            this.prizes = new ArrayList<>(prizes);
+            this.prizes = new HashMap<>(prizes);
         } else {
             this.prizes = null;
         }
+    }
+
+    public BigDecimal getPrize(int place) {
+        return prizes.get(place);
     }
 
     public List<Participant> getParticipants() {
@@ -272,7 +276,7 @@ public class Race implements Serializable {
             return false;
         }
 
-        if (minBet != null ? !minBet.equals(race.minBet) : race.minBet != null) {
+        if (minBet != null ? minBet.compareTo(race.minBet) != 0 : race.minBet != null) {
             return false;
         }
 
@@ -292,7 +296,7 @@ public class Race implements Serializable {
             return false;
         }
 
-        if (prizes != null ? !prizes.equals(race.prizes) : race.prizes != null) {
+        if (prizes != null ? !EntityHelper.compareMaps(prizes, race.prizes, Comparator.naturalOrder()) : race.prizes != null) {
             return false;
         }
 
@@ -300,6 +304,7 @@ public class Race implements Serializable {
     }
 
     @Override
+    // TODO: is correct hashcode?
     public int hashCode() {
         int result;
         long temp;
@@ -307,7 +312,9 @@ public class Race implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (racecourse != null ? racecourse.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
-        result = 31 * result + (minBet != null ? minBet.hashCode() : 0);
+
+        temp = minBet != null ? Double.doubleToLongBits(minBet.doubleValue()) : 0;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
 
         temp = Double.doubleToLongBits(commission);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -321,7 +328,14 @@ public class Race implements Serializable {
         result = 31 * result + maxRating;
         result = 31 * result + (distance != +0.0f ? Float.floatToIntBits(distance) : 0);
         result = 31 * result + (participants != null ? participants.hashCode() : 0);
+
+        for (Integer place : prizes.keySet()) {
+            temp = minBet != null ? Double.doubleToLongBits(prizes.get(place).doubleValue()) : 0;
+            result = 31 * result + (int) (temp ^ (temp >>> 32));
+        }
+
         result = 31 * result + (prizes != null ? prizes.hashCode() : 0);
+
         return result;
     }
 

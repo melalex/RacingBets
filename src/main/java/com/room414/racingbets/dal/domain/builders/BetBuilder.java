@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.domain.builders;
 
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Participant;
@@ -9,8 +8,6 @@ import com.room414.racingbets.dal.domain.enums.BetType;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Simplify creating Bet instance using builder pattern.
@@ -26,11 +23,11 @@ public class BetBuilder {
     private BigDecimal betSize;
     private BetType betType;
     private BetStatus betStatus;
-    private Set<Pair<Integer, Participant>> participants;
+    private Map<Integer, Participant> participants;
 
-    private Set<Pair<Integer, Participant>> getParticipants() {
+    private Map<Integer, Participant> getParticipants() {
         if (participants == null) {
-            participants = new HashSet<>();
+            participants = new HashMap<>();
         }
         return participants;
     }
@@ -81,9 +78,9 @@ public class BetBuilder {
         return this;
     }
 
-    public BetBuilder setParticipants(Set<Pair<Integer, Participant>> participants) {
+    public BetBuilder setParticipants(Map<Integer, Participant> participants) {
         if (participants != null) {
-            this.participants = new HashSet<>(participants);
+            this.participants = new HashMap<>(participants);
         } else {
             this.participants = null;
         }
@@ -91,20 +88,23 @@ public class BetBuilder {
     }
 
     public BetBuilder setParticipantsByIds(List<Long> Ids) {
-        this.participants = IntStream.range(0, Ids.size())
-                .mapToObj(id -> new Pair<>(id, new Participant(Ids.get(id))))
-                .collect(Collectors.toSet());
+        int i = 1;
+        for (Long id : Ids) {
+            this.participants.put(i, new Participant(id));
+            i++;
+        }
+
         return this;
     }
 
     public BetBuilder setParticipant(int place, Participant participant) {
-        getParticipants().add(new Pair<>(place, participant));
+        getParticipants().put(place, participant);
         return this;
     }
 
     public BetBuilder setParticipantById(int place, int id) {
         Participant participant = new Participant(id);
-        getParticipants().add(new Pair<>(place, participant));
+        getParticipants().put(place, participant);
         return this;
     }
 

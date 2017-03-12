@@ -23,7 +23,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
     /**
      * @return Count of Races that scheduled on Racecourse with id == racecourse param
      */
-    long findByRacecourseIdCount(RaceStatus status, long racecourse);
+    long findByRacecourseIdCount(RaceStatus status, long racecourse) throws DalException;
 
 
     /**
@@ -34,7 +34,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
     /**
      * @return Count of Races that scheduled on Racecourse with name starts with racecourse param
      */
-    long findByRacecourseCount(RaceStatus status, String racecourse);
+    long findByRacecourseCount(RaceStatus status, String racecourse) throws DalException;
 
 
     /**

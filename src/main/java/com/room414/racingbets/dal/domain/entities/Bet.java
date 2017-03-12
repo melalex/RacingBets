@@ -1,15 +1,13 @@
 package com.room414.racingbets.dal.domain.entities;
 
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class that represents a bet of handicapper.
@@ -29,7 +27,7 @@ public class Bet implements Serializable {
     private BigDecimal betSize;
     private BetType betType;
     private BetStatus betStatus;
-    private Set<Pair<Integer, Participant>> participants;
+    private Map<Integer, Participant> participants;
 
     public Bet() {
     }
@@ -86,17 +84,17 @@ public class Bet implements Serializable {
         this.betStatus = betStatus;
     }
 
-    public Set<Pair<Integer, Participant>> getParticipants() {
+    public Map<Integer, Participant> getParticipants() {
         if (participants != null) {
-            return new HashSet<>(participants);
+            return new HashMap<>(participants);
         } else {
-            return new HashSet<>();
+            return new HashMap<>();
         }
     }
 
-    public void setParticipants(Set<Pair<Integer, Participant>> participants) {
+    public void setParticipants(Map<Integer, Participant> participants) {
         if (participants != null) {
-            this.participants = new HashSet<>(participants);
+            this.participants = new HashMap<>(participants);
         } else {
             this.participants = null;
         }
@@ -104,15 +102,7 @@ public class Bet implements Serializable {
 
     public Participant getParticipantByPlace(int place) {
         if (participants != null) {
-            return participants.stream()
-                    .filter(p -> p.getFirstElement() == place)
-                    .map(Pair::getSecondElement)
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), l -> {
-                        if (!l.isEmpty()) {
-                            return l.get(0);
-                        }
-                        return null;
-                    }));
+            return participants.get(place);
         } else {
             return null;
         }

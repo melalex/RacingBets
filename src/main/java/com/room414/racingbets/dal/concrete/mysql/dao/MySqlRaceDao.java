@@ -4,13 +4,17 @@ import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 
@@ -26,19 +30,104 @@ public class MySqlRaceDao implements RaceDao {
     private static String TABLE_NAME = "race";
 
     private Connection connection;
-    private MySqlSharedExecutor executor;
+    private MySqlSharedExecutor<Race> executor;
 
     MySqlRaceDao(Connection connection) {
         this.connection = connection;
         this.executor = new MySqlSharedExecutor<>(
                 connection,
-                statement -> getResultWithArray(statement, this::mapRace),
-                statement -> getResultList(statement, this::mapRace)
+                statement -> getResultWithArray(statement, this::mapRaces),
+                statement -> getResultListWithArray(statement, this::mapRaces)
         );
     }
 
-    private List<Race> mapRace(ResultSet resultSet) {
-        return null;
+    private List<Race> mapRaces(Statement statement) throws SQLException {
+        try(ResultSet resultSet = statement.getResultSet()) {
+                return mapRaces(resultSet);
+        }
+    }
+
+    private List<Race> mapRaces(ResultSet resultSet) throws SQLException {
+        final String idColumnName = "race.id";
+        final String startColumnName = "race.start_date_time";
+        final String commissionColumnName = "race.commission";
+        final String distanceColumnName = "race.distance";
+        final String maxRatingColumnName = "race.max_rating";
+        final String minAgeColumnName = "race.min_age";
+        final String minBetColumnName = "race.min_bet";
+        final String minRatingColumnName = "race.min_rating";
+        final String nameColumnName = "race.name";
+        final String raceClassColumnName = "race.race_class";
+        final String raceTypeColumnName = "race.race_type";
+        final String statusColumnName = "race.status";
+        final String goingColumnName = "race.going";
+        final String prizeColumnName = "prize.prize_size";
+        final String placeColumnName = "prize.place";
+
+        Map<Long, RaceBuilder> builderById = new HashMap<>();
+
+        RaceBuilder builder;
+        long id;
+        Integer place;
+
+        while (resultSet.next()) {
+            id = resultSet.getLong(idColumnName);
+            builder = builderById.get(id);
+            if (builder == null) {
+                builder = Race.builder()
+                        .setId(id)
+                        .setStart(resultSet.getTimestamp(startColumnName))
+                        .setCommission(resultSet.getDouble(commissionColumnName))
+                        .setDistance(resultSet.getFloat(distanceColumnName))
+                        .setMaxRating(resultSet.getInt(maxRatingColumnName))
+                        .setMinAge(resultSet.getInt(minAgeColumnName))
+                        .setMinBet(resultSet.getBigDecimal(minBetColumnName))
+                        .setMinRating(resultSet.getInt(minRatingColumnName))
+                        .setName(resultSet.getString(nameColumnName))
+                        .setRaceClass(resultSet.getInt(raceClassColumnName))
+                        .setRaceType(resultSet.getString(raceTypeColumnName))
+                        .setRaceStatus(resultSet.getString(statusColumnName))
+                        .setTrackCondition(resultSet.getString(goingColumnName))
+                        .setRacecourse(MySqlMapHelper.mapRacecourse(resultSet));
+                builderById.put(id, builder);
+            }
+
+            place = resultSet.getInt(placeColumnName);
+
+            if (place == 0) {
+                builder.addParticipant(MySqlMapHelper.mapParticipant(resultSet));
+            } else {
+                builder.setPrize(place, resultSet.getBigDecimal(prizeColumnName));
+            }
+        }
+
+        return builderById
+                .values()
+                .stream()
+                .map(RaceBuilder::build)
+                .collect(Collectors.toList());
+    }
+
+    private List<Race> getRaces(String sqlStatement) throws DalException {
+        final String call = "{ CALL get_races(?) }";
+
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setString(1, sqlStatement);
+            statement.execute();
+            return mapRaces(statement);
+        } catch (SQLException e) {
+            String message = String.format("Exception during getting Races with subquery '%s'", sqlStatement);
+            throw new DalException(message, e);
+        }
+    }
+
+    private Race getRace(String sqlStatement) throws DalException {
+        List<Race> result = getRaces(sqlStatement);
+        if (!result.isEmpty()) {
+            return result.get(0);
+        } else {
+            return null;
+        }
     }
 
     private void createRace(Race entity) throws DalException {
@@ -86,9 +175,10 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     private void createParticipants(Race entity) throws DalException {
-        final String sqlStatement = "INSERT INTO participant " +
-                "(number, horse_id, race_id, carried_weight, topspeed, " +
-                "official_rating, jockey_id, trainer_id, place, odds)  " +
+        final String sqlStatement =
+                "INSERT INTO participant " +
+                "   (number, horse_id, race_id, carried_weight, topspeed, " +
+                "   official_rating, jockey_id, trainer_id, place, odds)  " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -118,12 +208,12 @@ public class MySqlRaceDao implements RaceDao {
         final String sqlStatement = "INSERT INTO prize (race_id, prize_size, place) VALUES (?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            List<BigDecimal> prizes = entity.getPrizes();
+            Map<Integer, BigDecimal> prizes = entity.getPrizes();
 
-            for (int i = 0; i < prizes.size(); i++) {
+            for (Integer place : prizes.keySet()) {
                 statement.setLong(1, entity.getId());
-                statement.setBigDecimal(2, prizes.get(i));
-                statement.setInt(3, i + 1);
+                statement.setBigDecimal(2, prizes.get(place));
+                statement.setInt(3, place);
 
                 statement.addBatch();
             }
@@ -144,62 +234,26 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
+    // TODO: injection
     public Race find(Long id) throws DalException {
-        //language=MySQL
-        final String sqlStatement =
-                "SELECT race.id, race.start_date_time, race.commission, race.distance, race.max_rating, " +
-                "   race.min_age, race.min_bet, race.min_rating, race.name, race.race_class, " +
-                "   race.race_type, race.status, race.going, racecourse.id, racecourse.name, " +
-                "   racecourse.clerk, racecourse.contact " +
-                "FROM (" +
-                "   SELECT * FROM race " +
-                "   INNER JOIN going " +
-                "       ON race.going_id = going.id " +
-                "   INNER JOIN racecourse " +
-                "       ON race.racecourse_id = racecourse.id " +
-                "   INNER JOIN country " +
-                "       ON racecourse.country_id = country.id  " +
-                "   WHERE race.id = ?" +
-                ") AS race " +
-                "UNION " +
-                "SELECT * " +
-                "FROM (" +
-                "   SELECT * FROM race as race " +
-                "   INNER JOIN going " +
-                "       ON race.going_id = going.id " +
-                "   INNER JOIN racecourse " +
-                "       ON race.racecourse_id = racecourse.id " +
-                "   WHERE race.id = ?" +
-                ") ";
+        final String sqlStatement = String.format("SELECT * FROM race WHERE id = %d", id);
 
-        return null;
+        return getRace(sqlStatement);
     }
 
     @Override
     public List<Race> findAll() throws DalException {
         //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM race " +
-                "INNER JOIN going " +
-                "   ON race.going_id = going.id " +
-                "INNER JOIN racecourse " +
-                "   ON race.racecourse_id = racecourse.id " ;
+        final String sqlStatement = "SELECT * FROM race";
 
-        return null;
+        return getRaces(sqlStatement);
     }
 
     @Override
     public List<Race> findAll(long offset, long limit) throws DalException {
-        //language=MySQL
-        final String sqlStatement =
-                "SELECT * FROM race " +
-                "INNER JOIN going " +
-                "   ON race.going_id = going.id " +
-                "INNER JOIN racecourse " +
-                "   ON race.racecourse_id = racecourse.id " +
-                "LIMIT ? OFFSET ?";
+        final String sqlStatement = String.format("SELECT * FROM race LIMIT %d OFFSET %d", limit, offset);
 
-        return null;
+        return getRaces(sqlStatement);
     }
 
     @Override
@@ -210,22 +264,20 @@ public class MySqlRaceDao implements RaceDao {
     @Override
     public long update(Race entity) throws DalException {
         final String sqlStatement =
-                "UPDATE race INNER " +
-                "JOIN going " +
-                "   ON going.name = ? " +
+                "UPDATE race " +
                 "SET name = ?, status = ?, racecourse_id = ?, start_date_time = ?, min_bet = ?, " +
-                "   commission = ?, going_id = going.id, race_type = ?, race_class = ?, " +
+                "   commission = ?, going = ?, race_type = ?, race_class = ?, " +
                 "   min_age = ?, min_rating = ?, max_rating = ?, distance = ? " +
                 "WHERE id = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, entity.getTrackCondition().getName());
-            statement.setString(2, entity.getName());
-            statement.setString(3, entity.getRaceStatus().getName());
-            statement.setLong(4, entity.getRacecourse().getId());
-            statement.setTimestamp(5, entity.getStart());
-            statement.setBigDecimal(6, entity.getMinBet());
-            statement.setDouble(7, entity.getCommission());
+            statement.setString(1, entity.getName());
+            statement.setString(2, entity.getRaceStatus().getName());
+            statement.setLong(3, entity.getRacecourse().getId());
+            statement.setTimestamp(4, entity.getStart());
+            statement.setBigDecimal(5, entity.getMinBet());
+            statement.setDouble(6, entity.getCommission());
+            statement.setString(7, entity.getTrackCondition().getName());
             statement.setString(8, entity.getRaceType().getName());
             statement.setInt(9, entity.getRaceClass());
             statement.setInt(10, entity.getMinAge());
@@ -264,22 +316,52 @@ public class MySqlRaceDao implements RaceDao {
 
     @Override
     public List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) throws DalException {
-        return null;
+        final String sqlStatement = String.format(
+                "SELECT * FROM race WHERE status = '%s' AND race.racecourse_id = %d LIMIT %d OFFSET %d",
+                status.getName(),
+                racecourse,
+                limit,
+                offset
+        );
+
+        return getRaces(sqlStatement);
     }
 
     @Override
-    public long findByRacecourseIdCount(RaceStatus status, long racecourse) {
-        return 0;
+    public long findByRacecourseIdCount(RaceStatus status, long racecourse) throws DalException {
+        final String column_name = "race.racecourse_id";
+
+        return executor.findByForeignKeyCount(TABLE_NAME, column_name, racecourse);
     }
 
     @Override
     public List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) throws DalException {
-        return null;
+        final String sqlStatement = String.format(
+                "SELECT * FROM race " +
+                "   INNER JOIN racecourse " +
+                "       ON race.racecourse_id = racecourse.id " +
+                "WHERE status = '%s' AND racecourse.name LIKE '%s' " +
+                "LIMIT %d OFFSET %d",
+                status.getName(),
+                startsWith(racecourse),
+                limit,
+                offset
+        );
+
+        return getRaces(sqlStatement);
     }
 
     @Override
-    public long findByRacecourseCount(RaceStatus status, String racecourse) {
-        return 0;
+    public long findByRacecourseCount(RaceStatus status, String racecourse) throws DalException {
+        final String sqlStatement = String.format(
+                "SELECT * FROM race " +
+                "   INNER JOIN racecourse " +
+                "       ON race.racecourse_id = racecourse.id " +
+                "WHERE status = '%s' AND racecourse.name LIKE '?'",
+                status.getName()
+        );
+
+        return executor.findByColumnPartCount(TABLE_NAME, racecourse);
     }
 
     @Override
