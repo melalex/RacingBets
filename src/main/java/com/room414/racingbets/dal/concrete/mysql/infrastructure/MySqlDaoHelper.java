@@ -113,4 +113,16 @@ public class MySqlDaoHelper {
 
         return affectedRows;
     }
+
+    public static void createEntities(PreparedStatement statement, List<Consumer<Long>> idSetters) throws SQLException {
+        int[] affectedRows = statement.executeBatch();
+
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            int i = 0;
+            while (generatedKeys.next()) {
+                idSetters.get(i).accept(generatedKeys.getLong(1));
+                i++;
+            }
+        }
+    }
 }

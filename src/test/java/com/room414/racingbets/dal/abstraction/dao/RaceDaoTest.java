@@ -7,10 +7,7 @@ import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.math.BigDecimal;
@@ -158,9 +155,9 @@ class RaceDaoTest {
 
         List<Race> expectedResult = new LinkedList<>();
 
-        expectedResult.add(storage.getRace(1));
+        expectedResult.add(storage.getRace(2));
 
-        List<Race> result = dao.findByRacecourse(RaceStatus.FINISHED,  "Ron", 0, 1);
+        List<Race> result = dao.findByRacecourse(RaceStatus.RIDING,  "Ron", 0, 1);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
 
@@ -172,7 +169,7 @@ class RaceDaoTest {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
-        long result = dao.findByRacecourseCount(RaceStatus.FINISHED, "Ron");
+        long result = dao.findByRacecourseCount(RaceStatus.RIDING, "Ron");
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -280,7 +277,6 @@ class RaceDaoTest {
         RaceDao dao = getDao();
 
         Race newEntity = Race.builder()
-                .setId(1)
                 .setName("Asp")
                 .setRaceStatus(RaceStatus.REJECTED)
                 .setCommission(0.14)
@@ -313,6 +309,10 @@ class RaceDaoTest {
         Race entity2 = dao.find(newEntity.getId());
 
         assert entity2 == null : "Dao did not delete entity";
+
+        // rollback
+
+        storage.reload();
     }
 
     @Test
@@ -324,7 +324,7 @@ class RaceDaoTest {
 
         Race entity = dao.find(targetId);
         Race updated = Race.builder()
-                .setId(1)
+                .setId(entity.getId())
                 .setName("Asp")
                 .setRaceStatus(RaceStatus.REJECTED)
                 .setCommission(0.14)
@@ -338,6 +338,12 @@ class RaceDaoTest {
                 .setMinRating(55)
                 .setMaxRating(75)
                 .setDistance(8.1f)
+                .addParticipant(storage.getParticipant(1))
+                .addParticipant(storage.getParticipant(2))
+                .addParticipant(storage.getParticipant(3))
+                .setPrize(1, BigDecimal.valueOf(300))
+                .setPrize(2, BigDecimal.valueOf(200))
+                .setPrize(3, BigDecimal.valueOf(100))
                 .build();
 
         assert !updated.equals(entity) : "entity and updated are already same";
@@ -359,6 +365,7 @@ class RaceDaoTest {
     void updateStatus() throws DalException {
         final long targetId = 1L;
         RaceStatus newStatus = RaceStatus.REJECTED;
+        RaceStatus oldStatus = storage.getRace(targetId).getRaceStatus();
         RaceDao dao = getDao();
 
         Race entity = dao.find(targetId);
@@ -375,6 +382,6 @@ class RaceDaoTest {
 
         // rollback
 
-        dao.updateStatus(entity.getId(), entity.getRaceStatus());
+        dao.updateStatus(entity.getId(), oldStatus);
     }
 }

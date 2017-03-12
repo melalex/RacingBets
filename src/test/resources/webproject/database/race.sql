@@ -64,7 +64,7 @@ CREATE PROCEDURE find_by_racecourse_name(
   IN p_offset        INT UNSIGNED
 )
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race INNER JOIN racecourse ON race.racecourse_id = racecourse.id WHERE status = ? AND racecourse.name LIKE ? LIMIT ? OFFSET ?');
+    SET @find_statement = get_races('SELECT race.id, start_date_time, commission, distance, max_rating, min_age, min_bet, min_rating, race.name, race_class, race_type, status, going, racecourse_id FROM race INNER JOIN racecourse ON race.racecourse_id = racecourse.id WHERE status = ? AND racecourse.name LIKE ? LIMIT ? OFFSET ?');
 
     PREPARE query_to_execute FROM @find_statement;
     SET @v_race_status = race_status;

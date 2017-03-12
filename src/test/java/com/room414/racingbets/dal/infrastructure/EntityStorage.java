@@ -62,6 +62,10 @@ public class EntityStorage {
         return newStorage;
     }
 
+    public void reload() {
+        ourInstance = create();
+    }
+
     private void initOwnerMap() throws ParseException {
         ownerMap.put(
                 1L,

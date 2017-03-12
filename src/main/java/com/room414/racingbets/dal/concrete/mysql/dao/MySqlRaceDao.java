@@ -14,6 +14,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
@@ -168,8 +169,10 @@ public class MySqlRaceDao implements RaceDao {
                 "   official_rating, jockey_id, trainer_id, place, odds)  " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            for (Participant participant : entity.getParticipants()) {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
+            List<Participant> participants = entity.getParticipants();
+
+            for (Participant participant : participants) {
                 statement.setInt(1, participant.getNumber());
                 statement.setLong(2, participant.getHorse().getId());
                 statement.setLong(3, entity.getId());
@@ -183,7 +186,14 @@ public class MySqlRaceDao implements RaceDao {
 
                 statement.addBatch();
             }
-            statement.executeBatch();
+
+            List<Consumer<Long>> idSetters = participants
+                    .stream()
+                    .map(p -> (Consumer<Long>) p::setId)
+                    .collect(Collectors.toList());
+
+            createEntities(statement, idSetters);
+
         } catch (SQLException e) {
             String message = "Exception during adding participant faze while creating race " + entity.toString();
             throw new DalException(message, e);
@@ -221,7 +231,6 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    // TODO: injection
     public Race find(Long id) throws DalException {
         final String call = "{ CALL find_race_by_id(?) }";
 
