@@ -24,7 +24,7 @@ public class MySqlUnitOfWorkFactory implements UnitOfWorkFactory {
         try {
             return new MySqlUnitOfWork(connectionPool.getConnection());
         } catch (SQLException e) {
-            throw new DalException("Can not get new connection from pool", e);
+            throw new DalException("Can't get new connection from pool", e);
         }
     }
 }
