@@ -7,6 +7,7 @@ import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -43,6 +44,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_existent_returnedEntity() throws DalException {
         ApplicationUserDao dao = getDao();
 
@@ -54,6 +56,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_nonexistent_returnedNull() throws DalException {
         ApplicationUserDao dao = getDao();
 
@@ -63,6 +66,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset() throws ParseException, DalException {
         ApplicationUserDao dao = getDao();
         List<ApplicationUser> expectedResult = new LinkedList<>();
@@ -76,6 +80,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
         ApplicationUserDao dao = getDao();
 
@@ -85,6 +90,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAll() throws ParseException, DalException {
         List<ApplicationUser> expectedResult = storage.getAllApplicationUsers();
 
@@ -94,6 +100,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void count() throws DalException {
         ApplicationUserDao dao = getDao();
         long expectedResult = 5;
@@ -105,6 +112,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByLoginPart() throws DalException {
         ApplicationUserDao dao = getDao();
 
@@ -119,6 +127,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByLoginPartCount() throws DalException {
         ApplicationUserDao dao = getDao();
         long expectedResult = 1;
@@ -130,6 +139,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByLoginAndPassword() throws DalException {
         ApplicationUserDao dao = getDao();
 
@@ -141,6 +151,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("write")
     void createDelete() throws DalException, ParseException {
         ApplicationUserDao dao = getDao();
 
@@ -171,11 +182,13 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("write")
     void create_existentLogin_notCreated() {
         // TODO: test this
     }
 
     @Test
+    @Tag("write")
     void update() throws DalException, ParseException {
         final long targetId = 1L;
 
@@ -210,11 +223,13 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("write")
     void confirmEmail() {
         // TODO: test this
     }
 
     @Test
+    @Tag("write")
     void addRoleAndRemoveRole() throws DalException {
         final long targetId = 3L;
         Role newRole = Role.ADMIN;
@@ -233,6 +248,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("write")
     void tryGetMoneyAndPutMoney_enoughMoney_gotMoneyReturnTrue() throws DalException {
         final long targetId = 1L;
         BigDecimal moneyToGet = BigDecimal.valueOf(10);
@@ -254,6 +270,7 @@ class ApplicationUserDaoTest {
     }
 
     @Test
+    @Tag("write")
     void tryGetMoney_notEnoughMoney_returnFalse() throws DalException {
         final long targetId = 1L;
         BigDecimal moneyToGet = BigDecimal.valueOf(10000);

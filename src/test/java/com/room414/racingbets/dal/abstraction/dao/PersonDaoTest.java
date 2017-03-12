@@ -42,6 +42,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> find_withNullBirthday_returnedPerson_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -60,6 +61,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> find_existent_returnedPerson_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -78,6 +80,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> find_nonexistent_returnedNull_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -96,6 +99,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> findAllLimitOffset_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -114,6 +118,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> findAllLimitOffset_nonexistent_returnedEmptyList_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -132,6 +137,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> findAll_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -150,6 +156,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> count_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -168,6 +175,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> findByNamePart_existent_returnedList_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -186,6 +194,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> findByNamePart_nonexistent_returnedEmptyList_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -204,6 +213,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("read")
     List<DynamicTest> findByNamePartCount_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -222,6 +232,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("write")
     List<DynamicTest> createAndDelete_withNullBirthday_createdAndDeleted_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -249,6 +260,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("write")
     List<DynamicTest> createAndDelete_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
@@ -267,6 +279,7 @@ class PersonDaoTest {
     }
 
     @TestFactory
+    @Tag("write")
     List<DynamicTest> update_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(

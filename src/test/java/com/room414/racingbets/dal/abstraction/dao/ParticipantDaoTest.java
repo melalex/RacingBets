@@ -7,6 +7,7 @@ import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -43,6 +44,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_existent_returnedEntity() throws ParseException, DalException {
         ParticipantDao dao = getParticipantDao();
 
@@ -54,6 +56,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_nullable_returnedEntity() throws ParseException, DalException {
         ParticipantDao dao = getParticipantDao();
 
@@ -65,6 +68,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_nonexistent_returnedNull() throws DalException {
         ParticipantDao dao = getParticipantDao();
 
@@ -74,6 +78,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset() throws ParseException, DalException {
         ParticipantDao dao = getParticipantDao();
         List<Participant> expectedResult = new LinkedList<>();
@@ -87,6 +92,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
         ParticipantDao dao = getParticipantDao();
 
@@ -96,6 +102,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAll() throws ParseException, DalException {
         List<Participant> expectedResult = storage.getAllParticipants();
 
@@ -105,6 +112,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void count() throws DalException {
         ParticipantDao dao = getParticipantDao();
         long expectedResult = 9;
@@ -116,6 +124,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByHorseId() throws DalException {
         final long targetId = 1;
 
@@ -142,6 +151,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByHorseIdCount() throws DalException {
         final long targetId = 1;
 
@@ -154,6 +164,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByOwnerId() throws DalException {
         final long targetId = 1;
 
@@ -180,6 +191,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByOwnerIdCount() throws DalException {
         final long targetId = 1;
 
@@ -192,6 +204,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByJockeyId() throws DalException {
         final long targetId = 1;
 
@@ -218,6 +231,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByJockeyIdCount() throws DalException {
         final long targetId = 1;
 
@@ -230,6 +244,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByTrainerId() throws DalException {
         final long targetId = 1;
 
@@ -256,6 +271,7 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByTrainerIdCount() throws DalException {
         final long targetId = 1;
 
@@ -269,11 +285,13 @@ class ParticipantDaoTest {
     }
 
     @Test
+    @Tag("write")
     void delete() throws DalException, ParseException {
         // TODO: test this shit
     }
 
     @Test
+    @Tag("write")
     void update() throws DalException, ParseException {
         final long targetId = 1L;
 

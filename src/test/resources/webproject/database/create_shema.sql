@@ -1,5 +1,7 @@
 CREATE SCHEMA `horse_racing_test`
   DEFAULT CHARACTER SET utf8;
+  
+USE horse_racing_test;
 
 CREATE TABLE `horse_racing_test`.`jockey` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,

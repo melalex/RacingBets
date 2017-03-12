@@ -35,6 +35,10 @@ public enum TrackCondition {
     }
 
     public static TrackCondition getTrackCondition(String name) {
+        if (name == null) {
+            return null;
+        }
+
         for(TrackCondition v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {
                 return v;

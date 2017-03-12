@@ -8,6 +8,7 @@ import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -44,6 +45,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_existent_returnedEntity() throws DalException {
         BetDao dao = getDao();
 
@@ -55,6 +57,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_nonexistent_returnedNull() throws DalException {
         BetDao dao = getDao();
 
@@ -64,6 +67,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset() throws ParseException, DalException {
         BetDao dao = getDao();
         List<Bet> expectedResult = new LinkedList<>();
@@ -77,6 +81,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
         BetDao dao = getDao();
 
@@ -86,6 +91,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAll() throws ParseException, DalException {
         List<Bet> expectedResult = storage.getAllBets();
 
@@ -95,6 +101,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void count() throws DalException {
         BetDao dao = getDao();
         long expectedResult = 15;
@@ -106,6 +113,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByUserId() throws DalException {
         BetDao dao = getDao();
 
@@ -123,6 +131,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByUserIdCount() throws DalException {
         BetDao dao = getDao();
         long expectedResult = 5;
@@ -133,6 +142,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByRaceId() throws DalException {
         BetDao dao = getDao();
 
@@ -160,6 +170,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByRaceIdCount() throws DalException {
         BetDao dao = getDao();
         long expectedResult = 15;
@@ -170,6 +181,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void getOdds_place() throws DalException {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
@@ -189,6 +201,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void getOdds_win() throws DalException {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
@@ -207,6 +220,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void getOdds_qeinella() throws DalException {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
@@ -226,6 +240,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void getOdds_exacta() throws DalException {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
@@ -245,6 +260,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("read")
     void getOdds_trifecta() throws DalException {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 600, 0.14);
@@ -265,6 +281,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("write")
     void createDelete() throws DalException, ParseException {
         BetDao dao = getDao();
 
@@ -292,6 +309,7 @@ class BetDaoTest {
     }
 
     @Test
+    @Tag("write")
     void update() throws DalException, ParseException {
         // TODO: bet update is redundant
     }

@@ -6,6 +6,7 @@ import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -40,6 +41,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_existent_returnedEntity() throws ParseException, DalException {
         RacecourseDao dao = getRacecourseDao();
 
@@ -51,6 +53,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_nonexistent_returnedNull() throws DalException {
         RacecourseDao dao = getRacecourseDao();
 
@@ -60,6 +63,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset() throws ParseException, DalException {
         RacecourseDao dao = getRacecourseDao();
         List<Racecourse> expectedResult = new LinkedList<>();
@@ -72,6 +76,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
         RacecourseDao dao = getRacecourseDao();
 
@@ -81,6 +86,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAll() throws ParseException, DalException {
         RacecourseDao dao = getRacecourseDao();
 
@@ -92,6 +98,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void count() throws DalException {
         RacecourseDao dao = getRacecourseDao();
         long expectedResult = 3;
@@ -103,6 +110,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePart_existent_returnedList() throws ParseException, DalException {
         RacecourseDao dao = getRacecourseDao();
 
@@ -116,6 +124,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePart_nonexistent_returnedEmptyList() throws DalException {
         RacecourseDao dao = getRacecourseDao();
 
@@ -126,6 +135,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePartCount() throws DalException {
         RacecourseDao dao = getRacecourseDao();
         long expectedResult = 1;
@@ -137,6 +147,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("write")
     void createAndDelete() throws DalException, ParseException {
         RacecourseDao dao = getRacecourseDao();
 
@@ -162,6 +173,7 @@ class RacecourseDaoTest {
     }
 
     @Test
+    @Tag("write")
     void update() throws DalException, ParseException {
         final long targetId = 3L;
 

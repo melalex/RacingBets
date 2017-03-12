@@ -42,6 +42,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_damAndSireNull_returnedEntity() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
@@ -53,6 +54,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_existent_returnedEntity() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
@@ -64,6 +66,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_nonexistent_returnedNull() throws DalException {
         HorseDao horseDao = getHorseDao();
         Horse result = horseDao.find(300L);
@@ -72,6 +75,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
@@ -87,6 +91,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
         HorseDao horseDao = getHorseDao();
         List<Horse> result = horseDao.findAll(300L, 400L);
@@ -95,6 +100,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAll() throws ParseException, DalException {
         List<Horse> expectedResult = storage.getAllHorses();
 
@@ -104,6 +110,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void count() throws DalException {
         long expectedResult = 8;
 
@@ -114,6 +121,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePart_existent_returnedList() throws ParseException, DalException {
         HorseDao horseDao = getHorseDao();
 
@@ -132,6 +140,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePart_nonexistent_returnedEmptyList() throws DalException {
         List<Horse> result = getHorseDao().findByNamePart("bla-bla-bla", 0L, 1L);
 
@@ -140,6 +149,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePartCount() throws DalException {
         long expectedResult = 2;
 
@@ -150,6 +160,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("write")
     void createAndDelete_nullSireAndDam_createdDeleted() throws DalException, ParseException {
         HorseDao horseDao = getHorseDao();
 
@@ -178,6 +189,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("write")
     void createAndDelete_notNullSireAndDam_createdDeleted() throws DalException, ParseException {
         HorseDao horseDao = getHorseDao();
 
@@ -208,6 +220,7 @@ class HorseDaoTest {
     }
 
     @Test
+    @Tag("write")
     void update() throws DalException, ParseException {
         final long targetId = 6L;
 

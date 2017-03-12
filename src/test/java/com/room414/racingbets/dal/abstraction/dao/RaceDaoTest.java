@@ -9,6 +9,7 @@ import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -46,6 +47,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_existent_returnedEntity() throws DalException {
         RaceDao dao = getDao();
 
@@ -57,6 +59,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_withNull_returnedEntity() throws DalException {
         RaceDao dao = getDao();
 
@@ -68,6 +71,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void find_nonexistent_returnedNull() throws DalException {
         RaceDao dao = getDao();
 
@@ -77,6 +81,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset() throws ParseException, DalException {
         RaceDao dao = getDao();
         List<Race> expectedResult = new LinkedList<>();
@@ -90,6 +95,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
         RaceDao dao = getDao();
 
@@ -99,6 +105,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findAll() throws ParseException, DalException {
         List<Race> expectedResult = storage.getAllRaces();
 
@@ -108,6 +115,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void count() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 3;
@@ -119,6 +127,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByRacecourseId() throws DalException {
         RaceDao dao = getDao();
 
@@ -132,6 +141,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByRacecourseIdCount() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 1;
@@ -142,6 +152,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByRacecourse() throws DalException {
         RaceDao dao = getDao();
 
@@ -156,6 +167,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByRacecourseCount() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 1;
@@ -166,7 +178,8 @@ class RaceDaoTest {
     }
 
     @Test
-    void findInTimestampDiapason() {
+    @Tag("read")
+    void findInTimestampDiapason() throws DalException {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -185,7 +198,8 @@ class RaceDaoTest {
     }
 
     @Test
-    void findInTimestampDiapasonCount() {
+    @Tag("read")
+    void findInTimestampDiapasonCount() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
@@ -199,7 +213,8 @@ class RaceDaoTest {
     }
 
     @Test
-    void findInTimestampDiapasonOnRacecourse() {
+    @Tag("read")
+    void findInTimestampDiapasonOnRacecourse() throws DalException {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -219,7 +234,8 @@ class RaceDaoTest {
     }
 
     @Test
-    void findInTimestampDiapasonOnRacecourseCount() {
+    @Tag("read")
+    void findInTimestampDiapasonOnRacecourseCount() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
@@ -234,6 +250,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePart() throws DalException {
         RaceDao dao = getDao();
 
@@ -247,6 +264,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("read")
     void findByNamePartCount() throws DalException {
         RaceDao dao = getDao();
         long expectedResult = 1;
@@ -257,6 +275,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("write")
     void createDelete() throws DalException, ParseException {
         RaceDao dao = getDao();
 
@@ -297,6 +316,7 @@ class RaceDaoTest {
     }
 
     @Test
+    @Tag("write")
     void update() throws DalException, ParseException {
         final long targetId = 1L;
 
@@ -335,6 +355,7 @@ class RaceDaoTest {
 
 
     @Test
+    @Tag("write")
     void updateStatus() throws DalException {
         final long targetId = 1L;
         RaceStatus newStatus = RaceStatus.REJECTED;
