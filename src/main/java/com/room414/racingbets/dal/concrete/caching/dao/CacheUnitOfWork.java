@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.*;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.concrete.caching.lazyload.*;
 
 /**
  * @author Alexander Melashchenko
@@ -10,53 +11,94 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 public class CacheUnitOfWork implements UnitOfWork {
     private UnitOfWork unitOfWork;
 
+    private ApplicationUserDao applicationUserDao;
+    private BetDao betDao;
+
+    private HorseDao horseDao;
+    private JockeyDao jockeyDao;
+    private OwnerDao ownerDao;
+    private TrainerDao trainerDao;
+
+    private ParticipantDao participantDao;
+    private RaceDao raceDao;
+
+    private RacecourseDao racecourseDao;
+
+
     public CacheUnitOfWork(UnitOfWork unitOfWork) {
         this.unitOfWork = unitOfWork;
     }
 
     @Override
     public ApplicationUserDao getApplicationUserDao() throws DalException {
-        return unitOfWork.getApplicationUserDao();
+        if (applicationUserDao == null) {
+            applicationUserDao = new CacheApplicationUserDao(new LazyLoadApplicationUserDao(unitOfWork));
+        }
+        return applicationUserDao;
     }
 
     @Override
     public BetDao getBetDao() throws DalException {
-        return unitOfWork.getBetDao();
+        if (betDao == null) {
+            betDao = new CacheBetDao(new LazyLoadBetDao(unitOfWork));
+        }
+        return betDao;
     }
 
     @Override
     public HorseDao getHorseDao() throws DalException {
-        return unitOfWork.getHorseDao();
+        if (horseDao == null) {
+            horseDao = new CacheHorseDao(new LazyLoadHorseDao(unitOfWork));
+        }
+        return horseDao;
     }
 
     @Override
     public JockeyDao getJockeyDao() throws DalException {
-        return unitOfWork.getJockeyDao();
+        if (jockeyDao == null) {
+            jockeyDao = new CacheJockeyDao(new LazyLoadJockeyDao(unitOfWork));
+        }
+        return jockeyDao;
     }
 
     @Override
     public OwnerDao getOwnerDao() throws DalException {
-        return unitOfWork.getOwnerDao();
+        if (ownerDao == null) {
+            ownerDao = new CacheOwnerDao(new LazyLoadOwnerDao(unitOfWork));
+        }
+        return ownerDao;
     }
 
     @Override
     public TrainerDao getTrainerDao() throws DalException {
-        return unitOfWork.getTrainerDao();
+        if (trainerDao == null) {
+            trainerDao = new CacheTrainerDao(new LazyLoadTrainerDao(unitOfWork));
+        }
+        return trainerDao;
     }
 
     @Override
     public ParticipantDao getParticipantDao() throws DalException {
-        return unitOfWork.getParticipantDao();
+        if (participantDao == null) {
+            participantDao = new CacheParticipantDao(new LazyLoadParticipantDao(unitOfWork));
+        }
+        return participantDao;
     }
 
     @Override
     public RaceDao getRaceDao() throws DalException {
-        return unitOfWork.getRaceDao();
+        if (raceDao == null) {
+            raceDao = new CacheRaceDao(new LazyLoadRaceDao(unitOfWork));
+        }
+        return raceDao;
     }
 
     @Override
     public RacecourseDao getRacecourseDao() throws DalException {
-        return unitOfWork.getRacecourseDao();
+        if (racecourseDao == null) {
+            racecourseDao = new CacheRacecourseDao(new LazyLoadRacecourseDao(unitOfWork));
+        }
+        return racecourseDao;
     }
 
     @Override

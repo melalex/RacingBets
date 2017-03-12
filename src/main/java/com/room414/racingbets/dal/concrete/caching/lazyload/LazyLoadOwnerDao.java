@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.caching.proxies;
+package com.room414.racingbets.dal.concrete.caching.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.OwnerDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;

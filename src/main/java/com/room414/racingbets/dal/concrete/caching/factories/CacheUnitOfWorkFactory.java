@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.dao.CacheUnitOfWork;
-import com.room414.racingbets.dal.concrete.caching.proxies.LazyLoadUnitOfWork;
+import com.room414.racingbets.dal.concrete.caching.lazyload.LazyLoadUnitOfWork;
 
 /**
  * @author Alexander Melashchenko
