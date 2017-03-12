@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 // TODO: usage comments
 public class MySqlDaoHelper {
     private final static String DEFAULT_ERROR_MESSAGE = "Exception during execution statement '%s'";
+    private final static String CALL_ERROR_MESSAGE = "Exception during calling procedure '%s' ";
 
     private MySqlDaoHelper() {
 
@@ -27,6 +28,23 @@ public class MySqlDaoHelper {
 
     public static String defaultErrorMessage(String sqlPattern, Object ... arguments) {
         return String.format(DEFAULT_ERROR_MESSAGE, sqlFormat(sqlPattern, arguments));
+    }
+
+    public static String callErrorMessage(String procedureName, Object ... params) {
+        String base = String.format(CALL_ERROR_MESSAGE, procedureName);
+
+        if (params.length == 0) {
+            return base;
+        }
+
+        StringBuilder builder = new StringBuilder(base);
+        builder.append("with parameters: ");
+
+        for (Object param : params) {
+            builder.append(param.toString());
+        }
+
+        return builder.toString();
     }
 
     public static String startsWith(String part) {

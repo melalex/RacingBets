@@ -300,9 +300,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
             statement.execute();
         } catch (SQLException e) {
-            String message = String.format(
-                    "Exception during adding role %s to user with id  %d", role.getName(), userId
-            );
+            String message = callErrorMessage("add_role", userId, role);
             throw new DalException(message, e);
         }
     }

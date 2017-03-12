@@ -25,6 +25,7 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  */
 public class MySqlBetDao implements BetDao {
     private static final String TABLE_NAME = "bet";
+    private static final String CALCULATING_ERROR_MESSAGE = "Exception during calculating odds for bet ";
 
     private Connection connection;
     private MySqlSharedExecutor<Bet> executor;
@@ -413,7 +414,7 @@ public class MySqlBetDao implements BetDao {
                 throw new SQLException("ResultSet is empty");
             }
         } catch (SQLException e) {
-            String message = "Exception during calculating odds for bet " + bet;
+            String message = CALCULATING_ERROR_MESSAGE + bet;
             throw new DalException(message, e);
         }
     }
@@ -449,7 +450,7 @@ public class MySqlBetDao implements BetDao {
                 throw new SQLException("ResultSet is empty");
             }
         } catch (SQLException e) {
-            String message = "Exception during calculating odds for bet " + bet;
+            String message = CALCULATING_ERROR_MESSAGE + bet;
             throw new DalException(message, e);
         }
     }
@@ -475,7 +476,7 @@ public class MySqlBetDao implements BetDao {
                 throw new SQLException("ResultSet is empty");
             }
         } catch (SQLException e) {
-            String message = "Exception during calculating odds for bet " + bet;
+            String message = CALCULATING_ERROR_MESSAGE + bet;
             throw new DalException(message, e);
         }
     }
@@ -501,7 +502,7 @@ public class MySqlBetDao implements BetDao {
                 throw new SQLException("ResultSet is empty");
             }
         } catch (SQLException e) {
-            String message = "Exception during calculating odds for bet " + bet;
+            String message = CALCULATING_ERROR_MESSAGE + bet;
             throw new DalException(message, e);
         }
     }

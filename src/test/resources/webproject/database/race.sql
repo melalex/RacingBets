@@ -1,8 +1,9 @@
 DELIMITER //
 
-CREATE PROCEDURE horse_racing_test.get_races(IN sql_statement VARCHAR(90))
+CREATE FUNCTION horse_racing_test.get_races(sql_statement VARCHAR(90))
+  RETURNS TEXT
   BEGIN
-    SET @find_races = CONCAT('SELECT
+    RETURN CONCAT('SELECT
       race.id \'race.id\',
       race.start_date_time \'race.start_date_time\',
       race.commission \'race.commission\',
@@ -56,8 +57,6 @@ CREATE PROCEDURE horse_racing_test.get_races(IN sql_statement VARCHAR(90))
 
     FROM (', sql_statement, ') AS race
 
-       INNER JOIN racecourse AS racecourse
-         ON race.racecourse_id = racecourse.id
        LEFT JOIN participant AS participant
          ON race.id = participant.race_id
        INNER JOIN jockey AS jockey
@@ -124,13 +123,175 @@ CREATE PROCEDURE horse_racing_test.get_races(IN sql_statement VARCHAR(90))
        prize.prize_size AS \'prize.prize_size\'
 
      FROM (', sql_statement, ') AS race
-       INNER JOIN racecourse AS racecourse
-         ON race.racecourse_id = racecourse.id
+
        LEFT JOIN prize AS prize
 		 ON prize.race_id = race.id');
 
-    PREPARE query_to_exec FROM @find_races;
-    EXECUTE query_to_exec;
-    DEALLOCATE PREPARE query_to_exec;
+  END //
 
+CREATE PROCEDURE find_race_by_id(IN race_id INT UNSIGNED)
+  BEGIN
+    SET @find_statement = get_races('SELECT * FROM race WHERE id = ?');
+    PREPARE query_to_execute FROM @find_statement;
+    SET @id = race_id;
+    EXECUTE query_to_execute
+    USING @id, @id;
+    DEALLOCATE PREPARE query_to_execute;
+  END //
+
+CREATE PROCEDURE find_all_races()
+  BEGIN
+    SET @find_statement = get_races('SELECT *
+                                     FROM race
+                                       INNER JOIN racecourse AS racecourse
+                                         ON race.racecourse_id = racecourse.id
+                                    ');
+
+    PREPARE query_to_execute FROM @find_statement;
+    EXECUTE query_to_execute;
+    DEALLOCATE PREPARE query_to_execute;
+  END //
+
+CREATE PROCEDURE find_all_races_limit_offset(IN p_limit INT UNSIGNED, IN p_offset INT UNSIGNED)
+  BEGIN
+    SET @find_statement = get_races('SELECT *
+                                     FROM race
+                                       INNER JOIN racecourse AS racecourse
+                                         ON race.racecourse_id = racecourse.id
+                                     LIMIT ? OFFSET ?');
+
+    PREPARE query_to_execute FROM @find_statement;
+    SET @v_limit = p_limit;
+    SET @v_offset = p_offset;
+    EXECUTE query_to_execute
+    USING @v_limit, @v_offset, @v_limit, @v_offset;
+    DEALLOCATE PREPARE query_to_execute;
+  END //
+
+CREATE PROCEDURE find_by_racecourse_id(
+  IN race_status   ENUM ('scheduled', 'riding', 'finished', 'rejected'),
+  IN racecourse_id INT UNSIGNED,
+  IN p_limit       INT UNSIGNED,
+  IN p_offset      INT UNSIGNED
+)
+  BEGIN
+    SET @find_statement = get_races('SELECT *
+                                     FROM race
+                                       INNER JOIN racecourse AS racecourse
+                                         ON race.racecourse_id = racecourse.id
+                                     WHERE race.status = ? AND race.racecourse_id = ?
+                                     LIMIT ? OFFSET ?');
+
+    PREPARE query_to_execute FROM @find_statement;
+    SET @v_race_status = race_status;
+    SET @v_racecourse_id = racecourse_id;
+    SET @v_limit = p_limit;
+    SET @v_offset = p_offset;
+    EXECUTE query_to_execute
+    USING @v_race_status, @v_racecourse_id, @v_limit, @v_offset, @v_race_status, @v_racecourse_id, @v_limit, @v_offset;
+    DEALLOCATE PREPARE query_to_execute;
+  END //
+
+
+CREATE PROCEDURE find_by_racecourse_name(
+  IN race_status     ENUM ('scheduled', 'riding', 'finished', 'rejected'),
+  IN racecourse_name VARCHAR(45),
+  IN p_limit         INT UNSIGNED,
+  IN p_offset        INT UNSIGNED
+)
+  BEGIN
+    SET @find_statement = get_races('SELECT *
+                                     FROM race
+                                       INNER JOIN racecourse
+                                         ON race.racecourse_id = racecourse.id
+                                     WHERE status = ? AND racecourse.name LIKE ?
+                                     LIMIT ? OFFSET ?');
+
+    PREPARE query_to_execute FROM @find_statement;
+    SET @v_race_status = race_status;
+    SET @v_racecourse_name = racecourse_name;
+    SET @v_limit = p_limit;
+    SET @v_offset = p_offset;
+    EXECUTE query_to_execute
+    USING @v_race_status, @v_racecourse_name, @v_limit, @v_offset, @v_race_status, @v_racecourse_name, @v_limit, @v_offset;
+    DEALLOCATE PREPARE query_to_execute;
+  END //
+
+CREATE PROCEDURE find_in_timestamp_diapason(
+  IN race_status ENUM ('scheduled', 'riding', 'finished', 'rejected'),
+  IN p_begin     TIMESTAMP,
+  IN p_end       TIMESTAMP,
+  IN p_limit     INT UNSIGNED,
+  IN p_offset    INT UNSIGNED
+)
+  BEGIN
+    SET @find_statement = get_races('SELECT *
+                                     FROM race
+                                       INNER JOIN racecourse
+                                         ON race.racecourse_id = racecourse.id
+                                     WHERE status = ? AND race.start_date_time BETWEEN ? AND ?
+                                     LIMIT ? OFFSET ?');
+
+    PREPARE query_to_execute FROM @find_statement;
+    SET @v_race_status = race_status;
+    SET @v_begin = p_begin;
+    SET @v_end = p_end;
+    SET @v_limit = p_limit;
+    SET @v_offset = p_offset;
+    EXECUTE query_to_execute
+    USING @v_race_status, @v_begin, @v_end, @v_limit, @v_offset, @v_race_status, @v_begin, @v_end, @v_limit, @v_offset;
+    DEALLOCATE PREPARE query_to_execute;
+  END //
+
+CREATE PROCEDURE find_in_timestamp_diapason_by_racecourse_id(
+  IN race_status   ENUM ('scheduled', 'riding', 'finished', 'rejected'),
+  IN racecourse_id INT UNSIGNED,
+  IN p_begin       TIMESTAMP,
+  IN p_end         TIMESTAMP,
+  IN p_limit       INT UNSIGNED,
+  IN p_offset      INT UNSIGNED
+)
+  BEGIN
+    SET @find_statement = get_races('SELECT *
+                                     FROM race
+                                       INNER JOIN racecourse
+                                         ON race.racecourse_id = racecourse.id
+                                     WHERE
+                                       status = ? AND race.racecourse_id = ? AND race.start_date_time BETWEEN ? AND ?
+                                     LIMIT ? OFFSET ?');
+
+    PREPARE query_to_execute FROM @find_statement;
+    SET @v_race_status = race_status;
+    SET @v_racecourse_id = racecourse_id;
+    SET @v_begin = p_begin;
+    SET @v_end = p_end;
+    SET @v_limit = p_limit;
+    SET @v_offset = p_offset;
+    EXECUTE query_to_execute
+    USING @v_race_status, @v_racecourse_id, @v_begin, @v_end, @v_limit, @v_offset, @v_race_status, @v_racecourse_id, @v_begin, @v_end, @v_limit, @v_offset;
+    DEALLOCATE PREPARE query_to_execute;
+  END //
+
+CREATE PROCEDURE find_by_name(
+  IN race_status     ENUM ('scheduled', 'riding', 'finished', 'rejected'),
+  IN p_name VARCHAR(45),
+  IN p_limit         INT UNSIGNED,
+  IN p_offset        INT UNSIGNED
+)
+  BEGIN
+    SET @find_statement = get_races('SELECT *
+                                     FROM race
+                                       INNER JOIN racecourse
+                                         ON race.racecourse_id = racecourse.id
+                                     WHERE status = ? AND race.name LIKE ?
+                                     LIMIT ? OFFSET ?');
+
+    PREPARE query_to_execute FROM @find_statement;
+    SET @v_race_status = race_status;
+    SET @v_name = p_name;
+    SET @v_limit = p_limit;
+    SET @v_offset = p_offset;
+    EXECUTE query_to_execute
+    USING @v_race_status, @v_name, @v_limit, @v_offset, @v_race_status, @v_name, @v_limit, @v_offset;
+    DEALLOCATE PREPARE query_to_execute;
   END //

@@ -40,12 +40,12 @@ public interface RaceDao extends CrudDao<Long, Race> {
     /**
      * @return List of Races that scheduled on timestamp between begin and end param
      */
-    List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit);
+    List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) throws DalException;
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param
      */
-    long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end);
+    long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) throws DalException;
 
 
     /**
@@ -54,7 +54,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
      */
     List<Race> findInTimestampDiapasonOnRacecourse(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit
-    );
+    ) throws DalException;
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param
@@ -62,7 +62,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
      */
     long findInTimestampDiapasonOnRacecourseCount(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end
-    );
+    ) throws DalException;
 
 
     /**
