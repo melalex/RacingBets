@@ -7,7 +7,7 @@ import com.room414.racingbets.dal.concrete.caching.dao.CacheUnitOfWork;
 import com.room414.racingbets.dal.concrete.caching.proxies.LazyLoadUnitOfWork;
 
 /**
- * @author melalex
+ * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
 public class CacheUnitOfWorkFactory implements UnitOfWorkFactory {

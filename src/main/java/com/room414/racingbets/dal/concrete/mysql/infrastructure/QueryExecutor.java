@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * @author melalex
+ * @author Alexander Melashchenko
  * @version 1.0 10 Mar 2017
  */
 @FunctionalInterface

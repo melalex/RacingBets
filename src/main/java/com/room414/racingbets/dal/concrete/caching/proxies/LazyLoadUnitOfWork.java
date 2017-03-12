@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 
 /**
- * @author melalex
+ * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
 public class LazyLoadUnitOfWork implements UnitOfWork {

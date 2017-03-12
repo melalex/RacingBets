@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.*;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 
 /**
- * @author melalex
+ * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
 public class CacheUnitOfWork implements UnitOfWork {
