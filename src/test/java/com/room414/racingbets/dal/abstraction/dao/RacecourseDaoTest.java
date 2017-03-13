@@ -36,7 +36,7 @@ class RacecourseDaoTest {
         unitOfWork.close();
     }
 
-    private static RacecourseDao getRacecourseDao() {
+    private static RacecourseDao getRacecourseDao() throws DalException {
         return unitOfWork.getRacecourseDao();
     }
 

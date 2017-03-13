@@ -39,7 +39,7 @@ class ApplicationUserDaoTest {
         unitOfWork.close();
     }
 
-    private static ApplicationUserDao getDao() {
+    private static ApplicationUserDao getDao() throws DalException {
         return unitOfWork.getApplicationUserDao();
     }
 

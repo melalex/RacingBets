@@ -37,7 +37,7 @@ class HorseDaoTest {
         unitOfWork.close();
     }
 
-    private static HorseDao getHorseDao() {
+    private static HorseDao getHorseDao() throws DalException {
         return unitOfWork.getHorseDao();
     }
 

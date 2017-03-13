@@ -39,7 +39,7 @@ class ParticipantDaoTest {
         unitOfWork.close();
     }
 
-    private static ParticipantDao getParticipantDao() {
+    private static ParticipantDao getParticipantDao() throws DalException {
         return unitOfWork.getParticipantDao();
     }
 

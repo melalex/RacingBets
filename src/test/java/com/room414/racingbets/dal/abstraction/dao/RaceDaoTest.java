@@ -39,7 +39,7 @@ class RaceDaoTest {
         unitOfWork.close();
     }
 
-    private static RaceDao getDao() {
+    private static RaceDao getDao() throws DalException {
         return unitOfWork.getRaceDao();
     }
 
@@ -309,10 +309,6 @@ class RaceDaoTest {
         Race entity2 = dao.find(newEntity.getId());
 
         assert entity2 == null : "Dao did not delete entity";
-
-        // rollback
-
-        storage.reload();
     }
 
     @Test

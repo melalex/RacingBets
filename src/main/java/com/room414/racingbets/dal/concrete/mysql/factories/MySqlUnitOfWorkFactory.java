@@ -13,10 +13,9 @@ import java.sql.SQLException;
  * @version 1.0 02 Mar 2017
  */
 public class MySqlUnitOfWorkFactory implements UnitOfWorkFactory {
-    // TODO: add connection pool initialization
     private DataSource connectionPool;
 
-    public MySqlUnitOfWorkFactory() {
+    public MySqlUnitOfWorkFactory(DataSource connectionPool) {
     }
 
     @Override

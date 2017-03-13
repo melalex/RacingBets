@@ -1,7 +1,7 @@
 package com.room414.racingbets.dal.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.domain.builders.RaceBuilder;
+import com.room414.racingbets.dal.domain.builders.*;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
@@ -25,15 +25,15 @@ import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromSt
 public class EntityStorage {
     private static EntityStorage ourInstance = create();
 
-    private Map<Long, ApplicationUser> applicationUserMap = new LinkedHashMap<>();
-    private Map<Long, Bet> betMap = new LinkedHashMap<>();
-    private Map<Long, Horse> horseMap = new LinkedHashMap<>();
-    private Map<Long, Participant> participantMap = new LinkedHashMap<>();
-    private Map<Long, Owner> ownerMap = new LinkedHashMap<>();
-    private Map<Long, Trainer> trainerMap = new LinkedHashMap<>();
-    private Map<Long, Jockey> jockeyMap = new LinkedHashMap<>();
-    private Map<Long, Racecourse> racecourseMap = new LinkedHashMap<>();
-    private Map<Long, Race> raceMap = new LinkedHashMap<>();
+    private Map<Long, ApplicationUserBuilder> applicationUserMap = new LinkedHashMap<>();
+    private Map<Long, BetBuilder> betMap = new LinkedHashMap<>();
+    private Map<Long, HorseBuilder> horseMap = new LinkedHashMap<>();
+    private Map<Long, ParticipantBuilder> participantMap = new LinkedHashMap<>();
+    private Map<Long, OwnerBuilder> ownerMap = new LinkedHashMap<>();
+    private Map<Long, TrainerBuilder> trainerMap = new LinkedHashMap<>();
+    private Map<Long, JockeyBuilder> jockeyMap = new LinkedHashMap<>();
+    private Map<Long, RacecourseBuilder> racecourseMap = new LinkedHashMap<>();
+    private Map<Long, RaceBuilder> raceMap = new LinkedHashMap<>();
 
     public static EntityStorage getInstance() {
         return ourInstance;
@@ -62,178 +62,156 @@ public class EntityStorage {
         return newStorage;
     }
 
-    public void reload() {
-        ourInstance = create();
-    }
-
     private void initOwnerMap() throws ParseException {
         ownerMap.put(
                 1L,
-                Owner.builder()
+                ((OwnerBuilder) Owner.builder()
                         .setId(1)
                         .setFirstName("Ruby")
                         .setSecondName("Nichols")
-                        .setBirthday(sqlDateFromString("1982-04-21"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1982-04-21")))
         );
         ownerMap.put(
                 2L,
-                Owner.builder()
+                ((OwnerBuilder) Owner.builder()
                         .setId(2)
                         .setFirstName("Nichols")
                         .setSecondName("Ruby")
-                        .setBirthday(sqlDateFromString("1962-05-19"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1962-05-19")))
         );
         ownerMap.put(
                 3L,
-                Owner.builder()
+                ((OwnerBuilder) Owner.builder()
                         .setId(3)
                         .setFirstName("Doris")
                         .setSecondName("Franklin")
-                        .setBirthday(sqlDateFromString("1984-03-16"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1984-03-16")))
         );
         ownerMap.put(
                 4L,
-                Owner.builder()
+                ((OwnerBuilder) Owner.builder()
                         .setId(4)
                         .setFirstName("Thomas")
                         .setSecondName("West")
-                        .setBirthday(sqlDateFromString("1980-01-19"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1980-01-19")))
         );
         ownerMap.put(
                 5L,
-                Owner.builder()
+                ((OwnerBuilder) Owner.builder()
                         .setId(5)
                         .setFirstName("Alex")
                         .setSecondName("Strutynski")
-                        .setBirthday(sqlDateFromString("1980-04-21"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1980-04-21")))
         );
         ownerMap.put(
                 6L,
-                Owner.builder()
+                ((OwnerBuilder) Owner.builder()
                         .setId(6)
                         .setFirstName("Vova")
                         .setSecondName("Bog")
-                        .setBirthday(null)
-                        .build()
+                        .setBirthday(null))
         );
     }
 
     private void initTrainerMap() throws ParseException {
         trainerMap.put(
                 1L,
-                Trainer.builder()
+                ((TrainerBuilder) Trainer.builder()
                         .setId(1)
                         .setFirstName("Ruby")
                         .setSecondName("Nichols")
-                        .setBirthday(sqlDateFromString("1982-04-21"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1982-04-21")))
         );
         trainerMap.put(
                 2L,
-                Trainer.builder()
+                ((TrainerBuilder) Trainer.builder()
                         .setId(2)
                         .setFirstName("Nichols")
                         .setSecondName("Ruby")
-                        .setBirthday(sqlDateFromString("1962-05-19"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1962-05-19")))
         );
         trainerMap.put(
                 3L,
-                Trainer.builder()
+                ((TrainerBuilder) Trainer.builder()
                         .setId(3)
                         .setFirstName("Doris")
                         .setSecondName("Franklin")
-                        .setBirthday(sqlDateFromString("1984-03-16"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1984-03-16")))
         );
         trainerMap.put(
                 4L,
-                Trainer.builder()
+                ((TrainerBuilder) Trainer.builder()
                         .setId(4)
                         .setFirstName("Thomas")
                         .setSecondName("West")
-                        .setBirthday(sqlDateFromString("1980-01-19"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1980-01-19")))
         );
         trainerMap.put(
                 5L,
-                Trainer.builder()
+                ((TrainerBuilder) Trainer.builder()
                         .setId(5)
                         .setFirstName("Alex")
                         .setSecondName("Strutynski")
-                        .setBirthday(sqlDateFromString("1980-04-21"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1980-04-21")))
         );
         trainerMap.put(
                 6L,
-                Trainer.builder()
+                ((TrainerBuilder) Trainer.builder()
                         .setId(6)
                         .setFirstName("Vova")
                         .setSecondName("Bog")
-                        .setBirthday(null)
-                        .build()
+                        .setBirthday(null))
         );
     }
 
     private void initJockeyMap() throws ParseException {
         jockeyMap.put(
                 1L,
-                Jockey.builder()
+                ((JockeyBuilder) Jockey.builder()
                         .setId(1)
                         .setFirstName("Ruby")
                         .setSecondName("Nichols")
-                        .setBirthday(sqlDateFromString("1982-04-21"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1982-04-21")))
         );
         jockeyMap.put(
                 2L,
-                Jockey.builder()
+                ((JockeyBuilder) Jockey.builder()
                         .setId(2)
                         .setFirstName("Nichols")
                         .setSecondName("Ruby")
-                        .setBirthday(sqlDateFromString("1962-05-19"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1962-05-19")))
         );
         jockeyMap.put(
                 3L,
-                Jockey.builder()
+                ((JockeyBuilder) Jockey.builder()
                         .setId(3)
                         .setFirstName("Doris")
                         .setSecondName("Franklin")
-                        .setBirthday(sqlDateFromString("1984-03-16"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1984-03-16")))
         );
         jockeyMap.put(
                 4L,
-                Jockey.builder()
+                ((JockeyBuilder) Jockey.builder()
                         .setId(4)
                         .setFirstName("Thomas")
                         .setSecondName("West")
-                        .setBirthday(sqlDateFromString("1980-01-19"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1980-01-19")))
         );
         jockeyMap.put(
                 5L,
-                Jockey.builder()
+                ((JockeyBuilder) Jockey.builder()
                         .setId(5)
                         .setFirstName("Alex")
                         .setSecondName("Strutynski")
-                        .setBirthday(sqlDateFromString("1980-04-21"))
-                        .build()
+                        .setBirthday(sqlDateFromString("1980-04-21")))
         );
         jockeyMap.put(
                 6L,
-                Jockey.builder()
+                ((JockeyBuilder) Jockey.builder()
                         .setId(6)
                         .setFirstName("Vova")
                         .setSecondName("Bog")
-                        .setBirthday(null)
-                        .build()
+                        .setBirthday(null))
         );
     }
 
@@ -247,7 +225,6 @@ public class EntityStorage {
                 .setGender("mare")
                 .setTrainer(getTrainer(5))
                 .setOwner(getOwner(1))
-                .build()
         );
 
         horseMap.put(
@@ -259,7 +236,6 @@ public class EntityStorage {
                 .setGender("stallion")
                 .setTrainer(getTrainer(4))
                 .setOwner(getOwner(2))
-                .build()
         );
 
         horseMap.put(
@@ -273,7 +249,6 @@ public class EntityStorage {
                 .setOwner(getOwner(3))
                 .setSir(HorseLazyLoadProxy.create(2))
                 .setDam(HorseLazyLoadProxy.create(1))
-                .build()
         );
 
         horseMap.put(
@@ -287,7 +262,6 @@ public class EntityStorage {
                 .setOwner(getOwner(4))
                 .setSir(HorseLazyLoadProxy.create(2))
                 .setDam(HorseLazyLoadProxy.create(1))
-                .build()
         );
 
         horseMap.put(
@@ -301,7 +275,6 @@ public class EntityStorage {
                 .setOwner(getOwner(5))
                 .setSir(HorseLazyLoadProxy.create(3))
                 .setDam(HorseLazyLoadProxy.create(4))
-                .build()
         );
 
         horseMap.put(
@@ -313,7 +286,6 @@ public class EntityStorage {
                 .setGender("stallion")
                 .setTrainer(getTrainer(4))
                 .setOwner(getOwner(2))
-                .build()
         );
 
         horseMap.put(
@@ -327,7 +299,6 @@ public class EntityStorage {
                 .setOwner(getOwner(4))
                 .setSir(HorseLazyLoadProxy.create(2))
                 .setDam(HorseLazyLoadProxy.create(1))
-                .build()
         );
 
         horseMap.put(
@@ -341,7 +312,6 @@ public class EntityStorage {
                 .setOwner(getOwner(3))
                 .setSir(HorseLazyLoadProxy.create(3))
                 .setDam(HorseLazyLoadProxy.create(4))
-                .build()
         );
     }
 
@@ -355,7 +325,6 @@ public class EntityStorage {
                 .setLongitude(-47.64917)
                 .setContact("scook0@hud.gov")
                 .setClerk("Stephen Cook")
-                .build()
         );
 
         racecourseMap.put(
@@ -367,7 +336,6 @@ public class EntityStorage {
                 .setLongitude(121.74293)
                 .setContact("ncunningham1@merriam-webster.com")
                 .setClerk("Nicole Cunningham")
-                .build()
         );
 
         racecourseMap.put(
@@ -379,7 +347,6 @@ public class EntityStorage {
                         .setLongitude(-50.54583)
                         .setContact("ajames2@amazon.co.jp")
                         .setClerk("Annie James")
-                        .build()
         );
 
     }
@@ -398,7 +365,6 @@ public class EntityStorage {
                         .setJockey(getJockey(1))
                         .setTrainer(getTrainer(1))
                         .setPlace(1)
-                        .build()
         );
 
         participantMap.put(
@@ -414,7 +380,6 @@ public class EntityStorage {
                         .setJockey(getJockey(2))
                         .setTrainer(getTrainer(2))
                         .setPlace(2)
-                        .build()
         );
 
         participantMap.put(
@@ -430,7 +395,6 @@ public class EntityStorage {
                         .setJockey(getJockey(3))
                         .setTrainer(getTrainer(3))
                         .setPlace(3)
-                        .build()
         );
 
         participantMap.put(
@@ -446,7 +410,6 @@ public class EntityStorage {
                         .setJockey(getJockey(4))
                         .setTrainer(getTrainer(4))
                         .setPlace(1)
-                        .build()
         );
 
         participantMap.put(
@@ -462,7 +425,6 @@ public class EntityStorage {
                         .setJockey(getJockey(5))
                         .setTrainer(getTrainer(5))
                         .setPlace(2)
-                        .build()
         );
 
         participantMap.put(
@@ -478,7 +440,6 @@ public class EntityStorage {
                         .setJockey(getJockey(1))
                         .setTrainer(getTrainer(1))
                         .setPlace(3)
-                        .build()
         );
 
         participantMap.put(
@@ -489,7 +450,6 @@ public class EntityStorage {
                         .setHorse(getHorse(2))
                         .setJockey(getJockey(2))
                         .setTrainer(getTrainer(2))
-                        .build()
         );
 
         participantMap.put(
@@ -500,7 +460,6 @@ public class EntityStorage {
                         .setHorse(getHorse(1))
                         .setJockey(getJockey(3))
                         .setTrainer(getTrainer(3))
-                        .build()
         );
 
         participantMap.put(
@@ -511,7 +470,6 @@ public class EntityStorage {
                         .setHorse(getHorse(3))
                         .setJockey(getJockey(4))
                         .setTrainer(getTrainer(4))
-                        .build()
         );
     }
 
@@ -593,9 +551,9 @@ public class EntityStorage {
                 .setPrize(2, BigDecimal.valueOf(200))
                 .setPrize(3, BigDecimal.valueOf(100));
 
-        raceMap.put(1L, race1Builder.build());
-        raceMap.put(2L, race2Builder.build());
-        raceMap.put(3L, race3Builder.build());
+        raceMap.put(1L, race1Builder);
+        raceMap.put(2L, race2Builder);
+        raceMap.put(3L, race3Builder);
     }
 
     private void initApplicationUserMap() {
@@ -613,7 +571,6 @@ public class EntityStorage {
                         .addRole(Role.ADMIN)
                         .addRole(Role.BOOKMAKER)
                         .addRole(Role.HANDICAPPER)
-                        .build()
         );
 
         applicationUserMap.put(
@@ -629,7 +586,6 @@ public class EntityStorage {
                         .setBalance(BigDecimal.valueOf(924.23))
                         .addRole(Role.BOOKMAKER)
                         .addRole(Role.HANDICAPPER)
-                        .build()
         );
 
         applicationUserMap.put(
@@ -644,7 +600,6 @@ public class EntityStorage {
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(256.71))
                         .addRole(Role.HANDICAPPER)
-                        .build()
         );
 
         applicationUserMap.put(
@@ -659,7 +614,6 @@ public class EntityStorage {
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(385.59))
                         .addRole(Role.HANDICAPPER)
-                        .build()
         );
 
         applicationUserMap.put(
@@ -674,7 +628,6 @@ public class EntityStorage {
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(749.38))
                         .addRole(Role.HANDICAPPER)
-                        .build()
         );
     }
 
@@ -693,7 +646,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(100))
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(1))
-                        .build()
         );
 
         betMap.put(
@@ -707,7 +659,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(200))
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(1))
-                        .build()
         );
 
         betMap.put(
@@ -721,7 +672,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(300))
                         .setParticipant(1, getParticipant(3))
                         .setParticipant(2, getParticipant(3))
-                        .build()
         );
 
         // Win
@@ -736,7 +686,6 @@ public class EntityStorage {
                         .setBetStatus(BetStatus.SCHEDULED)
                         .setBetSize(BigDecimal.valueOf(100))
                         .setParticipant(1, getParticipant(1))
-                        .build()
         );
 
         betMap.put(
@@ -749,7 +698,6 @@ public class EntityStorage {
                         .setBetStatus(BetStatus.SCHEDULED)
                         .setBetSize(BigDecimal.valueOf(200))
                         .setParticipant(1, getParticipant(1))
-                        .build()
         );
 
         betMap.put(
@@ -762,7 +710,6 @@ public class EntityStorage {
                         .setBetStatus(BetStatus.SCHEDULED)
                         .setBetSize(BigDecimal.valueOf(300))
                         .setParticipant(1, getParticipant(3))
-                        .build()
         );
 
         // Qeinella
@@ -778,7 +725,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(100))
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(2))
-                        .build()
         );
 
         betMap.put(
@@ -792,7 +738,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(200))
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(2))
-                        .build()
         );
 
         betMap.put(
@@ -806,7 +751,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(300))
                         .setParticipant(1, getParticipant(3))
                         .setParticipant(2, getParticipant(1))
-                        .build()
         );
 
         // Exacta
@@ -822,7 +766,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(100))
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(2))
-                        .build()
         );
 
         betMap.put(
@@ -836,7 +779,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(200))
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(2))
-                        .build()
         );
 
         betMap.put(
@@ -850,7 +792,6 @@ public class EntityStorage {
                         .setBetSize(BigDecimal.valueOf(300))
                         .setParticipant(1, getParticipant(3))
                         .setParticipant(2, getParticipant(1))
-                        .build()
         );
 
         // Trifecta
@@ -867,7 +808,6 @@ public class EntityStorage {
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(2))
                         .setParticipant(3, getParticipant(3))
-                        .build()
         );
 
         betMap.put(
@@ -882,7 +822,6 @@ public class EntityStorage {
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(2))
                         .setParticipant(3, getParticipant(3))
-                        .build()
         );
 
         betMap.put(
@@ -897,79 +836,78 @@ public class EntityStorage {
                         .setParticipant(1, getParticipant(1))
                         .setParticipant(2, getParticipant(2))
                         .setParticipant(3, getParticipant(3))
-                        .build()
         );
     }
 
     public Jockey getJockey(long o) {
-        return jockeyMap.get(o);
+        return jockeyMap.get(o).build();
     }
 
     public Owner getOwner(long o) {
-        return ownerMap.get(o);
+        return ownerMap.get(o).build();
     }
 
     public Trainer getTrainer(long o) {
-        return trainerMap.get(o);
+        return trainerMap.get(o).build();
     }
 
     public Horse getHorse(long o) {
-        return horseMap.get(o);
+        return horseMap.get(o).build();
     }
 
     public Racecourse getRacecourse(long o) {
-        return racecourseMap.get(o);
+        return racecourseMap.get(o).build();
     }
 
     public Participant getParticipant(long o) {
-        return participantMap.get(o);
+        return participantMap.get(o).build();
     }
 
     public Race getRace(long o) {
-        return raceMap.get(o);
+        return raceMap.get(o).build();
     }
 
     public ApplicationUser getApplicationUser(long o) {
-        return applicationUserMap.get(o);
+        return applicationUserMap.get(o).build();
     }
 
     public Bet getBet(long o) {
-        return betMap.get(o);
+        return betMap.get(o).build();
     }
 
     public List<Jockey> getAllJockeys() {
-        return jockeyMap.values().stream().collect(Collectors.toList());
+        return jockeyMap.values().stream().map(JockeyBuilder::build).collect(Collectors.toList());
     }
 
     public List<Owner> getAllOwners() {
-        return ownerMap.values().stream().collect(Collectors.toList());
+        return ownerMap.values().stream().map(OwnerBuilder::build).collect(Collectors.toList());
     }
 
     public List<Trainer> getAllTrainers() {
-        return trainerMap.values().stream().collect(Collectors.toList());
+        return trainerMap.values().stream().map(TrainerBuilder::build).collect(Collectors.toList());
     }
 
     public List<Horse> getAllHorses() {
-        return horseMap.values().stream().collect(Collectors.toList());
+        return horseMap.values().stream().map(HorseBuilder::build).collect(Collectors.toList());
     }
 
     public List<Racecourse> getAllRacecourses() {
-        return racecourseMap.values().stream().collect(Collectors.toList());
+        return racecourseMap.values().stream().map(RacecourseBuilder::build).collect(Collectors.toList());
     }
 
     public List<Participant> getAllParticipants() {
-        return participantMap.values().stream().collect(Collectors.toList());
+        return participantMap.values().stream().map(ParticipantBuilder::build).collect(Collectors.toList());
     }
 
     public List<Race> getAllRaces() {
-        return raceMap.values().stream().collect(Collectors.toList());
+        return raceMap.values().stream().map(RaceBuilder::build).collect(Collectors.toList());
     }
 
     public List<ApplicationUser> getAllApplicationUsers() {
-        return applicationUserMap.values().stream().collect(Collectors.toList());
+        return applicationUserMap.values().stream().map(ApplicationUserBuilder::build).collect(Collectors.toList());
     }
 
     public List<Bet> getAllBets() {
-        return betMap.values().stream().collect(Collectors.toList());
+        return betMap.values().stream().map(BetBuilder::build).collect(Collectors.toList());
     }
 }

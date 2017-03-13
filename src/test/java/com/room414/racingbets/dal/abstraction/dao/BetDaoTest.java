@@ -40,7 +40,7 @@ class BetDaoTest {
         unitOfWork.close();
     }
 
-    private static BetDao getDao() {
+    private static BetDao getDao() throws DalException {
         return unitOfWork.getBetDao();
     }
 
