@@ -1,9 +1,9 @@
 package com.room414.racingbets.dal.concrete.caching.dao;
 
-import com.room414.racingbets.dal.abstraction.caching.DaoCache;
 import com.room414.racingbets.dal.abstraction.dao.*;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.caching.lazyload.*;
+import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 
 /**
  * @author Alexander Melashchenko
@@ -11,7 +11,7 @@ import com.room414.racingbets.dal.concrete.caching.lazyload.*;
  */
 public class CacheUnitOfWork implements UnitOfWork {
     private UnitOfWork unitOfWork;
-    private DaoCache cache;
+    private RedisCache cache;
 
     private ApplicationUserDao applicationUserDao;
     private BetDao betDao;
@@ -27,8 +27,9 @@ public class CacheUnitOfWork implements UnitOfWork {
     private RacecourseDao racecourseDao;
 
 
-    public CacheUnitOfWork(UnitOfWork unitOfWork, DaoCache cache) {
+    public CacheUnitOfWork(UnitOfWork unitOfWork, RedisCache cache) {
         this.unitOfWork = unitOfWork;
+        this.cache = cache;
     }
 
     @Override
@@ -106,17 +107,16 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public void commit() throws DalException {
         unitOfWork.commit();
-        cache.commit();
     }
 
     @Override
     public void rollback() throws DalException {
         unitOfWork.rollback();
-        cache.rollback();
     }
 
     @Override
     public void close() throws Exception {
         unitOfWork.close();
+        cache.close();
     }
 }

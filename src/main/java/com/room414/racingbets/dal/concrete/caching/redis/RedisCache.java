@@ -2,11 +2,13 @@ package com.room414.racingbets.dal.concrete.caching.redis;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.room414.racingbets.dal.abstraction.caching.DaoCache;
 import redis.clients.jedis.Jedis;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
@@ -15,15 +17,14 @@ import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
  * @author Alexander Melashchenko
  * @version 1.0 13 Mar 2017
  */
-public class RedisCache implements DaoCache, AutoCloseable {
-    private Jedis jedis;
+public class RedisCache implements Closeable {
+    protected Jedis jedis;
 
     public RedisCache(Jedis jedis) {
         this.jedis = jedis;
     }
 
-    @Override
-    public <T> T get(String key, Callable<T> getter, Class<T> type) throws Exception {
+    public <T> T getOneCached(String key, Callable<T> getter, TypeReference<T> type) throws Exception {
         String value = jedis.get(key);
 
         if (value != null) {
@@ -37,13 +38,29 @@ public class RedisCache implements DaoCache, AutoCloseable {
         return result;
     }
 
-    @Override
+    public <T> List<T> getManyCached(
+            String namespace, String key, Callable<List<T>> getter, TypeReference<List<T>> type
+    ) throws Exception {
+
+        String value = jedis.hget(namespace, key);
+
+        if (value != null) {
+            return deserialize(value, type);
+        }
+
+        List<T> result = getter.call();
+
+        jedis.set(key, serialize(result));
+
+        return result;
+    }
+
     public void delete(String key) {
         jedis.del(key);
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         jedis.close();
     }
 
@@ -53,7 +70,7 @@ public class RedisCache implements DaoCache, AutoCloseable {
         return mapper.writeValueAsString(object);
     }
 
-    private <T> T deserialize(String json, Class<T> type) throws IOException {
+    private <T> T deserialize(String json, TypeReference<T> type) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(FIELD, JsonAutoDetect.Visibility.ANY);
         return objectMapper.readValue(json, type);
