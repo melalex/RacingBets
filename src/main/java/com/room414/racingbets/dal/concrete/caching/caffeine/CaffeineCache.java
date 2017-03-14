@@ -14,12 +14,9 @@ import java.util.List;
 public interface CaffeineCache<T> {
     T getOneCached(String key, Getter<T> getter) throws DalException, IOException;
     List<T> getManyCached(String key, Getter<List<T>> getter) throws DalException;
+    long getCachedCount(String key, Getter<Long> getter) throws DalException;
 
     void deleteOneCached(String key);
     void deleteAllCached();
     void deleteManyCached();
-
-    long getCachedCount(Getter<Long> getter) throws DalException;
-    void incrementCount();
-    void decrementCount();
 }

@@ -18,7 +18,7 @@ import static com.room414.racingbets.dal.concrete.caching.caffeine.caches.CacheH
 public abstract class BaseCache<T> implements CaffeineCache<T> {
     private String nameSpace;
     private String listNameSpace;
-    private String countKey;
+    private String countNameSpace;
 
     private TypeReference<T> type;
     private TypeReference<List<T>> listType;
@@ -31,7 +31,7 @@ public abstract class BaseCache<T> implements CaffeineCache<T> {
     public BaseCache(
             String nameSpace,
             String listNameSpace,
-            String countKey,
+            String countNameSpace,
             TypeReference<T> type,
             TypeReference<List<T>> listType,
             Cache<String, T> cache,
@@ -41,7 +41,7 @@ public abstract class BaseCache<T> implements CaffeineCache<T> {
     ) {
         this.nameSpace = nameSpace;
         this.listNameSpace = listNameSpace;
-        this.countKey = countKey;
+        this.countNameSpace = countNameSpace;
         this.type = type;
         this.listType = listType;
         this.cache = cache;
@@ -52,7 +52,11 @@ public abstract class BaseCache<T> implements CaffeineCache<T> {
 
     @Override
     public T getOneCached(String key, Getter<T> getter) throws DalException {
-        return getCached(cache, key, () -> redisCache.getCached(nameSpace, key, getter, type));
+        return getCached(
+                cache,
+                key,
+                () -> redisCache.getCached(nameSpace, key, getter, type)
+        );
     }
 
     @Override
@@ -61,6 +65,15 @@ public abstract class BaseCache<T> implements CaffeineCache<T> {
                 cacheList,
                 key,
                 () -> redisCache.getCached(listNameSpace, key, getter, listType)
+        );
+    }
+
+    @Override
+    public long getCachedCount(String key, Getter<Long> getter) throws DalException {
+        return getCached(
+                countCache,
+                key,
+                () -> redisCache.getCachedCount(listNameSpace, key, getter)
         );
     }
 
@@ -74,28 +87,17 @@ public abstract class BaseCache<T> implements CaffeineCache<T> {
     public void deleteAllCached() {
         cache.invalidateAll();
         cacheList.invalidateAll();
+        countCache.invalidateAll();
         redisCache.delete(nameSpace);
         redisCache.delete(listNameSpace);
+        redisCache.delete(countNameSpace);
     }
 
     @Override
     public void deleteManyCached() {
         cacheList.invalidateAll();
+        countCache.invalidateAll();
         redisCache.delete(listNameSpace);
-    }
-
-    @Override
-    public long getCachedCount(Getter<Long> getter) throws DalException {
-        return getCached(countCache, countKey, () -> redisCache.getCachedCount(countKey, getter));
-    }
-
-    @Override
-    public void incrementCount() {
-        redisCache.incrementCount(countKey);
-    }
-
-    @Override
-    public void decrementCount() {
-        redisCache.decrementCount(countKey);
+        redisCache.delete(countNameSpace);
     }
 }

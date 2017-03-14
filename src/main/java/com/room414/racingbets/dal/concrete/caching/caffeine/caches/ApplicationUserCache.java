@@ -16,18 +16,27 @@ import java.util.List;
 public class ApplicationUserCache extends BaseCache<ApplicationUser> {
     private static final String NAME_SPACE = "application:user";
     private static final String LIST_NAME_SPACE = "application:user:list";
-    private static final String COUNT_KEY = "application:user:count";
+    private static final String COUNT_NAME_SPACE = "application:user:count";
 
     private static final TypeReference<ApplicationUser> TYPE = new TypeReference<ApplicationUser>() {};
     private static final TypeReference<List<ApplicationUser>> LIST_TYPE = new TypeReference<List<ApplicationUser>>() {};
 
+    private BetCache betCache;
 
     public ApplicationUserCache(
             Cache<String, ApplicationUser> cache,
             Cache<String, List<ApplicationUser>> cacheList,
             Cache<String, Long> countCache,
-            RedisCache redisCache
+            RedisCache redisCache,
+            BetCache betCache
     ) {
-        super(NAME_SPACE, LIST_NAME_SPACE, COUNT_KEY, TYPE, LIST_TYPE, cache, cacheList, countCache, redisCache);
+        super(NAME_SPACE, LIST_NAME_SPACE, COUNT_NAME_SPACE, TYPE, LIST_TYPE, cache, cacheList, countCache, redisCache);
+        this.betCache = betCache;
+    }
+
+    @Override
+    public void deleteOneCached(String key) {
+        super.deleteOneCached(key);
+        betCache.deleteAllCached();
     }
 }

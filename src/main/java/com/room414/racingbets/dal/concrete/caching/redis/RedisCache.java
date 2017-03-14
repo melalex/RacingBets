@@ -56,8 +56,8 @@ public class RedisCache implements Closeable {
         }
     }
 
-    public long getCachedCount(String key, Getter<Long> getter) throws DalException {
-        String value = jedis.get(key);
+    public long getCachedCount(String namespace, String key, Getter<Long> getter) throws DalException {
+        String value = jedis.hget(namespace, key);
 
         if (value != null) {
             return Long.valueOf(value);
@@ -65,19 +65,10 @@ public class RedisCache implements Closeable {
 
         Long result = getter.call();
 
-        jedis.set(key, String.valueOf(result));
+        jedis.hset(namespace, key, String.valueOf(result));
 
         return result;
     }
-
-    public void incrementCount(String key) {
-        getTransaction().incr(key);
-    }
-
-    public void decrementCount(String key) {
-        getTransaction().decr(key);
-    }
-
 
     public void delete(String key) {
         getTransaction().del(key);
@@ -85,11 +76,6 @@ public class RedisCache implements Closeable {
 
     public void delete(String namespace, String key) {
         getTransaction().hdel(namespace, key);
-    }
-
-    @Override
-    public void close() {
-        jedis.close();
     }
 
     private <T> String serialize(T object) throws JsonProcessingException {
@@ -115,5 +101,10 @@ public class RedisCache implements Closeable {
         if (transaction != null) {
             transaction.discard();
         }
+    }
+
+    @Override
+    public void close() {
+        jedis.close();
     }
 }

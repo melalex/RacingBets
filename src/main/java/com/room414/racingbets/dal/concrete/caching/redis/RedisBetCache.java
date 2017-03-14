@@ -27,7 +27,7 @@ public class RedisBetCache extends RedisCache {
         return "odds:" + raceId;
     }
 
-    private String getOddsKey(String namespace, Bet bet) {
+    public static String getOddsKey(String namespace, Bet bet) {
         StringBuilder builder = new StringBuilder(namespace);
         builder.append(bet.getBetType().toString());
 
