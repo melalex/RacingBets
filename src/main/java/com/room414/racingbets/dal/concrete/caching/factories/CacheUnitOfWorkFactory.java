@@ -29,6 +29,6 @@ public class CacheUnitOfWorkFactory implements UnitOfWorkFactory {
     public UnitOfWork createUnitOfWork() throws DalException {
         UnitOfWork unitOfWork = new LazyLoadUnitOfWork(unitOfWorkFactory);
 
-        return new CacheUnitOfWork(new LazyLoadUnitOfWork(unitOfWorkFactory), redisUnitOfWorkFactory.create());
+        return null;
     }
 }
