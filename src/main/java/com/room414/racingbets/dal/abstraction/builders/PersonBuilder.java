@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.abstraction.entities.Person;
 import java.sql.Date;
 
 /**
- * Base class for builders that creates person subclasses.
+ * base class for builders that creates person subclasses.
  *
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017

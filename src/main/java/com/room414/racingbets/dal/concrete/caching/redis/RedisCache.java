@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 
@@ -18,45 +19,72 @@ import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
  * @version 1.0 13 Mar 2017
  */
 public class RedisCache implements Closeable {
-    protected Jedis jedis;
+    Jedis jedis;
+
+    private Transaction transaction;
 
     public RedisCache(Jedis jedis) {
         this.jedis = jedis;
     }
 
-    public <T> T getOneCached(String key, Callable<T> getter, TypeReference<T> type) throws Exception {
+    Transaction getTransaction() {
+        if (transaction == null) {
+            transaction = jedis.multi();
+        }
+        return transaction;
+    }
+
+    public <T> T getCached(String namespace, String key, Getter<T> getter, TypeReference<T> type) throws DalException {
+        try {
+            String value = jedis.hget(namespace, key);
+
+            if (value != null) {
+                return deserialize(value, type);
+            }
+
+            T result = getter.call();
+
+            jedis.set(key, serialize(result));
+
+            return result;
+        } catch (JsonProcessingException e) {
+            String message = "Exception during object -> json serializing";
+            throw new DalException(message, e);
+        } catch (IOException e) {
+            String message = "Exception during json -> object deserialize";
+            throw new DalException(message, e);
+        }
+    }
+
+    public long getCachedCount(String key, Getter<Long> getter) throws DalException {
         String value = jedis.get(key);
 
         if (value != null) {
-            return deserialize(value, type);
+            return Long.valueOf(value);
         }
 
-        T result = getter.call();
+        Long result = getter.call();
 
-        jedis.set(key, serialize(result));
+        jedis.set(key, String.valueOf(result));
 
         return result;
     }
 
-    public <T> List<T> getManyCached(
-            String namespace, String key, Callable<List<T>> getter, TypeReference<List<T>> type
-    ) throws Exception {
-
-        String value = jedis.hget(namespace, key);
-
-        if (value != null) {
-            return deserialize(value, type);
-        }
-
-        List<T> result = getter.call();
-
-        jedis.set(key, serialize(result));
-
-        return result;
+    public void incrementCount(String key) {
+        getTransaction().incr(key);
     }
+
+    public void decrementCount(String key) {
+        getTransaction().decr(key);
+    }
+
 
     public void delete(String key) {
-        jedis.del(key);
+        getTransaction().del(key);
+    }
+
+    public void delete(String namespace, String key) {
+        getTransaction().hdel(namespace, key);
     }
 
     @Override
@@ -74,5 +102,18 @@ public class RedisCache implements Closeable {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(FIELD, JsonAutoDetect.Visibility.ANY);
         return objectMapper.readValue(json, type);
+    }
+
+
+    public void commit() {
+        if (transaction != null) {
+            transaction.exec();
+        }
+    }
+
+    public void rollback() {
+        if (transaction != null) {
+            transaction.discard();
+        }
     }
 }

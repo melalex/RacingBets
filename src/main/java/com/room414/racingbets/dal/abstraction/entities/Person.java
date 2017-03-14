@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 /**
- * Base class for entities that stores data about person.
+ * base class for entities that stores data about person.
  *
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017

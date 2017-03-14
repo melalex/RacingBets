@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.dao.CacheUnitOfWork;
-import com.room414.racingbets.dal.concrete.caching.lazyload.LazyLoadUnitOfWork;
+import com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload.LazyLoadUnitOfWork;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
 import redis.clients.jedis.JedisPool;
 
@@ -17,16 +17,18 @@ import javax.sql.DataSource;
 public class CacheUnitOfWorkFactory implements UnitOfWorkFactory {
 
     private UnitOfWorkFactory unitOfWorkFactory;
-    private RedisFactory redisFactory;
-    // private CaffeineFactory caffeineFactory = CaffeineFactory.createFactory(redisFactory);
+    private RedisUnitOfWorkFactory redisUnitOfWorkFactory;
+    // private CaffeineFactory caffeineFactory = CaffeineFactory.createFactory(redisUnitOfWorkFactory);
 
     public CacheUnitOfWorkFactory(DataSource mysqlConnectionPool, JedisPool redisConnectionPool) {
         this.unitOfWorkFactory = new MySqlUnitOfWorkFactory(mysqlConnectionPool);
-        this.redisFactory = new RedisFactory(redisConnectionPool);
+        this.redisUnitOfWorkFactory = new RedisUnitOfWorkFactory(redisConnectionPool);
     }
 
     @Override
     public UnitOfWork createUnitOfWork() throws DalException {
-        return new CacheUnitOfWork(new LazyLoadUnitOfWork(unitOfWorkFactory), redisFactory.create());
+        UnitOfWork unitOfWork = new LazyLoadUnitOfWork(unitOfWorkFactory);
+
+        return new CacheUnitOfWork(new LazyLoadUnitOfWork(unitOfWorkFactory), redisUnitOfWorkFactory.create());
     }
 }

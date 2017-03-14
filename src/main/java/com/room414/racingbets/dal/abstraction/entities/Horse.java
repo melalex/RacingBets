@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 /**
- * Base class to HorseEntity and its lazyload.
+ * base class to HorseEntity and its lazyload.
  *
  * @see com.room414.racingbets.dal.domain.entities.HorseEntity
  * @see com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy

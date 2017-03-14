@@ -2,7 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.*;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.caching.lazyload.*;
+import com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload.*;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 
 /**

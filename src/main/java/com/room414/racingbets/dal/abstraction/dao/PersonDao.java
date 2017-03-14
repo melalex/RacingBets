@@ -6,7 +6,7 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import java.util.List;
 
 /**
- * Base DAO interface for entities that inherits Person.
+ * base DAO interface for entities that inherits Person.
  *
  * @see Person
  * @author Alexander Melashchenko
