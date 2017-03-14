@@ -1,7 +1,11 @@
 package com.room414.racingbets.dal.concrete.caching.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
+import com.room414.racingbets.dal.abstraction.dao.CrudDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCache;
+import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
+import com.room414.racingbets.dal.concrete.caching.caffeine.caches.BetCache;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 
@@ -11,75 +15,56 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheBetDao implements BetDao {
-    private BetDao betDao;
+public class CacheBetDao extends CacheCrudDao<Bet> implements BetDao {
+    protected BetDao dao;
+    protected BetCache cache;
 
-    public CacheBetDao(BetDao betDao) {
-        this.betDao = betDao;
+    CacheBetDao(CrudDao<Long, Bet> dao, CaffeineCache<Bet> cache) {
+        super(dao, cache);
     }
 
     @Override
     public void create(Bet entity) throws DalException {
-        betDao.create(entity);
+        dao.create(entity);
+        cache.updateOdds(entity);
     }
 
     @Override
     public List<Bet> findByUserId(long id, long offset, long limit) throws DalException {
-        return betDao.findByUserId(id, offset, limit);
-    }
+        String key = String.format("find:user:%d:%d:%d", id, limit, offset);
 
-    @Override
-    public Bet find(Long id) throws DalException {
-        return betDao.find(id);
+        return cache.getManyCached(key, () -> dao.findByUserId(id, offset, limit));
     }
 
     @Override
     public long findByUserIdCount(long id) throws DalException {
-        return betDao.findByUserIdCount(id);
-    }
+        String key = "find:user:id";
 
-    @Override
-    public List<Bet> findAll() throws DalException {
-        return betDao.findAll();
+        return cache.getCachedCount(key, () -> dao.findByUserIdCount(id));
     }
 
     @Override
     public List<Bet> findByRaceId(long id, long offset, long limit) throws DalException {
-        return betDao.findByRaceId(id, offset, limit);
+        String key = String.format("find:race:%d:%d:%d", id, limit, offset);
+
+        return cache.getManyCached(key, () -> dao.findByRaceId(id, offset, limit));
     }
 
     @Override
     public long findByRaceIdCount(long id) throws DalException {
-        return betDao.findByRaceIdCount(id);
-    }
+        String key = "find:race:id";
 
-    @Override
-    public List<Bet> findAll(long offset, long limit) throws DalException {
-        return betDao.findAll(offset, limit);
+        return cache.getCachedCount(key, () -> dao.findByRaceIdCount(id));
     }
 
     @Override
     public long update(List<Bet> bets) throws DalException {
-        return betDao.update(bets);
-    }
-
-    @Override
-    public long count() throws DalException {
-        return betDao.count();
-    }
-
-    @Override
-    public long update(Bet entity) throws DalException {
-        return betDao.update(entity);
+        cache.deleteAllCached();
+        return dao.update(bets);
     }
 
     @Override
     public Odds getOdds(Bet bet) throws DalException {
-        return betDao.getOdds(bet);
-    }
-
-    @Override
-    public boolean delete(Long id) throws DalException {
-        return betDao.delete(id);
+        return cache.getOdds(bet, () -> dao.getOdds(bet));
     }
 }
