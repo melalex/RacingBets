@@ -4,7 +4,6 @@ import com.room414.racingbets.dal.abstraction.dao.CrudDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCache;
 
-import java.io.IOException;
 import java.util.List;
 
 /**

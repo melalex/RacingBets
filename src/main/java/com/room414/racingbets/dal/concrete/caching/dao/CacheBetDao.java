@@ -19,8 +19,10 @@ public class CacheBetDao extends CacheCrudDao<Bet> implements BetDao {
     protected BetDao dao;
     protected BetCache cache;
 
-    CacheBetDao(CrudDao<Long, Bet> dao, CaffeineCache<Bet> cache) {
+    CacheBetDao(BetDao dao, BetCache cache) {
         super(dao, cache);
+        this.dao = dao;
+        this.cache = cache;
     }
 
     @Override

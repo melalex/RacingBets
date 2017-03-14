@@ -18,8 +18,11 @@ public class CacheApplicationUserDao extends CacheCrudDao<ApplicationUser> imple
     protected ApplicationUserDao dao;
     protected ApplicationUserCache cache;
 
+    // TODO: ivar inheritance
     CacheApplicationUserDao(ApplicationUserDao dao, ApplicationUserCache cache) {
         super(dao, cache);
+        this.dao = dao;
+        this.cache = cache;
     }
 
     @Override
