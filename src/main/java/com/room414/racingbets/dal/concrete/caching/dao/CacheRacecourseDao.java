@@ -2,6 +2,8 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.RacecourseDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
+import com.room414.racingbets.dal.concrete.caching.caffeine.caches.RacecourseCache;
 import com.room414.racingbets.dal.domain.entities.Racecourse;
 
 import java.util.List;
@@ -10,55 +12,28 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheRacecourseDao implements RacecourseDao {
-    private RacecourseDao racecourseDao;
+public class CacheRacecourseDao extends CacheCrudDao<Racecourse> implements RacecourseDao {
+    private RacecourseDao dao;
+    private RacecourseCache cache;
 
-    public CacheRacecourseDao(RacecourseDao racecourseDao) {
-        this.racecourseDao = racecourseDao;
-    }
-
-    @Override
-    public void create(Racecourse entity) throws DalException {
-        racecourseDao.create(entity);
+    CacheRacecourseDao(RacecourseDao dao, RacecourseCache cache) {
+        super(dao, cache);
+        this.dao = dao;
+        this.cache = cache;
     }
 
     @Override
     public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
-        return racecourseDao.findByNamePart(namePart, offset, limit);
-    }
+        String key = String.format("find:name:%s:%d:%d", namePart, limit, offset);
 
-    @Override
-    public Racecourse find(Long id) throws DalException {
-        return racecourseDao.find(id);
+        return cache.getManyCached(key, () -> dao.findByNamePart(namePart, offset, limit));
     }
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        return racecourseDao.findByNamePartCount(namePart);
+        String key = "find:name:count";
+
+        return cache.getCachedCount(key, () -> dao.findByNamePartCount(namePart));
     }
 
-    @Override
-    public List<Racecourse> findAll() throws DalException {
-        return racecourseDao.findAll();
-    }
-
-    @Override
-    public List<Racecourse> findAll(long offset, long limit) throws DalException {
-        return racecourseDao.findAll(offset, limit);
-    }
-
-    @Override
-    public long count() throws DalException {
-        return racecourseDao.count();
-    }
-
-    @Override
-    public long update(Racecourse entity) throws DalException {
-        return racecourseDao.update(entity);
-    }
-
-    @Override
-    public boolean delete(Long id) throws DalException {
-        return racecourseDao.delete(id);
-    }
 }
