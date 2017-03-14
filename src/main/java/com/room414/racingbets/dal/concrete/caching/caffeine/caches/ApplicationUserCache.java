@@ -39,4 +39,10 @@ public class ApplicationUserCache extends BaseCache<ApplicationUser> {
         super.deleteOneCached(key);
         betCache.deleteAllCached();
     }
+
+    @Override
+    public void deleteAllCached() {
+        super.deleteAllCached();
+        betCache.deleteAllCached();
+    }
 }

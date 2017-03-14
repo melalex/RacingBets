@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.caching.dao;
+package com.room414.racingbets.dal.concrete.caching.caffeine.base;
 
 import com.room414.racingbets.dal.abstraction.dao.CrudDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
@@ -12,8 +12,8 @@ import java.util.List;
  * @version 1.0 14 Mar 2017
  */
 public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
-    CrudDao<Long, T> dao;
-    CaffeineCache<T> cache;
+    protected CrudDao<Long, T> dao;
+    protected CaffeineCache<T> cache;
 
     public CacheCrudDao(CrudDao<Long, T> dao, CaffeineCache<T> cache) {
         this.dao = dao;
@@ -28,7 +28,7 @@ public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
 
     @Override
     public T find(Long id) throws DalException {
-        final String key = "find:" + id;
+        final String key = getFindByIdKey(id);
 
         return cache.getOneCached(key, () -> dao.find(id));
     }
@@ -61,10 +61,14 @@ public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
 
     @Override
     public boolean delete(Long id) throws DalException {
-        final String key = "find:" + id;
+        final String key = getFindByIdKey(id);
 
         cache.deleteOneCached(key);
         cache.deleteManyCached();
         return dao.delete(id);
+    }
+
+    protected String getFindByIdKey(long id) {
+        return "find:" + id;
     }
 }
