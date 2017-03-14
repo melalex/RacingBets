@@ -31,7 +31,7 @@ public class CacheHorseDao extends CacheCrudDao<Horse> implements HorseDao {
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        String key = "find:name:count";
+        String key = "find:name:count:" + namePart;
 
         return cache.getCachedCount(key, () -> dao.findByNamePartCount(namePart));
     }

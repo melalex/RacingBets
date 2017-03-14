@@ -31,7 +31,7 @@ public class CacheRacecourseDao extends CacheCrudDao<Racecourse> implements Race
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        String key = "find:name:count";
+        String key = "find:name:count" + namePart;
 
         return cache.getCachedCount(key, () -> dao.findByNamePartCount(namePart));
     }

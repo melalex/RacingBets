@@ -58,27 +58,28 @@ public class CacheApplicationUserDao extends CacheCrudDao<ApplicationUser> imple
     @Override
     public boolean confirmEmail(long id) throws DalException {
         removeFromCacheById(id);
-
+        cache.deleteManyCached();
         return dao.confirmEmail(id);
     }
 
     @Override
     public void addRole(long userId, Role role) throws DalException {
         dao.addRole(userId, role);
-
+        cache.deleteManyCached();
         removeFromCacheById(userId);
     }
 
     @Override
     public void removeRole(long userId, Role role) throws DalException {
         dao.removeRole(userId, role);
-
+        cache.deleteManyCached();
         removeFromCacheById(userId);
     }
 
     @Override
     public boolean tryGetMoney(long id, BigDecimal amount) throws DalException {
         removeFromCacheById(id);
+        cache.deleteManyCached();
         return dao.tryGetMoney(id, amount);
     }
 
@@ -86,6 +87,7 @@ public class CacheApplicationUserDao extends CacheCrudDao<ApplicationUser> imple
     public void putMoney(long id, BigDecimal amount) throws DalException {
         dao.putMoney(id, amount);
         removeFromCacheById(id);
+        cache.deleteManyCached();
     }
 
     private String  getFindByLoginAndPasswordKey(String login, String password) {

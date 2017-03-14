@@ -30,7 +30,7 @@ public abstract class CachePersonDao<T extends Person> extends CacheCrudDao<T> i
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        String key = "find:name:count";
+        String key = "find:name:count:" + namePart;
 
         return cache.getCachedCount(key, () -> dao.findByNamePartCount(namePart));
     }
