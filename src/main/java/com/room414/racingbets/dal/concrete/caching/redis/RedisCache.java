@@ -44,7 +44,7 @@ public class RedisCache implements Closeable {
 
             T result = getter.call();
 
-            jedis.set(key, serialize(result));
+            jedis.hset(namespace, key, serialize(result));
 
             return result;
         } catch (JsonProcessingException e) {
