@@ -34,7 +34,7 @@ public class RedisCache implements Closeable {
         return transaction;
     }
 
-    public <T> T getCached(String namespace, String key, Getter<T> getter, TypeReference<T> type) throws DalException {
+    public <T> T getCached(String namespace, String key, Getter<T> getter, TypeReference<T> type) {
         try {
             String value = jedis.hget(namespace, key);
 
@@ -56,7 +56,7 @@ public class RedisCache implements Closeable {
         }
     }
 
-    public long getCachedCount(String namespace, String key, Getter<Long> getter) throws DalException {
+    public long getCachedCount(String namespace, String key, Getter<Long> getter) {
         String value = jedis.hget(namespace, key);
 
         if (value != null) {

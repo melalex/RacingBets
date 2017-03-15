@@ -18,32 +18,32 @@ public class LazyLoadRacecourseDao implements RacecourseDao {
         this.unitOfWork = unitOfWork;
     }
 
-    private RacecourseDao getRacecourseDao() throws DalException {
+    private RacecourseDao getRacecourseDao() {
         return unitOfWork.getRacecourseDao();
     }
 
     @Override
-    public void create(Racecourse entity) throws DalException {
+    public void create(Racecourse entity) {
         getRacecourseDao().create(entity);
     }
 
     @Override
-    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) {
         return getRacecourseDao().findByNamePart(namePart, offset, limit);
     }
 
     @Override
-    public Racecourse find(Long id) throws DalException {
+    public Racecourse find(Long id) {
         return getRacecourseDao().find(id);
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         return getRacecourseDao().findByNamePartCount(namePart);
     }
 
     @Override
-    public List<Racecourse> findAll() throws DalException {
+    public List<Racecourse> findAll() {
         return getRacecourseDao().findAll();
     }
 

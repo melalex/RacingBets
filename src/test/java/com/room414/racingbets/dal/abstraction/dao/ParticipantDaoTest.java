@@ -39,13 +39,13 @@ class ParticipantDaoTest {
         unitOfWork.close();
     }
 
-    private static ParticipantDao getParticipantDao() throws DalException {
+    private static ParticipantDao getParticipantDao() {
         return unitOfWork.getParticipantDao();
     }
 
     @Test
     @Tag("read")
-    void find_existent_returnedEntity() throws ParseException, DalException {
+    void find_existent_returnedEntity() throws ParseException {
         ParticipantDao dao = getParticipantDao();
 
         Participant expectedResult = storage.getParticipant(1);
@@ -57,7 +57,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void find_nullable_returnedEntity() throws ParseException, DalException {
+    void find_nullable_returnedEntity() throws ParseException {
         ParticipantDao dao = getParticipantDao();
 
         Participant expectedResult = storage.getParticipant(9);
@@ -69,7 +69,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void find_nonexistent_returnedNull() throws DalException {
+    void find_nonexistent_returnedNull() {
         ParticipantDao dao = getParticipantDao();
 
         Participant result = dao.find(300L);
@@ -79,7 +79,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset() throws ParseException, DalException {
+    void findAllLimitOffset() throws ParseException {
         ParticipantDao dao = getParticipantDao();
         List<Participant> expectedResult = new LinkedList<>();
 
@@ -93,7 +93,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
+    void findAllLimitOffset_nonexistent_returnedEmptyList() {
         ParticipantDao dao = getParticipantDao();
 
         List<Participant> result = dao.findAll(300L, 400L);
@@ -103,7 +103,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findAll() throws ParseException, DalException {
+    void findAll() throws ParseException {
         List<Participant> expectedResult = storage.getAllParticipants();
 
         List<Participant> result = getParticipantDao().findAll();
@@ -113,7 +113,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void count() throws DalException {
+    void count() {
         ParticipantDao dao = getParticipantDao();
         long expectedResult = 9;
 
@@ -125,7 +125,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByHorseId() throws DalException {
+    void findByHorseId() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -152,7 +152,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByHorseIdCount() throws DalException {
+    void findByHorseIdCount() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -165,7 +165,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByOwnerId() throws DalException {
+    void findByOwnerId() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -192,7 +192,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByOwnerIdCount() throws DalException {
+    void findByOwnerIdCount() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -205,7 +205,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByJockeyId() throws DalException {
+    void findByJockeyId() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -232,7 +232,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByJockeyIdCount() throws DalException {
+    void findByJockeyIdCount() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -245,7 +245,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByTrainerId() throws DalException {
+    void findByTrainerId() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -272,7 +272,7 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("read")
-    void findByTrainerIdCount() throws DalException {
+    void findByTrainerIdCount() {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
@@ -286,13 +286,13 @@ class ParticipantDaoTest {
 
     @Test
     @Tag("write")
-    void delete() throws DalException, ParseException {
+    void delete() throws ParseException {
         // TODO: test this shit
     }
 
     @Test
     @Tag("write")
-    void update() throws DalException, ParseException {
+    void update() throws ParseException {
         final long targetId = 1L;
 
         ParticipantDao dao = getParticipantDao();

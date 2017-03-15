@@ -39,13 +39,13 @@ class RaceDaoTest {
         unitOfWork.close();
     }
 
-    private static RaceDao getDao() throws DalException {
+    private static RaceDao getDao() {
         return unitOfWork.getRaceDao();
     }
 
     @Test
     @Tag("read")
-    void find_existent_returnedEntity() throws DalException {
+    void find_existent_returnedEntity() {
         RaceDao dao = getDao();
 
         Race expectedResult = storage.getRace(1);
@@ -57,7 +57,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void find_withNull_returnedEntity() throws DalException {
+    void find_withNull_returnedEntity() {
         RaceDao dao = getDao();
 
         Race expectedResult = storage.getRace(3);
@@ -69,7 +69,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void find_nonexistent_returnedNull() throws DalException {
+    void find_nonexistent_returnedNull() {
         RaceDao dao = getDao();
 
         Race result = dao.find(300L);
@@ -79,7 +79,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset() throws ParseException, DalException {
+    void findAllLimitOffset() throws ParseException {
         RaceDao dao = getDao();
         List<Race> expectedResult = new LinkedList<>();
 
@@ -93,7 +93,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
+    void findAllLimitOffset_nonexistent_returnedEmptyList() {
         RaceDao dao = getDao();
 
         List<Race> result = dao.findAll(300L, 400L);
@@ -103,7 +103,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findAll() throws ParseException, DalException {
+    void findAll() throws ParseException {
         List<Race> expectedResult = storage.getAllRaces();
 
         List<Race> result = getDao().findAll();
@@ -113,7 +113,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void count() throws DalException {
+    void count() {
         RaceDao dao = getDao();
         long expectedResult = 3;
 
@@ -125,7 +125,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findByRacecourseId() throws DalException {
+    void findByRacecourseId() {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -139,7 +139,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findByRacecourseIdCount() throws DalException {
+    void findByRacecourseIdCount() {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
@@ -150,7 +150,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findByRacecourse() throws DalException {
+    void findByRacecourse() {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -165,7 +165,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findByRacecourseCount() throws DalException {
+    void findByRacecourseCount() {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
@@ -176,7 +176,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapason() throws DalException {
+    void findInTimestampDiapason() {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -196,7 +196,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapasonCount() throws DalException {
+    void findInTimestampDiapasonCount() {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
@@ -211,7 +211,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapasonOnRacecourse() throws DalException {
+    void findInTimestampDiapasonOnRacecourse() {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -232,7 +232,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapasonOnRacecourseCount() throws DalException {
+    void findInTimestampDiapasonOnRacecourseCount() {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
@@ -248,7 +248,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePart() throws DalException {
+    void findByNamePart() {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -262,7 +262,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePartCount() throws DalException {
+    void findByNamePartCount() {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
@@ -273,7 +273,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("write")
-    void createDelete() throws DalException, ParseException {
+    void createDelete() throws ParseException {
         RaceDao dao = getDao();
 
         Race newEntity = Race.builder()
@@ -313,7 +313,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("write")
-    void update() throws DalException, ParseException {
+    void update() throws ParseException {
         final long targetId = 1L;
 
         RaceDao dao = getDao();

@@ -39,13 +39,13 @@ class ApplicationUserDaoTest {
         unitOfWork.close();
     }
 
-    private static ApplicationUserDao getDao() throws DalException {
+    private static ApplicationUserDao getDao() {
         return unitOfWork.getApplicationUserDao();
     }
 
     @Test
     @Tag("read")
-    void find_existent_returnedEntity() throws DalException {
+    void find_existent_returnedEntity() {
         ApplicationUserDao dao = getDao();
 
         ApplicationUser expectedResult = storage.getApplicationUser(1);
@@ -57,7 +57,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void find_nonexistent_returnedNull() throws DalException {
+    void find_nonexistent_returnedNull() {
         ApplicationUserDao dao = getDao();
 
         ApplicationUser result = dao.find(300L);
@@ -67,7 +67,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset() throws ParseException, DalException {
+    void findAllLimitOffset() throws ParseException {
         ApplicationUserDao dao = getDao();
         List<ApplicationUser> expectedResult = new LinkedList<>();
 
@@ -81,7 +81,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
+    void findAllLimitOffset_nonexistent_returnedEmptyList() {
         ApplicationUserDao dao = getDao();
 
         List<ApplicationUser> result = dao.findAll(300L, 400L);
@@ -91,7 +91,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void findAll() throws ParseException, DalException {
+    void findAll() throws ParseException {
         List<ApplicationUser> expectedResult = storage.getAllApplicationUsers();
 
         List<ApplicationUser> result = getDao().findAll();
@@ -101,7 +101,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void count() throws DalException {
+    void count() {
         ApplicationUserDao dao = getDao();
         long expectedResult = 5;
 
@@ -113,7 +113,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void findByLoginPart() throws DalException {
+    void findByLoginPart() {
         ApplicationUserDao dao = getDao();
 
         List<ApplicationUser> expectedResult = new LinkedList<>();
@@ -128,7 +128,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void findByLoginPartCount() throws DalException {
+    void findByLoginPartCount() {
         ApplicationUserDao dao = getDao();
         long expectedResult = 1;
 
@@ -140,7 +140,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("read")
-    void findByLoginAndPassword() throws DalException {
+    void findByLoginAndPassword() {
         ApplicationUserDao dao = getDao();
 
         ApplicationUser expectedResult = storage.getApplicationUser(1);
@@ -152,7 +152,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("write")
-    void createDelete() throws DalException, ParseException {
+    void createDelete() throws ParseException {
         ApplicationUserDao dao = getDao();
 
         ApplicationUser newEntity = ApplicationUser.builder()
@@ -189,7 +189,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("write")
-    void update() throws DalException, ParseException {
+    void update() throws ParseException {
         final long targetId = 1L;
 
         ApplicationUserDao dao = getDao();
@@ -230,7 +230,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("write")
-    void addRoleAndRemoveRole() throws DalException {
+    void addRoleAndRemoveRole() {
         final long targetId = 3L;
         Role newRole = Role.ADMIN;
         ApplicationUserDao dao = getDao();
@@ -249,7 +249,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("write")
-    void tryGetMoneyAndPutMoney_enoughMoney_gotMoneyReturnTrue() throws DalException {
+    void tryGetMoneyAndPutMoney_enoughMoney_gotMoneyReturnTrue() {
         final long targetId = 1L;
         BigDecimal moneyToGet = BigDecimal.valueOf(10);
         ApplicationUserDao dao = getDao();
@@ -271,7 +271,7 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("write")
-    void tryGetMoney_notEnoughMoney_returnFalse() throws DalException {
+    void tryGetMoney_notEnoughMoney_returnFalse() {
         final long targetId = 1L;
         BigDecimal moneyToGet = BigDecimal.valueOf(10000);
         ApplicationUserDao dao = getDao();

@@ -16,7 +16,7 @@ import java.sql.Date;
  * @author Alexander Melashchenko
  * @version 1.0 26 Feb 2017
  */
-public abstract class Horse implements Serializable{
+public abstract class Horse implements Serializable {
     private static final long serialVersionUID = -4727421296999383932L;
 
     // TODO: is cool?

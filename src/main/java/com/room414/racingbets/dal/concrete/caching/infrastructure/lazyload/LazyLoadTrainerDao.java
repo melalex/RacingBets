@@ -18,52 +18,52 @@ public class LazyLoadTrainerDao implements TrainerDao {
         this.unitOfWork = unitOfWork;
     }
 
-    private TrainerDao getTrainerDao() throws DalException {
+    private TrainerDao getTrainerDao() {
         return unitOfWork.getTrainerDao();
     }
 
     @Override
-    public void create(Trainer entity) throws DalException {
+    public void create(Trainer entity) {
         getTrainerDao().create(entity);
     }
 
     @Override
-    public List<Trainer> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Trainer> findByNamePart(String namePart, long offset, long limit) {
         return getTrainerDao().findByNamePart(namePart, offset, limit);
     }
 
     @Override
-    public Trainer find(Long id) throws DalException {
+    public Trainer find(Long id) {
         return getTrainerDao().find(id);
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         return getTrainerDao().findByNamePartCount(namePart);
     }
 
     @Override
-    public List<Trainer> findAll() throws DalException {
+    public List<Trainer> findAll() {
         return getTrainerDao().findAll();
     }
 
     @Override
-    public List<Trainer> findAll(long offset, long limit) throws DalException {
+    public List<Trainer> findAll(long offset, long limit) {
         return getTrainerDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return getTrainerDao().count();
     }
 
     @Override
-    public long update(Trainer entity) throws DalException {
+    public long update(Trainer entity) {
         return getTrainerDao().update(entity);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return getTrainerDao().delete(id);
     }
 }

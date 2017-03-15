@@ -20,46 +20,46 @@ public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
     }
 
     @Override
-    public void create(T entity) throws DalException {
+    public void create(T entity) {
         dao.create(entity);
         cache.deleteManyCached();
     }
 
     @Override
-    public T find(Long id) throws DalException {
+    public T find(Long id) {
         final String key = getFindByIdKey(id);
 
         return cache.getOneCached(key, () -> dao.find(id));
     }
 
     @Override
-    public List<T> findAll() throws DalException {
+    public List<T> findAll() {
         final String key = "find:all";
 
         return cache.getManyCached(key, () -> dao.findAll());
     }
 
     @Override
-    public List<T> findAll(long offset, long limit) throws DalException {
+    public List<T> findAll(long offset, long limit) {
         final String key = String.format("find:all:%d:%d", limit, offset);
 
         return cache.getManyCached(key, () -> dao.findAll(offset, limit));
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         final String key = "count";
 
         return cache.getCachedCount(key, () -> dao.count());
     }
 
     @Override
-    public long update(T entity) throws DalException {
+    public long update(T entity) {
         return dao.update(entity);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         final String key = getFindByIdKey(id);
 
         cache.deleteOneCached(key);

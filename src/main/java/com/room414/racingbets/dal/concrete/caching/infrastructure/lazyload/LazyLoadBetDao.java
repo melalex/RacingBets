@@ -19,72 +19,72 @@ public class LazyLoadBetDao implements BetDao {
         this.unitOfWork = unitOfWork;
     }
 
-    private BetDao getBetDao() throws DalException {
+    private BetDao getBetDao() {
         return unitOfWork.getBetDao();
     }
 
     @Override
-    public void create(Bet entity) throws DalException {
+    public void create(Bet entity) {
         getBetDao().create(entity);
     }
 
     @Override
-    public List<Bet> findByUserId(long id, long offset, long limit) throws DalException {
+    public List<Bet> findByUserId(long id, long offset, long limit) {
         return getBetDao().findByUserId(id, offset, limit);
     }
 
     @Override
-    public Bet find(Long id) throws DalException {
+    public Bet find(Long id) {
         return getBetDao().find(id);
     }
 
     @Override
-    public long findByUserIdCount(long id) throws DalException {
+    public long findByUserIdCount(long id) {
         return getBetDao().findByUserIdCount(id);
     }
 
     @Override
-    public List<Bet> findAll() throws DalException {
+    public List<Bet> findAll() {
         return getBetDao().findAll();
     }
 
     @Override
-    public List<Bet> findByRaceId(long id, long offset, long limit) throws DalException {
+    public List<Bet> findByRaceId(long id, long offset, long limit) {
         return getBetDao().findByRaceId(id, offset, limit);
     }
 
     @Override
-    public long findByRaceIdCount(long id) throws DalException {
+    public long findByRaceIdCount(long id) {
         return getBetDao().findByRaceIdCount(id);
     }
 
     @Override
-    public List<Bet> findAll(long offset, long limit) throws DalException {
+    public List<Bet> findAll(long offset, long limit) {
         return getBetDao().findAll(offset, limit);
     }
 
     @Override
-    public long update(List<Bet> bets) throws DalException {
+    public long update(List<Bet> bets) {
         return getBetDao().update(bets);
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return getBetDao().count();
     }
 
     @Override
-    public long update(Bet entity) throws DalException {
+    public long update(Bet entity) {
         return getBetDao().update(entity);
     }
 
     @Override
-    public Odds getOdds(Bet bet) throws DalException {
+    public Odds getOdds(Bet bet) {
         return getBetDao().getOdds(bet);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return getBetDao().delete(id);
     }
 }

@@ -24,57 +24,57 @@ public class LazyLoadUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public ApplicationUserDao getApplicationUserDao() throws DalException {
+    public ApplicationUserDao getApplicationUserDao() {
         return getUnitOfWork().getApplicationUserDao();
     }
 
     @Override
-    public BetDao getBetDao() throws DalException {
+    public BetDao getBetDao() {
         return getUnitOfWork().getBetDao();
     }
 
     @Override
-    public HorseDao getHorseDao() throws DalException {
+    public HorseDao getHorseDao() {
         return getUnitOfWork().getHorseDao();
     }
 
     @Override
-    public JockeyDao getJockeyDao() throws DalException {
+    public JockeyDao getJockeyDao() {
         return getUnitOfWork().getJockeyDao();
     }
 
     @Override
-    public OwnerDao getOwnerDao() throws DalException {
+    public OwnerDao getOwnerDao() {
         return getUnitOfWork().getOwnerDao();
     }
 
     @Override
-    public TrainerDao getTrainerDao() throws DalException {
+    public TrainerDao getTrainerDao() {
         return getUnitOfWork().getTrainerDao();
     }
 
     @Override
-    public ParticipantDao getParticipantDao() throws DalException {
+    public ParticipantDao getParticipantDao() {
         return getUnitOfWork().getParticipantDao();
     }
 
     @Override
-    public RaceDao getRaceDao() throws DalException {
+    public RaceDao getRaceDao() {
         return getUnitOfWork().getRaceDao();
     }
 
     @Override
-    public RacecourseDao getRacecourseDao() throws DalException {
+    public RacecourseDao getRacecourseDao() {
         return getUnitOfWork().getRacecourseDao();
     }
 
     @Override
-    public void commit() throws DalException {
+    public void commit() {
         getUnitOfWork().commit();
     }
 
     @Override
-    public void rollback() throws DalException {
+    public void rollback() {
         getUnitOfWork().rollback();
     }
 

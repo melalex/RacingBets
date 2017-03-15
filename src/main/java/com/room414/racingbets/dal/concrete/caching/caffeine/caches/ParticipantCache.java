@@ -12,8 +12,6 @@ import com.room414.racingbets.dal.domain.entities.Participant;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.caching.caffeine.caches.CacheHelper.getCached;
-
 /**
  * @author Alexander Melashchenko
  * @version 1.0 14 Mar 2017
@@ -49,10 +47,9 @@ public class ParticipantCache extends BaseCache<Participant> {
     public List<Pair<Participant, Timestamp>> getWhoAndWhenCached(
             String key, Getter<List<Pair<Participant, Timestamp>>> getter
     ) throws DalException {
-        return getCached(
-                whoAndWhenCache,
+        return whoAndWhenCache.get(
                 key,
-                () -> redisCache.getCached(WHO_AND_WHEN_CACHE_NAME_SPACE, key, getter, WHO_AND_WHEN)
+                k -> redisCache.getCached(WHO_AND_WHEN_CACHE_NAME_SPACE, key, getter, WHO_AND_WHEN)
         );
     }
 

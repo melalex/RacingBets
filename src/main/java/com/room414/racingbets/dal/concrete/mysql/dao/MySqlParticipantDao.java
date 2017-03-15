@@ -42,12 +42,12 @@ public class MySqlParticipantDao implements ParticipantDao {
 
 
     @Override
-    public void create(Participant entity) throws DalException {
+    public void create(Participant entity) {
         throw new DalException("It is impossible to createUnitOfWorkFactory a Participant separate from the Race");
     }
 
     @Override
-    public Participant find(Long id) throws DalException {
+    public Participant find(Long id) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
@@ -69,7 +69,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Participant> findAll() throws DalException {
+    public List<Participant> findAll() {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
@@ -90,7 +90,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Participant> findAll(long offset, long limit) throws DalException {
+    public List<Participant> findAll(long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
@@ -112,7 +112,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return executor.count(TABLE_NAME);
     }
 
@@ -120,7 +120,7 @@ public class MySqlParticipantDao implements ParticipantDao {
      * Don't change participants race
      */
     @Override
-    public long update(Participant entity) throws DalException {
+    public long update(Participant entity) {
         String sqlStatement =
                 "UPDATE participant " +
                 "SET number = ?, horse_id = ?, carried_weight = ?, topspeed = ?, official_rating = ?, " +
@@ -160,7 +160,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return executor.delete(TABLE_NAME, id);
     }
 
@@ -176,7 +176,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) throws DalException {
+    public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
@@ -199,7 +199,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public long findByHorseIdCount(long id) throws DalException {
+    public long findByHorseIdCount(long id) {
         final String columnName = "horse_id";
 
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
@@ -229,7 +229,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public long findByOwnerIdCount(long id) throws DalException {
+    public long findByOwnerIdCount(long id) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT COUNT(*) AS count " +
@@ -250,7 +250,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) throws DalException {
+    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
@@ -273,14 +273,14 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public long findByJockeyIdCount(long id) throws DalException {
+    public long findByJockeyIdCount(long id) {
         final String columnName = "jockey_id";
 
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) throws DalException {
+    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM participant " +
@@ -303,7 +303,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public long findByTrainerIdCount(long id) throws DalException {
+    public long findByTrainerIdCount(long id) {
         final String columnName = "trainer_id";
 
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);

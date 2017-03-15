@@ -38,7 +38,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) {
         //language=MySQL
         final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.name LIKE ? LIMIT ? OFFSET ?";
 
@@ -46,7 +46,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         //language=MySQL
         final String sqlStatement = "SELECT COUNT(*) AS count FROM racecourse WHERE name LIKE ?";
 
@@ -54,7 +54,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public void create(Racecourse entity) throws DalException {
+    public void create(Racecourse entity) {
         final String sqlStatement =
                 "INSERT INTO racecourse " +
                 "   (name, latitude, longitude, contact, clerk) " +
@@ -82,7 +82,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public Racecourse find(Long id) throws DalException {
+    public Racecourse find(Long id) {
         //language=MySQL
         final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.id = ?";
 
@@ -90,7 +90,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public List<Racecourse> findAll() throws DalException {
+    public List<Racecourse> findAll() {
         //language=MySQL
         final String sqlStatement = "SELECT * FROM racecourse";
 
@@ -98,7 +98,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public List<Racecourse> findAll(long offset, long limit) throws DalException {
+    public List<Racecourse> findAll(long offset, long limit) {
         //language=MySQL
         final String sqlStatement = "SELECT * FROM racecourse LIMIT ? OFFSET ?";
 
@@ -111,7 +111,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public long update(Racecourse entity) throws DalException {
+    public long update(Racecourse entity) {
         String sqlStatement =
                 "UPDATE racecourse " +
                 "SET name = ?, latitude = ?, longitude = ?, contact = ?, clerk = ? " +
@@ -141,7 +141,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return executor.delete(TABLE_NAME, id);
     }
 }

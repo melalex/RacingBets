@@ -118,7 +118,7 @@ public class MySqlRaceDao implements RaceDao {
         }
     }
 
-    private void createRace(Race entity) throws DalException {
+    private void createRace(Race entity) {
         final String sqlStatement =
                 "INSERT INTO race " +
                 "   (name, status, racecourse_id, start_date_time, min_bet, commission, going, " +
@@ -162,7 +162,7 @@ public class MySqlRaceDao implements RaceDao {
         }
     }
 
-    private void createParticipants(Race entity) throws DalException {
+    private void createParticipants(Race entity) {
         final String sqlStatement =
                 "INSERT INTO participant " +
                 "   (number, horse_id, race_id, carried_weight, topspeed, " +
@@ -201,7 +201,7 @@ public class MySqlRaceDao implements RaceDao {
 
     }
 
-    private void createPrizes(Race entity) throws DalException {
+    private void createPrizes(Race entity) {
         final String sqlStatement = "INSERT INTO prize (race_id, prize_size, place) VALUES (?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -224,14 +224,14 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public void create(Race entity) throws DalException {
+    public void create(Race entity) {
         createRace(entity);
         createParticipants(entity);
         createPrizes(entity);
     }
 
     @Override
-    public Race find(Long id) throws DalException {
+    public Race find(Long id) {
         final String call = "{ CALL find_race_by_id(?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {
@@ -245,7 +245,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findAll() throws DalException {
+    public List<Race> findAll() {
         //language=MySQL
         final String call = "{ CALL find_all_races() }";
 
@@ -259,7 +259,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findAll(long offset, long limit) throws DalException {
+    public List<Race> findAll(long offset, long limit) {
         //language=MySQL
         final String call = "{ CALL find_all_races_limit_offset(?, ?) }";
 
@@ -276,12 +276,12 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return executor.count(TABLE_NAME);
     }
 
     @Override
-    public long update(Race entity) throws DalException {
+    public long update(Race entity) {
         final String sqlStatement =
                 "UPDATE race " +
                 "SET name = ?, status = ?, racecourse_id = ?, start_date_time = ?, min_bet = ?, " +
@@ -328,7 +328,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return executor.delete(TABLE_NAME, id);
     }
 
@@ -347,7 +347,7 @@ public class MySqlRaceDao implements RaceDao {
         }
     }
 
-    private long findByColumnPartCount(String sqlStatement, RaceStatus status, String part) throws DalException {
+    private long findByColumnPartCount(String sqlStatement, RaceStatus status, String part) {
         try (PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, status.getName());
             statement.setString(2, startsWith(part));
@@ -360,7 +360,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) throws DalException {
+    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) {
         //language=MySQL
         final String call = "{ CALL find_by_racecourse_id(?, ?, ?, ?) }";
 
@@ -379,7 +379,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findByRacecourseIdCount(RaceStatus status, long racecourse) throws DalException {
+    public long findByRacecourseIdCount(RaceStatus status, long racecourse) {
         final String sqlStatement = "SELECT  COUNT(*) AS count FROM race WHERE status = ? AND racecourse_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -394,7 +394,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) throws DalException {
+    public List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) {
         //language=MySQL
         final String call = "{ CALL find_by_racecourse_name(?, ?, ?, ?) }";
 
@@ -402,7 +402,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findByRacecourseCount(RaceStatus status, String racecourse) throws DalException {
+    public long findByRacecourseCount(RaceStatus status, String racecourse) {
         //language=MySQL
         String sqlStatement =
                 "SELECT  COUNT(*) AS count " +
@@ -415,7 +415,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) throws DalException {
+    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) {
         //language=MySQL
         final String call = "{ CALL find_in_timestamp_diapason(?, ?, ?, ?, ?) }";
 
@@ -435,7 +435,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) throws DalException {
+    public long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) {
         final String sqlStatement =
                 "SELECT COUNT(*) AS count " +
                 "FROM race " +
@@ -455,7 +455,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit) throws DalException {
+    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit) {
         //language=MySQL
         final String call = "{ CALL find_in_timestamp_diapason_by_racecourse_id(?, ?, ?, ?, ?, ?) }";
 
@@ -486,7 +486,7 @@ public class MySqlRaceDao implements RaceDao {
     @Override
     public long findInTimestampDiapasonOnRacecourseCount(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end
-    ) throws DalException {
+    ) {
 
         final String sqlStatement =
                 "SELECT COUNT(*) AS count " +
@@ -508,7 +508,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findByNamePart(RaceStatus status, String name, long offset, long limit) throws DalException {
+    public List<Race> findByNamePart(RaceStatus status, String name, long offset, long limit) {
         //language=MySQL
         final String call = "{ CALL find_by_name(?, ?, ?, ?) }";
 
@@ -516,7 +516,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findByNamePartCount(RaceStatus status, String name) throws DalException {
+    public long findByNamePartCount(RaceStatus status, String name) {
         //language=MySQL
         String sqlStatement = "SELECT  COUNT(*) AS count FROM race WHERE status = ? AND name LIKE ?";
 
@@ -524,7 +524,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public boolean updateStatus(long id, RaceStatus status) throws DalException {
+    public boolean updateStatus(long id, RaceStatus status) {
         final String sqlStatement = "UPDATE race SET status = ? WHERE id = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {

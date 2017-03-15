@@ -81,7 +81,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 .collect(Collectors.toList());
     }
 
-    private void createApplicationUser(ApplicationUser entity) throws DalException {
+    private void createApplicationUser(ApplicationUser entity) {
         final String sqlStatement =
                 "INSERT INTO application_user " +
                 "   (login, password, first_name, last_name, email, is_email_confirmed, balance) " +
@@ -112,7 +112,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         }
     }
 
-    private void createRoles(ApplicationUser entity) throws DalException {
+    private void createRoles(ApplicationUser entity) {
         final String sqlStatement =
                 "INSERT INTO role " +
                 "   (application_user_id, name) " +
@@ -132,13 +132,13 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void create(ApplicationUser entity) throws DalException {
+    public void create(ApplicationUser entity) {
         createApplicationUser(entity);
         createRoles(entity);
     }
 
     @Override
-    public ApplicationUser find(Long id) throws DalException {
+    public ApplicationUser find(Long id) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
@@ -153,7 +153,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public List<ApplicationUser> findAll() throws DalException {
+    public List<ApplicationUser> findAll() {
         //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
@@ -167,7 +167,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public List<ApplicationUser> findAll(long offset, long limit) throws DalException {
+    public List<ApplicationUser> findAll(long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
@@ -181,7 +181,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return executor.count(TABLE_NAME);
     }
 
@@ -189,7 +189,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
      * This method didn't update user roles
      */
     @Override
-    public long update(ApplicationUser entity) throws DalException {
+    public long update(ApplicationUser entity) {
         final String sqlStatement =
                 "UPDATE application_user " +
                 "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
@@ -224,12 +224,12 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return executor.delete(TABLE_NAME, id);
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException {
+    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
@@ -247,7 +247,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public long findByLoginPartCount(String loginPart) throws DalException {
+    public long findByLoginPartCount(String loginPart) {
         //language=MySQL
         final String sqlStatement = "SELECT COUNT(*) AS count FROM application_user WHERE login LIKE ?";
 
@@ -255,7 +255,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public ApplicationUser findByLoginAndPassword(String login, String password) throws DalException {
+    public ApplicationUser findByLoginAndPassword(String login, String password) {
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -279,7 +279,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public boolean confirmEmail(long id) throws DalException {
+    public boolean confirmEmail(long id) {
         final String sqlStatement = "UPDATE application_user SET is_email_confirmed = TRUE WHERE id = ?";
 
         try(Statement statement = connection.createStatement()) {
@@ -291,7 +291,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void addRole(long userId, Role role) throws DalException {
+    public void addRole(long userId, Role role) {
         final String call = "{ CALL add_role(?, ?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {
@@ -306,7 +306,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void removeRole(long userId, Role role) throws DalException {
+    public void removeRole(long userId, Role role) {
         final String sqlStatement = "DELETE FROM role WHERE application_user_id = ? AND name = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -323,7 +323,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public boolean tryGetMoney(long id, BigDecimal amount) throws DalException {
+    public boolean tryGetMoney(long id, BigDecimal amount) {
         final String sqlStatement =
                 "UPDATE application_user " +
                 "   SET application_user.balance = application_user.balance - ? " +
@@ -342,7 +342,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void putMoney(long id, BigDecimal amount) throws DalException {
+    public void putMoney(long id, BigDecimal amount) {
         final String sqlStatement =
                 "UPDATE application_user " +
                 "   SET application_user.balance = application_user.balance + ? " +

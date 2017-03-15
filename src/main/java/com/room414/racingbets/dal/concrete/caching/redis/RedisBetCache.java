@@ -40,7 +40,7 @@ public class RedisBetCache extends RedisCache {
         return builder.toString();
     }
 
-    public Odds getOdds(Bet bet, Getter<Odds> getter) throws DalException {
+    public Odds getOdds(Bet bet, Getter<Odds> getter) {
         String hashKey = getHashKey(bet.getRaceId());
         String prizePoolKey = getOddsKey(PRIZE_POOL_KEY, bet);
         String eventPoolKey = getOddsKey(EVENT_POOL_KEY, bet);

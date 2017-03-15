@@ -36,13 +36,13 @@ class RacecourseDaoTest {
         unitOfWork.close();
     }
 
-    private static RacecourseDao getRacecourseDao() throws DalException {
+    private static RacecourseDao getRacecourseDao() {
         return unitOfWork.getRacecourseDao();
     }
 
     @Test
     @Tag("read")
-    void find_existent_returnedEntity() throws ParseException, DalException {
+    void find_existent_returnedEntity() throws ParseException {
         RacecourseDao dao = getRacecourseDao();
 
         Racecourse expectedResult = storage.getRacecourse(1);
@@ -54,7 +54,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void find_nonexistent_returnedNull() throws DalException {
+    void find_nonexistent_returnedNull() {
         RacecourseDao dao = getRacecourseDao();
 
         Racecourse result = dao.find(300L);
@@ -64,7 +64,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset() throws ParseException, DalException {
+    void findAllLimitOffset() throws ParseException {
         RacecourseDao dao = getRacecourseDao();
         List<Racecourse> expectedResult = new LinkedList<>();
 
@@ -77,7 +77,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
+    void findAllLimitOffset_nonexistent_returnedEmptyList() {
         RacecourseDao dao = getRacecourseDao();
 
         List<Racecourse> result = dao.findAll(300L, 400L);
@@ -87,7 +87,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void findAll() throws ParseException, DalException {
+    void findAll() throws ParseException {
         RacecourseDao dao = getRacecourseDao();
 
         List<Racecourse> expectedResult = storage.getAllRacecourses();
@@ -99,7 +99,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void count() throws DalException {
+    void count() {
         RacecourseDao dao = getRacecourseDao();
         long expectedResult = 3;
 
@@ -111,7 +111,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePart_existent_returnedList() throws ParseException, DalException {
+    void findByNamePart_existent_returnedList() throws ParseException {
         RacecourseDao dao = getRacecourseDao();
 
         List<Racecourse> expectedResult = new LinkedList<>();
@@ -125,7 +125,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePart_nonexistent_returnedEmptyList() throws DalException {
+    void findByNamePart_nonexistent_returnedEmptyList() {
         RacecourseDao dao = getRacecourseDao();
 
         List<Racecourse> result = dao.findByNamePart("bla-bla-bla", 0L, 1L);
@@ -136,7 +136,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePartCount() throws DalException {
+    void findByNamePartCount() {
         RacecourseDao dao = getRacecourseDao();
         long expectedResult = 1;
 
@@ -148,7 +148,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("write")
-    void createAndDelete() throws DalException, ParseException {
+    void createAndDelete() throws ParseException {
         RacecourseDao dao = getRacecourseDao();
 
         Racecourse newEntity = Racecourse.builder()
@@ -174,7 +174,7 @@ class RacecourseDaoTest {
 
     @Test
     @Tag("write")
-    void update() throws DalException, ParseException {
+    void update() throws ParseException {
         final long targetId = 3L;
 
         RacecourseDao dao = getRacecourseDao();

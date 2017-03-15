@@ -23,14 +23,14 @@ public class CachedRacecourseDao extends CacheCrudDao<Racecourse> implements Rac
     }
 
     @Override
-    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) {
         String key = String.format("find:name:%s:%d:%d", namePart, limit, offset);
 
         return cache.getManyCached(key, () -> dao.findByNamePart(namePart, offset, limit));
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         String key = "find:name:count" + namePart;
 
         return cache.getCachedCount(key, () -> dao.findByNamePartCount(namePart));

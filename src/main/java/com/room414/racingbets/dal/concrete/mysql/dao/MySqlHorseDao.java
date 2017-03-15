@@ -38,7 +38,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Horse> findByNamePart(String namePart, long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
@@ -53,7 +53,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public void create(Horse entity) throws DalException {
+    public void create(Horse entity) {
         final String sqlStatement =
                 "INSERT INTO horse " +
                 "   (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id) " +
@@ -95,7 +95,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         //language=MySQL
         final String sqlStatement = "SELECT COUNT(*) AS count FROM horse WHERE name LIKE ?";
 
@@ -103,7 +103,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public Horse find(Long id) throws DalException {
+    public Horse find(Long id) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
@@ -117,7 +117,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> findAll() throws DalException {
+    public List<Horse> findAll() {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
@@ -130,7 +130,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> findAll(long offset, long limit) throws DalException {
+    public List<Horse> findAll(long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM horse " +
@@ -144,12 +144,12 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return executor.count(TABLE_NAME);
     }
 
     @Override
-    public long update(Horse entity) throws DalException {
+    public long update(Horse entity) {
         final String sqlStatement =
                 "UPDATE horse " +
                 "SET name = ?, trainer_id = ?, owner_id = ?, birthday = ?, gender = ?, sire_id = ?, dam_id = ? " +
@@ -194,7 +194,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return executor.delete(TABLE_NAME, id);
     }
 }

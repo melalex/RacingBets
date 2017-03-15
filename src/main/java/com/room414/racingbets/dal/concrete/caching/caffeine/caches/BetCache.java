@@ -40,11 +40,10 @@ public class BetCache extends BaseCache<Bet> {
         this.oddsCache = oddsCache;
     }
 
-    public Odds getOdds(Bet bet, Getter<Odds> getter) throws DalException {
-        return CacheHelper.getCached(
-                oddsCache,
+    public Odds getOdds(Bet bet, Getter<Odds> getter) {
+        return oddsCache.get(
                 getOddsKey(NAME_SPACE, bet),
-                () -> redisBetCache.getOdds(bet, getter)
+                k -> redisBetCache.getOdds(bet, getter)
         );
     }
 

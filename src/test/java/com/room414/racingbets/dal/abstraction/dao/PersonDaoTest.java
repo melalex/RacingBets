@@ -298,7 +298,7 @@ class PersonDaoTest {
     }
 
     private <T extends Person> void find_withNullBirthday_returnedPerson(PersonDao<T> personDao, Function<Long, T> getter)
-            throws DalException, ParseException {
+            throws ParseException {
         T expectedResult = getter.apply(6L);
 
         T result = personDao.find(6L);
@@ -309,7 +309,7 @@ class PersonDaoTest {
 
 
     private <T extends Person> void find_existent_returnedPerson(PersonDao<T> personDao, Function<Long, T> getter)
-            throws DalException, ParseException {
+            throws ParseException {
         T expectedResult = getter.apply(1L);
 
         T result = personDao.find(1L);
@@ -318,7 +318,7 @@ class PersonDaoTest {
 
     }
 
-    private <T extends Person> void find_nonexistent_returnedNull(PersonDao<T> personDao) throws DalException {
+    private <T extends Person> void find_nonexistent_returnedNull(PersonDao<T> personDao) {
         T result = personDao.find(300L);
 
         assert result == null : defaultAssertionFailMessage(result, null);
@@ -326,7 +326,7 @@ class PersonDaoTest {
     }
 
     private <T extends Person> void findAllLimitOffset(PersonDao<T> personDao, Function<Long, T> getter)
-            throws DalException, ParseException {
+            throws ParseException {
 
         List<T> expectedResult = new LinkedList<>();
 
@@ -338,14 +338,13 @@ class PersonDaoTest {
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
-    private <T extends Person> void findAllLimitOffset_nonexistent_returnedEmptyList(PersonDao<T> personDao) throws DalException {
+    private <T extends Person> void findAllLimitOffset_nonexistent_returnedEmptyList(PersonDao<T> personDao) {
         List<T> result = personDao.findAll(300, 400);
 
         assert result.isEmpty() : "result is not empty";
     }
 
-    private <T extends Person> void findAll(PersonDao<T> personDao, ListProducer<T> getter)
-            throws DalException, ParseException {
+    private <T extends Person> void findAll(PersonDao<T> personDao, ListProducer<T> getter) throws ParseException {
 
         List<T> expectedResult = getter.invoke();
 
@@ -354,7 +353,7 @@ class PersonDaoTest {
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
-    private <T extends Person> void count(PersonDao<T> personDao) throws DalException {
+    private <T extends Person> void count(PersonDao<T> personDao) {
         long expectedResult = 6;
 
         long result = personDao.count();
@@ -363,7 +362,7 @@ class PersonDaoTest {
     }
 
     private <T extends Person> void findByNamePart_existent_returnedList(PersonDao<T> personDao, Function<Long, T> getter)
-            throws DalException, ParseException {
+            throws ParseException {
 
         List<T> expectedResult1 = new LinkedList<>();
         List<T> expectedResult2 = new LinkedList<>();
@@ -378,7 +377,7 @@ class PersonDaoTest {
         assert result2.equals(expectedResult2) : defaultAssertionFailMessage(result2, expectedResult2);
     }
 
-    private <T extends Person> void findByNamePart_nonexistent_returnedEmptyList(PersonDao<T> personDao) throws DalException {
+    private <T extends Person> void findByNamePart_nonexistent_returnedEmptyList(PersonDao<T> personDao) {
         List<T> result = personDao.findByNamePart("bla-bla-bla", 0, 300);
 
         assert result.isEmpty() : "result is not empty";
@@ -393,7 +392,7 @@ class PersonDaoTest {
     }
 
     private <T extends Person> void createAndDelete(PersonDao<T> personDao, PersonBuilder<T> builder)
-            throws DalException, ParseException {
+            throws ParseException {
 
         T newPerson = builder
                 .setFirstName("Alexander")
@@ -416,7 +415,7 @@ class PersonDaoTest {
 
     private <T extends Person> void createAndDelete_withNullBirthday_createdAndDeleted(
             PersonDao<T> personDao, PersonBuilder<T> builder
-    ) throws DalException, ParseException {
+    ) throws ParseException {
 
         T newPerson = builder
                 .setFirstName("Alexander")
@@ -437,8 +436,7 @@ class PersonDaoTest {
         assert person2 == null : "Dao did not delete Person";
     }
 
-    private <T extends Person> void update(PersonDao<T> personDao, PersonBuilder<T> builder)
-            throws DalException, ParseException {
+    private <T extends Person> void update(PersonDao<T> personDao, PersonBuilder<T> builder) throws ParseException {
 
         final long targetId = 5L;
 

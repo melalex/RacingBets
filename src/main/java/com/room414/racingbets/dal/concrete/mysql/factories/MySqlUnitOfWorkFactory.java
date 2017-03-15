@@ -19,7 +19,7 @@ public class MySqlUnitOfWorkFactory implements UnitOfWorkFactory {
     }
 
     @Override
-    public UnitOfWork createUnitOfWork() throws DalException {
+    public UnitOfWork createUnitOfWork() {
         try {
             return new MySqlUnitOfWork(connectionPool.getConnection());
         } catch (SQLException e) {

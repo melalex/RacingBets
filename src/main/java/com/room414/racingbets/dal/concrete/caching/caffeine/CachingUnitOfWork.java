@@ -113,6 +113,7 @@ public class CachingUnitOfWork implements AutoCloseable {
                     mainCachePool.getRaceCachePool().getListCache(),
                     mainCachePool.getRaceCachePool().getCountCache(),
                     getParticipantCache(),
+                    getBetCache(),
                     redisUnitOfWork.getRedisBetCache()
             );
         }

@@ -9,19 +9,19 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
  * @version 1.0 28 Feb 2017
  */
 public interface UnitOfWork extends AutoCloseable {
-    ApplicationUserDao getApplicationUserDao() throws DalException;
-    BetDao getBetDao() throws DalException;
+    ApplicationUserDao getApplicationUserDao();
+    BetDao getBetDao();
 
-    HorseDao getHorseDao() throws DalException;
-    JockeyDao getJockeyDao() throws DalException;
-    OwnerDao getOwnerDao() throws DalException;
-    TrainerDao getTrainerDao() throws DalException;
+    HorseDao getHorseDao();
+    JockeyDao getJockeyDao();
+    OwnerDao getOwnerDao();
+    TrainerDao getTrainerDao();
 
-    ParticipantDao getParticipantDao() throws DalException;
-    RaceDao getRaceDao() throws DalException;
+    ParticipantDao getParticipantDao();
+    RaceDao getRaceDao();
 
-    RacecourseDao getRacecourseDao() throws DalException;
+    RacecourseDao getRacecourseDao();
 
-    void commit() throws DalException;
-    void rollback() throws DalException;
+    void commit();
+    void rollback();
 }

@@ -51,29 +51,26 @@ public abstract class BaseCache<T> implements CaffeineCache<T> {
     }
 
     @Override
-    public T getOneCached(String key, Getter<T> getter) throws DalException {
-        return getCached(
-                cache,
+    public T getOneCached(String key, Getter<T> getter) {
+        return cache.get(
                 key,
-                () -> redisCache.getCached(nameSpace, key, getter, type)
+                k -> redisCache.getCached(nameSpace, key, getter, type)
         );
     }
 
     @Override
-    public List<T> getManyCached(String key, Getter<List<T>> getter) throws DalException {
-        return getCached(
-                cacheList,
+    public List<T> getManyCached(String key, Getter<List<T>> getter) {
+        return cacheList.get(
                 key,
-                () -> redisCache.getCached(listNameSpace, key, getter, listType)
+                k -> redisCache.getCached(listNameSpace, key, getter, listType)
         );
     }
 
     @Override
-    public long getCachedCount(String key, Getter<Long> getter) throws DalException {
-        return getCached(
-                countCache,
+    public long getCachedCount(String key, Getter<Long> getter) {
+        return countCache.get(
                 key,
-                () -> redisCache.getCachedCount(listNameSpace, key, getter)
+                k -> redisCache.getCachedCount(listNameSpace, key, getter)
         );
     }
 

@@ -18,52 +18,52 @@ public class LazyLoadOwnerDao implements OwnerDao {
         this.unitOfWork = unitOfWork;
     }
 
-    private OwnerDao getOwnerDao() throws DalException {
+    private OwnerDao getOwnerDao() {
         return unitOfWork.getOwnerDao();
     }
 
     @Override
-    public void create(Owner entity) throws DalException {
+    public void create(Owner entity) {
         getOwnerDao().create(entity);
     }
 
     @Override
-    public List<Owner> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Owner> findByNamePart(String namePart, long offset, long limit) {
         return getOwnerDao().findByNamePart(namePart, offset, limit);
     }
 
     @Override
-    public Owner find(Long id) throws DalException {
+    public Owner find(Long id) {
         return getOwnerDao().find(id);
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         return getOwnerDao().findByNamePartCount(namePart);
     }
 
     @Override
-    public List<Owner> findAll() throws DalException {
+    public List<Owner> findAll() {
         return getOwnerDao().findAll();
     }
 
     @Override
-    public List<Owner> findAll(long offset, long limit) throws DalException {
+    public List<Owner> findAll(long offset, long limit) {
         return getOwnerDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return getOwnerDao().count();
     }
 
     @Override
-    public long update(Owner entity) throws DalException {
+    public long update(Owner entity) {
         return getOwnerDao().update(entity);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return getOwnerDao().delete(id);
     }
 }

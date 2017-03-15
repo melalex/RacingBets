@@ -18,17 +18,17 @@ public interface ParticipantDao extends CrudDao<Long, Participant> {
     /**
      * @return List of Participants and race timestamp.
      */
-    List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) throws DalException;
-    long findByHorseIdCount(long id) throws DalException;
+    List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit);
+    long findByHorseIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit) throws DalException;
-    long findByOwnerIdCount(long id) throws DalException;
+    List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit);
+    long findByOwnerIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) throws DalException;
-    long findByJockeyIdCount(long id) throws DalException;
+    List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit);
+    long findByJockeyIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) throws DalException;
-    long findByTrainerIdCount(long id) throws DalException;
+    List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit);
+    long findByTrainerIdCount(long id);
 
     // TODO: add some aggregation queries for statistic
 }

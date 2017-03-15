@@ -36,7 +36,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     protected abstract T mapResultSet(ResultSet resultSet) throws SQLException;
 
     @Override
-    public void create(T entity) throws DalException {
+    public void create(T entity) {
         String sqlStatement = String.format(
                 "INSERT INTO %s (first_name, last_name, birthday) VALUES (?, ?, ?)",
                 getTableName()
@@ -61,7 +61,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public List<T> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<T> findByNamePart(String namePart, long offset, long limit) {
         String sqlStatement = String.format(
                 "SELECT * FROM %s WHERE first_name LIKE ? OR last_name LIKE ? LIMIT ? OFFSET ?",
                 getTableName()
@@ -87,7 +87,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         String sqlStatement = String.format(
                 "SELECT COUNT(*) as count FROM %s WHERE first_name LIKE ? OR last_name LIKE ?",
                 getTableName()
@@ -109,7 +109,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public T find(Long id) throws DalException {
+    public T find(Long id) {
         String sqlStatement = String.format(
                 "SELECT * FROM %s WHERE id = ?",
                 getTableName()
@@ -119,14 +119,14 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public List<T> findAll() throws DalException {
+    public List<T> findAll() {
         String sqlStatement = String.format("SELECT * FROM %s", getTableName());
 
         return executor.findAll(sqlStatement);
     }
 
     @Override
-    public List<T> findAll(long offset, long limit) throws DalException {
+    public List<T> findAll(long offset, long limit) {
         String sqlStatement = String.format(
                 "SELECT * FROM %s LIMIT ? OFFSET ?", getTableName()
         );
@@ -135,12 +135,12 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return executor.count(getTableName());
     }
 
     @Override
-    public long update(T entity) throws DalException {
+    public long update(T entity) {
         String sqlStatement = String.format(
                 "UPDATE %s SET first_name = ?, last_name = ?, birthday = ? WHERE id = ?", getTableName()
         );
@@ -165,7 +165,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return executor.delete(getTableName(), id);
     }
 }

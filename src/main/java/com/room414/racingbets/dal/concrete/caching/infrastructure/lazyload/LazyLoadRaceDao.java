@@ -20,97 +20,97 @@ public class LazyLoadRaceDao implements RaceDao {
         this.unitOfWork = unitOfWork;
     }
 
-    private RaceDao getRaceDao() throws DalException {
+    private RaceDao getRaceDao() {
         return unitOfWork.getRaceDao();
     }
 
     @Override
-    public void create(Race entity) throws DalException {
+    public void create(Race entity) {
         getRaceDao().create(entity);
     }
 
     @Override
-    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) throws DalException {
+    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) {
         return getRaceDao().findByRacecourseId(status, racecourse, offset, limit);
     }
 
     @Override
-    public Race find(Long id) throws DalException {
+    public Race find(Long id) {
         return getRaceDao().find(id);
     }
 
     @Override
-    public List<Race> findAll() throws DalException {
+    public List<Race> findAll() {
         return getRaceDao().findAll();
     }
 
     @Override
-    public long findByRacecourseIdCount(RaceStatus status, long racecourse) throws DalException {
+    public long findByRacecourseIdCount(RaceStatus status, long racecourse) {
         return getRaceDao().findByRacecourseIdCount(status, racecourse);
     }
 
     @Override
-    public List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) throws DalException {
+    public List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) {
         return getRaceDao().findByRacecourse(status, racecourse, offset, limit);
     }
 
     @Override
-    public List<Race> findAll(long offset, long limit) throws DalException {
+    public List<Race> findAll(long offset, long limit) {
         return getRaceDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return getRaceDao().count();
     }
 
     @Override
-    public long findByRacecourseCount(RaceStatus status, String racecourse) throws DalException {
+    public long findByRacecourseCount(RaceStatus status, String racecourse) {
         return getRaceDao().findByRacecourseCount(status, racecourse);
     }
 
     @Override
-    public long update(Race entity) throws DalException {
+    public long update(Race entity) {
         return getRaceDao().update(entity);
     }
 
     @Override
-    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) throws DalException {
+    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) {
         return getRaceDao().findInTimestampDiapason(status, begin, end, offset, limit);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return getRaceDao().delete(id);
     }
 
     @Override
-    public long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) throws DalException {
+    public long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) {
         return getRaceDao().findInTimestampDiapasonCount(status, begin, end);
     }
 
     @Override
-    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit) throws DalException {
+    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit) {
         return getRaceDao().findInTimestampDiapasonOnRacecourse(status, racecourse, begin, end, offset, limit);
     }
 
     @Override
-    public long findInTimestampDiapasonOnRacecourseCount(RaceStatus status, long racecourse, Timestamp begin, Timestamp end) throws DalException {
+    public long findInTimestampDiapasonOnRacecourseCount(RaceStatus status, long racecourse, Timestamp begin, Timestamp end) {
         return getRaceDao().findInTimestampDiapasonOnRacecourseCount(status, racecourse, begin, end);
     }
 
     @Override
-    public List<Race> findByNamePart(RaceStatus raceStatus, String namePart, long offset, long limit) throws DalException {
+    public List<Race> findByNamePart(RaceStatus raceStatus, String namePart, long offset, long limit) {
         return getRaceDao().findByNamePart(raceStatus, namePart, offset, limit);
     }
 
     @Override
-    public long findByNamePartCount(RaceStatus raceStatus, String namePart) throws DalException {
+    public long findByNamePartCount(RaceStatus raceStatus, String namePart) {
         return getRaceDao().findByNamePartCount(raceStatus, namePart);
     }
 
     @Override
-    public boolean updateStatus(long id, RaceStatus status) throws DalException {
+    public boolean updateStatus(long id, RaceStatus status) {
         return getRaceDao().updateStatus(id, status);
     }
 }

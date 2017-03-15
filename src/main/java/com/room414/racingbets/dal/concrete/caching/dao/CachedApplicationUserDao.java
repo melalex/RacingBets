@@ -26,7 +26,7 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
-    public void create(ApplicationUser entity) throws DalException {
+    public void create(ApplicationUser entity) {
         super.create(entity);
 
         String key = String.format("find:login:password:%s:%s", entity.getLogin(), entity.getPassword());
@@ -35,56 +35,56 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException {
+    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
         String key = String.format("find:login:part:%s:%d:%d", loginPart, limit, offset);
 
         return cache.getManyCached(key, () -> dao.findByLoginPart(loginPart, offset, limit));
     }
 
     @Override
-    public long findByLoginPartCount(String loginPart) throws DalException {
+    public long findByLoginPartCount(String loginPart) {
         String key = "find:login:part:count:" + loginPart;
 
         return cache.getCachedCount(key, () -> dao.findByLoginPartCount(loginPart));
     }
 
     @Override
-    public ApplicationUser findByLoginAndPassword(String login, String password) throws DalException {
+    public ApplicationUser findByLoginAndPassword(String login, String password) {
         String key = getFindByLoginAndPasswordKey(login, password);
 
         return cache.getOneCached(key, () -> dao.findByLoginAndPassword(login, password));
     }
 
     @Override
-    public boolean confirmEmail(long id) throws DalException {
+    public boolean confirmEmail(long id) {
         removeFromCacheById(id);
         cache.deleteManyCached();
         return dao.confirmEmail(id);
     }
 
     @Override
-    public void addRole(long userId, Role role) throws DalException {
+    public void addRole(long userId, Role role) {
         dao.addRole(userId, role);
         cache.deleteManyCached();
         removeFromCacheById(userId);
     }
 
     @Override
-    public void removeRole(long userId, Role role) throws DalException {
+    public void removeRole(long userId, Role role) {
         dao.removeRole(userId, role);
         cache.deleteManyCached();
         removeFromCacheById(userId);
     }
 
     @Override
-    public boolean tryGetMoney(long id, BigDecimal amount) throws DalException {
+    public boolean tryGetMoney(long id, BigDecimal amount) {
         removeFromCacheById(id);
         cache.deleteManyCached();
         return dao.tryGetMoney(id, amount);
     }
 
     @Override
-    public void putMoney(long id, BigDecimal amount) throws DalException {
+    public void putMoney(long id, BigDecimal amount) {
         dao.putMoney(id, amount);
         removeFromCacheById(id);
         cache.deleteManyCached();
@@ -94,7 +94,7 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
         return String.format("find:login:password:%s:%s", login, password);
     }
 
-    private void removeFromCacheById(long id) throws DalException {
+    private void removeFromCacheById(long id) {
         ApplicationUser user = find(id);
 
         if (user != null) {

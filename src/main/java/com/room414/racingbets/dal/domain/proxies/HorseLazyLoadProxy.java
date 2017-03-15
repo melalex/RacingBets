@@ -39,10 +39,9 @@ public class HorseLazyLoadProxy extends Horse {
         if (horse == null) {
             try(UnitOfWork unitOfWork = CachedDalFactory.getInstance().createUnitOfWorkFactory().createUnitOfWork()) {
                 horse = unitOfWork.getHorseDao().find(id);
-            } catch (DalException e) {
-                throw new RuntimeException("Can not lazy load horse");
             } catch (Exception e) {
-                throw new RuntimeException("Can not close UnitOfWork instance");
+                String message = "Can't create unit of work";
+                throw new DalException(message, e);
             }
         }
         return horse;

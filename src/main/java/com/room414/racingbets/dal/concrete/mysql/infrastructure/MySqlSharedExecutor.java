@@ -27,7 +27,7 @@ public class MySqlSharedExecutor<T> {
         this.mapResultList = mapResultList;
     }
 
-    public long count(String tableName) throws DalException {
+    public long count(String tableName) {
         String sqlStatement = String.format("SELECT COUNT(*) AS count FROM %s", tableName);
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -38,7 +38,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public boolean delete(String tableName, Long id) throws DalException {
+    public boolean delete(String tableName, Long id) {
         String sqlStatement = String.format("DELETE FROM %s WHERE id = ?", tableName);
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
@@ -50,7 +50,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public T find(long id, String sqlStatement) throws DalException {
+    public T find(long id, String sqlStatement) {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setLong(1, id);
             return mapResult.apply(statement);
@@ -60,7 +60,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public List<T> findAll(String sqlStatement) throws DalException {
+    public List<T> findAll(String sqlStatement) {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             return mapResultList.apply(statement);
         } catch (SQLException e) {
@@ -69,7 +69,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public List<T> findAll(String sqlStatement, long limit, long offset) throws DalException {
+    public List<T> findAll(String sqlStatement, long limit, long offset) {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setLong(1, limit);
             statement.setLong(2, offset);
@@ -81,7 +81,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public List<T> findByForeignKey(String sqlStatement, long key, long offset, long limit) throws DalException {
+    public List<T> findByForeignKey(String sqlStatement, long key, long offset, long limit) {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setLong(1, key);
             statement.setLong(2, limit);
@@ -94,7 +94,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public long findByForeignKeyCount(String tableName, String columnName, long key) throws DalException {
+    public long findByForeignKeyCount(String tableName, String columnName, long key) {
         final String sqlStatement = String.format(
                 "SELECT Count(*) AS count FROM %s WHERE %s = ?", tableName, columnName
         );
@@ -108,7 +108,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public List<T> findByColumnPart(String sqlStatement, String namePart, long limit, long offset) throws DalException {
+    public List<T> findByColumnPart(String sqlStatement, String namePart, long limit, long offset) {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, startsWith(namePart));
             statement.setLong(2, limit);
@@ -121,7 +121,7 @@ public class MySqlSharedExecutor<T> {
         }
     }
 
-    public long findByColumnPartCount(String sqlStatement, String namePart) throws DalException {
+    public long findByColumnPartCount(String sqlStatement, String namePart) {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, startsWith(namePart));
 

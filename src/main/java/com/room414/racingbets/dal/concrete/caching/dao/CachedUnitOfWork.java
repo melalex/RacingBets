@@ -34,7 +34,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public ApplicationUserDao getApplicationUserDao() throws DalException {
+    public ApplicationUserDao getApplicationUserDao() {
         if (applicationUserDao == null) {
             applicationUserDao = new CachedApplicationUserDao(
                     new LazyLoadApplicationUserDao(unitOfWork),
@@ -45,7 +45,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public BetDao getBetDao() throws DalException {
+    public BetDao getBetDao() {
         if (betDao == null) {
             betDao = new CachedBetDao(
                     new LazyLoadBetDao(unitOfWork),
@@ -56,7 +56,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public HorseDao getHorseDao() throws DalException {
+    public HorseDao getHorseDao() {
         if (horseDao == null) {
             horseDao = new CachedHorseDao(
                     new LazyLoadHorseDao(unitOfWork),
@@ -67,7 +67,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public JockeyDao getJockeyDao() throws DalException {
+    public JockeyDao getJockeyDao() {
         if (jockeyDao == null) {
             jockeyDao = new CachedJockeyDao(
                     new LazyLoadJockeyDao(unitOfWork),
@@ -78,7 +78,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public OwnerDao getOwnerDao() throws DalException {
+    public OwnerDao getOwnerDao() {
         if (ownerDao == null) {
             ownerDao = new CachedOwnerDao(
                     new LazyLoadOwnerDao(unitOfWork),
@@ -89,7 +89,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public TrainerDao getTrainerDao() throws DalException {
+    public TrainerDao getTrainerDao() {
         if (trainerDao == null) {
             trainerDao = new CachedTrainerDao(
                     new LazyLoadTrainerDao(unitOfWork),
@@ -100,7 +100,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public ParticipantDao getParticipantDao() throws DalException {
+    public ParticipantDao getParticipantDao() {
         if (participantDao == null) {
             participantDao = new CachedParticipantDao(
                     new LazyLoadParticipantDao(unitOfWork),
@@ -111,7 +111,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public RaceDao getRaceDao() throws DalException {
+    public RaceDao getRaceDao() {
         if (raceDao == null) {
             raceDao = new CachedRaceDao(
                     new LazyLoadRaceDao(unitOfWork),
@@ -122,7 +122,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public RacecourseDao getRacecourseDao() throws DalException {
+    public RacecourseDao getRacecourseDao() {
         if (racecourseDao == null) {
             racecourseDao = new CachedRacecourseDao(
                     new LazyLoadRacecourseDao(unitOfWork),
@@ -133,13 +133,13 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void commit() throws DalException {
+    public void commit() {
         unitOfWork.commit();
         cache.commit();
     }
 
     @Override
-    public void rollback() throws DalException {
+    public void rollback() {
         unitOfWork.rollback();
         cache.rollback();
     }

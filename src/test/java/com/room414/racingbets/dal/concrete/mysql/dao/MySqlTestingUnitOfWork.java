@@ -108,12 +108,12 @@ public class MySqlTestingUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void commit() throws DalException {
+    public void commit() {
         throw new UnsupportedOperationException("MySqlTestingUnitOfWork сan not manage transactions");
     }
 
     @Override
-    public void rollback() throws DalException {
+    public void rollback() {
         throw new UnsupportedOperationException("MySqlTestingUnitOfWork сan not manage transactions");
     }
 

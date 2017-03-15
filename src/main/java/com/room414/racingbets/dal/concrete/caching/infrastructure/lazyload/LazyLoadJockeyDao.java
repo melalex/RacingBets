@@ -18,52 +18,52 @@ public class LazyLoadJockeyDao implements JockeyDao {
         this.unitOfWork = unitOfWork;
     }
 
-    private JockeyDao getJockeyDao() throws DalException {
+    private JockeyDao getJockeyDao() {
         return unitOfWork.getJockeyDao();
     }
 
     @Override
-    public void create(Jockey entity) throws DalException {
+    public void create(Jockey entity) {
         getJockeyDao().create(entity);
     }
 
     @Override
-    public List<Jockey> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Jockey> findByNamePart(String namePart, long offset, long limit) {
         return getJockeyDao().findByNamePart(namePart, offset, limit);
     }
 
     @Override
-    public Jockey find(Long id) throws DalException {
+    public Jockey find(Long id) {
         return getJockeyDao().find(id);
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         return getJockeyDao().findByNamePartCount(namePart);
     }
 
     @Override
-    public List<Jockey> findAll() throws DalException {
+    public List<Jockey> findAll() {
         return getJockeyDao().findAll();
     }
 
     @Override
-    public List<Jockey> findAll(long offset, long limit) throws DalException {
+    public List<Jockey> findAll(long offset, long limit) {
         return getJockeyDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return getJockeyDao().count();
     }
 
     @Override
-    public long update(Jockey entity) throws DalException {
+    public long update(Jockey entity) {
         return getJockeyDao().update(entity);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return getJockeyDao().delete(id);
     }
 }

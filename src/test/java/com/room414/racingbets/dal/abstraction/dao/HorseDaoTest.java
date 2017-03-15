@@ -37,13 +37,13 @@ class HorseDaoTest {
         unitOfWork.close();
     }
 
-    private static HorseDao getHorseDao() throws DalException {
+    private static HorseDao getHorseDao() {
         return unitOfWork.getHorseDao();
     }
 
     @Test
     @Tag("read")
-    void find_damAndSireNull_returnedEntity() throws ParseException, DalException {
+    void find_damAndSireNull_returnedEntity() throws ParseException {
         HorseDao horseDao = getHorseDao();
 
         Horse expectedResult = storage.getHorse(1);
@@ -55,7 +55,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void find_existent_returnedEntity() throws ParseException, DalException {
+    void find_existent_returnedEntity() throws ParseException {
         HorseDao horseDao = getHorseDao();
 
         Horse expectedResult = storage.getHorse(3);
@@ -67,7 +67,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void find_nonexistent_returnedNull() throws DalException {
+    void find_nonexistent_returnedNull() {
         HorseDao horseDao = getHorseDao();
         Horse result = horseDao.find(300L);
 
@@ -76,7 +76,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset() throws ParseException, DalException {
+    void findAllLimitOffset() throws ParseException {
         HorseDao horseDao = getHorseDao();
 
         List<Horse> expectedResult = new LinkedList<>();
@@ -92,7 +92,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
+    void findAllLimitOffset_nonexistent_returnedEmptyList() {
         HorseDao horseDao = getHorseDao();
         List<Horse> result = horseDao.findAll(300L, 400L);
 
@@ -101,7 +101,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void findAll() throws ParseException, DalException {
+    void findAll() throws ParseException {
         List<Horse> expectedResult = storage.getAllHorses();
 
         List<Horse> result = getHorseDao().findAll();
@@ -111,7 +111,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void count() throws DalException {
+    void count() {
         long expectedResult = 8;
 
         long result = getHorseDao().count();
@@ -122,7 +122,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePart_existent_returnedList() throws ParseException, DalException {
+    void findByNamePart_existent_returnedList() throws ParseException {
         HorseDao horseDao = getHorseDao();
 
         List<Horse> expectedResult1 = new LinkedList<>();
@@ -141,7 +141,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePart_nonexistent_returnedEmptyList() throws DalException {
+    void findByNamePart_nonexistent_returnedEmptyList() {
         List<Horse> result = getHorseDao().findByNamePart("bla-bla-bla", 0L, 1L);
 
         assert result.isEmpty() : "result is not empty";
@@ -150,7 +150,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("read")
-    void findByNamePartCount() throws DalException {
+    void findByNamePartCount() {
         long expectedResult = 2;
 
         long result = getHorseDao().findByNamePartCount("Pro");
@@ -161,7 +161,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("write")
-    void createAndDelete_nullSireAndDam_createdDeleted() throws DalException, ParseException {
+    void createAndDelete_nullSireAndDam_createdDeleted() throws ParseException {
         HorseDao horseDao = getHorseDao();
 
         Trainer trainer3 = storage.getTrainer(3);
@@ -190,7 +190,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("write")
-    void createAndDelete_notNullSireAndDam_createdDeleted() throws DalException, ParseException {
+    void createAndDelete_notNullSireAndDam_createdDeleted() throws ParseException {
         HorseDao horseDao = getHorseDao();
 
         Trainer trainer3 = storage.getTrainer(3);
@@ -221,7 +221,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("write")
-    void update() throws DalException, ParseException {
+    void update() throws ParseException {
         final long targetId = 6L;
 
         HorseDao horseDao = getHorseDao();

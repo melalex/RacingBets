@@ -18,52 +18,52 @@ public class LazyLoadHorseDao implements HorseDao {
         this.unitOfWork = unitOfWork;
     }
 
-    private HorseDao getHorseDao() throws DalException {
+    private HorseDao getHorseDao() {
         return unitOfWork.getHorseDao();
     }
 
     @Override
-    public void create(Horse entity) throws DalException {
+    public void create(Horse entity) {
         getHorseDao().create(entity);
     }
 
     @Override
-    public List<Horse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Horse> findByNamePart(String namePart, long offset, long limit) {
         return getHorseDao().findByNamePart(namePart, offset, limit);
     }
 
     @Override
-    public Horse find(Long id) throws DalException {
+    public Horse find(Long id) {
         return getHorseDao().find(id);
     }
 
     @Override
-    public long findByNamePartCount(String namePart) throws DalException {
+    public long findByNamePartCount(String namePart) {
         return getHorseDao().findByNamePartCount(namePart);
     }
 
     @Override
-    public List<Horse> findAll() throws DalException {
+    public List<Horse> findAll() {
         return getHorseDao().findAll();
     }
 
     @Override
-    public List<Horse> findAll(long offset, long limit) throws DalException {
+    public List<Horse> findAll(long offset, long limit) {
         return getHorseDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return getHorseDao().count();
     }
 
     @Override
-    public long update(Horse entity) throws DalException {
+    public long update(Horse entity) {
         return getHorseDao().update(entity);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return getHorseDao().delete(id);
     }
 }

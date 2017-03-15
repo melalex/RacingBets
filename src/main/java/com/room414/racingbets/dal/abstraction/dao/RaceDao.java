@@ -18,34 +18,34 @@ public interface RaceDao extends CrudDao<Long, Race> {
     /**
      * @return List of Races that scheduled on Racecourse with id == racecourse param
      */
-    List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) throws DalException;
+    List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit);
 
     /**
      * @return Count of Races that scheduled on Racecourse with id == racecourse param
      */
-    long findByRacecourseIdCount(RaceStatus status, long racecourse) throws DalException;
+    long findByRacecourseIdCount(RaceStatus status, long racecourse);
 
 
     /**
      * @return List of Races that scheduled on Racecourse with name starts with racecourse param
      */
-    List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) throws DalException;
+    List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit);
 
     /**
      * @return Count of Races that scheduled on Racecourse with name starts with racecourse param
      */
-    long findByRacecourseCount(RaceStatus status, String racecourse) throws DalException;
+    long findByRacecourseCount(RaceStatus status, String racecourse);
 
 
     /**
      * @return List of Races that scheduled on timestamp between begin and end param
      */
-    List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) throws DalException;
+    List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit);
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param
      */
-    long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) throws DalException;
+    long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end);
 
 
     /**
@@ -54,7 +54,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
      */
     List<Race> findInTimestampDiapasonOnRacecourse(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit
-    ) throws DalException;
+    );
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param
@@ -62,18 +62,18 @@ public interface RaceDao extends CrudDao<Long, Race> {
      */
     long findInTimestampDiapasonOnRacecourseCount(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end
-    ) throws DalException;
+    );
 
 
     /**
      * @return List of Races which names starts with namePart or empty list if no found.
      */
-    List<Race> findByNamePart(RaceStatus raceStatus, String namePart, long offset, long limit) throws DalException;
+    List<Race> findByNamePart(RaceStatus raceStatus, String namePart, long offset, long limit);
 
     /**
      * @return count of Races which names starts with namePart
      */
-    long findByNamePartCount(RaceStatus raceStatus, String namePart) throws DalException;
+    long findByNamePartCount(RaceStatus raceStatus, String namePart);
 
-    boolean updateStatus(long id, RaceStatus status) throws DalException;
+    boolean updateStatus(long id, RaceStatus status);
 }

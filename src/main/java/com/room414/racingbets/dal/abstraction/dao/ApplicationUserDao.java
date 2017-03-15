@@ -24,27 +24,27 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param limit elements count in result
      * @return List of ApplicationUsers whose login starts with loginPart or empty if no found.
      */
-    List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException;
+    List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit);
 
     /**
      * @param loginPart begin of ApplicationUser login
      * @return count ApplicationUsers whose login starts with loginPart
      */
-    long findByLoginPartCount(String loginPart) throws DalException;
+    long findByLoginPartCount(String loginPart);
 
     /**
      * @param login ApplicationUser login
      * @param password ApplicationUser password
      * @return ApplicationUser with login == login param
      */
-    ApplicationUser findByLoginAndPassword(String login, String password) throws DalException;
+    ApplicationUser findByLoginAndPassword(String login, String password);
 
     /**
      * Set ApplicationUser isEmailConfirmed field to true to user with id == id param
      *
      * @param id ApplicationUser id
      */
-    boolean confirmEmail(long id) throws DalException;
+    boolean confirmEmail(long id);
 
     /**
      * Add role to ApplicationUser
@@ -52,7 +52,7 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param userId ApplicationUser id
      * @param role role
      */
-    void addRole(long userId, Role role) throws DalException;
+    void addRole(long userId, Role role);
 
     /**
      * Remove role from ApplicationUser
@@ -60,14 +60,14 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param userId ApplicationUser id
      * @param role role
      */
-    void removeRole(long userId, Role role) throws DalException;
+    void removeRole(long userId, Role role);
 
     /**
      * @param id ApplicationUser id
      * @param amount amount of money
      * @return true if the money were removed successfully, false if not enough money on the balance sheet
      */
-    boolean tryGetMoney(long id, BigDecimal amount) throws DalException;
+    boolean tryGetMoney(long id, BigDecimal amount);
 
     /**
      * Add amount param to ApplicationUser balance field
@@ -75,5 +75,5 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      * @param id ApplicationUser id
      * @param amount amount of money
      */
-    void putMoney(long id, BigDecimal amount) throws DalException;
+    void putMoney(long id, BigDecimal amount);
 }

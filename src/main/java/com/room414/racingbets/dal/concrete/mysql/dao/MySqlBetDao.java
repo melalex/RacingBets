@@ -75,7 +75,7 @@ public class MySqlBetDao implements BetDao {
                 .collect(Collectors.toList());
     }
 
-    private void createBet(Bet entity) throws DalException {
+    private void createBet(Bet entity) {
         final String sqlStatement =
                 "INSERT INTO bet " +
                 "   (application_user_id, status, bet_size, bet_type, race_id) " +
@@ -101,7 +101,7 @@ public class MySqlBetDao implements BetDao {
         }
     }
 
-    private void createBetParticipant(Bet entity) throws DalException {
+    private void createBetParticipant(Bet entity) {
         final String sqlStatement =
                 "INSERT bet_participant " +
                 "   (bet_id, participant_id, place) " +
@@ -127,13 +127,13 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public void create(Bet entity) throws DalException {
+    public void create(Bet entity) {
         createBet(entity);
         createBetParticipant(entity);
     }
 
     @Override
-    public List<Bet> findByUserId(long id, long offset, long limit) throws DalException {
+    public List<Bet> findByUserId(long id, long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -161,7 +161,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public long findByUserIdCount(long id) throws DalException {
+    public long findByUserIdCount(long id) {
         final String columnName = "application_user_id";
 
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
@@ -169,7 +169,7 @@ public class MySqlBetDao implements BetDao {
 
     @Override
     // TODO: comment about user role
-    public Bet find(Long id) throws DalException {
+    public Bet find(Long id) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -196,7 +196,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findAll() throws DalException {
+    public List<Bet> findAll() {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -222,7 +222,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findByRaceId(long id, long offset, long limit) throws DalException {
+    public List<Bet> findByRaceId(long id, long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -250,7 +250,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findAll(long offset, long limit) throws DalException {
+    public List<Bet> findAll(long offset, long limit) {
         //language=MySQL
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -277,7 +277,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public long findByRaceIdCount(long id) throws DalException {
+    public long findByRaceIdCount(long id) {
         final String columnName = "race_id";
 
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
@@ -285,7 +285,7 @@ public class MySqlBetDao implements BetDao {
 
     @Override
     // TODO: add comment about participant array
-    public long update(List<Bet> bets) throws DalException {
+    public long update(List<Bet> bets) {
         final String sqlStatement =
                 "UPDATE bet " +
                 "SET application_user_id = ?, status = ?, bet_size = ?, bet_type = ?, race_id = ? " +
@@ -311,12 +311,12 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return executor.count(TABLE_NAME);
     }
 
     @Override
-    public long update(Bet entity) throws DalException {
+    public long update(Bet entity) {
         final String sqlStatement =
                 "UPDATE bet " +
                 "SET application_user_id = ?, status = ?, bet_size = ?, bet_type = ?, race_id = ? " +
@@ -345,12 +345,12 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return executor.delete(TABLE_NAME, id);
     }
 
     @Override
-    public Odds getOdds(Bet bet) throws DalException {
+    public Odds getOdds(Bet bet) {
         switch (bet.getBetType()) {
             case SHOW:
                 return getShowOdds(bet);
@@ -379,28 +379,28 @@ public class MySqlBetDao implements BetDao {
         return new Odds(prizePool, eventPool, commission);
     }
 
-    private Odds getShowOdds(Bet bet) throws DalException {
+    private Odds getShowOdds(Bet bet) {
         //language=MySQL
         final String call = "{ CALL get_odds_for_show(?, ?, ?, ?, ?) }";
 
         return getOddsOneParticipant(bet, call);
     }
 
-    private Odds getPlaceOdds(Bet bet) throws DalException {
+    private Odds getPlaceOdds(Bet bet) {
         //language=MySQL
         final String call = "{ CALL get_odds_for_place(?, ?, ?, ?, ?) }";
 
         return getOddsOneParticipant(bet, call);
     }
 
-    private Odds getWinOdds(Bet bet) throws DalException {
+    private Odds getWinOdds(Bet bet) {
         //language=MySQL
         final String call = "{ CALL get_odds_for_win(?, ?, ?, ?, ?) }";
 
         return getOddsOneParticipant(bet, call);
     }
 
-    private Odds getOddsOneParticipant(Bet bet, String call) throws DalException {
+    private Odds getOddsOneParticipant(Bet bet, String call) {
         try(CallableStatement statement = connection.prepareCall(call)) {
             statement.setLong(1, bet.getRaceId());
             statement.setLong(2, bet.getParticipantByPlace(1).getId());
@@ -419,21 +419,21 @@ public class MySqlBetDao implements BetDao {
         }
     }
 
-    private Odds getQuinellaOdds(Bet bet) throws DalException {
+    private Odds getQuinellaOdds(Bet bet) {
         //language=MySQL
         final String call = "{ CALL get_odds_for_quinella(?, ?, ?, ?, ?, ?) }";
 
         return getOddsTwoParticipant(bet, call);
     }
 
-    private Odds getExactaOdds(Bet bet) throws DalException {
+    private Odds getExactaOdds(Bet bet) {
         //language=MySQL
         final String call = "{ CALL get_odds_for_exacta(?, ?, ?, ?, ?, ?) }";
 
         return getOddsTwoParticipant(bet, call);
     }
 
-    private Odds getOddsTwoParticipant(Bet bet, String call) throws DalException {
+    private Odds getOddsTwoParticipant(Bet bet, String call) {
         try(CallableStatement statement = connection.prepareCall(call)) {
             statement.setLong(1, bet.getRaceId());
 
@@ -456,7 +456,7 @@ public class MySqlBetDao implements BetDao {
     }
 
 
-    private Odds getTrifectaOdds(Bet bet) throws DalException {
+    private Odds getTrifectaOdds(Bet bet) {
         final String call = "{ CALL get_odds_for_trifecta(?, ?, ?, ?, ?, ?, ?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {
@@ -481,7 +481,7 @@ public class MySqlBetDao implements BetDao {
         }
     }
 
-    private Odds getSuperfectaOdds(Bet bet) throws DalException {
+    private Odds getSuperfectaOdds(Bet bet) {
         final String call = "{ CALL get_odds_for_superfecta(?, ?, ?, ?, ?, ?, ?, ?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {

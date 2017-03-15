@@ -17,29 +17,29 @@ public interface BetDao extends CrudDao<Long, Bet> {
     /**
      * @return bets made by the user with id == id param
      */
-    List<Bet> findByUserId(long id, long offset, long limit) throws DalException;
+    List<Bet> findByUserId(long id, long offset, long limit);
 
     /**
      * @return number of bets made by the user with id == id param
      */
-    long findByUserIdCount(long id) throws DalException;
+    long findByUserIdCount(long id);
 
     /**
      * @return bets make on Race with id == id param
      */
-    List<Bet> findByRaceId(long id, long offset, long limit) throws DalException;
+    List<Bet> findByRaceId(long id, long offset, long limit);
 
     /**
      * @return number of bets make on Race with id == id param
      */
-    long findByRaceIdCount(long id) throws DalException;
+    long findByRaceIdCount(long id);
 
     /**
      * Update all bets in the list.
      *
      * @return number of updates
      */
-    long update(List<Bet> bets) throws DalException;
+    long update(List<Bet> bets);
 
     /**
      * @return Odds of concrete Bet.
@@ -47,5 +47,5 @@ public interface BetDao extends CrudDao<Long, Bet> {
      *          Odds calculation example
      *      </a>
      */
-    Odds getOdds(Bet bet) throws DalException;
+    Odds getOdds(Bet bet);
 }

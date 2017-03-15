@@ -21,7 +21,7 @@ public class CachedUnitOfWorkFactory implements UnitOfWorkFactory {
     }
 
     @Override
-    public UnitOfWork createUnitOfWork() throws DalException {
+    public UnitOfWork createUnitOfWork() {
         UnitOfWork unitOfWork = new LazyLoadUnitOfWork(unitOfWorkFactory);
         CachingUnitOfWork cachingUnitOfWork = cachingUnitOfWorkFactory.create();
         return new CachedUnitOfWork(unitOfWork, cachingUnitOfWork);

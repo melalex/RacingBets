@@ -40,13 +40,13 @@ class BetDaoTest {
         unitOfWork.close();
     }
 
-    private static BetDao getDao() throws DalException {
+    private static BetDao getDao() {
         return unitOfWork.getBetDao();
     }
 
     @Test
     @Tag("read")
-    void find_existent_returnedEntity() throws DalException {
+    void find_existent_returnedEntity() {
         BetDao dao = getDao();
 
         Bet expectedResult = storage.getBet(1);
@@ -58,7 +58,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void find_nonexistent_returnedNull() throws DalException {
+    void find_nonexistent_returnedNull() {
         BetDao dao = getDao();
 
         Bet result = dao.find(300L);
@@ -68,7 +68,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset() throws ParseException, DalException {
+    void findAllLimitOffset() throws ParseException {
         BetDao dao = getDao();
         List<Bet> expectedResult = new LinkedList<>();
 
@@ -82,7 +82,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void findAllLimitOffset_nonexistent_returnedEmptyList() throws DalException {
+    void findAllLimitOffset_nonexistent_returnedEmptyList() {
         BetDao dao = getDao();
 
         List<Bet> result = dao.findAll(300L, 400L);
@@ -92,7 +92,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void findAll() throws ParseException, DalException {
+    void findAll() throws ParseException {
         List<Bet> expectedResult = storage.getAllBets();
 
         List<Bet> result = getDao().findAll();
@@ -102,7 +102,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void count() throws DalException {
+    void count() {
         BetDao dao = getDao();
         long expectedResult = 15;
 
@@ -114,7 +114,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void findByUserId() throws DalException {
+    void findByUserId() {
         BetDao dao = getDao();
 
         List<Bet> expectedResult = new LinkedList<>();
@@ -132,7 +132,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void findByUserIdCount() throws DalException {
+    void findByUserIdCount() {
         BetDao dao = getDao();
         long expectedResult = 5;
 
@@ -143,7 +143,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void findByRaceId() throws DalException {
+    void findByRaceId() {
         BetDao dao = getDao();
 
         List<Bet> expectedResult = new LinkedList<>();
@@ -171,7 +171,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void findByRaceIdCount() throws DalException {
+    void findByRaceIdCount() {
         BetDao dao = getDao();
         long expectedResult = 15;
 
@@ -182,7 +182,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void getOdds_place() throws DalException {
+    void getOdds_place() {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
         Bet bet = Bet.builder()
@@ -202,7 +202,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void getOdds_win() throws DalException {
+    void getOdds_win() {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
         Bet bet = Bet.builder()
@@ -221,7 +221,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void getOdds_qeinella() throws DalException {
+    void getOdds_qeinella() {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
         Bet bet = Bet.builder()
@@ -241,7 +241,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void getOdds_exacta() throws DalException {
+    void getOdds_exacta() {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 300, 0.14);
         Bet bet = Bet.builder()
@@ -261,7 +261,7 @@ class BetDaoTest {
 
     @Test
     @Tag("read")
-    void getOdds_trifecta() throws DalException {
+    void getOdds_trifecta() {
         BetDao dao = getDao();
         Odds expectedResult = new Odds(600, 600, 0.14);
         Bet bet = Bet.builder()
@@ -282,7 +282,7 @@ class BetDaoTest {
 
     @Test
     @Tag("write")
-    void createDelete() throws DalException, ParseException {
+    void createDelete() throws ParseException {
         BetDao dao = getDao();
 
         Bet newEntity = Bet.builder()
@@ -310,7 +310,7 @@ class BetDaoTest {
 
     @Test
     @Tag("write")
-    void update() throws DalException, ParseException {
+    void update() {
         // TODO: bet update is redundant
     }
 }

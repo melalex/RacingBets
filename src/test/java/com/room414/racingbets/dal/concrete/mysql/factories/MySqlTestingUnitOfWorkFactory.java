@@ -66,7 +66,7 @@ public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
     }
 
     @Override
-    public UnitOfWork createUnitOfWork() throws DalException {
+    public UnitOfWork createUnitOfWork() {
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
             return new MySqlTestingUnitOfWork(connection);

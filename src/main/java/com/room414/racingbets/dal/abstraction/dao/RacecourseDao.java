@@ -16,10 +16,10 @@ public interface RacecourseDao extends CrudDao<Long, Racecourse> {
     /**
      * @return List of Racecourses which names starts with namePart or empty list if no found.
      */
-    List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException;
+    List<Racecourse> findByNamePart(String namePart, long offset, long limit);
 
     /**
      * @return count of Racecourses which names starts with namePart
      */
-    long findByNamePartCount(String namePart) throws DalException;
+    long findByNamePartCount(String namePart);
 }

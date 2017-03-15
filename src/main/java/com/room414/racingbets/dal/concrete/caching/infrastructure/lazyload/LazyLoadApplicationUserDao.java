@@ -25,77 +25,77 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void create(ApplicationUser entity) throws DalException {
+    public void create(ApplicationUser entity) {
         getApplicationUserDao().create(entity);
     }
 
     @Override
-    public ApplicationUser find(Long id) throws DalException {
+    public ApplicationUser find(Long id) {
         return getApplicationUserDao().find(id);
     }
 
     @Override
-    public List<ApplicationUser> findAll() throws DalException {
+    public List<ApplicationUser> findAll() {
         return getApplicationUserDao().findAll();
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) throws DalException {
+    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
         return getApplicationUserDao().findByLoginPart(loginPart, offset, limit);
     }
 
     @Override
-    public List<ApplicationUser> findAll(long offset, long limit) throws DalException {
+    public List<ApplicationUser> findAll(long offset, long limit) {
         return getApplicationUserDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() throws DalException {
+    public long count() {
         return getApplicationUserDao().count();
     }
 
     @Override
-    public long findByLoginPartCount(String loginPart) throws DalException {
+    public long findByLoginPartCount(String loginPart) {
         return getApplicationUserDao().findByLoginPartCount(loginPart);
     }
 
     @Override
-    public long update(ApplicationUser entity) throws DalException {
+    public long update(ApplicationUser entity) {
         return getApplicationUserDao().update(entity);
     }
 
     @Override
-    public ApplicationUser findByLoginAndPassword(String login, String password) throws DalException {
+    public ApplicationUser findByLoginAndPassword(String login, String password) {
         return getApplicationUserDao().findByLoginAndPassword(login, password);
     }
 
     @Override
-    public boolean delete(Long id) throws DalException {
+    public boolean delete(Long id) {
         return getApplicationUserDao().delete(id);
     }
 
     @Override
-    public boolean confirmEmail(long id) throws DalException {
+    public boolean confirmEmail(long id) {
         return getApplicationUserDao().confirmEmail(id);
     }
 
     @Override
-    public void addRole(long userId, Role role) throws DalException {
+    public void addRole(long userId, Role role) {
         getApplicationUserDao().addRole(userId, role);
     }
 
     @Override
-    public void removeRole(long userId, Role role) throws DalException {
+    public void removeRole(long userId, Role role) {
         getApplicationUserDao().removeRole(userId, role);
     }
 
     @Override
-    public boolean tryGetMoney(long id, BigDecimal amount) throws DalException {
+    public boolean tryGetMoney(long id, BigDecimal amount) {
         return getApplicationUserDao().tryGetMoney(id, amount);
     }
 
     @Override
-    public void putMoney(long id, BigDecimal amount) throws DalException {
+    public void putMoney(long id, BigDecimal amount) {
         getApplicationUserDao().putMoney(id, amount);
     }
 }

@@ -8,5 +8,5 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
  */
 @FunctionalInterface
 public interface Getter<T> {
-    T call() throws DalException;
+    T call();
 }
