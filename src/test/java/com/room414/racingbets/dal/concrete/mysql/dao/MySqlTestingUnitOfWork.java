@@ -30,8 +30,8 @@ public class MySqlTestingUnitOfWork implements UnitOfWork {
         this.connection = connection;
     }
 
+    @org.jetbrains.annotations.Contract("_ -> !null")
     public static MySqlUnitOfWork create(Connection connection) throws SQLException {
-        connection.setAutoCommit(false);
         return new MySqlUnitOfWork(connection);
     }
 

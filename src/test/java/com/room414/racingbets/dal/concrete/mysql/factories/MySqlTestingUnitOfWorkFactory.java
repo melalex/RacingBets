@@ -23,12 +23,11 @@ import java.util.Properties;
 public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
     private static final Path CONFIG_FILE_PATH = Paths.get(
             System.getProperty("user.dir"),
-            "src",
+            "database",
+            "mysql",
             "test",
-            "resources",
-            "webproject",
             "config",
-            "testDbConfig.properties"
+            "dbConfig.properties"
     );
     private static MySqlTestingUnitOfWorkFactory ourInstance = createFactory();
 
