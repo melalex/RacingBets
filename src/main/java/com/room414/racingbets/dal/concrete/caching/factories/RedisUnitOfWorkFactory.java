@@ -11,7 +11,7 @@ import redis.clients.jedis.JedisPool;
 public class RedisUnitOfWorkFactory {
     private JedisPool jedisPool;
 
-    RedisUnitOfWorkFactory(JedisPool jedisPool) {
+    public RedisUnitOfWorkFactory(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
 

@@ -1,10 +1,9 @@
 package com.room414.racingbets.dal.domain.proxies;
 
-import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.DalFactory;
+import com.room414.racingbets.dal.concrete.CachedDalFactory;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.domain.enums.Gender;
@@ -38,7 +37,7 @@ public class HorseLazyLoadProxy extends Horse {
     // TODO: is good?
     private Horse getHorse() {
         if (horse == null) {
-            try(UnitOfWork unitOfWork = DalFactory.getInstance().createUnitOfWorkFactory().createUnitOfWork()) {
+            try(UnitOfWork unitOfWork = CachedDalFactory.getInstance().createUnitOfWorkFactory().createUnitOfWork()) {
                 horse = unitOfWork.getHorseDao().find(id);
             } catch (DalException e) {
                 throw new RuntimeException("Can not lazy load horse");

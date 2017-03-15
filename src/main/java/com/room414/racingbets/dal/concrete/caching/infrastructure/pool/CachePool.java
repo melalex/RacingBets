@@ -10,29 +10,27 @@ import java.util.List;
  * @version 1.0 15 Mar 2017
  */
 // TODO: Reference-based Eviction
+// TODO: Memory lick
 public class CachePool<T> {
-    private Cache<String, T> cache;
+    private Cache<String, T> cache ;
     private Cache<String, List<T>> listCache;
     private Cache<String, Long> countCache;
 
+    CachePool() {
+        this.cache = Caffeine.<String, T>newBuilder().weakKeys().weakValues().build();
+        this.listCache = Caffeine.<String, List<T>>newBuilder().weakKeys().weakValues().build();
+        this.countCache = Caffeine.<String, Long>newBuilder().weakKeys().weakValues().build();
+    }
+
     public Cache<String, T> getCache() {
-        if (cache == null) {
-            this.cache = Caffeine.<String, T>newBuilder().weakKeys().weakValues().build();
-        }
         return cache;
     }
 
     public Cache<String, List<T>> getListCache() {
-        if (listCache == null) {
-            this.listCache = Caffeine.<String, List<T>>newBuilder().weakKeys().weakValues().build();
-        }
         return listCache;
     }
 
     public Cache<String, Long> getCountCache() {
-        if (countCache == null) {
-            this.countCache = Caffeine.<String, Long>newBuilder().weakKeys().weakValues().build();
-        }
         return countCache;
     }
 }
