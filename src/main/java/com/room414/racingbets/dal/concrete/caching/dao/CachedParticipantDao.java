@@ -14,11 +14,11 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheParticipantDao extends CacheCrudDao<Participant> implements ParticipantDao {
+public class CachedParticipantDao extends CacheCrudDao<Participant> implements ParticipantDao {
     private ParticipantDao dao;
     private ParticipantCache cache;
 
-    CacheParticipantDao(ParticipantDao dao, ParticipantCache cache) {
+    CachedParticipantDao(ParticipantDao dao, ParticipantCache cache) {
         super(dao, cache);
         this.dao = dao;
         this.cache = cache;

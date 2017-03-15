@@ -14,12 +14,12 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheApplicationUserDao extends CacheCrudDao<ApplicationUser> implements ApplicationUserDao {
+public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> implements ApplicationUserDao {
     protected ApplicationUserDao dao;
     protected ApplicationUserCache cache;
 
     // TODO: ivar inheritance
-    CacheApplicationUserDao(ApplicationUserDao dao, ApplicationUserCache cache) {
+    CachedApplicationUserDao(ApplicationUserDao dao, ApplicationUserCache cache) {
         super(dao, cache);
         this.dao = dao;
         this.cache = cache;

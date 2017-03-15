@@ -9,7 +9,7 @@ import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheUnitOfWork implements UnitOfWork {
+public class CachedUnitOfWork implements UnitOfWork {
     private UnitOfWork unitOfWork;
     private RedisCache cache;
 
@@ -27,7 +27,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     private RacecourseDao racecourseDao;
 
 
-    public CacheUnitOfWork(UnitOfWork unitOfWork, RedisCache cache) {
+    public CachedUnitOfWork(UnitOfWork unitOfWork, RedisCache cache) {
         this.unitOfWork = unitOfWork;
         this.cache = cache;
     }
@@ -35,7 +35,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public ApplicationUserDao getApplicationUserDao() throws DalException {
         if (applicationUserDao == null) {
-            applicationUserDao = new CacheApplicationUserDao(new LazyLoadApplicationUserDao(unitOfWork));
+            applicationUserDao = new CachedApplicationUserDao(new LazyLoadApplicationUserDao(unitOfWork));
         }
         return applicationUserDao;
     }
@@ -43,7 +43,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public BetDao getBetDao() throws DalException {
         if (betDao == null) {
-            betDao = new CacheBetDao(new LazyLoadBetDao(unitOfWork));
+            betDao = new CachedBetDao(new LazyLoadBetDao(unitOfWork));
         }
         return betDao;
     }
@@ -51,7 +51,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public HorseDao getHorseDao() throws DalException {
         if (horseDao == null) {
-            horseDao = new CacheHorseDao(new LazyLoadHorseDao(unitOfWork));
+            horseDao = new CachedHorseDao(new LazyLoadHorseDao(unitOfWork));
         }
         return horseDao;
     }
@@ -59,7 +59,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public JockeyDao getJockeyDao() throws DalException {
         if (jockeyDao == null) {
-            jockeyDao = new CacheJockeyDao(new LazyLoadJockeyDao(unitOfWork));
+            jockeyDao = new CachedJockeyDao(new LazyLoadJockeyDao(unitOfWork));
         }
         return jockeyDao;
     }
@@ -67,7 +67,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public OwnerDao getOwnerDao() throws DalException {
         if (ownerDao == null) {
-            ownerDao = new CacheOwnerDao(new LazyLoadOwnerDao(unitOfWork));
+            ownerDao = new CachedOwnerDao(new LazyLoadOwnerDao(unitOfWork));
         }
         return ownerDao;
     }
@@ -75,7 +75,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public TrainerDao getTrainerDao() throws DalException {
         if (trainerDao == null) {
-            trainerDao = new CacheTrainerDao(new LazyLoadTrainerDao(unitOfWork));
+            trainerDao = new CachedTrainerDao(new LazyLoadTrainerDao(unitOfWork));
         }
         return trainerDao;
     }
@@ -83,7 +83,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public ParticipantDao getParticipantDao() throws DalException {
         if (participantDao == null) {
-            participantDao = new CacheParticipantDao(new LazyLoadParticipantDao(unitOfWork));
+            participantDao = new CachedParticipantDao(new LazyLoadParticipantDao(unitOfWork));
         }
         return participantDao;
     }
@@ -91,7 +91,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public RaceDao getRaceDao() throws DalException {
         if (raceDao == null) {
-            raceDao = new CacheRaceDao(new LazyLoadRaceDao(unitOfWork));
+            raceDao = new CachedRaceDao(new LazyLoadRaceDao(unitOfWork));
         }
         return raceDao;
     }
@@ -99,7 +99,7 @@ public class CacheUnitOfWork implements UnitOfWork {
     @Override
     public RacecourseDao getRacecourseDao() throws DalException {
         if (racecourseDao == null) {
-            racecourseDao = new CacheRacecourseDao(new LazyLoadRacecourseDao(unitOfWork));
+            racecourseDao = new CachedRacecourseDao(new LazyLoadRacecourseDao(unitOfWork));
         }
         return racecourseDao;
     }

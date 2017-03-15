@@ -3,7 +3,6 @@ package com.room414.racingbets.dal.concrete.caching.factories;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
-import com.room414.racingbets.dal.concrete.caching.dao.CacheUnitOfWork;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload.LazyLoadUnitOfWork;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
 import redis.clients.jedis.JedisPool;

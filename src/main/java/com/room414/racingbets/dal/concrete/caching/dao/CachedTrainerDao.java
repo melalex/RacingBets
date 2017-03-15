@@ -14,9 +14,9 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheTrainerDao extends CachePersonDao<Trainer> implements TrainerDao {
+public class CachedTrainerDao extends CachePersonDao<Trainer> implements TrainerDao {
 
-    CacheTrainerDao(TrainerDao dao, TrainerCache cache) {
+    CachedTrainerDao(TrainerDao dao, TrainerCache cache) {
         super(dao, cache);
     }
 }

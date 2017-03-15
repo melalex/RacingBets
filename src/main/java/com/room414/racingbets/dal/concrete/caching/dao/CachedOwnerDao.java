@@ -10,9 +10,9 @@ import com.room414.racingbets.dal.domain.entities.Owner;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheOwnerDao extends CachePersonDao<Owner> implements OwnerDao {
+public class CachedOwnerDao extends CachePersonDao<Owner> implements OwnerDao {
 
-    CacheOwnerDao(OwnerDao dao, OwnerCache cache) {
+    CachedOwnerDao(OwnerDao dao, OwnerCache cache) {
         super(dao, cache);
     }
 }

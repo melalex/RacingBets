@@ -10,9 +10,9 @@ import com.room414.racingbets.dal.domain.entities.Jockey;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheJockeyDao extends CachePersonDao<Jockey> implements JockeyDao {
+public class CachedJockeyDao extends CachePersonDao<Jockey> implements JockeyDao {
 
-    CacheJockeyDao(JockeyDao dao, JockeyCache cache) {
+    CachedJockeyDao(JockeyDao dao, JockeyCache cache) {
         super(dao, cache);
     }
 }

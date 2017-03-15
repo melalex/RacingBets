@@ -15,11 +15,11 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheBetDao extends CacheCrudDao<Bet> implements BetDao {
+public class CachedBetDao extends CacheCrudDao<Bet> implements BetDao {
     protected BetDao dao;
     protected BetCache cache;
 
-    CacheBetDao(BetDao dao, BetCache cache) {
+    CachedBetDao(BetDao dao, BetCache cache) {
         super(dao, cache);
         this.dao = dao;
         this.cache = cache;

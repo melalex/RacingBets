@@ -1,10 +1,10 @@
 package com.room414.racingbets.dal.concrete.caching.dao;
 
-import com.room414.racingbets.dal.abstraction.dao.RacecourseDao;
+import com.room414.racingbets.dal.abstraction.dao.HorseDao;
+import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
-import com.room414.racingbets.dal.concrete.caching.caffeine.caches.RacecourseCache;
-import com.room414.racingbets.dal.domain.entities.Racecourse;
+import com.room414.racingbets.dal.concrete.caching.caffeine.caches.HorseCache;
 
 import java.util.List;
 
@@ -12,18 +12,18 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheRacecourseDao extends CacheCrudDao<Racecourse> implements RacecourseDao {
-    private RacecourseDao dao;
-    private RacecourseCache cache;
+public class CachedHorseDao extends CacheCrudDao<Horse> implements HorseDao {
+    protected HorseDao dao;
+    protected HorseCache cache;
 
-    CacheRacecourseDao(RacecourseDao dao, RacecourseCache cache) {
+    CachedHorseDao(HorseDao dao, HorseCache cache) {
         super(dao, cache);
         this.dao = dao;
         this.cache = cache;
     }
 
     @Override
-    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) throws DalException {
+    public List<Horse> findByNamePart(String namePart, long offset, long limit) throws DalException {
         String key = String.format("find:name:%s:%d:%d", namePart, limit, offset);
 
         return cache.getManyCached(key, () -> dao.findByNamePart(namePart, offset, limit));
@@ -31,9 +31,8 @@ public class CacheRacecourseDao extends CacheCrudDao<Racecourse> implements Race
 
     @Override
     public long findByNamePartCount(String namePart) throws DalException {
-        String key = "find:name:count" + namePart;
+        String key = "find:name:count:" + namePart;
 
         return cache.getCachedCount(key, () -> dao.findByNamePartCount(namePart));
     }
-
 }
