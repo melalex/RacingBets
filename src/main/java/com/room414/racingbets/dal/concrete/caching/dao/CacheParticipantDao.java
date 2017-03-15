@@ -3,6 +3,8 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
+import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
+import com.room414.racingbets.dal.concrete.caching.caffeine.caches.ParticipantCache;
 import com.room414.racingbets.dal.domain.entities.Participant;
 
 import java.sql.Timestamp;
@@ -12,85 +14,69 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 12 Mar 2017
  */
-public class CacheParticipantDao implements ParticipantDao {
-    private ParticipantDao participantDao;
+public class CacheParticipantDao extends CacheCrudDao<Participant> implements ParticipantDao {
+    private ParticipantDao dao;
+    private ParticipantCache cache;
 
-    public CacheParticipantDao(ParticipantDao participantDao) {
-        this.participantDao = participantDao;
-    }
-
-    @Override
-    public void create(Participant entity) throws DalException {
-        participantDao.create(entity);
+    CacheParticipantDao(ParticipantDao dao, ParticipantCache cache) {
+        super(dao, cache);
+        this.dao = dao;
+        this.cache = cache;
     }
 
     @Override
     public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) throws DalException {
-        return participantDao.findByHorseId(id, offset, limit);
-    }
+        final String key = String.format("find:horse:%d:%d:%d", id, limit, offset);
 
-    @Override
-    public Participant find(Long id) throws DalException {
-        return participantDao.find(id);
+        return cache.getWhoAndWhenCached(key, () -> dao.findByHorseId(id, offset, limit));
     }
 
     @Override
     public long findByHorseIdCount(long id) throws DalException {
-        return participantDao.findByHorseIdCount(id);
+        final String key = String.format("find:horse:count:%d", id);
+
+        return cache.getCachedCount(key, () -> dao.findByHorseIdCount(id));
     }
 
     @Override
     public List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit) throws DalException {
-        return participantDao.findByOwnerId(id, offset, limit);
-    }
+        final String key = String.format("find:owner:%d:%d:%d", id, limit, offset);
 
-    @Override
-    public List<Participant> findAll() throws DalException {
-        return participantDao.findAll();
+        return cache.getWhoAndWhenCached(key, () -> dao.findByOwnerId(id, offset, limit));
     }
 
     @Override
     public long findByOwnerIdCount(long id) throws DalException {
-        return participantDao.findByOwnerIdCount(id);
+        final String key = String.format("find:owner:count:%d", id);
+
+        return cache.getCachedCount(key, () -> dao.findByOwnerIdCount(id));
     }
 
     @Override
     public List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) throws DalException {
-        return participantDao.findByJockeyId(id, offset, limit);
-    }
+        final String key = String.format("find:jockey:%d:%d:%d", id, limit, offset);
 
-    @Override
-    public List<Participant> findAll(long offset, long limit) throws DalException {
-        return participantDao.findAll(offset, limit);
+        return cache.getWhoAndWhenCached(key, () -> dao.findByJockeyId(id, offset, limit));
     }
 
     @Override
     public long findByJockeyIdCount(long id) throws DalException {
-        return participantDao.findByJockeyIdCount(id);
+        final String key = String.format("find:jockey:count:%d", id);
+
+        return cache.getCachedCount(key, () -> dao.findByJockeyIdCount(id));
     }
 
     @Override
     public List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) throws DalException {
-        return participantDao.findByTrainerId(id, offset, limit);
-    }
+        final String key = String.format("find:trainer:%d:%d:%d", id, limit, offset);
 
-    @Override
-    public long count() throws DalException {
-        return participantDao.count();
+        return cache.getWhoAndWhenCached(key, () -> dao.findByTrainerId(id, offset, limit));
     }
 
     @Override
     public long findByTrainerIdCount(long id) throws DalException {
-        return participantDao.findByTrainerIdCount(id);
-    }
+        final String key = String.format("find:trainer:count:%d", id);
 
-    @Override
-    public long update(Participant entity) throws DalException {
-        return participantDao.update(entity);
-    }
-
-    @Override
-    public boolean delete(Long id) throws DalException {
-        return participantDao.delete(id);
+        return cache.getCachedCount(key, () -> dao.findByTrainerIdCount(id));
     }
 }

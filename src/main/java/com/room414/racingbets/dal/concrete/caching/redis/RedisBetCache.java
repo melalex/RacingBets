@@ -6,6 +6,8 @@ import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Response;
+import redis.clients.jedis.Transaction;
 
 import java.math.BigDecimal;
 
@@ -19,7 +21,7 @@ public class RedisBetCache extends RedisCache {
     private static final String COMMISSION_KEY = "commission:";
 
 
-    public RedisBetCache(Jedis jedis) {
+    RedisBetCache(Jedis jedis) {
         super(jedis);
     }
 
@@ -44,9 +46,15 @@ public class RedisBetCache extends RedisCache {
         String eventPoolKey = getOddsKey(EVENT_POOL_KEY, bet);
         String commissionKey = getOddsKey(COMMISSION_KEY, bet);
 
-        String prizePoolString = jedis.hget(hashKey, prizePoolKey);
-        String eventPoolString = jedis.hget(hashKey, eventPoolKey);
-        String commissionString = jedis.hget(hashKey, commissionKey);
+        Transaction oddsTransaction = jedis.multi();
+        Response<String> prizePoolResponse = oddsTransaction.hget(hashKey, prizePoolKey);
+        Response<String> eventPoolResponse = oddsTransaction.hget(hashKey, eventPoolKey);
+        Response<String> commissionResponse = oddsTransaction.hget(hashKey, commissionKey);
+        oddsTransaction.exec();
+
+        String prizePoolString = prizePoolResponse.get();
+        String eventPoolString = eventPoolResponse.get();
+        String commissionString = commissionResponse.get();
 
         if (prizePoolString != null && eventPoolString != null && commissionString != null) {
             BigDecimal prizePool = new BigDecimal(prizePoolString);

@@ -23,7 +23,7 @@ public class RedisCache implements Closeable {
 
     private Transaction transaction;
 
-    public RedisCache(Jedis jedis) {
+    RedisCache(Jedis jedis) {
         this.jedis = jedis;
     }
 
@@ -91,13 +91,13 @@ public class RedisCache implements Closeable {
     }
 
 
-    public void commit() {
+    void commit() {
         if (transaction != null) {
             transaction.exec();
         }
     }
 
-    public void rollback() {
+    void rollback() {
         if (transaction != null) {
             transaction.discard();
         }

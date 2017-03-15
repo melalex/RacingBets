@@ -26,7 +26,7 @@ public abstract class BaseCache<T> implements CaffeineCache<T> {
     private Cache<String, T> cache;
     private Cache<String, List<T>> cacheList;
     private Cache<String, Long> countCache;
-    private RedisCache redisCache;
+    protected RedisCache redisCache;
 
     public BaseCache(
             String nameSpace,
