@@ -2,20 +2,18 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.base;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
-import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCache;
+import com.room414.racingbets.dal.abstraction.cache.EntityCache;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 
 import java.util.List;
 
-import static com.room414.racingbets.dal.concrete.caching.caffeine.caches.CacheHelper.getCached;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 14 Mar 2017
  */
-public abstract class BaseCache<T> implements CaffeineCache<T> {
+public abstract class BaseCache<T> implements EntityCache<T> {
     private String nameSpace;
     private String listNameSpace;
     private String countNameSpace;

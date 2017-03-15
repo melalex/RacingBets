@@ -2,8 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.base;
 
 import com.room414.racingbets.dal.abstraction.dao.PersonDao;
 import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCache;
+import com.room414.racingbets.dal.abstraction.cache.EntityCache;
 
 import java.util.List;
 
@@ -13,9 +12,9 @@ import java.util.List;
  */
 public abstract class CachePersonDao<T extends Person> extends CacheCrudDao<T> implements PersonDao<T> {
     protected PersonDao<T> dao;
-    protected CaffeineCache<T> cache;
+    protected EntityCache<T> cache;
 
-    public CachePersonDao(PersonDao<T> dao, CaffeineCache<T> cache) {
+    public CachePersonDao(PersonDao<T> dao, EntityCache<T> cache) {
         super(dao, cache);
         this.dao = dao;
         this.cache = cache;

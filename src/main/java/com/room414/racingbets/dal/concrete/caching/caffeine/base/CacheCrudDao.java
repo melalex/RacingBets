@@ -1,8 +1,7 @@
 package com.room414.racingbets.dal.concrete.caching.caffeine.base;
 
 import com.room414.racingbets.dal.abstraction.dao.CrudDao;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCache;
+import com.room414.racingbets.dal.abstraction.cache.EntityCache;
 
 import java.util.List;
 
@@ -12,9 +11,9 @@ import java.util.List;
  */
 public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
     protected CrudDao<Long, T> dao;
-    protected CaffeineCache<T> cache;
+    protected EntityCache<T> cache;
 
-    public CacheCrudDao(CrudDao<Long, T> dao, CaffeineCache<T> cache) {
+    public CacheCrudDao(CrudDao<Long, T> dao, EntityCache<T> cache) {
         this.dao = dao;
         this.cache = cache;
     }

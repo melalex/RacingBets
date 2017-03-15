@@ -1,10 +1,9 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.*;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.concrete.mysql.dao.*;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @author Alexander Melashchenko
@@ -28,11 +27,6 @@ public class MySqlTestingUnitOfWork implements UnitOfWork {
 
     public MySqlTestingUnitOfWork(Connection connection) {
         this.connection = connection;
-    }
-
-    @org.jetbrains.annotations.Contract("_ -> !null")
-    public static MySqlUnitOfWork create(Connection connection) throws SQLException {
-        return new MySqlUnitOfWork(connection);
     }
 
     @Override

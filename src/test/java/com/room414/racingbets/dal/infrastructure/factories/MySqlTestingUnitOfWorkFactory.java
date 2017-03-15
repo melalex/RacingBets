@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete.mysql.factories;
+package com.room414.racingbets.dal.infrastructure.factories;
 
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;

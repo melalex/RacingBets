@@ -68,7 +68,7 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
         return newInstance;
     }
 
-    // TODO: initialize data store
+    // TODO: initialize data source
     private void initMySqlConnectionPool() {
         try {
             Properties properties = new Properties();
