@@ -290,6 +290,30 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
+    public List<ApplicationUser> findByLoginAndEmail(String login, String email) {
+        final String sqlStatement =
+                "SELECT application_user.id, application_user.login, application_user.first_name, " +
+                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
+                "   application_user.password, application_user.balance, role.name " +
+                "FROM (" +
+                "   SELECT * FROM application_user " +
+                "   WHERE application_user.login = ? OR application_user.email = ?" +
+                ") AS application_user " +
+                "LEFT OUTER JOIN role " +
+                "   ON application_user.id = role.application_user_id";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setString(1, login);
+            statement.setString(2, email);
+
+            return getResultListWithArray(statement, this::mapUsers);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, login, email);
+            throw new DalException(message, e);
+        }
+    }
+
+    @Override
     public boolean confirmEmail(long id) {
         final String sqlStatement = "UPDATE application_user SET is_email_confirmed = TRUE WHERE id = ?";
 

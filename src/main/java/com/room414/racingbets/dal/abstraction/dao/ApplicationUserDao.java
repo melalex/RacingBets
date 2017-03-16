@@ -39,6 +39,14 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      */
     ApplicationUser findByLoginAndPassword(String login, String password);
 
+
+    /**
+     * @param login ApplicationUser login
+     * @param email ApplicationUser email
+     * @return ApplicationUsers who's email == email param or login == login param
+     */
+    List<ApplicationUser> findByLoginAndEmail(String login, String email);
+
     /**
      * Set ApplicationUser isEmailConfirmed field to true to user with id == id param
      *

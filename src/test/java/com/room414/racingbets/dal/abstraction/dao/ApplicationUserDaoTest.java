@@ -6,6 +6,7 @@ import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
+import com.sun.corba.se.impl.oa.poa.AOMEntry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -149,6 +150,21 @@ class ApplicationUserDaoTest {
         ApplicationUser expectedResult = storage.getApplicationUser(1);
 
         ApplicationUser result = dao.findByLoginAndPassword("pgordon0", "kJ182n");
+
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
+    }
+
+    @Test
+    @Tag("read")
+    void findByLoginAndEmail() {
+        ApplicationUserDao dao = getDao();
+        String login = "pgordon0";
+        String email = "hbanks2@adobe.com";
+        List<ApplicationUser> expectedResult = new LinkedList<>();
+        expectedResult.add(storage.getApplicationUser(1));
+        expectedResult.add(storage.getApplicationUser(3));
+
+        List<ApplicationUser> result = dao.findByLoginAndEmail(login, email);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }

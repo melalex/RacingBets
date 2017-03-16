@@ -56,6 +56,13 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
+    public List<ApplicationUser> findByLoginAndEmail(String login, String email) {
+        String key = String.format("find:by:login:email:%s:%s", login, email);
+
+        return cache.getManyCached(key, () -> dao.findByLoginAndEmail(login, email));
+    }
+
+    @Override
     public boolean confirmEmail(long id) {
         removeFromCacheById(id);
         cache.deleteManyCached();

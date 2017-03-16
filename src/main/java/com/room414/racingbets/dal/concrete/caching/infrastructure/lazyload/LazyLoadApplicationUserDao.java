@@ -70,6 +70,11 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
+    public List<ApplicationUser> findByLoginAndEmail(String login, String email) {
+        return getApplicationUserDao().findByLoginAndEmail(login, email);
+    }
+
+    @Override
     public boolean delete(Long id) {
         return getApplicationUserDao().delete(id);
     }
