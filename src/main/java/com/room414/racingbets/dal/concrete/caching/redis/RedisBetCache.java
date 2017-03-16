@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.concrete.caching.redis;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
@@ -8,6 +9,7 @@ import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Response;
 import redis.clients.jedis.Transaction;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
@@ -65,11 +67,15 @@ public class RedisBetCache extends RedisCache {
 
         Odds odds = getter.call();
 
-        Pipeline pipeline = jedis.pipelined();
-        pipeline.hset(hashKey, prizePoolKey, odds.getPrizePool().toString());
-        pipeline.hset(hashKey, eventPoolKey, odds.getEventPool().toString());
-        pipeline.hset(hashKey, commissionKey, String.valueOf(odds.getCommission()));
-        pipeline.sync();
+        try (Pipeline pipeline = jedis.pipelined()) {
+            pipeline.hset(hashKey, prizePoolKey, odds.getPrizePool().toString());
+            pipeline.hset(hashKey, eventPoolKey, odds.getEventPool().toString());
+            pipeline.hset(hashKey, commissionKey, String.valueOf(odds.getCommission()));
+            pipeline.sync();
+        } catch (IOException e) {
+            String message = "Can't close pipeline";
+            throw new DalException(message, e);
+        }
 
         return odds;
     }
@@ -79,10 +85,14 @@ public class RedisBetCache extends RedisCache {
         String prizePoolKey = getOddsKey(PRIZE_POOL_KEY, bet);
         String eventPoolKey = getOddsKey(EVENT_POOL_KEY, bet);
 
-        Pipeline pipeline = jedis.pipelined();
-        pipeline.hincrByFloat(hashKey, prizePoolKey, bet.getBetSize().doubleValue());
-        pipeline.hincrByFloat(hashKey, eventPoolKey, bet.getBetSize().doubleValue());
-        pipeline.sync();
+        try (Pipeline pipeline = jedis.pipelined()) {
+            pipeline.hincrByFloat(hashKey, prizePoolKey, bet.getBetSize().doubleValue());
+            pipeline.hincrByFloat(hashKey, eventPoolKey, bet.getBetSize().doubleValue());
+            pipeline.sync();
+        } catch (IOException e) {
+            String message = "Can't close pipeline";
+            throw new DalException(message, e);
+        }
     }
 
     public void deleteOdds(long raceId) {

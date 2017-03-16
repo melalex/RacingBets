@@ -4,13 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.infrastructure.factories.TestingRedisUnitOfWorkFactory;
 import com.room414.racingbets.dal.resolvers.RedisParameterResolver;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alexander Melashchenko
@@ -25,14 +22,22 @@ class RedisCacheTest {
     @BeforeAll
     static void setUp(TestingRedisUnitOfWorkFactory factory) {
         RedisCacheTest.factory = factory;
-        RedisCacheTest.unitOfWork = factory.create();
-        RedisCacheTest.cache = unitOfWork.getRedisCache();
     }
 
     @AfterAll
     static void tearDown() throws Exception {
-        unitOfWork.close();
         factory.close();
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        unitOfWork = factory.create();
+        cache = unitOfWork.getRedisCache();
+    }
+
+    @AfterEach
+    void afterEach() throws Exception {
+        unitOfWork.close();
     }
 
     @Test

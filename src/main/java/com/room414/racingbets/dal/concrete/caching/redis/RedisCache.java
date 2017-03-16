@@ -9,7 +9,6 @@ import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
@@ -18,7 +17,7 @@ import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
  * @author Alexander Melashchenko
  * @version 1.0 13 Mar 2017
  */
-public class RedisCache implements Closeable {
+public class RedisCache implements AutoCloseable {
     Jedis jedis;
 
     private Transaction transaction;
@@ -104,7 +103,8 @@ public class RedisCache implements Closeable {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
         jedis.close();
+        transaction.close();
     }
 }
