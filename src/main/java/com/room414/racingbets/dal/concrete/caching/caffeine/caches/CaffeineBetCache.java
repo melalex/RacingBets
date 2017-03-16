@@ -40,6 +40,7 @@ public class CaffeineBetCache extends BaseCache<Bet> implements BetCache {
         this.oddsCache = oddsCache;
     }
 
+    @Override
     public Odds getOdds(Bet bet, Getter<Odds> getter) {
         return oddsCache.get(
                 getOddsKey(NAME_SPACE, bet),
@@ -47,6 +48,7 @@ public class CaffeineBetCache extends BaseCache<Bet> implements BetCache {
         );
     }
 
+    @Override
     public void updateOdds(Bet bet) {
         oddsCache.invalidate(getOddsKey(NAME_SPACE, bet));
         redisBetCache.updateOdds(bet);
