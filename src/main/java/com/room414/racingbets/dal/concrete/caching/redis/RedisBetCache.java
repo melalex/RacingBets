@@ -11,6 +11,8 @@ import redis.clients.jedis.Transaction;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Alexander Melashchenko
@@ -21,6 +23,14 @@ public class RedisBetCache extends RedisCache {
     private static final String EVENT_POOL_KEY = "event:pool:";
     private static final String COMMISSION_KEY = "commission:";
 
+    private List<Bet> oddsToUpdate;
+
+    private List<Bet> getOddsToUpdate() {
+        if (oddsToUpdate == null) {
+            oddsToUpdate = new LinkedList<>();
+        }
+        return oddsToUpdate;
+    }
 
     RedisBetCache(Jedis jedis) {
         super(jedis);
@@ -47,33 +57,42 @@ public class RedisBetCache extends RedisCache {
         String eventPoolKey = getOddsKey(EVENT_POOL_KEY, bet);
         String commissionKey = getOddsKey(COMMISSION_KEY, bet);
 
-        Transaction oddsTransaction = jedis.multi();
-        Response<String> prizePoolResponse = oddsTransaction.hget(hashKey, prizePoolKey);
-        Response<String> eventPoolResponse = oddsTransaction.hget(hashKey, eventPoolKey);
-        Response<String> commissionResponse = oddsTransaction.hget(hashKey, commissionKey);
-        oddsTransaction.exec();
+        try (Transaction oddsTransaction = jedis.multi()) {
+            Response<String> prizePoolResponse = oddsTransaction.hget(hashKey, prizePoolKey);
+            Response<String> eventPoolResponse = oddsTransaction.hget(hashKey, eventPoolKey);
+            Response<String> commissionResponse = oddsTransaction.hget(hashKey, commissionKey);
+            oddsTransaction.exec();
 
-        String prizePoolString = prizePoolResponse.get();
-        String eventPoolString = eventPoolResponse.get();
-        String commissionString = commissionResponse.get();
+            String prizePoolString = prizePoolResponse.get();
+            String eventPoolString = eventPoolResponse.get();
+            String commissionString = commissionResponse.get();
 
-        if (prizePoolString != null && eventPoolString != null && commissionString != null) {
-            BigDecimal prizePool = new BigDecimal(prizePoolString);
-            BigDecimal eventPool = new BigDecimal(prizePoolString);
-            double commission = Double.valueOf(prizePoolString);
+            if (prizePoolString != null && eventPoolString != null && commissionString != null) {
+                BigDecimal prizePool = new BigDecimal(prizePoolString);
+                BigDecimal eventPool = new BigDecimal(eventPoolString);
+                double commission = Double.valueOf(commissionString);
 
-            return new Odds(prizePool, eventPool, commission);
+                return new Odds(prizePool, eventPool, commission);
+            }
+        } catch (IOException e) {
+            String message = "Can't close get odds transaction";
+            throw new DalException(message, e);
         }
 
         Odds odds = getter.call();
 
-        try (Pipeline pipeline = jedis.pipelined()) {
-            pipeline.hset(hashKey, prizePoolKey, odds.getPrizePool().toString());
-            pipeline.hset(hashKey, eventPoolKey, odds.getEventPool().toString());
-            pipeline.hset(hashKey, commissionKey, String.valueOf(odds.getCommission()));
-            pipeline.sync();
+        if (odds == null) {
+            String message = "Getter should return value that != null";
+            throw new IllegalArgumentException(message);
+        }
+
+        try (Transaction transaction = jedis.multi()) {
+            transaction.hset(hashKey, prizePoolKey, odds.getPrizePool().toString());
+            transaction.hset(hashKey, eventPoolKey, odds.getEventPool().toString());
+            transaction.hset(hashKey, commissionKey, String.valueOf(odds.getCommission()));
+            transaction.exec();
         } catch (IOException e) {
-            String message = "Can't close pipeline";
+            String message = "Can't close set odds transaction";
             throw new DalException(message, e);
         }
 
@@ -81,13 +100,36 @@ public class RedisBetCache extends RedisCache {
     }
 
     public void updateOdds(Bet bet) {
-        String hashKey = getHashKey(bet.getRaceId());
-        String prizePoolKey = getOddsKey(PRIZE_POOL_KEY, bet);
-        String eventPoolKey = getOddsKey(EVENT_POOL_KEY, bet);
+        getOddsToUpdate().add(bet);
+    }
+
+    public void deleteOdds(long raceId) {
+        getToDelete().add(getHashKey(raceId));
+    }
+
+    @Override
+    void commit() throws IOException {
+        super.commit();
+
+        if (oddsToUpdate == null || oddsToUpdate.isEmpty()) {
+            return;
+        }
 
         try (Pipeline pipeline = jedis.pipelined()) {
-            pipeline.hincrByFloat(hashKey, prizePoolKey, bet.getBetSize().doubleValue());
-            pipeline.hincrByFloat(hashKey, eventPoolKey, bet.getBetSize().doubleValue());
+            String hashKey;
+            String prizePoolKey;
+            String eventPoolKey;
+
+            for (Bet bet : oddsToUpdate) {
+                hashKey = getHashKey(bet.getRaceId());
+                prizePoolKey = getOddsKey(PRIZE_POOL_KEY, bet);
+                eventPoolKey = getOddsKey(EVENT_POOL_KEY, bet);
+
+                pipeline.multi();
+                pipeline.hincrByFloat(hashKey, prizePoolKey, bet.getBetSize().doubleValue());
+                pipeline.hincrByFloat(hashKey, eventPoolKey, bet.getBetSize().doubleValue());
+                pipeline.exec();
+            }
             pipeline.sync();
         } catch (IOException e) {
             String message = "Can't close pipeline";
@@ -95,7 +137,12 @@ public class RedisBetCache extends RedisCache {
         }
     }
 
-    public void deleteOdds(long raceId) {
-        getTransaction().del(getHashKey(raceId));
+    @Override
+    void rollback() {
+        super.rollback();
+
+        if (oddsToUpdate != null) {
+            oddsToUpdate.clear();
+        }
     }
 }

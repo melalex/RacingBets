@@ -1,6 +1,9 @@
 package com.room414.racingbets.dal.concrete.caching.redis;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import redis.clients.jedis.Jedis;
+
+import java.io.IOException;
 
 /**
  * @author Alexander Melashchenko
@@ -30,8 +33,13 @@ public class RedisUnitOfWork implements AutoCloseable {
     }
 
     public void commit() {
-        redisBetCache.commit();
-        redisCache.commit();
+        try {
+            redisBetCache.commit();
+            redisCache.commit();
+        } catch (IOException e) {
+            String message = "Can't close redis connection";
+            throw new DalException(message, e);
+        }
     }
 
     public void rollback() {

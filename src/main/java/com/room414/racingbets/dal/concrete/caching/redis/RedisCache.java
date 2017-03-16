@@ -6,12 +6,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
+import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Transaction;
+import redis.clients.jedis.Pipeline;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.NONE;
 
 /**
  * @author Alexander Melashchenko
@@ -20,17 +24,25 @@ import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 public class RedisCache implements AutoCloseable {
     Jedis jedis;
 
-    private Transaction transaction;
+    private List<String> toDelete;
+    private List<Pair<String, String>> toDeleteFromMap;
 
     RedisCache(Jedis jedis) {
         this.jedis = jedis;
     }
 
-    Transaction getTransaction() {
-        if (transaction == null) {
-            transaction = jedis.multi();
+    List<String> getToDelete() {
+        if (toDelete == null) {
+            toDelete = new LinkedList<>();
         }
-        return transaction;
+        return toDelete;
+    }
+
+    private List<Pair<String, String>> getToDeleteFromMap() {
+        if (toDeleteFromMap == null) {
+            toDeleteFromMap = new LinkedList<>();
+        }
+        return toDeleteFromMap;
     }
 
     public <T> T getCached(String namespace, String key, Getter<T> getter, TypeReference<T> type) {
@@ -70,11 +82,11 @@ public class RedisCache implements AutoCloseable {
     }
 
     public void delete(String key) {
-        getTransaction().del(key);
+        getToDelete().add(key);
     }
 
     public void delete(String namespace, String key) {
-        getTransaction().hdel(namespace, key);
+        getToDeleteFromMap().add(new Pair<>(namespace, key));
     }
 
     private <T> String serialize(T object) throws JsonProcessingException {
@@ -90,21 +102,32 @@ public class RedisCache implements AutoCloseable {
     }
 
 
-    void commit() {
-        if (transaction != null) {
-            transaction.exec();
+    void commit() throws IOException {
+        try (Pipeline pipeline = jedis.pipelined()) {
+            if (toDelete != null && !toDelete.isEmpty()) {
+                toDelete.forEach(pipeline::del);
+                toDelete.clear();
+            }
+
+            if (toDeleteFromMap != null && !toDeleteFromMap.isEmpty()) {
+                toDeleteFromMap.forEach(e -> pipeline.hdel(e.getFirstElement(), e.getSecondElement()));
+                toDeleteFromMap.clear();
+            }
         }
     }
 
     void rollback() {
-        if (transaction != null) {
-            transaction.discard();
+        if (toDelete != null) {
+            toDelete.clear();
+        }
+
+        if (toDeleteFromMap != null) {
+            toDeleteFromMap.clear();
         }
     }
 
     @Override
     public void close() throws IOException {
         jedis.close();
-        transaction.close();
     }
 }

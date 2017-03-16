@@ -6,6 +6,9 @@ import com.room414.racingbets.dal.infrastructure.factories.TestingRedisUnitOfWor
 import com.room414.racingbets.dal.resolvers.RedisParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import redis.clients.jedis.Jedis;
+
+import java.io.IOException;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
 
@@ -26,6 +29,9 @@ class RedisCacheTest {
 
     @AfterAll
     static void tearDown() throws Exception {
+        try(Jedis jedis = factory.getConnection()) {
+            jedis.flushDB();
+        }
         factory.close();
     }
 
@@ -75,7 +81,7 @@ class RedisCacheTest {
     }
 
     @Test
-    void delete() {
+    void delete() throws IOException {
         String namespace = "test:delete";
         String key1 = "delete:key1:" + System.currentTimeMillis();
         String key2 = "delete:key2:" + System.currentTimeMillis();
@@ -99,7 +105,7 @@ class RedisCacheTest {
     }
 
     @Test
-    void deleteFromNamespace() {
+    void deleteFromNamespace() throws IOException {
         String namespace = "test:delete";
         String key1 = "delete:key1:" + System.currentTimeMillis();
         String key2 = "delete:key2:" + System.currentTimeMillis();
@@ -118,7 +124,7 @@ class RedisCacheTest {
         result1 = cache.getCachedCount(namespace, key1, () -> (long) -1);
         result2 = cache.getCachedCount(namespace, key2, () -> (long) -1);
 
-        assert result1 == -1 : defaultAssertionFailMessage(result1, target1);
+        assert result1 == -1 : defaultAssertionFailMessage(result1, -1);
         assert result2 == target2 : defaultAssertionFailMessage(result2, target2);
     }
 }

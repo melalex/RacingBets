@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.infrastructure.factories;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisUnitOfWork;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -50,11 +51,14 @@ public class TestingRedisUnitOfWorkFactory implements AutoCloseable {
         } catch (IOException e) {
             throw new DalException("Exception during redis connection pool creation", e);
         }
-
     }
 
     public RedisUnitOfWork create() {
         return new RedisUnitOfWork(jedisPool.getResource());
+    }
+
+    public Jedis getConnection() {
+        return jedisPool.getResource();
     }
 
     @Override
