@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.exception.UserAlreadyExistsException;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
@@ -17,6 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -184,8 +187,66 @@ class ApplicationUserDaoTest {
     @Test
     @Tag("write")
     void create_existentLogin_notCreated() {
-        // TODO: test this
+        ApplicationUserDao dao = getDao();
+
+        ApplicationUser newEntity = ApplicationUser.builder()
+                .setLogin("pgordon0")
+                .setPassword("fortuna322")
+                .setFirstName("Alex")
+                .setLastName("Allen")
+                .setEmail("melalex490@virginia.edu")
+                .setEmailConfirmed(true)
+                .setBalance(BigDecimal.valueOf(385.59))
+                .addRole(Role.ADMIN)
+                .addRole(Role.BOOKMAKER)
+                .addRole(Role.HANDICAPPER)
+                .build();
+
+        assertThrows(UserAlreadyExistsException.class, () -> dao.create(newEntity));
     }
+
+    @Test
+    @Tag("write")
+    void create_existentEmail_notCreated() {
+        ApplicationUserDao dao = getDao();
+
+        ApplicationUser newEntity = ApplicationUser.builder()
+                .setLogin("melalex")
+                .setPassword("fortuna322")
+                .setFirstName("Alex")
+                .setLastName("Allen")
+                .setEmail("pgordon0@google.ru")
+                .setEmailConfirmed(true)
+                .setBalance(BigDecimal.valueOf(385.59))
+                .addRole(Role.ADMIN)
+                .addRole(Role.BOOKMAKER)
+                .addRole(Role.HANDICAPPER)
+                .build();
+
+        assertThrows(UserAlreadyExistsException.class, () -> dao.create(newEntity));
+    }
+
+    @Test
+    @Tag("write")
+    void create_existentEmailLogin_notCreated() {
+        ApplicationUserDao dao = getDao();
+
+        ApplicationUser newEntity = ApplicationUser.builder()
+                .setLogin("pgordon0")
+                .setPassword("fortuna322")
+                .setFirstName("Alex")
+                .setLastName("Allen")
+                .setEmail("pgordon0@google.ru")
+                .setEmailConfirmed(true)
+                .setBalance(BigDecimal.valueOf(385.59))
+                .addRole(Role.ADMIN)
+                .addRole(Role.BOOKMAKER)
+                .addRole(Role.HANDICAPPER)
+                .build();
+
+        assertThrows(UserAlreadyExistsException.class, () -> dao.create(newEntity));
+    }
+
 
     @Test
     @Tag("write")

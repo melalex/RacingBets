@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.exception.UserAlreadyExistsException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
@@ -25,6 +26,7 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 28 Feb 2017
  */
 public class MySqlApplicationUserDao implements ApplicationUserDao {
+    private static final int MYSQL_DUPLICATE = 1062;
     private static String TABLE_NAME = "application_user";
 
     private Connection connection;
@@ -98,6 +100,15 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {
+            if(e.getErrorCode() == MYSQL_DUPLICATE){
+                String message = String.format(
+                        "User with login %s or email %s already exists", entity.getLogin(), entity.getEmail()
+                );
+                boolean emailExist = e.getMessage().contains("email_UNIQUE");
+                boolean loginExist = e.getMessage().contains("login_UNIQUE");
+                throw new UserAlreadyExistsException(message, e, emailExist, loginExist);
+            }
+
             String message = defaultErrorMessage(
                     sqlStatement,
                     entity.getLogin(),

@@ -16,7 +16,6 @@ public interface CrudDao<K, E> {
      *
      * @param entity entity that should be added to data store.
      */
-    // TODO: boolean or exception
     void create(E entity);
 
     /**
