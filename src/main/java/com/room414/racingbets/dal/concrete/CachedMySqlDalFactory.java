@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.factories.CachedUnitOfWorkFactory;
-import com.room414.racingbets.dal.concrete.caching.factories.CachingUnitOfWorkFactory;
+import com.room414.racingbets.dal.concrete.caching.factories.CaffeineCachingUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.factories.RedisUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
@@ -106,7 +106,7 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
         RedisUnitOfWorkFactory redisUnitOfWorkFactory = new RedisUnitOfWorkFactory(this.jedisPool);
         UnitOfWorkFactory unitOfWorkFactory = new MySqlUnitOfWorkFactory(mysqlPool);
         MainCachePool pool = new MainCachePool();
-        CachingUnitOfWorkFactory cachingUnitOfWorkFactory = new CachingUnitOfWorkFactory(redisUnitOfWorkFactory, pool);
+        CaffeineCachingUnitOfWorkFactory cachingUnitOfWorkFactory = new CaffeineCachingUnitOfWorkFactory(redisUnitOfWorkFactory, pool);
 
         this.factory = new CachedUnitOfWorkFactory(unitOfWorkFactory, cachingUnitOfWorkFactory);
     }

@@ -126,7 +126,7 @@ class RedisBetCacheTest {
                 .setParticipantById(1, 1)
                 .setRaceId(System.currentTimeMillis())
                 .build();
-        
+
         assertThrows(IllegalArgumentException.class, () -> cache.getOdds(mock, () -> null));
     }
 }

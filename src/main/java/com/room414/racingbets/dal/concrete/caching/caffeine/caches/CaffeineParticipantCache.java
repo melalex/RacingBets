@@ -2,6 +2,8 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.caches;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.room414.racingbets.dal.abstraction.cache.ParticipantCache;
+import com.room414.racingbets.dal.abstraction.cache.RaceCache;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
@@ -16,7 +18,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 14 Mar 2017
  */
-public class ParticipantCache extends BaseCache<Participant> {
+public class CaffeineParticipantCache extends BaseCache<Participant> implements ParticipantCache {
     private static final String NAME_SPACE = "participant";
     private static final String LIST_NAME_SPACE = "participant:list";
     private static final String COUNT_NAME_SPACE = "participant:count";
@@ -31,7 +33,7 @@ public class ParticipantCache extends BaseCache<Participant> {
     private RaceCache raceCache;
     private Cache<String, List<Pair<Participant, Timestamp>>> whoAndWhenCache;
 
-    public ParticipantCache(
+    public CaffeineParticipantCache(
             Cache<String, Participant> cache,
             Cache<String, List<Participant>> cacheList,
             Cache<String, Long> countCache,
@@ -44,9 +46,10 @@ public class ParticipantCache extends BaseCache<Participant> {
         this.raceCache = raceCache;
     }
 
+    @Override
     public List<Pair<Participant, Timestamp>> getWhoAndWhenCached(
             String key, Getter<List<Pair<Participant, Timestamp>>> getter
-    ) throws DalException {
+    ) {
         return whoAndWhenCache.get(
                 key,
                 k -> redisCache.getCached(WHO_AND_WHEN_CACHE_NAME_SPACE, key, getter, WHO_AND_WHEN)
@@ -76,7 +79,8 @@ public class ParticipantCache extends BaseCache<Participant> {
         redisCache.delete(WHO_AND_WHEN_CACHE_NAME_SPACE);
     }
 
-    void deleteWhoAndWhen() {
+    @Override
+    public void deleteWhoAndWhen() {
         whoAndWhenCache.invalidateAll();
         redisCache.delete(WHO_AND_WHEN_CACHE_NAME_SPACE);
     }

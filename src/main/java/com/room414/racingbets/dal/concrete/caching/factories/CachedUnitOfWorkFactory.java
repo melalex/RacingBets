@@ -1,9 +1,10 @@
 package com.room414.racingbets.dal.concrete.caching.factories;
 
+import com.room414.racingbets.dal.abstraction.cache.CachingUnitOfWork;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.factories.CachingUnitOfWorkFactory;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
-import com.room414.racingbets.dal.concrete.caching.caffeine.CachingUnitOfWork;
+import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCachingUnitOfWork;
 import com.room414.racingbets.dal.concrete.caching.dao.CachedUnitOfWork;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload.LazyLoadUnitOfWork;
 

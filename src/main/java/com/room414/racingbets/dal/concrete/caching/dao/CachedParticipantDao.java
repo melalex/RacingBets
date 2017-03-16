@@ -1,10 +1,10 @@
 package com.room414.racingbets.dal.concrete.caching.dao;
 
+import com.room414.racingbets.dal.abstraction.cache.ParticipantCache;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
-import com.room414.racingbets.dal.concrete.caching.caffeine.caches.ParticipantCache;
+import com.room414.racingbets.dal.concrete.caching.caffeine.caches.CaffeineParticipantCache;
 import com.room414.racingbets.dal.domain.entities.Participant;
 
 import java.sql.Timestamp;

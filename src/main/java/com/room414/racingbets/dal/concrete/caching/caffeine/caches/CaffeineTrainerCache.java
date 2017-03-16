@@ -2,6 +2,8 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.caches;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.room414.racingbets.dal.abstraction.cache.HorseCache;
+import com.room414.racingbets.dal.abstraction.cache.TrainerCache;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.BaseCache;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 import com.room414.racingbets.dal.domain.entities.Trainer;
@@ -12,7 +14,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 14 Mar 2017
  */
-public class TrainerCache extends BaseCache<Trainer> {
+public class CaffeineTrainerCache extends BaseCache<Trainer> implements TrainerCache {
     private static final String NAME_SPACE = "trainer";
     private static final String LIST_NAME_SPACE = "trainer:list";
     private static final String COUNT_NAME_SPACE = "trainer:count";
@@ -22,7 +24,7 @@ public class TrainerCache extends BaseCache<Trainer> {
 
     private HorseCache horseCache;
 
-    public TrainerCache(
+    public CaffeineTrainerCache(
             Cache<String, Trainer> cache,
             Cache<String, List<Trainer>> cacheList,
             Cache<String, Long> countCache,

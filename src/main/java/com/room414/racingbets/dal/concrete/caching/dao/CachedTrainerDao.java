@@ -1,8 +1,9 @@
 package com.room414.racingbets.dal.concrete.caching.dao;
 
+import com.room414.racingbets.dal.abstraction.cache.TrainerCache;
 import com.room414.racingbets.dal.abstraction.dao.TrainerDao;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CachePersonDao;
-import com.room414.racingbets.dal.concrete.caching.caffeine.caches.TrainerCache;
+import com.room414.racingbets.dal.concrete.caching.caffeine.caches.CaffeineTrainerCache;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 
 /**

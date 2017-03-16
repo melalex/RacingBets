@@ -1,10 +1,9 @@
 package com.room414.racingbets.dal.concrete.caching.dao;
 
+import com.room414.racingbets.dal.abstraction.cache.CachingUnitOfWork;
 import com.room414.racingbets.dal.abstraction.dao.*;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.caching.caffeine.CachingUnitOfWork;
+import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCachingUnitOfWork;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload.*;
-import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 
 /**
  * @author Alexander Melashchenko

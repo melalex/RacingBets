@@ -1,8 +1,9 @@
 package com.room414.racingbets.dal.concrete.caching.dao;
 
+import com.room414.racingbets.dal.abstraction.cache.BetCache;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
-import com.room414.racingbets.dal.concrete.caching.caffeine.caches.BetCache;
+import com.room414.racingbets.dal.concrete.caching.caffeine.caches.CaffeineBetCache;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 

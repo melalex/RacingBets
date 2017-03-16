@@ -2,7 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.caches;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.cache.BetCache;
 import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.BaseCache;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisBetCache;
@@ -17,7 +17,7 @@ import static com.room414.racingbets.dal.concrete.caching.redis.RedisBetCache.ge
  * @author Alexander Melashchenko
  * @version 1.0 14 Mar 2017
  */
-public class BetCache extends BaseCache<Bet> {
+public class CaffeineBetCache extends BaseCache<Bet> implements BetCache {
     private static final String NAME_SPACE = "bet";
     private static final String LIST_NAME_SPACE = "bet:list";
     private static final String COUNT_NAME_SPACE = "bet:count";
@@ -28,7 +28,7 @@ public class BetCache extends BaseCache<Bet> {
     private RedisBetCache redisBetCache;
     private Cache<String, Odds> oddsCache;
 
-    public BetCache(
+    public CaffeineBetCache(
             Cache<String, Bet> cache,
             Cache<String, List<Bet>> cacheList,
             Cache<String, Long> countCache,
@@ -52,6 +52,7 @@ public class BetCache extends BaseCache<Bet> {
         redisBetCache.updateOdds(bet);
     }
 
+    @Override
     public void deleteOdds(long raceId) {
         oddsCache.invalidateAll();
         redisBetCache.deleteOdds(raceId);

@@ -2,6 +2,9 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.caches;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.room414.racingbets.dal.abstraction.cache.BetCache;
+import com.room414.racingbets.dal.abstraction.cache.ParticipantCache;
+import com.room414.racingbets.dal.abstraction.cache.RaceCache;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.BaseCache;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 import com.room414.racingbets.dal.domain.entities.Race;
@@ -12,7 +15,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 14 Mar 2017
  */
-public class RaceCache extends BaseCache<Race> {
+public class CaffeineRaceCache extends BaseCache<Race> implements RaceCache {
     private static final String NAME_SPACE = "race:user";
     private static final String LIST_NAME_SPACE = "race:user:list";
     private static final String COUNT_NAME_SPACE = "race:user:count";
@@ -23,7 +26,7 @@ public class RaceCache extends BaseCache<Race> {
     private ParticipantCache participantCache;
     private BetCache betCache;
 
-    public RaceCache(
+    public CaffeineRaceCache(
             Cache<String, Race> cache,
             Cache<String, List<Race>> cacheList,
             Cache<String, Long> countCache,
@@ -43,6 +46,7 @@ public class RaceCache extends BaseCache<Race> {
         participantCache.deleteWhoAndWhen();
     }
 
+    @Override
     public void deleteOddsCache(long raceId) {
         betCache.deleteOdds(raceId);
     }

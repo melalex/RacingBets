@@ -9,7 +9,6 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 13 Mar 2017
  */
-// TODO: add more cache interfaces
 public interface EntityCache<T> {
     T getOneCached(String key, Getter<T> getter);
     List<T> getManyCached(String key, Getter<List<T>> getter);
