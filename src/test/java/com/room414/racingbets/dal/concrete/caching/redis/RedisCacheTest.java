@@ -56,17 +56,64 @@ class RedisCacheTest {
 
     @Test
     void getCachedCount() {
+        String namespace = "test";
+        String key = "get:cached:count:" + System.currentTimeMillis();
+        long target = System.currentTimeMillis();
 
+        long result = cache.getCachedCount(namespace, key, () -> target);
+
+        assert target == result : defaultAssertionFailMessage(result, target);
+
+        result = cache.getCachedCount(namespace, key, () -> (long) -1);
+
+        assert target == result : defaultAssertionFailMessage(result, target);
     }
 
     @Test
     void delete() {
+        String namespace = "test:delete";
+        String key1 = "delete:key1:" + System.currentTimeMillis();
+        String key2 = "delete:key2:" + System.currentTimeMillis();
+        long target1 = System.currentTimeMillis();
+        long target2 = System.currentTimeMillis();
 
+        long result1 = cache.getCachedCount(namespace, key1, () -> target1);
+        long result2 = cache.getCachedCount(namespace, key2, () -> target1);
+
+        assert target1 == result1 : defaultAssertionFailMessage(result1, target1);
+        assert target2 == result2 : defaultAssertionFailMessage(result2, target2);
+
+        cache.delete(namespace);
+        cache.commit();
+
+        result1 = cache.getCachedCount(namespace, key1, () -> (long) -1);
+        result2 = cache.getCachedCount(namespace, key2, () -> (long) -1);
+
+        assert result1 == -1 : defaultAssertionFailMessage(result1, -1);
+        assert result2 == -1 : defaultAssertionFailMessage(result2, -1);
     }
 
     @Test
-    void delete1() {
+    void deleteFromNamespace() {
+        String namespace = "test:delete";
+        String key1 = "delete:key1:" + System.currentTimeMillis();
+        String key2 = "delete:key2:" + System.currentTimeMillis();
+        long target1 = System.currentTimeMillis();
+        long target2 = System.currentTimeMillis();
 
+        long result1 = cache.getCachedCount(namespace, key1, () -> target1);
+        long result2 = cache.getCachedCount(namespace, key2, () -> target1);
+
+        assert target1 == result1 : defaultAssertionFailMessage(result1, target1);
+        assert target2 == result2 : defaultAssertionFailMessage(result2, target2);
+
+        cache.delete(namespace, key1);
+        cache.commit();
+
+        result1 = cache.getCachedCount(namespace, key1, () -> (long) -1);
+        result2 = cache.getCachedCount(namespace, key2, () -> (long) -1);
+
+        assert result1 == -1 : defaultAssertionFailMessage(result1, target1);
+        assert result2 == target2 : defaultAssertionFailMessage(result2, target2);
     }
-
 }
