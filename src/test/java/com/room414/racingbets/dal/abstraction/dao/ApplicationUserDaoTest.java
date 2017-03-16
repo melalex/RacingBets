@@ -302,7 +302,35 @@ class ApplicationUserDaoTest {
     @Test
     @Tag("write")
     void confirmEmail() {
-        // TODO: test this
+        ApplicationUserDao dao = getDao();
+
+        ApplicationUser newEntity = ApplicationUser.builder()
+                .setLogin("melalex")
+                .setPassword("fortuna322")
+                .setFirstName("Alex")
+                .setLastName("Allen")
+                .setEmail("melalex490@virginia.edu")
+                .setEmailConfirmed(false)
+                .setBalance(BigDecimal.valueOf(385.59))
+                .addRole(Role.ADMIN)
+                .addRole(Role.BOOKMAKER)
+                .addRole(Role.HANDICAPPER)
+                .build();
+
+        dao.create(newEntity);
+
+        ApplicationUser entity1 = dao.find(newEntity.getId());
+
+        assert newEntity.equals(entity1) : "Dao did not create entity";
+        assert !entity1.isEmailConfirmed() : "Email already confirmed";
+
+        dao.confirmEmail(newEntity.getId());
+
+        ApplicationUser entity2 = dao.find(newEntity.getId());
+
+        assert entity2.isEmailConfirmed() : "Dao did not confirm email";
+
+        dao.delete(newEntity.getId());
     }
 
     @Test

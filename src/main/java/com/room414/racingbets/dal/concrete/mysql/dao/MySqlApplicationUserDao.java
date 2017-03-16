@@ -314,13 +314,14 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public boolean confirmEmail(long id) {
+    public void confirmEmail(long id) {
         final String sqlStatement = "UPDATE application_user SET is_email_confirmed = TRUE WHERE id = ?";
 
-        try(Statement statement = connection.createStatement()) {
-            return statement.executeUpdate(sqlStatement) > 0;
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            statement.setLong(1, id);
+            statement.executeUpdate();
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
+            String message = defaultErrorMessage(sqlStatement, id);
             throw new DalException(message, e);
         }
     }

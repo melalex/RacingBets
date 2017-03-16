@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 
@@ -52,7 +51,7 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
      *
      * @param id ApplicationUser id
      */
-    boolean confirmEmail(long id);
+    void confirmEmail(long id);
 
     /**
      * Add role to ApplicationUser

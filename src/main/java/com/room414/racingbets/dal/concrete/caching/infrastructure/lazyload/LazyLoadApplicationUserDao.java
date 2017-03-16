@@ -80,8 +80,8 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public boolean confirmEmail(long id) {
-        return getApplicationUserDao().confirmEmail(id);
+    public void confirmEmail(long id) {
+        getApplicationUserDao().confirmEmail(id);
     }
 
     @Override
