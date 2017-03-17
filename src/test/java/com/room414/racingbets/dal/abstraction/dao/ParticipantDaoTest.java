@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
@@ -287,7 +286,7 @@ class ParticipantDaoTest {
     @Test
     @Tag("write")
     void delete() throws ParseException {
-        // TODO: test this shit
+        // All dao's use same delete method from SharedExecutor
     }
 
     @Test

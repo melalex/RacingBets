@@ -310,6 +310,6 @@ class BetDaoTest {
     @Test
     @Tag("write")
     void update() {
-        // TODO: bet update is redundant
+        // bet update is redundant
     }
 }

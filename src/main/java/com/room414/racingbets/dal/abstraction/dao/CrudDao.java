@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public interface CrudDao<K, E> {
     long count();
 
     /**
-     * Updates value of entity param in data store
+     * Updates value of entity param in data store. If entity has inner list it will not be updated
      *
      * @param entity entity to update
      * @return count of updated entities

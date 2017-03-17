@@ -167,8 +167,12 @@ public class MySqlBetDao implements BetDao {
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
     }
 
+    /**
+     * ApplicationUser role will be set to Handicapper
+     *
+     * @see com.room414.racingbets.dal.domain.enums.Role#HANDICAPPER
+     */
     @Override
-    // TODO: comment about user role
     public Bet find(Long id) {
         //language=MySQL
         final String sqlStatement =
@@ -283,8 +287,10 @@ public class MySqlBetDao implements BetDao {
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
     }
 
+    /**
+     * Participant list will not be updated
+     */
     @Override
-    // TODO: add comment about participant array
     public long update(List<Bet> bets) {
         final String sqlStatement =
                 "UPDATE bet " +

@@ -26,7 +26,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
  */
-// TODO: ordered
 public class MySqlRaceDao implements RaceDao {
     private static String TABLE_NAME = "race";
 

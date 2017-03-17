@@ -16,8 +16,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @author Alexander Melashchenko
  * @version 1.0 02 Mar 2017
  */
-// TODO: cascading comment
-// TODO: sql injection
 public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     private Connection connection;
     private MySqlSharedExecutor<T> executor;

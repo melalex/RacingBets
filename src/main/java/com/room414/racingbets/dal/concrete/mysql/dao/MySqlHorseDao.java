@@ -27,7 +27,6 @@ public class MySqlHorseDao implements HorseDao {
     private Connection connection;
     private MySqlSharedExecutor<Horse> executor;
 
-    // TODO: lazy load vs caching
     MySqlHorseDao(Connection connection) {
         this.connection = connection;
         this.executor = new MySqlSharedExecutor<>(
