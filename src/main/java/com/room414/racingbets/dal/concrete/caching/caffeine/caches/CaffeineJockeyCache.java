@@ -1,10 +1,10 @@
 package com.room414.racingbets.dal.concrete.caching.caffeine.caches;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.benmanes.caffeine.cache.Cache;
 import com.room414.racingbets.dal.abstraction.cache.JockeyCache;
 import com.room414.racingbets.dal.abstraction.cache.ParticipantCache;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.BaseCache;
+import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.CachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 import com.room414.racingbets.dal.domain.entities.Jockey;
 
@@ -25,13 +25,11 @@ public class CaffeineJockeyCache extends BaseCache<Jockey> implements JockeyCach
     private ParticipantCache participantCache;
 
     public CaffeineJockeyCache(
-            Cache<String, Jockey> cache,
-            Cache<String, List<Jockey>> cacheList,
-            Cache<String, Long> countCache,
+            CachePool<Jockey> cachePool,
             RedisCache redisCache,
             ParticipantCache participantCache
     ) {
-        super(NAME_SPACE, LIST_NAME_SPACE, COUNT_NAME_SPACE, TYPE, LIST_TYPE, cache, cacheList, countCache, redisCache);
+        super(cachePool, TYPE, LIST_TYPE, redisCache);
         this.participantCache = participantCache;
     }
 

@@ -49,92 +49,72 @@ public class TestCacheFactory {
     }
 
     public ApplicationUserCache createApplicationUserCache(BetCache betCache) {
-            return new CaffeineApplicationUserCache(
+            return new CaffeineApplicationUserCache(,
                     mainCachePool.getApplicationUserCachePool().getCache(),
-                    mainCachePool.getApplicationUserCachePool().getListCache(),
-                    mainCachePool.getApplicationUserCachePool().getCountCache(),
                     redisCache,
                     betCache
             );
     }
 
     public BetCache createBetCache() {
-        return new CaffeineBetCache(
+        return new CaffeineBetCache(,
                 mainCachePool.getBetCachePool().getCache(),
-                mainCachePool.getBetCachePool().getListCache(),
-                mainCachePool.getBetCachePool().getCountCache(),
                 mainCachePool.getOddsCachePool().getCache(),
                 redisBetCache
         );
     }
 
     public HorseCache createHorseCache(ParticipantCache participantCache) {
-        return new CaffeineHorseCache(
+        return new CaffeineHorseCache(,
                 mainCachePool.getHorseCachePool().getCache(),
-                mainCachePool.getHorseCachePool().getListCache(),
-                mainCachePool.getHorseCachePool().getCountCache(),
                 redisCache,
                 participantCache
         );
     }
 
     public JockeyCache createJockeyCache(ParticipantCache participantCache) {
-        return new CaffeineJockeyCache(
+        return new CaffeineJockeyCache(,
                 mainCachePool.getJockeyCachePool().getCache(),
-                mainCachePool.getJockeyCachePool().getListCache(),
-                mainCachePool.getJockeyCachePool().getCountCache(),
                 redisCache,
                 participantCache
         );
     }
 
     public OwnerCache createOwnerCache(HorseCache horseCache) {
-        return new CaffeineOwnerCache(
+        return new CaffeineOwnerCache(,
                 mainCachePool.getOwnerCachePool().getCache(),
-                mainCachePool.getOwnerCachePool().getListCache(),
-                mainCachePool.getOwnerCachePool().getCountCache(),
                 redisCache,
                 horseCache
         );
     }
 
     public ParticipantCache createParticipantCache(RaceCache raceCache) {
-        return new CaffeineParticipantCache(
-                mainCachePool.getParticipantCachePool().getCache(),
+        return new CaffeineParticipantCache(,
+                mainCachePool.getParticipantCachePool().getCache(), ,
                 mainCachePool.getParticipantCachePool().getListCache(),
-                mainCachePool.getParticipantCachePool().getCountCache(),
-                mainCachePool.getWhoAndWhenCachePool().getListCache(),
                 redisCache,
                 raceCache
         );
     }
 
     public RaceCache createRaceCache(ParticipantCache participantCache, BetCache betCache) {
-        return new CaffeineRaceCache(
+        return new CaffeineRaceCache(,
                 mainCachePool.getRaceCachePool().getCache(),
-                mainCachePool.getRaceCachePool().getListCache(),
-                mainCachePool.getRaceCachePool().getCountCache(),
-                participantCache,
-                betCache,
-                redisCache
+                redisCache, betCache, participantCache
         );
     }
 
     public RacecourseCache createRacecourseCache(RaceCache raceCache) {
-        return new CaffeineRacecourseCache(
+        return new CaffeineRacecourseCache(,
                 mainCachePool.getRacecourseCachePool().getCache(),
-                mainCachePool.getRacecourseCachePool().getListCache(),
-                mainCachePool.getRacecourseCachePool().getCountCache(),
                 redisCache,
                 raceCache
         );
     }
 
     public TrainerCache createTrainerCache(HorseCache horseCache) {
-        return new CaffeineTrainerCache(
+        return new CaffeineTrainerCache(,
                 mainCachePool.getTrainerCachePool().getCache(),
-                mainCachePool.getTrainerCachePool().getListCache(),
-                mainCachePool.getTrainerCachePool().getCountCache(),
                 redisCache,
                 horseCache
         );

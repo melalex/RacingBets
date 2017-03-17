@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
 import com.room414.racingbets.dal.abstraction.cache.EntityCache;
+import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.CachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
 
 import java.util.List;
@@ -27,24 +28,19 @@ public abstract class BaseCache<T> implements EntityCache<T> {
     protected RedisCache redisCache;
 
     public BaseCache(
-            String nameSpace,
-            String listNameSpace,
-            String countNameSpace,
+            CachePool<T> cachePool,
             TypeReference<T> type,
             TypeReference<List<T>> listType,
-            Cache<String, T> cache,
-            Cache<String, List<T>> cacheList,
-            Cache<String, Long> countCache,
             RedisCache redisCache
     ) {
-        this.nameSpace = nameSpace;
-        this.listNameSpace = listNameSpace;
-        this.countNameSpace = countNameSpace;
+        this.nameSpace = cachePool.getCacheNamespace();
+        this.listNameSpace = cachePool.getListCacheNamespace();
+        this.countNameSpace = cachePool.getCountCacheNamespace();
         this.type = type;
         this.listType = listType;
-        this.cache = cache;
-        this.cacheList = cacheList;
-        this.countCache = countCache;
+        this.cache = cachePool.getCache();
+        this.cacheList = cachePool.getListCache();
+        this.countCache = cachePool.getCountCache();
         this.redisCache = redisCache;
     }
 

@@ -76,6 +76,11 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
             InputStream is = new FileInputStream(DB_CONFIG_FILE_PATH.toString());
             properties.load(is);
 
+            String url = properties.getProperty("jdbc.url");
+            String driver = properties.getProperty("jdbc.driver");
+            String username = properties.getProperty("jdbc.username");
+            String password = properties.getProperty("jdbc.password");
+
 
         } catch (IOException e) {
             throw new DalException("Exception during mysql connection pool creation", e);

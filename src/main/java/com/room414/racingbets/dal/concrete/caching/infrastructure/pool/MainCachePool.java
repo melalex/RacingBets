@@ -12,17 +12,17 @@ import java.sql.Timestamp;
  * @version 1.0 14 Mar 2017
  */
 public class MainCachePool {
-    private CachePool<ApplicationUser> applicationUserCachePool = new CachePool<>();
-    private CachePool<Bet> betCachePool = new CachePool<>();
-    private CachePool<Horse> horseCachePool = new CachePool<>();
-    private CachePool<Jockey> jockeyCachePool = new CachePool<>();
-    private CachePool<Owner> ownerCachePool = new CachePool<>();
-    private CachePool<Participant> participantCachePool = new CachePool<>();
-    private CachePool<Race> raceCachePool = new CachePool<>();
-    private CachePool<Racecourse> racecourseCachePool = new CachePool<>();
-    private CachePool<Trainer> trainerCachePool = new CachePool<>();
-    private CachePool<Odds> oddsCachePool = new CachePool<>();
-    private CachePool<Pair<Participant, Timestamp>> whoAndWhenCachePool = new CachePool<>();
+    private CachePool<ApplicationUser> applicationUserCachePool = new CachePool<>("application:user");
+    private CachePool<Bet> betCachePool = new CachePool<>("bet");
+    private CachePool<Horse> horseCachePool = new CachePool<>("horse");
+    private CachePool<Jockey> jockeyCachePool = new CachePool<>("jockey");
+    private CachePool<Owner> ownerCachePool = new CachePool<>("owner");
+    private CachePool<Participant> participantCachePool = new CachePool<>("participant");
+    private CachePool<Race> raceCachePool = new CachePool<>("race");
+    private CachePool<Racecourse> racecourseCachePool = new CachePool<>("racecourse");
+    private CachePool<Trainer> trainerCachePool = new CachePool<>("trainer");
+    private CachePool<Odds> oddsCachePool = new CachePool<>("odds");
+    private CachePool<Pair<Participant, Timestamp>> whoAndWhenCachePool = new CachePool<>("who:when");
 
     public CachePool<ApplicationUser> getApplicationUserCachePool() {
         return applicationUserCachePool;

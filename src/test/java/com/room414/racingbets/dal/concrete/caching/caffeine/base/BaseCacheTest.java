@@ -38,15 +38,10 @@ class BaseCacheTest {
         when(redisCache.getCachedCount(anyString(), anyString(), any()))
                 .then(invocationOnMock -> ((Getter) invocationOnMock.getArguments()[2]).call());
 
-        return new BaseCache<Pair<String, Integer>>(
-                "",
-                "",
+        return new BaseCache<Pair<String, Integer>>(,
                 "",
                 new TypeReference<Pair<String, Integer>>() {},
                 new TypeReference<List<Pair<String, Integer>>>() {},
-                cachePool.getCache(),
-                cachePool.getListCache(),
-                cachePool.getCountCache(),
                 redisCache) { };
     }
 
