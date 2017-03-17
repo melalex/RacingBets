@@ -7,6 +7,7 @@ import com.room414.racingbets.dal.concrete.caching.factories.CachedUnitOfWorkFac
 import com.room414.racingbets.dal.concrete.caching.factories.CaffeineCachingUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.factories.RedisUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
+import com.room414.racingbets.dal.concrete.caching.redis.RedisSubscriber;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -45,6 +46,8 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
 
     private static CachedMySqlDalFactory ourInstance = createDalFactory();
 
+    private MainCachePool pool = new MainCachePool();
+
     private JedisPool jedisPool;
     private DataSource mysqlPool;
 
@@ -63,6 +66,7 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
 
         newInstance.initMySqlConnectionPool();
         newInstance.initRedisConnectionPool();
+        newInstance.initRedisSubscriber();
         newInstance.initUnitOfWorkFactory();
 
         return newInstance;
@@ -106,11 +110,14 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
         }
     }
 
+    private void initRedisSubscriber() {
+        RedisSubscriber redisSubscriber = new RedisSubscriber(pool.getCacheByNamespaceMap());
+        redisSubscriber.subscribe(jedisPool.getResource());
+    }
 
     private void initUnitOfWorkFactory() {
         RedisUnitOfWorkFactory redisUnitOfWorkFactory = new RedisUnitOfWorkFactory(this.jedisPool);
         UnitOfWorkFactory unitOfWorkFactory = new MySqlUnitOfWorkFactory(mysqlPool);
-        MainCachePool pool = new MainCachePool();
         CaffeineCachingUnitOfWorkFactory cachingUnitOfWorkFactory = new CaffeineCachingUnitOfWorkFactory(redisUnitOfWorkFactory, pool);
 
         this.factory = new CachedUnitOfWorkFactory(unitOfWorkFactory, cachingUnitOfWorkFactory);

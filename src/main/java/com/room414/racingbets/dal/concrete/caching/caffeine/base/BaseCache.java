@@ -70,15 +70,11 @@ public abstract class BaseCache<T> implements EntityCache<T> {
 
     @Override
     public void deleteOneCached(String key) {
-        cache.invalidate(key);
         redisCache.delete(nameSpace, key);
     }
 
     @Override
     public void deleteAllCached() {
-        cache.invalidateAll();
-        cacheList.invalidateAll();
-        countCache.invalidateAll();
         redisCache.delete(nameSpace);
         redisCache.delete(listNameSpace);
         redisCache.delete(countNameSpace);
@@ -86,8 +82,6 @@ public abstract class BaseCache<T> implements EntityCache<T> {
 
     @Override
     public void deleteManyCached() {
-        cacheList.invalidateAll();
-        countCache.invalidateAll();
         redisCache.delete(listNameSpace);
         redisCache.delete(countNameSpace);
     }

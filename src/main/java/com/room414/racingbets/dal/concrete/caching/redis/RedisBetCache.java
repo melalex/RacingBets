@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.redis;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Getter;
+import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import redis.clients.jedis.Jedis;
@@ -104,7 +105,7 @@ public class RedisBetCache extends RedisCache {
     }
 
     public void deleteOdds(long raceId) {
-        getToDelete().add(getHashKey(raceId));
+        getToDelete().add(MainCachePool.getOddsNamespace());
     }
 
     @Override
@@ -119,15 +120,18 @@ public class RedisBetCache extends RedisCache {
             String hashKey;
             String prizePoolKey;
             String eventPoolKey;
+            String message;
 
             for (Bet bet : oddsToUpdate) {
                 hashKey = getHashKey(bet.getRaceId());
                 prizePoolKey = getOddsKey(PRIZE_POOL_KEY, bet);
                 eventPoolKey = getOddsKey(EVENT_POOL_KEY, bet);
+                message = getOddsKey(getHashKey(bet.getId()), bet);
 
                 pipeline.multi();
                 pipeline.hincrByFloat(hashKey, prizePoolKey, bet.getBetSize().doubleValue());
                 pipeline.hincrByFloat(hashKey, eventPoolKey, bet.getBetSize().doubleValue());
+                pipeline.publish(RedisSubscriber.UPDATE_CHANEL_ODDS, message);
                 pipeline.exec();
             }
             pipeline.sync();

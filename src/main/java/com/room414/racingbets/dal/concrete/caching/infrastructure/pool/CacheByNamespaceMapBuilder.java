@@ -28,7 +28,6 @@ class CacheByNamespaceMapBuilder {
         return this;
     }
 
-    // TODO: Refactor with streams
     Map<String, Cache> build() {
         return toBuild.stream()
                 .map(Map::entrySet)

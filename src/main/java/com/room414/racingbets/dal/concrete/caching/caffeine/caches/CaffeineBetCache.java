@@ -46,13 +46,11 @@ public class CaffeineBetCache extends BaseCache<Bet> implements BetCache {
 
     @Override
     public void updateOdds(Bet bet) {
-        oddsCache.invalidate(getOddsKey(getHashKey(bet.getId()), bet));
         redisBetCache.updateOdds(bet);
     }
 
     @Override
     public void deleteOdds(long raceId) {
-        oddsCache.invalidateAll();
         redisBetCache.deleteOdds(raceId);
     }
 }

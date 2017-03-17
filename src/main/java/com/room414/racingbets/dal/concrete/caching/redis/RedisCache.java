@@ -45,6 +45,10 @@ public class RedisCache implements AutoCloseable {
         return toDeleteFromMap;
     }
 
+    private String messageFromPair(Pair<String, String> pair) {
+        return pair.getFirstElement() + "@" + pair.getSecondElement();
+    }
+
     public <T> T getCached(String namespace, String key, Getter<T> getter, TypeReference<T> type) {
         try {
             String value = jedis.hget(namespace, key);
@@ -105,12 +109,18 @@ public class RedisCache implements AutoCloseable {
     void commit() throws IOException {
         try (Pipeline pipeline = jedis.pipelined()) {
             if (toDelete != null && !toDelete.isEmpty()) {
-                toDelete.forEach(pipeline::del);
+                for (String key : toDelete) {
+                    pipeline.del(key);
+                    pipeline.publish(RedisSubscriber.DELETE_CHANEL_ALL, key);
+                }
                 toDelete.clear();
             }
 
             if (toDeleteFromMap != null && !toDeleteFromMap.isEmpty()) {
-                toDeleteFromMap.forEach(e -> pipeline.hdel(e.getFirstElement(), e.getSecondElement()));
+                for (Pair<String, String> target : toDeleteFromMap) {
+                    pipeline.hdel(target.getFirstElement(), target.getSecondElement());
+                    pipeline.publish(RedisSubscriber.DELETE_CHANEL_FIELD, messageFromPair(target));
+                }
                 toDeleteFromMap.clear();
             }
         }

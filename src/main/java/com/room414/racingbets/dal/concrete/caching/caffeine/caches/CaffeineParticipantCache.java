@@ -54,14 +54,12 @@ public class CaffeineParticipantCache extends BaseCache<Participant> implements 
     public void deleteOneCached(String key) {
         super.deleteOneCached(key);
         raceCache.deleteAllCached();
-        whoAndWhenCache.invalidateAll();
         redisCache.delete(whoAndWhenCacheNameSpace);
     }
 
     @Override
     public void deleteManyCached() {
         super.deleteManyCached();
-        whoAndWhenCache.invalidateAll();
         redisCache.delete(whoAndWhenCacheNameSpace);
     }
 
@@ -69,13 +67,11 @@ public class CaffeineParticipantCache extends BaseCache<Participant> implements 
     public void deleteAllCached() {
         super.deleteAllCached();
         raceCache.deleteAllCached();
-        whoAndWhenCache.invalidateAll();
         redisCache.delete(whoAndWhenCacheNameSpace);
     }
 
     @Override
     public void deleteWhoAndWhen() {
-        whoAndWhenCache.invalidateAll();
         redisCache.delete(whoAndWhenCacheNameSpace);
     }
 }
