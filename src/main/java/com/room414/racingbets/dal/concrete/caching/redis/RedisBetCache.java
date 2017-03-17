@@ -36,7 +36,7 @@ public class RedisBetCache extends RedisCache {
         super(jedis);
     }
 
-    private String getHashKey(long raceId) {
+    public static String getHashKey(long raceId) {
         return "odds:" + raceId;
     }
 

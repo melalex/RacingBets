@@ -12,6 +12,7 @@ import com.room414.racingbets.dal.domain.entities.Odds;
 
 import java.util.List;
 
+import static com.room414.racingbets.dal.concrete.caching.redis.RedisBetCache.getHashKey;
 import static com.room414.racingbets.dal.concrete.caching.redis.RedisBetCache.getOddsKey;
 
 /**
@@ -22,7 +23,6 @@ public class CaffeineBetCache extends BaseCache<Bet> implements BetCache {
     private static final TypeReference<Bet> TYPE = new TypeReference<Bet>() {};
     private static final TypeReference<List<Bet>> LIST_TYPE = new TypeReference<List<Bet>>() {};
 
-    private String nameSpace;
     private RedisBetCache redisBetCache;
     private Cache<String, Odds> oddsCache;
 
@@ -32,7 +32,6 @@ public class CaffeineBetCache extends BaseCache<Bet> implements BetCache {
             RedisBetCache redisCache
     ) {
         super(cachePool, TYPE, LIST_TYPE, redisCache);
-        this.nameSpace = oddsCachePool.getCacheNamespace();
         this.redisBetCache = redisCache;
         this.oddsCache = oddsCachePool.getCache();
     }
@@ -40,14 +39,14 @@ public class CaffeineBetCache extends BaseCache<Bet> implements BetCache {
     @Override
     public Odds getOdds(Bet bet, Getter<Odds> getter) {
         return oddsCache.get(
-                getOddsKey(nameSpace, bet),
+                getOddsKey(getHashKey(bet.getId()), bet),
                 k -> redisBetCache.getOdds(bet, getter)
         );
     }
 
     @Override
     public void updateOdds(Bet bet) {
-        oddsCache.invalidate(getOddsKey(nameSpace, bet));
+        oddsCache.invalidate(getOddsKey(getHashKey(bet.getId()), bet));
         redisBetCache.updateOdds(bet);
     }
 
