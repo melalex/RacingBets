@@ -8,6 +8,7 @@ import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import org.intellij.lang.annotations.Language;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -76,29 +77,20 @@ public class MySqlBetDao implements BetDao {
     }
 
     private void createBet(Bet entity) {
+        @Language("MySQL")
         final String sqlStatement =
                 "INSERT INTO bet " +
                 "   (application_user_id, status, bet_size, bet_type, race_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setLong(1, entity.getUser().getId());
-            statement.setString(2, entity.getBetStatus().getName());
-            statement.setBigDecimal(3, entity.getBetSize());
-            statement.setString(4, entity.getBetType().getName());
-            statement.setLong(5, entity.getRaceId());
-
-            createEntity(statement, entity::setId);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getUser().getId(),
-                    entity.getBetStatus().getName(),
-                    entity.getBetSize(),
-                    entity.getBetType().getName()
-            );
-            throw new DalException(message, e);
-        }
+        executor.create(
+                sqlStatement,
+                entity::setId,
+                entity.getUser().getId(),
+                entity.getBetStatus().getName(),
+                entity.getBetSize(),
+                entity.getBetType().getName()
+        );
     }
 
     private void createBetParticipant(Bet entity) {
@@ -134,7 +126,7 @@ public class MySqlBetDao implements BetDao {
 
     @Override
     public List<Bet> findByUserId(long id, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -323,31 +315,20 @@ public class MySqlBetDao implements BetDao {
 
     @Override
     public long update(Bet entity) {
+        @Language("MySQL")
         final String sqlStatement =
                 "UPDATE bet " +
                 "SET application_user_id = ?, status = ?, bet_size = ?, bet_type = ?, race_id = ? " +
                 "WHERE id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, entity.getUser().getId());
-            statement.setString(2, entity.getBetStatus().getName());
-            statement.setBigDecimal(3, entity.getBetSize());
-            statement.setString(4, entity.getBetType().getName());
-            statement.setLong(5, entity.getRaceId());
-            statement.setLong(6, entity.getId());
-
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getUser().getId(),
-                    entity.getBetStatus().getName(),
-                    entity.getBetSize(),
-                    entity.getBetType().getName(),
-                    entity.getId()
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeUpdateQuery(
+                sqlStatement,
+                entity.getUser().getId(),
+                entity.getBetStatus().getName(),
+                entity.getBetSize(),
+                entity.getBetType().getName(),
+                entity.getId()
+        );
     }
 
     @Override
@@ -386,21 +367,21 @@ public class MySqlBetDao implements BetDao {
     }
 
     private Odds getShowOdds(Bet bet) {
-        //language=MySQL
+        @Language("MySQL")
         final String call = "{ CALL get_odds_for_show(?, ?, ?, ?, ?) }";
 
         return getOddsOneParticipant(bet, call);
     }
 
     private Odds getPlaceOdds(Bet bet) {
-        //language=MySQL
+        @Language("MySQL")
         final String call = "{ CALL get_odds_for_place(?, ?, ?, ?, ?) }";
 
         return getOddsOneParticipant(bet, call);
     }
 
     private Odds getWinOdds(Bet bet) {
-        //language=MySQL
+        @Language("MySQL")
         final String call = "{ CALL get_odds_for_win(?, ?, ?, ?, ?) }";
 
         return getOddsOneParticipant(bet, call);
@@ -426,14 +407,14 @@ public class MySqlBetDao implements BetDao {
     }
 
     private Odds getQuinellaOdds(Bet bet) {
-        //language=MySQL
+        @Language("MySQL")
         final String call = "{ CALL get_odds_for_quinella(?, ?, ?, ?, ?, ?) }";
 
         return getOddsTwoParticipant(bet, call);
     }
 
     private Odds getExactaOdds(Bet bet) {
-        //language=MySQL
+        @Language("MySQL")
         final String call = "{ CALL get_odds_for_exacta(?, ?, ?, ?, ?, ?) }";
 
         return getOddsTwoParticipant(bet, call);

@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.startsWith;
@@ -37,6 +38,12 @@ public class MySqlSharedExecutor<T> {
         String sqlStatement = String.format("DELETE FROM %s WHERE id = ?", tableName);
 
         return executeUpdateQuery(sqlStatement, id) > 0;
+    }
+
+    public long create(String sqlStatement, Consumer<Long> idSetter, Object ... objects) {
+        QueryExecutor<Long> executor = statement -> createEntity(statement, idSetter);
+        
+        return executeQuery(executor, sqlStatement, objects);
     }
 
     public T find(long id, String sqlStatement) {
