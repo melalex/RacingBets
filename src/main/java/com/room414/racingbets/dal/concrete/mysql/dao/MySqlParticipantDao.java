@@ -6,6 +6,7 @@ import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecu
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
+import org.intellij.lang.annotations.Language;
 
 import java.sql.*;
 import java.util.List;
@@ -22,12 +23,10 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
 public class MySqlParticipantDao implements ParticipantDao {
     private static String TABLE_NAME = "participant";
 
-    private Connection connection;
     private MySqlSharedExecutor<Participant> executor;
     private MySqlSharedExecutor<Pair<Participant, Timestamp>> foreignExecutor;
 
     MySqlParticipantDao(Connection connection) {
-        this.connection = connection;
         this.executor = new MySqlSharedExecutor<>(
                 connection,
                 statement -> getResult(statement, MySqlMapHelper::mapParticipant),
@@ -48,7 +47,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public Participant find(Long id) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -70,7 +69,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public List<Participant> findAll() {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -91,7 +90,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public List<Participant> findAll(long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -121,42 +120,26 @@ public class MySqlParticipantDao implements ParticipantDao {
      */
     @Override
     public long update(Participant entity) {
+        @Language("MySQL")
         String sqlStatement =
                 "UPDATE participant " +
                 "SET number = ?, horse_id = ?, carried_weight = ?, topspeed = ?, official_rating = ?, " +
                 "   jockey_id = ?, trainer_id = ?, place = ?, odds = ? " +
                 "WHERE id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setInt(1, entity.getNumber());
-            statement.setLong(2, entity.getHorse().getId());
-            statement.setFloat(3, entity.getCarriedWeight());
-            statement.setInt(4, entity.getTopSpeed());
-            statement.setInt(5, entity.getOfficialRating());
-            statement.setLong(6, entity.getJockey().getId());
-            statement.setLong(7, entity.getTrainer().getId());
-            statement.setInt(8, entity.getPlace());
-            statement.setDouble(9, entity.getOdds());
-            statement.setLong(10, entity.getId());
-
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getNumber(),
-                    entity.getHorse().getId(),
-                    entity.getCarriedWeight(),
-                    entity.getTopSpeed(),
-                    entity.getOfficialRating(),
-                    entity.getJockey().getId(),
-                    entity.getTrainer().getId(),
-                    entity.getPlace(),
-                    entity.getOdds(),
-                    entity.getId()
-
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeUpdateQuery(
+                sqlStatement,
+                entity.getNumber(),
+                entity.getHorse().getId(),
+                entity.getCarriedWeight(),
+                entity.getTopSpeed(),
+                entity.getOfficialRating(),
+                entity.getJockey().getId(),
+                entity.getTrainer().getId(),
+                entity.getPlace(),
+                entity.getOdds(),
+                entity.getId()
+        );
     }
 
     @Override
@@ -230,7 +213,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public long findByOwnerIdCount(long id) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT COUNT(*) AS count " +
                 "FROM participant " +
@@ -240,18 +223,12 @@ public class MySqlParticipantDao implements ParticipantDao {
                 "       ON horse.owner_id = horse_owner.id " +
                 "WHERE horse_owner.id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-            return getResult(statement, MySqlMapHelper::mapCount);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return executor.executeCountQuery(sqlStatement, id);
     }
 
     @Override
     public List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -281,7 +258,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
