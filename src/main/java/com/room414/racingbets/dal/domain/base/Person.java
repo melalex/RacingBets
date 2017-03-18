@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.abstraction.entities;
+package com.room414.racingbets.dal.domain.base;
 
 import java.io.Serializable;
 import java.sql.Date;

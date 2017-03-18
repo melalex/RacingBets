@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.pool;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.*;
 

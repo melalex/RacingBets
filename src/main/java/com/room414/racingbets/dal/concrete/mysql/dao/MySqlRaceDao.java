@@ -315,7 +315,7 @@ public class MySqlRaceDao implements RaceDao {
     // TODO: need clean up
     public long update(Race entity) {
         long racesAffected = updateRace(entity);
-        updateRace(entity);
+        updateParticipants(entity);
 
         return racesAffected;
     }

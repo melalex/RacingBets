@@ -1,12 +1,14 @@
 package com.room414.racingbets.bll.dto.base;
 
+import com.room414.racingbets.dal.domain.base.Person;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * base class for DTOs that stores data about person.
  *
- * @see com.room414.racingbets.dal.abstraction.entities.Person
+ * @see Person
  * @author Alexander Melashchenko
  * @version 1.0 23 Feb 2017
  */

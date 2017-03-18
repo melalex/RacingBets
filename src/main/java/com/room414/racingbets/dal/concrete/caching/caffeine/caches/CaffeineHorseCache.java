@@ -3,10 +3,10 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.caches;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.room414.racingbets.dal.abstraction.cache.HorseCache;
 import com.room414.racingbets.dal.abstraction.cache.ParticipantCache;
-import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.BaseCache;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.CachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
+import com.room414.racingbets.dal.domain.entities.Horse;
 
 import java.util.List;
 

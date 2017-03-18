@@ -2,8 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.domain.entities.Horse;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+
+import com.room414.racingbets.dal.domain.entities.Horse;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.domain.base.Person;
 
 import java.util.List;
 

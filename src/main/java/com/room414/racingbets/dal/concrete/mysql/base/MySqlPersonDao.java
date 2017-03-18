@@ -1,10 +1,8 @@
 package com.room414.racingbets.dal.concrete.mysql.base;
 
 import com.room414.racingbets.dal.abstraction.dao.PersonDao;
-import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.domain.base.Person;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 
 import java.sql.*;

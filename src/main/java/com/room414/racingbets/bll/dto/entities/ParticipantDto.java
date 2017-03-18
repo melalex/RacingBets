@@ -1,6 +1,7 @@
 package com.room414.racingbets.bll.dto.entities;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
+
+import com.room414.racingbets.dal.domain.entities.Horse;
 
 import java.io.Serializable;
 

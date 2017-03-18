@@ -1,10 +1,8 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.domain.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
-import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.*;
@@ -202,8 +200,8 @@ class HorseDaoTest {
                 .setGender("mare")
                 .setTrainer(trainer3)
                 .setOwner(owner3)
-                .setSir(HorseLazyLoadProxy.create(3))
-                .setDam(HorseLazyLoadProxy.create(4))
+                .setSir(3)
+                .setDam(4)
                 .build();
 
         horseDao.create(newEntity);

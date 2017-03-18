@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
-import com.mysql.cj.api.jdbc.Statement;
 import com.room414.racingbets.dal.abstraction.dao.RacecourseDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
@@ -9,8 +8,6 @@ import com.room414.racingbets.dal.domain.entities.Racecourse;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;

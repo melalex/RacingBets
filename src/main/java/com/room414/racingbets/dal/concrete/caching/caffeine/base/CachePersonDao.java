@@ -1,7 +1,7 @@
 package com.room414.racingbets.dal.concrete.caching.caffeine.base;
 
 import com.room414.racingbets.dal.abstraction.dao.PersonDao;
-import com.room414.racingbets.dal.abstraction.entities.Person;
+import com.room414.racingbets.dal.domain.base.Person;
 import com.room414.racingbets.dal.abstraction.cache.EntityCache;
 
 import java.util.List;

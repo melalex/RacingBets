@@ -1,8 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.builders.PersonBuilder;
-import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.domain.base.Person;
 import com.room414.racingbets.dal.domain.entities.Jockey;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;

@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.abstraction.cache;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
+
+import com.room414.racingbets.dal.domain.entities.Horse;
 
 /**
  * @author Alexander Melashchenko

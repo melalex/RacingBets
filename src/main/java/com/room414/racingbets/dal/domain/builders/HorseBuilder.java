@@ -1,7 +1,6 @@
 package com.room414.racingbets.dal.domain.builders;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.domain.entities.HorseEntity;
+import com.room414.racingbets.dal.domain.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.domain.enums.Gender;
@@ -9,9 +8,9 @@ import com.room414.racingbets.dal.domain.enums.Gender;
 import java.sql.Date;
 
 /**
- * Simplify creating HorseEntity instance using builder pattern.
+ * Simplify creating Horse instance using builder pattern.
  *
- * @see HorseEntity
+ * @see Horse
  * @author Alexander Melashchenko
  * @version 1.0 27 Feb 2017
  */
@@ -22,8 +21,8 @@ public class HorseBuilder {
     private Owner owner;
     private Date birthday;
     private Gender gender;
-    private Horse sir;
-    private Horse dam;
+    private long sir;
+    private long dam;
 
     public HorseBuilder setId(long id) {
         this.id = id;
@@ -72,30 +71,18 @@ public class HorseBuilder {
         return this;
     }
 
-    public HorseBuilder setSir(Horse sir) {
+    public HorseBuilder setSir(long sir) {
         this.sir = sir;
         return this;
     }
 
-    public HorseBuilder setSirById(int id) {
-        this.sir = new HorseEntity();
-        this.sir.setId(id);
-        return this;
-    }
-
-    public HorseBuilder setDam(Horse dam) {
+    public HorseBuilder setDam(long dam) {
         this.dam = dam;
         return this;
     }
 
-    public HorseBuilder setDamById(int id) {
-        this.dam = new HorseEntity();
-        this.dam.setId(id);
-        return this;
-    }
-
     public Horse build() {
-        Horse horse = new HorseEntity();
+        Horse horse = new Horse();
 
         horse.setId(id);
         horse.setName(name);

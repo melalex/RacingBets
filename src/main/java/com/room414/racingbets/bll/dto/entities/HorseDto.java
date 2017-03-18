@@ -1,6 +1,5 @@
 package com.room414.racingbets.bll.dto.entities;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.enums.Gender;
 
 import java.io.Serializable;
@@ -9,7 +8,7 @@ import java.util.Date;
 /**
  * DTO for Horse class
  *
- * @see Horse
+ * @see com.room414.racingbets.dal.domain.entities.Horse
  * @author Alexander Melashchenko
  * @version 1.0 18 Mar 2017
  */
@@ -22,8 +21,8 @@ public class HorseDto implements Serializable {
     private OwnerDto ownerDto;
     private Date birthday;
     private Gender gender;
-    private Horse sir;
-    private Horse dam;
+    private long sir;
+    private long dam;
 
     public HorseDto() {
     }
@@ -76,19 +75,19 @@ public class HorseDto implements Serializable {
         this.gender = gender;
     }
 
-    public Horse getSir() {
+    public long getSir() {
         return sir;
     }
 
-    public void setSir(Horse sir) {
+    public void setSir(long sir) {
         this.sir = sir;
     }
 
-    public Horse getDam() {
+    public long getDam() {
         return dam;
     }
 
-    public void setDam(Horse dam) {
+    public void setDam(long dam) {
         this.dam = dam;
     }
 
@@ -128,11 +127,11 @@ public class HorseDto implements Serializable {
             return false;
         }
 
-        if (sir != null ? !sir.equals(horseDto.sir) : horseDto.sir != null) {
+        if (sir != horseDto.sir) {
             return false;
         }
 
-        if (dam != null ? !dam.equals(horseDto.dam) : horseDto.dam != null) {
+        if (dam != horseDto.dam) {
             return false;
         }
 
@@ -148,8 +147,8 @@ public class HorseDto implements Serializable {
         result = 31 * result + (ownerDto != null ? ownerDto.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + (sir != null ? sir.hashCode() : 0);
-        result = 31 * result + (dam != null ? dam.hashCode() : 0);
+        result = 31 * result +  (int) (sir ^ (sir >>> 32));
+        result = 31 * result +  (int) (dam ^ (dam >>> 32));
 
         return result;
     }

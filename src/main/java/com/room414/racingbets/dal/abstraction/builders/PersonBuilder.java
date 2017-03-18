@@ -1,6 +1,6 @@
 package com.room414.racingbets.dal.abstraction.builders;
 
-import com.room414.racingbets.dal.abstraction.entities.Person;
+import com.room414.racingbets.dal.domain.base.Person;
 
 import java.sql.Date;
 

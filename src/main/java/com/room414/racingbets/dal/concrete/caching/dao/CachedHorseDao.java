@@ -2,9 +2,9 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 
 import com.room414.racingbets.dal.abstraction.cache.HorseCache;
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
-import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
 import com.room414.racingbets.dal.concrete.caching.caffeine.caches.CaffeineHorseCache;
+import com.room414.racingbets.dal.domain.entities.Horse;
 
 import java.util.List;
 

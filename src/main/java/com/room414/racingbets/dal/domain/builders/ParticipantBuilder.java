@@ -1,7 +1,6 @@
 package com.room414.racingbets.dal.domain.builders;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.domain.entities.HorseEntity;
+import com.room414.racingbets.dal.domain.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.Jockey;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Trainer;
@@ -41,7 +40,7 @@ public class ParticipantBuilder {
     }
 
     public ParticipantBuilder setHorseById(int id) {
-        this.horse = new HorseEntity();
+        this.horse = new Horse();
         this.horse.setId(id);
         return this;
     }

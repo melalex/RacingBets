@@ -1,12 +1,10 @@
 package com.room414.racingbets.dal.infrastructure;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.builders.*;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
 import com.room414.racingbets.dal.domain.enums.Role;
-import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -247,8 +245,8 @@ public class EntityStorage {
                 .setGender("mare")
                 .setTrainer(getTrainer(3))
                 .setOwner(getOwner(3))
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
+                .setSir(2)
+                .setDam(1)
         );
 
         horseMap.put(
@@ -260,8 +258,8 @@ public class EntityStorage {
                 .setGender("stallion")
                 .setTrainer(getTrainer(2))
                 .setOwner(getOwner(4))
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
+                .setSir(2)
+                .setDam(1)
         );
 
         horseMap.put(
@@ -273,8 +271,8 @@ public class EntityStorage {
                 .setGender("mare")
                 .setTrainer(getTrainer(1))
                 .setOwner(getOwner(5))
-                .setSir(HorseLazyLoadProxy.create(3))
-                .setDam(HorseLazyLoadProxy.create(4))
+                .setSir(3)
+                .setDam(4)
         );
 
         horseMap.put(
@@ -297,8 +295,8 @@ public class EntityStorage {
                 .setGender("stallion")
                 .setTrainer(getTrainer(2))
                 .setOwner(getOwner(4))
-                .setSir(HorseLazyLoadProxy.create(2))
-                .setDam(HorseLazyLoadProxy.create(1))
+                .setSir(2)
+                .setDam(1)
         );
 
         horseMap.put(
@@ -310,8 +308,8 @@ public class EntityStorage {
                 .setGender("mare")
                 .setTrainer(getTrainer(3))
                 .setOwner(getOwner(3))
-                .setSir(HorseLazyLoadProxy.create(3))
-                .setDam(HorseLazyLoadProxy.create(4))
+                .setSir(3)
+                .setDam(4)
         );
     }
 

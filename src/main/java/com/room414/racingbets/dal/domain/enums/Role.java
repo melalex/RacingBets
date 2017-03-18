@@ -21,10 +21,10 @@ public enum Role {
      */
     BOOKMAKER("Bookmaker"),
     /**
-     * Adding an entities (HorseEntity, Owner, Jockey, Trainer, Racecourse) in the webproject.database,
+     * Adding an entities (Horse, Owner, Jockey, Trainer, Racecourse) in the webproject.database,
      * adds and removes bookmakers.
      *
-     * @see HorseEntity
+     * @see Horse
      * @see Owner
      * @see Jockey
      * @see Trainer

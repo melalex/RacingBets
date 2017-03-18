@@ -1,9 +1,7 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
-import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.domain.enums.Role;
-import com.room414.racingbets.dal.domain.proxies.HorseLazyLoadProxy;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +18,7 @@ public class MySqlMapHelper {
 
     }
 
-    public static long mapCount(ResultSet resultSet) throws SQLException {
+    static long mapCount(ResultSet resultSet) throws SQLException {
         final String COUNT_COLUMN = "count";
 
         return resultSet.getLong(COUNT_COLUMN);
@@ -169,8 +167,8 @@ public class MySqlMapHelper {
                 .setName(resultSet.getString(nameColumnName))
                 .setBirthday(resultSet.getDate(birthdayColumnName))
                 .setGender(resultSet.getString(genderColumnName))
-                .setSir(HorseLazyLoadProxy.create(resultSet.getLong(sirColumnName)))
-                .setDam(HorseLazyLoadProxy.create(resultSet.getLong(damColumnName)))
+                .setSir(resultSet.getLong(sirColumnName))
+                .setDam(resultSet.getLong(damColumnName))
                 .setOwner(mapOwner(resultSet, ownerNamespace))
                 .setTrainer(mapTrainer(resultSet, trainerNamespace))
                 .build();
