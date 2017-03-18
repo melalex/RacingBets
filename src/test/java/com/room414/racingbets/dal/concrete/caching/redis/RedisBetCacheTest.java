@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.caching.redis;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.BetType;
-import com.room414.racingbets.dal.infrastructure.factories.TestingRedisUnitOfWorkFactory;
+import com.room414.racingbets.dal.infrastructure.factories.TestingRedisFactory;
 import com.room414.racingbets.dal.resolvers.RedisParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(RedisParameterResolver.class)
 class RedisBetCacheTest {
-    private static TestingRedisUnitOfWorkFactory factory;
+    private static TestingRedisFactory factory;
     private RedisUnitOfWork unitOfWork;
     private RedisBetCache cache;
 
     @BeforeAll
-    static void setUp(TestingRedisUnitOfWorkFactory factory) {
+    static void setUp(TestingRedisFactory factory) {
         RedisBetCacheTest.factory = factory;
     }
 

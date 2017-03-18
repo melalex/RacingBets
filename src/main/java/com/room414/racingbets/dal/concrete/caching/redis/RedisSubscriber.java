@@ -25,16 +25,17 @@ public class RedisSubscriber extends JedisPubSub {
     // TODO: is good?
     public void subscribe(Jedis jedis) {
         String channel = "racing:bets:*";
-        Runnable subscribe = () -> jedis.subscribe(this, channel);
-        Thread subscriberTread = new Thread(subscribe, "Subscriber");
-        subscriberTread.setDaemon(true);
-        subscriberTread.start();
+        Runnable subscribe = () -> {
+            jedis.psubscribe(this, channel);
+            jedis.close();
+        };
+        Thread subscriberThread = new Thread(subscribe, "Subscriber");
+        subscriberThread.setDaemon(true);
+        subscriberThread.start();
     }
 
     @Override
-    public void onMessage(String channel, String message) {
-        super.onMessage(channel, message);
-
+    public void onPMessage(String pattern, String channel, String message) {
         switch (channel) {
             case DELETE_CHANEL_ALL:
                 invalidateAll(message);

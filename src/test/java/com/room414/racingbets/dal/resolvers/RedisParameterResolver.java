@@ -1,7 +1,7 @@
 package com.room414.racingbets.dal.resolvers;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.infrastructure.factories.TestingRedisUnitOfWorkFactory;
+import com.room414.racingbets.dal.infrastructure.factories.TestingRedisFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
@@ -16,13 +16,13 @@ public class RedisParameterResolver implements ParameterResolver {
     public boolean supports(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Class<?> type = parameterContext.getParameter().getType();
 
-        return type == TestingRedisUnitOfWorkFactory.class;
+        return type == TestingRedisFactory.class;
     }
 
     @Override
     public Object resolve(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         try {
-            return TestingRedisUnitOfWorkFactory.createInstance();
+            return TestingRedisFactory.createInstance();
         } catch (DalException e) {
             throw new ParameterResolutionException("Exception during creating MySqlTestingUnitOfWork instance", e);
         }

@@ -2,7 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.redis;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
-import com.room414.racingbets.dal.infrastructure.factories.TestingRedisUnitOfWorkFactory;
+import com.room414.racingbets.dal.infrastructure.factories.TestingRedisFactory;
 import com.room414.racingbets.dal.resolvers.RedisParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,12 +18,12 @@ import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssert
  */
 @ExtendWith(RedisParameterResolver.class)
 class RedisCacheTest {
-    private static TestingRedisUnitOfWorkFactory factory;
+    private static TestingRedisFactory factory;
     private static RedisUnitOfWork unitOfWork;
     private static RedisCache cache;
 
     @BeforeAll
-    static void setUp(TestingRedisUnitOfWorkFactory factory) {
+    static void setUp(TestingRedisFactory factory) {
         RedisCacheTest.factory = factory;
     }
 

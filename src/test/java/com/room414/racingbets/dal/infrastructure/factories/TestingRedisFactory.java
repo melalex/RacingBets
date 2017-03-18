@@ -17,7 +17,7 @@ import java.util.Properties;
  * @author Alexander Melashchenko
  * @version 1.0 15 Mar 2017
  */
-public class TestingRedisUnitOfWorkFactory implements AutoCloseable {
+public class TestingRedisFactory implements AutoCloseable {
     private static final Path REDIS_CONFIG_FILE_PATH = Paths.get(
             System.getProperty("user.dir"),
             "database",
@@ -28,11 +28,11 @@ public class TestingRedisUnitOfWorkFactory implements AutoCloseable {
     );
     private JedisPool jedisPool;
 
-    private TestingRedisUnitOfWorkFactory(JedisPool jedisPool) {
+    private TestingRedisFactory(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
 
-    public static TestingRedisUnitOfWorkFactory createInstance() {
+    public static TestingRedisFactory createInstance() {
         try {
             Properties properties = new Properties();
 
@@ -47,7 +47,7 @@ public class TestingRedisUnitOfWorkFactory implements AutoCloseable {
 
             JedisPool jedisPool = new JedisPool(new JedisPoolConfig(), host, port, timeout, password, db);
 
-            return new TestingRedisUnitOfWorkFactory(jedisPool);
+            return new TestingRedisFactory(jedisPool);
         } catch (IOException e) {
             throw new DalException("Exception during redis connection pool creation", e);
         }
