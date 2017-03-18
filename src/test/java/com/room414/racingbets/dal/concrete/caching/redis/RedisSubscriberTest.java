@@ -67,12 +67,25 @@ class RedisSubscriberTest {
     }
 
     @Test
-    void invalidateField() {
+    void invalidateField() throws InterruptedException {
+        String namespace = "cache";
+        String field = "cache:1";
+        Jedis jedis = redisFactory.getConnection();
 
+        jedis.publish(RedisSubscriber.DELETE_CHANEL_FIELD, namespace + "@" + field);
+        Thread.sleep(100);
+
+        assert map.get(namespace).getIfPresent(field) == null : "Cache is valid!";
     }
 
     @Test
-    void invalidateOdds() {
+    void invalidateOdds() throws InterruptedException {
+        String message = "odds:cache:1";
+        Jedis jedis = redisFactory.getConnection();
 
+        jedis.publish(RedisSubscriber.UPDATE_CHANEL_ODDS, message);
+        Thread.sleep(100);
+
+        assert map.get(MainCachePool.getOddsNamespace()).getIfPresent(message) == null : "Cache is valid!";
     }
 }
