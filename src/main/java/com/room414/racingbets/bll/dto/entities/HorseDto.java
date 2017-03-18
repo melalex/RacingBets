@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.domain.enums.Gender;
@@ -6,104 +6,87 @@ import com.room414.racingbets.dal.domain.enums.Gender;
 import java.sql.Date;
 
 /**
- * Class that represents HorseEntity entity.
- * To create instances of HorseEntity is recommended to use the HorseBuilder.
+ * DTO for Horse class
  *
- * @see com.room414.racingbets.dal.domain.builders.HorseBuilder
+ * @see Horse
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class HorseEntity extends Horse {
+public class HorseDto {
     private static final long serialVersionUID = -4741079009638927620L;
 
     private long id;
     private String name;
-    private Trainer trainer;
-    private Owner owner;
+    private TrainerDto trainerDto;
+    private OwnerDto ownerDto;
     private Date birthday;
     private Gender gender;
     private Horse sir;
     private Horse dam;
 
-    public HorseEntity() {
+    public HorseDto() {
     }
 
-    @Override
     public long getId() {
         return id;
     }
 
-    @Override
     public void setId(long id) {
         this.id = id;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
-    public Trainer getTrainer() {
-        return trainer;
+    public TrainerDto getTrainerDto() {
+        return trainerDto;
     }
 
-    @Override
-    public void setTrainer(Trainer trainer) {
-        this.trainer = trainer;
+    public void setTrainerDto(TrainerDto trainerDto) {
+        this.trainerDto = trainerDto;
     }
 
-    @Override
-    public Owner getOwner() {
-        return owner;
+    public OwnerDto getOwnerDto() {
+        return ownerDto;
     }
 
-    @Override
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setOwnerDto(OwnerDto ownerDto) {
+        this.ownerDto = ownerDto;
     }
 
-    @Override
     public Date getBirthday() {
         return birthday;
     }
 
-    @Override
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
-    @Override
     public Gender getGender() {
         return gender;
     }
 
-    @Override
     public void setGender(Gender gender) {
         this.gender = gender;
     }
 
-    @Override
     public Horse getSir() {
         return sir;
     }
 
-    @Override
     public void setSir(Horse sir) {
         this.sir = sir;
     }
 
-    @Override
     public Horse getDam() {
         return dam;
     }
 
-    @Override
     public void setDam(Horse dam) {
         this.dam = dam;
     }
@@ -118,37 +101,37 @@ public class HorseEntity extends Horse {
             return false;
         }
 
-        HorseEntity horseEntity = (HorseEntity) o;
+        HorseDto horseDto = (HorseDto) o;
 
-        if (id != horseEntity.id) {
+        if (id != horseDto.id) {
             return false;
         }
 
-        if (name != null ? !name.equals(horseEntity.name) : horseEntity.name != null) {
+        if (name != null ? !name.equals(horseDto.name) : horseDto.name != null) {
             return false;
         }
 
-        if (trainer != null ? !trainer.equals(horseEntity.trainer) : horseEntity.trainer != null) {
+        if (trainerDto != null ? !trainerDto.equals(horseDto.trainerDto) : horseDto.trainerDto != null) {
             return false;
         }
 
-        if (owner != null ? !owner.equals(horseEntity.owner) : horseEntity.owner != null) {
+        if (ownerDto != null ? !ownerDto.equals(horseDto.ownerDto) : horseDto.ownerDto != null) {
             return false;
         }
 
-        if (birthday != null ? !birthday.equals(horseEntity.birthday) : horseEntity.birthday != null) {
+        if (birthday != null ? !birthday.equals(horseDto.birthday) : horseDto.birthday != null) {
             return false;
         }
 
-        if (gender != horseEntity.gender) {
+        if (gender != horseDto.gender) {
             return false;
         }
 
-        if (sir != null ? !sir.equals(horseEntity.sir) : horseEntity.sir != null) {
+        if (sir != null ? !sir.equals(horseDto.sir) : horseDto.sir != null) {
             return false;
         }
 
-        if (dam != null ? !dam.equals(horseEntity.dam) : horseEntity.dam != null) {
+        if (dam != null ? !dam.equals(horseDto.dam) : horseDto.dam != null) {
             return false;
         }
 
@@ -160,8 +143,8 @@ public class HorseEntity extends Horse {
         int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (trainerDto != null ? trainerDto.hashCode() : 0);
+        result = 31 * result + (ownerDto != null ? ownerDto.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (sir != null ? sir.hashCode() : 0);
@@ -172,11 +155,11 @@ public class HorseEntity extends Horse {
 
     @Override
     public String toString() {
-        return "HorseEntity{" +
+        return "HorseDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", trainer=" + trainer +
-                ", owner=" + owner +
+                ", trainerDto=" + trainerDto +
+                ", ownerDto=" + ownerDto +
                 ", birthday=" + birthday +
                 ", gender=" + gender +
                 ", sir=" + sir +

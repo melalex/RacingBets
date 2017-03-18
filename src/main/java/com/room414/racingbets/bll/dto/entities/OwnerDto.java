@@ -1,26 +1,20 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
 import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.domain.builders.OwnerBuilder;
 
 /**
- * Horse owner.
- * To create instances of Owner is recommended to use the OwnerBuilder.
+ * DTO for Owner class
  *
- * @see OwnerBuilder
+ * @see com.room414.racingbets.dal.domain.entities.Owner
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class Owner extends Person {
+public class OwnerDto extends Person {
     private static final long serialVersionUID = 3071894574677370238L;
-
-    public static OwnerBuilder builder() {
-        return new OwnerBuilder();
-    }
 
     @Override
     public String toString() {
-        return "Owner{" +
+        return "OwnerDto{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

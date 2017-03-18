@@ -7,7 +7,7 @@ import com.room414.racingbets.dal.domain.entities.Odds;
 import java.util.List;
 
 /**
- * DAO for Bet entity
+ * DAO for BetDto entity
  *
  * @see Bet
  * @author Alexander Melashchenko
@@ -25,12 +25,12 @@ public interface BetDao extends CrudDao<Long, Bet> {
     long findByUserIdCount(long id);
 
     /**
-     * @return bets make on Race with id == id param
+     * @return bets make on RaceDto with id == id param
      */
     List<Bet> findByRaceId(long id, long offset, long limit);
 
     /**
-     * @return number of bets make on Race with id == id param
+     * @return number of bets make on RaceDto with id == id param
      */
     long findByRaceIdCount(long id);
 
@@ -42,9 +42,9 @@ public interface BetDao extends CrudDao<Long, Bet> {
     long update(List<Bet> bets);
 
     /**
-     * @return Odds of concrete Bet.
+     * @return OddsDto of concrete BetDto.
      * @see <a href="https://en.wikipedia.org/wiki/Parimutuel_betting#Example">
-     *          Odds calculation example
+     *          OddsDto calculation example
      *      </a>
      */
     Odds getOdds(Bet bet);

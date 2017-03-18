@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * DAO for Race entity
+ * DAO for RaceDto entity
  *
  * @see Race
  * @author Alexander Melashchenko
@@ -16,23 +16,23 @@ import java.util.List;
  */
 public interface RaceDao extends CrudDao<Long, Race> {
     /**
-     * @return List of Races that scheduled on Racecourse with id == racecourse param
+     * @return List of Races that scheduled on RacecourseDto with id == racecourse param
      */
     List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit);
 
     /**
-     * @return Count of Races that scheduled on Racecourse with id == racecourse param
+     * @return Count of Races that scheduled on RacecourseDto with id == racecourse param
      */
     long findByRacecourseIdCount(RaceStatus status, long racecourse);
 
 
     /**
-     * @return List of Races that scheduled on Racecourse with name starts with racecourse param
+     * @return List of Races that scheduled on RacecourseDto with name starts with racecourse param
      */
     List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit);
 
     /**
-     * @return Count of Races that scheduled on Racecourse with name starts with racecourse param
+     * @return Count of Races that scheduled on RacecourseDto with name starts with racecourse param
      */
     long findByRacecourseCount(RaceStatus status, String racecourse);
 
@@ -50,7 +50,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
 
     /**
      * @return List of Races that scheduled on timestamp between begin and end param
-     *      on Racecourse with id == racecourse param
+     *      on RacecourseDto with id == racecourse param
      */
     List<Race> findInTimestampDiapasonOnRacecourse(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit
@@ -58,7 +58,7 @@ public interface RaceDao extends CrudDao<Long, Race> {
 
     /**
      * @return Count of Races that scheduled on timestamp between begin and end param
-     *      on Racecourse id == racecourse param
+     *      on RacecourseDto id == racecourse param
      */
     long findInTimestampDiapasonOnRacecourseCount(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end

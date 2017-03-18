@@ -61,8 +61,8 @@ public class MySqlHorseDao implements HorseDao {
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getName());
-            statement.setLong(2, entity.getTrainer().getId());
-            statement.setLong(3, entity.getOwner().getId());
+            statement.setLong(2, entity.getTrainerDto().getId());
+            statement.setLong(3, entity.getOwnerDto().getId());
             statement.setDate(4, entity.getBirthday());
             statement.setString(5, entity.getGender().getName());
 
@@ -83,8 +83,8 @@ public class MySqlHorseDao implements HorseDao {
             String message = defaultErrorMessage(
                     sqlStatement,
                     entity.getName(),
-                    entity.getTrainer().getId(),
-                    entity.getOwner().getId(),
+                    entity.getTrainerDto().getId(),
+                    entity.getOwnerDto().getId(),
                     entity.getBirthday(),
                     entity.getGender().getName(),
                     entity.getSir() != null ? entity.getSir().getId() : "NULL",
@@ -157,8 +157,8 @@ public class MySqlHorseDao implements HorseDao {
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             statement.setString(1, entity.getName());
-            statement.setLong(2, entity.getTrainer().getId());
-            statement.setLong(3, entity.getOwner().getId());
+            statement.setLong(2, entity.getTrainerDto().getId());
+            statement.setLong(3, entity.getOwnerDto().getId());
             statement.setDate(4, entity.getBirthday());
             statement.setString(5, entity.getGender().getName());
 
@@ -181,8 +181,8 @@ public class MySqlHorseDao implements HorseDao {
             String message = defaultErrorMessage(
                     sqlStatement,
                     entity.getName(),
-                    entity.getTrainer().getId(),
-                    entity.getOwner().getId(),
+                    entity.getTrainerDto().getId(),
+                    entity.getOwnerDto().getId(),
                     entity.getBirthday(),
                     entity.getGender().getName(),
                     entity.getSir() != null ? entity.getSir().getId() : "NULL",

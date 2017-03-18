@@ -1,6 +1,5 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
-import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
 
@@ -10,30 +9,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class that represents a bet of handicapper.
- * To create instances of Bet is recommended to use the BetBuilder
+ * DTO for Bet class
  *
- * @see BetBuilder
+ * @see com.room414.racingbets.dal.domain.entities.Bet
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class Bet implements Serializable {
+public class BetDto implements Serializable {
     private static final long serialVersionUID = -5253938704091728335L;
 
     private long id;
-    // TODO: make proxy
     private long raceId;
-    private ApplicationUser user;
+    private UserDto user;
     private BigDecimal betSize;
     private BetType betType;
     private BetStatus betStatus;
-    private Map<Integer, Participant> participants;
+    private Map<Integer, ParticipantDto> participants;
 
-    public Bet() {
-    }
-
-    public static BetBuilder builder() {
-        return new BetBuilder();
+    public BetDto() {
     }
 
     public long getId() {
@@ -52,11 +45,11 @@ public class Bet implements Serializable {
         this.raceId = raceId;
     }
 
-    public ApplicationUser getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(ApplicationUser user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 
@@ -84,7 +77,7 @@ public class Bet implements Serializable {
         this.betStatus = betStatus;
     }
 
-    public Map<Integer, Participant> getParticipants() {
+    public Map<Integer, ParticipantDto> getParticipants() {
         if (participants != null) {
             return new HashMap<>(participants);
         } else {
@@ -92,7 +85,7 @@ public class Bet implements Serializable {
         }
     }
 
-    public void setParticipants(Map<Integer, Participant> participants) {
+    public void setParticipants(Map<Integer, ParticipantDto> participants) {
         if (participants != null) {
             this.participants = new HashMap<>(participants);
         } else {
@@ -100,7 +93,7 @@ public class Bet implements Serializable {
         }
     }
 
-    public Participant getParticipantByPlace(int place) {
+    public ParticipantDto getParticipantByPlace(int place) {
         if (participants != null) {
             return participants.get(place);
         } else {
@@ -118,7 +111,7 @@ public class Bet implements Serializable {
             return false;
         }
 
-        Bet bet = (Bet) o;
+        BetDto bet = (BetDto) o;
 
         if (id != bet.id) {
             return false;
@@ -172,7 +165,7 @@ public class Bet implements Serializable {
 
     @Override
     public String toString() {
-        return "Bet{" +
+        return "BetDto{" +
                 "id=" + id +
                 ", raceId=" + raceId +
                 ", user=" + user +

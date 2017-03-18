@@ -3,12 +3,12 @@ DELIMITER //
 CREATE FUNCTION horse_racing_test.get_races(sql_statement VARCHAR(255))
   RETURNS TEXT
   BEGIN
-    RETURN CONCAT('SELECT race.id \'race.id\', race.start_date_time \'race.start_date_time\', race.commission \'race.commission\', race.distance \'race.distance\', race.max_rating \'race.max_rating\', race.min_age \'race.min_age\', race.min_bet \'race.min_bet\', race.min_rating \'race.min_rating\', race.name \'race.name\', race.race_class \'race.race_class\', race.race_type \'race.race_type\', race.status \'race.status\', race.going \'race.going\', racecourse.id \'racecourse.id\', racecourse.name \'racecourse.name\', racecourse.latitude \'racecourse.latitude\', racecourse.longitude \'racecourse.longitude\', racecourse.clerk \'racecourse.clerk\', racecourse.contact \'racecourse.contact\', participant.id \'participant.id\', participant.number \'participant.number\', participant.carried_weight \'participant.carried_weight\', participant.topspeed \'participant.topspeed\', participant.official_rating \'participant.official_rating\', participant.odds \'participant.odds\', participant.place \'participant.place\', trainer.id \'trainer.id\', trainer.first_name \'trainer.first_name\', trainer.last_name \'trainer.last_name\', trainer.birthday \'trainer.birthday\', jockey.id \'jockey.id\', jockey.first_name \'jockey.first_name\', jockey.last_name \'jockey.last_name\', jockey.birthday \'jockey.birthday\', horse.id \'horse.id\', horse.name \'horse.name\', horse.birthday \'horse.birthday\', horse.gender \'horse.gender\', horse.sire_id \'horse.sire_id\', horse.dam_id \'horse.dam_id\', horse_owner.id \'horse_owner.id\', horse_owner.first_name \'horse_owner.first_name\', horse_owner.last_name \'horse_owner.last_name\', horse_owner.birthday \'horse_owner.birthday\', horse_trainer.id \'horse_trainer.id\', horse_trainer.first_name \'horse_trainer.first_name\', horse_trainer.last_name \'horse_trainer.last_name\', horse_trainer.birthday \'horse_trainer.birthday\', NULL AS \'prize.place\', NULL AS \'prize.prize_size\' FROM (', sql_statement, ') AS race INNER JOIN racecourse AS racecourse ON race.racecourse_id = racecourse.id LEFT JOIN participant AS participant ON race.id = participant.race_id INNER JOIN jockey AS jockey ON participant.jockey_id = jockey.id INNER JOIN trainer AS trainer ON participant.trainer_id = trainer.id INNER JOIN horse AS horse ON participant.horse_id = horse.id INNER JOIN owner AS horse_owner ON horse.owner_id = horse_owner.id INNER JOIN trainer AS horse_trainer ON horse.trainer_id = horse_trainer.id UNION SELECT race.id \'race.id\', race.start_date_time \'race.start_date_time\', race.commission \'race.commission\', race.distance \'race.distance\', race.max_rating \'race.max_rating\', race.min_age \'race.min_age\', race.min_bet \'race.min_bet\', race.min_rating \'race.min_rating\', race.name \'race.name\', race.race_class \'race.race_class\', race.race_type \'race.race_type\', race.status \'race.status\', race.going \'race.going\', racecourse.id \'racecourse.id\', racecourse.name \'racecourse.name\', racecourse.latitude \'racecourse.latitude\', racecourse.longitude \'racecourse.longitude\', racecourse.clerk \'racecourse.clerk\', racecourse.contact \'racecourse.contact\', NULL AS \'participant.id\', NULL AS \'participant.number\', NULL AS \'participant.carried_weight\', NULL AS \'participant.topspeed\', NULL AS \'participant.official_rating\', NULL AS \'participant.odds\', NULL AS \'participant.place\', NULL AS \'trainer.id\', NULL AS \'trainer.first_name\', NULL AS \'trainer.last_name\', NULL AS \'trainer.birthday\', NULL AS \'jockey.id\', NULL AS \'jockey.first_name\', NULL AS \'jockey.last_name\', NULL AS \'jockey.birthday\', NULL AS \'horse.id\', NULL AS \'horse.name\', NULL AS \'horse.birthday\', NULL AS \'horse.gender\', NULL AS \'horse.sire_id\', NULL AS \'horse.dam_id\', NULL AS \'horse_owner.id\', NULL AS \'horse_owner.first_name\', NULL AS \'horse_owner.last_name\', NULL AS \'horse_owner.birthday\', NULL AS \'horse_trainer.id\', NULL AS \'horse_trainer.first_name\', NULL AS \'horse_trainer.last_name\', NULL AS \'horse_trainer.birthday\', prize.place AS \'prize.place\', prize.prize_size AS \'prize.prize_size\' FROM (', sql_statement, ') AS race INNER JOIN racecourse AS racecourse ON race.racecourse_id = racecourse.id LEFT JOIN prize AS prize ON prize.race_id = race.id');
+    RETURN CONCAT('SELECT raceDto.id \'raceDto.id\', raceDto.start_date_time \'raceDto.start_date_time\', raceDto.commission \'raceDto.commission\', raceDto.distance \'raceDto.distance\', raceDto.max_rating \'raceDto.max_rating\', raceDto.min_age \'raceDto.min_age\', raceDto.min_bet \'raceDto.min_bet\', raceDto.min_rating \'raceDto.min_rating\', raceDto.name \'raceDto.name\', raceDto.race_class \'raceDto.race_class\', raceDto.race_type \'raceDto.race_type\', raceDto.status \'raceDto.status\', raceDto.going \'raceDto.going\', racecourseDto.id \'racecourseDto.id\', racecourseDto.name \'racecourseDto.name\', racecourseDto.latitude \'racecourseDto.latitude\', racecourseDto.longitude \'racecourseDto.longitude\', racecourseDto.clerk \'racecourseDto.clerk\', racecourseDto.contact \'racecourseDto.contact\', participant.id \'participant.id\', participant.number \'participant.number\', participant.carried_weight \'participant.carried_weight\', participant.topspeed \'participant.topspeed\', participant.official_rating \'participant.official_rating\', participant.oddsDto \'participant.oddsDto\', participant.place \'participant.place\', trainerDto.id \'trainerDto.id\', trainerDto.first_name \'trainerDto.first_name\', trainerDto.last_name \'trainerDto.last_name\', trainerDto.birthday \'trainerDto.birthday\', jockeyDto.id \'jockeyDto.id\', jockeyDto.first_name \'jockeyDto.first_name\', jockeyDto.last_name \'jockeyDto.last_name\', jockeyDto.birthday \'jockeyDto.birthday\', horse.id \'horse.id\', horse.name \'horse.name\', horse.birthday \'horse.birthday\', horse.gender \'horse.gender\', horse.sire_id \'horse.sire_id\', horse.dam_id \'horse.dam_id\', horse_owner.id \'horse_owner.id\', horse_owner.first_name \'horse_owner.first_name\', horse_owner.last_name \'horse_owner.last_name\', horse_owner.birthday \'horse_owner.birthday\', horse_trainer.id \'horse_trainer.id\', horse_trainer.first_name \'horse_trainer.first_name\', horse_trainer.last_name \'horse_trainer.last_name\', horse_trainer.birthday \'horse_trainer.birthday\', NULL AS \'prize.place\', NULL AS \'prize.prize_size\' FROM (', sql_statement, ') AS raceDto INNER JOIN racecourseDto AS racecourseDto ON raceDto.racecourse_id = racecourseDto.id LEFT JOIN participant AS participant ON raceDto.id = participant.race_id INNER JOIN jockeyDto AS jockeyDto ON participant.jockey_id = jockeyDto.id INNER JOIN trainerDto AS trainerDto ON participant.trainer_id = trainerDto.id INNER JOIN horse AS horse ON participant.horse_id = horse.id INNER JOIN ownerDto AS horse_owner ON horse.owner_id = horse_owner.id INNER JOIN trainerDto AS horse_trainer ON horse.trainer_id = horse_trainer.id UNION SELECT raceDto.id \'raceDto.id\', raceDto.start_date_time \'raceDto.start_date_time\', raceDto.commission \'raceDto.commission\', raceDto.distance \'raceDto.distance\', raceDto.max_rating \'raceDto.max_rating\', raceDto.min_age \'raceDto.min_age\', raceDto.min_bet \'raceDto.min_bet\', raceDto.min_rating \'raceDto.min_rating\', raceDto.name \'raceDto.name\', raceDto.race_class \'raceDto.race_class\', raceDto.race_type \'raceDto.race_type\', raceDto.status \'raceDto.status\', raceDto.going \'raceDto.going\', racecourseDto.id \'racecourseDto.id\', racecourseDto.name \'racecourseDto.name\', racecourseDto.latitude \'racecourseDto.latitude\', racecourseDto.longitude \'racecourseDto.longitude\', racecourseDto.clerk \'racecourseDto.clerk\', racecourseDto.contact \'racecourseDto.contact\', NULL AS \'participant.id\', NULL AS \'participant.number\', NULL AS \'participant.carried_weight\', NULL AS \'participant.topspeed\', NULL AS \'participant.official_rating\', NULL AS \'participant.oddsDto\', NULL AS \'participant.place\', NULL AS \'trainerDto.id\', NULL AS \'trainerDto.first_name\', NULL AS \'trainerDto.last_name\', NULL AS \'trainerDto.birthday\', NULL AS \'jockeyDto.id\', NULL AS \'jockeyDto.first_name\', NULL AS \'jockeyDto.last_name\', NULL AS \'jockeyDto.birthday\', NULL AS \'horse.id\', NULL AS \'horse.name\', NULL AS \'horse.birthday\', NULL AS \'horse.gender\', NULL AS \'horse.sire_id\', NULL AS \'horse.dam_id\', NULL AS \'horse_owner.id\', NULL AS \'horse_owner.first_name\', NULL AS \'horse_owner.last_name\', NULL AS \'horse_owner.birthday\', NULL AS \'horse_trainer.id\', NULL AS \'horse_trainer.first_name\', NULL AS \'horse_trainer.last_name\', NULL AS \'horse_trainer.birthday\', prize.place AS \'prize.place\', prize.prize_size AS \'prize.prize_size\' FROM (', sql_statement, ') AS raceDto INNER JOIN racecourseDto AS racecourseDto ON raceDto.racecourse_id = racecourseDto.id LEFT JOIN prize AS prize ON prize.race_id = raceDto.id');
   END //
 
 CREATE PROCEDURE find_race_by_id(IN race_id INT UNSIGNED)
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race WHERE race.id = ?');
+    SET @find_statement = get_races('SELECT * FROM raceDto WHERE raceDto.id = ?');
     PREPARE query_to_execute FROM @find_statement;
     SET @id = race_id;
     EXECUTE query_to_execute
@@ -18,7 +18,7 @@ CREATE PROCEDURE find_race_by_id(IN race_id INT UNSIGNED)
 
 CREATE PROCEDURE find_all_races()
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race');
+    SET @find_statement = get_races('SELECT * FROM raceDto');
 
     PREPARE query_to_execute FROM @find_statement;
     EXECUTE query_to_execute;
@@ -27,7 +27,7 @@ CREATE PROCEDURE find_all_races()
 
 CREATE PROCEDURE find_all_races_limit_offset(IN p_limit INT UNSIGNED, IN p_offset INT UNSIGNED)
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race LIMIT ? OFFSET ?');
+    SET @find_statement = get_races('SELECT * FROM raceDto LIMIT ? OFFSET ?');
 
     PREPARE query_to_execute FROM @find_statement;
     SET @v_limit = p_limit;
@@ -44,7 +44,7 @@ CREATE PROCEDURE find_by_racecourse_id(
   IN p_offset      INT UNSIGNED
 )
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race WHERE race.status = ? AND race.racecourse_id = ? LIMIT ? OFFSET ?');
+    SET @find_statement = get_races('SELECT * FROM raceDto WHERE raceDto.status = ? AND raceDto.racecourse_id = ? LIMIT ? OFFSET ?');
 
     PREPARE query_to_execute FROM @find_statement;
     SET @v_race_status = race_status;
@@ -64,7 +64,7 @@ CREATE PROCEDURE find_by_racecourse_name(
   IN p_offset        INT UNSIGNED
 )
   BEGIN
-    SET @find_statement = get_races('SELECT race.id, start_date_time, commission, distance, max_rating, min_age, min_bet, min_rating, race.name, race_class, race_type, status, going, racecourse_id FROM race INNER JOIN racecourse ON race.racecourse_id = racecourse.id WHERE status = ? AND racecourse.name LIKE ? LIMIT ? OFFSET ?');
+    SET @find_statement = get_races('SELECT raceDto.id, start_date_time, commission, distance, max_rating, min_age, min_bet, min_rating, raceDto.name, race_class, race_type, status, going, racecourse_id FROM raceDto INNER JOIN racecourseDto ON raceDto.racecourse_id = racecourseDto.id WHERE status = ? AND racecourseDto.name LIKE ? LIMIT ? OFFSET ?');
 
     PREPARE query_to_execute FROM @find_statement;
     SET @v_race_status = race_status;
@@ -84,7 +84,7 @@ CREATE PROCEDURE find_in_timestamp_diapason(
   IN p_offset    INT UNSIGNED
 )
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race WHERE status = ? AND race.start_date_time BETWEEN ? AND ? LIMIT ? OFFSET ?');
+    SET @find_statement = get_races('SELECT * FROM raceDto WHERE status = ? AND raceDto.start_date_time BETWEEN ? AND ? LIMIT ? OFFSET ?');
 
     PREPARE query_to_execute FROM @find_statement;
     SET @v_race_status = race_status;
@@ -106,7 +106,7 @@ CREATE PROCEDURE find_in_timestamp_diapason_by_racecourse_id(
   IN p_offset      INT UNSIGNED
 )
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race WHERE status = ? AND race.racecourse_id = ? AND race.start_date_time BETWEEN ? AND ? LIMIT ? OFFSET ?');
+    SET @find_statement = get_races('SELECT * FROM raceDto WHERE status = ? AND raceDto.racecourse_id = ? AND raceDto.start_date_time BETWEEN ? AND ? LIMIT ? OFFSET ?');
 
     PREPARE query_to_execute FROM @find_statement;
     SET @v_race_status = race_status;
@@ -127,7 +127,7 @@ CREATE PROCEDURE find_by_name(
   IN p_offset    INT UNSIGNED
 )
   BEGIN
-    SET @find_statement = get_races('SELECT * FROM race WHERE status = ? AND race.name LIKE ? LIMIT ? OFFSET ?');
+    SET @find_statement = get_races('SELECT * FROM raceDto WHERE status = ? AND raceDto.name LIKE ? LIMIT ? OFFSET ?');
 
     PREPARE query_to_execute FROM @find_statement;
     SET @v_race_status = race_status;

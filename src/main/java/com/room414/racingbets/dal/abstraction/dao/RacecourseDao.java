@@ -6,7 +6,7 @@ import com.room414.racingbets.dal.domain.entities.Racecourse;
 import java.util.List;
 
 /**
- * DAO for Racecourse entity
+ * DAO for RacecourseDto entity
  *
  * @see Racecourse
  * @author Alexander Melashchenko

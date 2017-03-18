@@ -16,10 +16,10 @@ CREATE PROCEDURE horse_racing.get_odds_for_win(
     FROM bet
     WHERE bet.bet_type = type_of_bet AND bet.race_id = id_of_race;
 
-    SELECT race.commission
+    SELECT raceDto.commission
     INTO race_commission
-    FROM race
-    WHERE race.id = id_of_race;
+    FROM raceDto
+    WHERE raceDto.id = id_of_race;
 
     SET event_pool = (
       SELECT SUM(bet_size)
@@ -53,10 +53,10 @@ CREATE PROCEDURE horse_racing.get_odds_for_place(
     FROM bet
     WHERE bet.bet_type = type_of_bet AND bet.race_id = id_of_race;
 
-    SELECT race.commission
+    SELECT raceDto.commission
     INTO race_commission
-    FROM race
-    WHERE race.id = id_of_race;
+    FROM raceDto
+    WHERE raceDto.id = id_of_race;
 
     SET event_pool = (
       SELECT (SUM(bet_size) / 2)
@@ -90,10 +90,10 @@ CREATE PROCEDURE horse_racing.get_odds_for_show(
     FROM bet
     WHERE bet.bet_type = type_of_bet AND bet.race_id = id_of_race;
 
-    SELECT race.commission
+    SELECT raceDto.commission
     INTO race_commission
-    FROM race
-    WHERE race.id = id_of_race;
+    FROM raceDto
+    WHERE raceDto.id = id_of_race;
 
     SET event_pool = (
       SELECT (SUM(bet_size) / 3)
@@ -128,10 +128,10 @@ CREATE PROCEDURE horse_racing.get_odds_for_quinella(
     FROM bet
     WHERE bet.bet_type = type_of_bet AND bet.race_id = id_of_race;
 
-    SELECT race.commission
+    SELECT raceDto.commission
     INTO race_commission
-    FROM race
-    WHERE race.id = id_of_race;
+    FROM raceDto
+    WHERE raceDto.id = id_of_race;
 
     SELECT sum(bet_size)
     INTO event_pool
@@ -168,10 +168,10 @@ CREATE PROCEDURE horse_racing.get_odds_for_exacta(
     FROM bet
     WHERE bet.bet_type = type_of_bet AND bet.race_id = id_of_race;
 
-    SELECT race.commission
+    SELECT raceDto.commission
     INTO race_commission
-    FROM race
-    WHERE race.id = id_of_race;
+    FROM raceDto
+    WHERE raceDto.id = id_of_race;
 
     SELECT sum(bet_size)
     INTO event_pool
@@ -210,10 +210,10 @@ CREATE PROCEDURE horse_racing.get_odds_for_trifecta(
     FROM bet
     WHERE bet.bet_type = type_of_bet AND bet.race_id = id_of_race;
 
-    SELECT race.commission
+    SELECT raceDto.commission
     INTO race_commission
-    FROM race
-    WHERE race.id = id_of_race;
+    FROM raceDto
+    WHERE raceDto.id = id_of_race;
 
     SELECT sum(bet_size)
     INTO event_pool
@@ -254,10 +254,10 @@ CREATE PROCEDURE horse_racing.get_odds_for_superfecta(
     FROM bet
     WHERE bet.bet_type = type_of_bet AND bet.race_id = id_of_race;
 
-    SELECT race.commission
+    SELECT raceDto.commission
     INTO race_commission
-    FROM race
-    WHERE race.id = id_of_race;
+    FROM raceDto
+    WHERE raceDto.id = id_of_race;
 
     SELECT sum(bet_size)
     INTO event_pool

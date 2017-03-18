@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.domain.entities.Trainer;
 import java.util.List;
 
 /**
- * DAO for Trainer entity.
+ * DAO for TrainerDto entity.
  *
  * @see Trainer
  * @author Alexander Melashchenko

@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * DAO for Participant entity
+ * DAO for ParticipantDto entity
  *
  * @see Participant
  * @author Alexander Melashchenko

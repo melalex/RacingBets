@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.domain.entities.Jockey;
 import java.util.List;
 
 /**
- * DAO for Jockey entity.
+ * DAO for JockeyDto entity.
  *
  * @see Jockey
  * @author Alexander Melashchenko

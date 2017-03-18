@@ -3,7 +3,7 @@ CREATE SCHEMA `horse_racing_test`
   
 USE horse_racing_test;
 
-CREATE TABLE `horse_racing_test`.`jockey` (
+CREATE TABLE `horse_racing_test`.`jockeyDto` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45)  NOT NULL,
   `last_name`  VARCHAR(45)  NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE `horse_racing_test`.`jockey` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 );
 
-CREATE TABLE `horse_racing_test`.`owner` (
+CREATE TABLE `horse_racing_test`.`ownerDto` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45)  NOT NULL,
   `last_name`  VARCHAR(45)  NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `horse_racing_test`.`owner` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 );
 
-CREATE TABLE `horse_racing_test`.`trainer` (
+CREATE TABLE `horse_racing_test`.`trainerDto` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45)  NOT NULL,
   `last_name`  VARCHAR(45)  NOT NULL,
@@ -41,13 +41,13 @@ CREATE TABLE `horse_racing_test`.`horse` (
   `dam_id`     INT UNSIGNED              NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (trainer_id) REFERENCES trainer (id),
-  FOREIGN KEY (owner_id) REFERENCES owner (id),
+  FOREIGN KEY (trainer_id) REFERENCES trainerDto (id),
+  FOREIGN KEY (owner_id) REFERENCES ownerDto (id),
   FOREIGN KEY (sire_id) REFERENCES horse (id),
   FOREIGN KEY (dam_id) REFERENCES horse (id)
 );
 
-CREATE TABLE `horse_racing_test`.`racecourse` (
+CREATE TABLE `horse_racing_test`.`racecourseDto` (
   `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`      VARCHAR(45)  NOT NULL,
   `latitude`  DOUBLE       NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE `horse_racing_test`.`role` (
     ON DELETE CASCADE
 );
 
-CREATE TABLE `horse_racing_test`.`race` (
+CREATE TABLE `horse_racing_test`.`raceDto` (
   `id`              INT UNSIGNED                                                                                                                                       NOT NULL AUTO_INCREMENT,
   `name`            VARCHAR(45)                                                                                                                                        NOT NULL,
   `status`          ENUM ('scheduled', 'riding', 'finished', 'rejected')                                                                                               NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE `horse_racing_test`.`race` (
   `distance`        FLOAT UNSIGNED                                                                                                                                     NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (racecourse_id) REFERENCES racecourse (id)
+  FOREIGN KEY (racecourse_id) REFERENCES racecourseDto (id)
 );
 
 CREATE TABLE `horse_racing_test`.`prize` (
@@ -110,7 +110,7 @@ CREATE TABLE `horse_racing_test`.`prize` (
   `place`      INT(2) UNSIGNED         NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (race_id) REFERENCES race (id)
+  FOREIGN KEY (race_id) REFERENCES raceDto (id)
     ON DELETE CASCADE
 );
 
@@ -124,15 +124,15 @@ CREATE TABLE `horse_racing_test`.`participant` (
   `carried_weight`  FLOAT UNSIGNED  NULL,
   `topspeed`        INT(3) UNSIGNED NULL,
   `official_rating` INT(5) UNSIGNED NULL,
-  `odds`            DOUBLE UNSIGNED NULL,
+  `oddsDto`            DOUBLE UNSIGNED NULL,
   `place`           INT(2) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (horse_id) REFERENCES horse (id),
-  FOREIGN KEY (race_id) REFERENCES race (id)
+  FOREIGN KEY (race_id) REFERENCES raceDto (id)
     ON DELETE CASCADE,
-  FOREIGN KEY (jockey_id) REFERENCES jockey (id),
-  FOREIGN KEY (trainer_id) REFERENCES trainer (id)
+  FOREIGN KEY (jockey_id) REFERENCES jockeyDto (id),
+  FOREIGN KEY (trainer_id) REFERENCES trainerDto (id)
 );
 
 CREATE TABLE `horse_racing_test`.`bet` (
@@ -146,7 +146,7 @@ CREATE TABLE `horse_racing_test`.`bet` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (application_user_id) REFERENCES application_user (id)
     ON DELETE CASCADE,
-  FOREIGN KEY (race_id) REFERENCES race (id)
+  FOREIGN KEY (race_id) REFERENCES raceDto (id)
     ON DELETE CASCADE
 );
 

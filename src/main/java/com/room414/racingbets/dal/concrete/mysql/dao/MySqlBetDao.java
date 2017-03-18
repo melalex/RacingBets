@@ -161,7 +161,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     /**
-     * ApplicationUser role will be set to Handicapper
+     * UserDto role will be set to Handicapper
      *
      * @see com.room414.racingbets.dal.domain.enums.Role#HANDICAPPER
      */
@@ -281,7 +281,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     /**
-     * Participant list will not be updated
+     * ParticipantDto list will not be updated
      */
     @Override
     public long update(List<Bet> bets) {

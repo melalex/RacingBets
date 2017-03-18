@@ -1,26 +1,20 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
 import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.domain.builders.JockeyBuilder;
 
 /**
- * Horse jockey.
- * To create instances of Jockey is recommended to use the JockeyBuilder.
+ * DTO for Jockey class
  *
- * @see JockeyBuilder
+ * @see com.room414.racingbets.dal.domain.entities.Jockey
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class Jockey extends Person {
+public class JockeyDto extends Person {
     private static final long serialVersionUID = 3949892361764703963L;
-
-    public static JockeyBuilder builder() {
-        return new JockeyBuilder();
-    }
 
     @Override
     public String toString() {
-        return "Jockey{" +
+        return "JockeyDto{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

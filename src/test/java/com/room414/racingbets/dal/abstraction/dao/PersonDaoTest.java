@@ -46,15 +46,15 @@ class PersonDaoTest {
     List<DynamicTest> find_withNullBirthday_returnedPerson_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "find_withNullBirthday_returnedPerson for Jockey",
+                        "find_withNullBirthday_returnedPerson for JockeyDto",
                         () -> find_withNullBirthday_returnedPerson(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
-                        "find_withNullBirthday_returnedPerson for Trainer",
+                        "find_withNullBirthday_returnedPerson for TrainerDto",
                         () -> find_withNullBirthday_returnedPerson(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
-                        "find_withNullBirthday_returnedPerson for Owner",
+                        "find_withNullBirthday_returnedPerson for OwnerDto",
                         () -> find_withNullBirthday_returnedPerson(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
@@ -65,15 +65,15 @@ class PersonDaoTest {
     List<DynamicTest> find_existent_returnedPerson_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "find_existent_returnedPerson for Jockey",
+                        "find_existent_returnedPerson for JockeyDto",
                         () -> find_existent_returnedPerson(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
-                        "find_existent_returnedPerson for Trainer",
+                        "find_existent_returnedPerson for TrainerDto",
                         () -> find_existent_returnedPerson(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
-                        "find_existent_returnedPerson for Owner",
+                        "find_existent_returnedPerson for OwnerDto",
                         () -> find_existent_returnedPerson(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
@@ -84,15 +84,15 @@ class PersonDaoTest {
     List<DynamicTest> find_nonexistent_returnedNull_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "find_nonexistent_returnedNull for Jockey",
+                        "find_nonexistent_returnedNull for JockeyDto",
                         () -> find_nonexistent_returnedNull(unitOfWork.getJockeyDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "find_nonexistent_returnedNull for Trainer",
+                        "find_nonexistent_returnedNull for TrainerDto",
                         () -> find_nonexistent_returnedNull(unitOfWork.getTrainerDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "find_nonexistent_returnedNull for Owner",
+                        "find_nonexistent_returnedNull for OwnerDto",
                         () -> find_nonexistent_returnedNull(unitOfWork.getOwnerDao())
                 )
         );
@@ -103,15 +103,15 @@ class PersonDaoTest {
     List<DynamicTest> findAllLimitOffset_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "findAllLimitOffset for Jockey",
+                        "findAllLimitOffset for JockeyDto",
                         () -> findAllLimitOffset(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
-                        "findAllLimitOffset for Trainer",
+                        "findAllLimitOffset for TrainerDto",
                         () -> findAllLimitOffset(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
-                        "findAllLimitOffset for Owner",
+                        "findAllLimitOffset for OwnerDto",
                         () -> findAllLimitOffset(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
@@ -122,15 +122,15 @@ class PersonDaoTest {
     List<DynamicTest> findAllLimitOffset_nonexistent_returnedEmptyList_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "findAllLimitOffset_nonexistent_returnedEmptyList for Jockey",
+                        "findAllLimitOffset_nonexistent_returnedEmptyList for JockeyDto",
                         () -> findAllLimitOffset_nonexistent_returnedEmptyList(unitOfWork.getJockeyDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findAllLimitOffset_nonexistent_returnedEmptyList for Trainer",
+                        "findAllLimitOffset_nonexistent_returnedEmptyList for TrainerDto",
                         () -> findAllLimitOffset_nonexistent_returnedEmptyList(unitOfWork.getTrainerDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findAllLimitOffset_nonexistent_returnedEmptyList for Owner",
+                        "findAllLimitOffset_nonexistent_returnedEmptyList for OwnerDto",
                         () -> findAllLimitOffset_nonexistent_returnedEmptyList(unitOfWork.getOwnerDao())
                 )
         );
@@ -141,15 +141,15 @@ class PersonDaoTest {
     List<DynamicTest> findAll_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "findAll for Jockey",
+                        "findAll for JockeyDto",
                         () -> findAll(unitOfWork.getJockeyDao(), storage::getAllJockeys)
                 ),
                 DynamicTest.dynamicTest(
-                        "findAll for Trainer",
+                        "findAll for TrainerDto",
                         () -> findAll(unitOfWork.getTrainerDao(), storage::getAllTrainers)
                 ),
                 DynamicTest.dynamicTest(
-                        "findAll for Owner",
+                        "findAll for OwnerDto",
                         () -> findAll(unitOfWork.getOwnerDao(), storage::getAllOwners)
                 )
         );
@@ -160,15 +160,15 @@ class PersonDaoTest {
     List<DynamicTest> count_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "count for Jockey",
+                        "count for JockeyDto",
                         () -> count(unitOfWork.getJockeyDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "count for Trainer",
+                        "count for TrainerDto",
                         () -> count(unitOfWork.getTrainerDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "count for Owner",
+                        "count for OwnerDto",
                         () -> count(unitOfWork.getOwnerDao())
                 )
         );
@@ -179,15 +179,15 @@ class PersonDaoTest {
     List<DynamicTest> findByNamePart_existent_returnedList_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "findByNamePart_existent_returnedList for Jockey",
+                        "findByNamePart_existent_returnedList for JockeyDto",
                         () -> findByNamePart_existent_returnedList(unitOfWork.getJockeyDao(), storage::getJockey)
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePart_existent_returnedList for Trainer",
+                        "findByNamePart_existent_returnedList for TrainerDto",
                         () -> findByNamePart_existent_returnedList(unitOfWork.getTrainerDao(), storage::getTrainer)
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePart_existent_returnedList for Owner",
+                        "findByNamePart_existent_returnedList for OwnerDto",
                         () -> findByNamePart_existent_returnedList(unitOfWork.getOwnerDao(), storage::getOwner)
                 )
         );
@@ -198,15 +198,15 @@ class PersonDaoTest {
     List<DynamicTest> findByNamePart_nonexistent_returnedEmptyList_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "findByNamePart_nonexistent_returnedEmptyList for Jockey",
+                        "findByNamePart_nonexistent_returnedEmptyList for JockeyDto",
                         () -> findByNamePart_nonexistent_returnedEmptyList(unitOfWork.getJockeyDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePart_nonexistent_returnedEmptyList for Trainer",
+                        "findByNamePart_nonexistent_returnedEmptyList for TrainerDto",
                         () -> findByNamePart_nonexistent_returnedEmptyList(unitOfWork.getTrainerDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePart_nonexistent_returnedEmptyList for Owner",
+                        "findByNamePart_nonexistent_returnedEmptyList for OwnerDto",
                         () -> findByNamePart_nonexistent_returnedEmptyList(unitOfWork.getOwnerDao())
                 )
         );
@@ -217,15 +217,15 @@ class PersonDaoTest {
     List<DynamicTest> findByNamePartCount_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "findByNamePartCount for Jockey",
+                        "findByNamePartCount for JockeyDto",
                         () -> findByNamePartCount(unitOfWork.getJockeyDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePartCount for Trainer",
+                        "findByNamePartCount for TrainerDto",
                         () -> findByNamePartCount(unitOfWork.getTrainerDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePartCount for Owner",
+                        "findByNamePartCount for OwnerDto",
                         () -> findByNamePartCount(unitOfWork.getOwnerDao())
                 )
         );
@@ -236,21 +236,21 @@ class PersonDaoTest {
     List<DynamicTest> createAndDelete_withNullBirthday_createdAndDeleted_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "createAndDelete_withNullBirthday_createdAndDeleted for Jockey",
+                        "createAndDelete_withNullBirthday_createdAndDeleted for JockeyDto",
                         () -> createAndDelete_withNullBirthday_createdAndDeleted(
                                 unitOfWork.getJockeyDao(),
                                 Jockey.builder()
                         )
                 ),
                 DynamicTest.dynamicTest(
-                        "createAndDelete_withNullBirthday_createdAndDeleted for Trainer",
+                        "createAndDelete_withNullBirthday_createdAndDeleted for TrainerDto",
                         () -> createAndDelete_withNullBirthday_createdAndDeleted(
                                 unitOfWork.getTrainerDao(),
                                 Trainer.builder()
                         )
                 ),
                 DynamicTest.dynamicTest(
-                        "createAndDelete_withNullBirthday_createdAndDeleted for Owner",
+                        "createAndDelete_withNullBirthday_createdAndDeleted for OwnerDto",
                         () -> createAndDelete_withNullBirthday_createdAndDeleted(
                                 unitOfWork.getOwnerDao(),
                                 Owner.builder()
@@ -264,15 +264,15 @@ class PersonDaoTest {
     List<DynamicTest> createAndDelete_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "createAndDelete for Jockey",
+                        "createAndDelete for JockeyDto",
                         () -> createAndDelete(unitOfWork.getJockeyDao(), Jockey.builder())
                 ),
                 DynamicTest.dynamicTest(
-                        "createAndDelete for Trainer",
+                        "createAndDelete for TrainerDto",
                         () -> createAndDelete(unitOfWork.getTrainerDao(), Trainer.builder())
                 ),
                 DynamicTest.dynamicTest(
-                        "createAndDelete for Owner",
+                        "createAndDelete for OwnerDto",
                         () -> createAndDelete(unitOfWork.getOwnerDao(), Owner.builder())
                 )
         );
@@ -283,15 +283,15 @@ class PersonDaoTest {
     List<DynamicTest> update_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "update for Jockey",
+                        "update for JockeyDto",
                         () -> update(unitOfWork.getJockeyDao(), Jockey.builder())
                 ),
                 DynamicTest.dynamicTest(
-                        "update for Trainer",
+                        "update for TrainerDto",
                         () -> update(unitOfWork.getTrainerDao(), Trainer.builder())
                 ),
                 DynamicTest.dynamicTest(
-                        "update for Owner",
+                        "update for OwnerDto",
                         () -> update(unitOfWork.getOwnerDao(), Owner.builder())
                 )
         );

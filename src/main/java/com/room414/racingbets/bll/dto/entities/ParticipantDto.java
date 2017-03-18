@@ -1,69 +1,35 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
 import com.room414.racingbets.dal.abstraction.entities.Horse;
-import com.room414.racingbets.dal.domain.builders.ParticipantBuilder;
 
 import java.io.Serializable;
 
 /**
- * Class that represent participant of the race.
- * To create instances of Participant is recommended to use the ParticipantBuilder.
+ * DTO for Participant class
  *
- * @see ParticipantBuilder
- * @see Race
+ * @see com.room414.racingbets.dal.domain.entities.Participant
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class Participant implements Serializable {
+public class ParticipantDto implements Serializable {
     private static final long serialVersionUID = -2072016846596822050L;
 
     private long id;
-    /**
-     * Saddle cloth number the horse will carry.
-     */
     private int number;
-    /**
-     * A horse that participates in the race.
-     */
     private Horse horse;
-    /**
-     * Weight carried by horse.
-     */
     private float carriedWeight;
-    /**
-     * Weight carried by horse.
-     */
     private int topSpeed;
-    /**
-     * Official Rating is a BHA rating, as assigned by the official Handicapper.
-     */
     private int officialRating;
-    /**
-     * Latest betting odds.
-     */
     private double odds;
-    /**
-     * Horse's jockey.
-     */
-    private Jockey jockey;
-    /**
-     * Horse's trainer.
-     */
-    private Trainer trainer;
-    /**
-     * The place where the horse finished.
-     */
+    private JockeyDto jockeyDto;
+    private TrainerDto trainerDto;
     private int place;
 
-    public Participant() {
+    public ParticipantDto() {
     }
 
-    public Participant(long id) {
+    public ParticipantDto(long id) {
         this.id = id;
-    }
-
-    public static ParticipantBuilder builder() {
-        return new ParticipantBuilder();
     }
 
     public long getId() {
@@ -122,20 +88,20 @@ public class Participant implements Serializable {
         this.odds = odds;
     }
 
-    public Jockey getJockey() {
-        return jockey;
+    public JockeyDto getJockeyDto() {
+        return jockeyDto;
     }
 
-    public void setJockey(Jockey jockey) {
-        this.jockey = jockey;
+    public void setJockeyDto(JockeyDto jockeyDto) {
+        this.jockeyDto = jockeyDto;
     }
 
-    public Trainer getTrainer() {
-        return trainer;
+    public TrainerDto getTrainerDto() {
+        return trainerDto;
     }
 
-    public void setTrainer(Trainer trainer) {
-        this.trainer = trainer;
+    public void setTrainerDto(TrainerDto trainerDto) {
+        this.trainerDto = trainerDto;
     }
 
     public int getPlace() {
@@ -156,7 +122,7 @@ public class Participant implements Serializable {
             return false;
         }
 
-        Participant that = (Participant) o;
+        ParticipantDto that = (ParticipantDto) o;
 
         if (id != that.id) {
             return false;
@@ -190,11 +156,11 @@ public class Participant implements Serializable {
             return false;
         }
 
-        if (jockey != null ? !jockey.equals(that.jockey) : that.jockey != null) {
+        if (jockeyDto != null ? !jockeyDto.equals(that.jockeyDto) : that.jockeyDto != null) {
             return false;
         }
 
-        if (trainer != null ? !trainer.equals(that.trainer) : that.trainer != null) {
+        if (trainerDto != null ? !trainerDto.equals(that.trainerDto) : that.trainerDto != null) {
             return false;
         }
 
@@ -216,8 +182,8 @@ public class Participant implements Serializable {
         temp = Double.doubleToLongBits(odds);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
 
-        result = 31 * result + (jockey != null ? jockey.hashCode() : 0);
-        result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
+        result = 31 * result + (jockeyDto != null ? jockeyDto.hashCode() : 0);
+        result = 31 * result + (trainerDto != null ? trainerDto.hashCode() : 0);
         result = 31 * result + place;
 
         return result;
@@ -225,7 +191,7 @@ public class Participant implements Serializable {
 
     @Override
     public String toString() {
-        return "Participant{" +
+        return "ParticipantDto{" +
                 "id=" + id +
                 ", number=" + number +
                 ", horse=" + horse +
@@ -233,8 +199,8 @@ public class Participant implements Serializable {
                 ", topSpeed=" + topSpeed +
                 ", officialRating=" + officialRating +
                 ", odds=" + odds +
-                ", jockey=" + jockey +
-                ", trainer=" + trainer +
+                ", jockeyDto=" + jockeyDto +
+                ", trainerDto=" + trainerDto +
                 ", place=" + place +
                 '}';
     }

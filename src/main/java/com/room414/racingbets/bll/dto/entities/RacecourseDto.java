@@ -1,38 +1,25 @@
-package com.room414.racingbets.dal.domain.entities;
-
-import com.room414.racingbets.dal.domain.builders.RacecourseBuilder;
+package com.room414.racingbets.bll.dto.entities;
 
 import java.io.Serializable;
 
 /**
- * Stores information about racecourse.
- * To create instances of Race is recommended to use the RaceBuilder.
+ * DTO for Racecourse class
  *
- * @see RacecourseBuilder
+ * @see com.room414.racingbets.dal.domain.entities.Racecourse
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class Racecourse implements Serializable {
+public class RacecourseDto implements Serializable {
     private static final long serialVersionUID = 2069863490131436051L;
 
     private long id;
     private String name;
     private double latitude;
     private double longitude;
-    /**
-     * Racecourse telephone number.
-     */
     private String contact;
-    /**
-     * Clerk of the racecourse
-     */
     private String clerk;
 
-    public Racecourse() {
-    }
-
-    public static RacecourseBuilder builder() {
-        return new RacecourseBuilder();
+    public RacecourseDto() {
     }
 
     public long getId() {
@@ -93,7 +80,7 @@ public class Racecourse implements Serializable {
             return false;
         }
 
-        Racecourse that = (Racecourse) o;
+        RacecourseDto that = (RacecourseDto) o;
 
         if (id != that.id) {
             return false;
@@ -144,7 +131,7 @@ public class Racecourse implements Serializable {
 
     @Override
     public String toString() {
-        return "Racecourse{" +
+        return "RacecourseDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", latitude=" + latitude +

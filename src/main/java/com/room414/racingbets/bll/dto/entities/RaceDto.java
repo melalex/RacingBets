@@ -1,6 +1,5 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
-import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
@@ -12,68 +11,38 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * Class that represent race.
- * To create instances of Race is recommended to use the RaceBuilder.
+ * DTO for Race class
  *
- * @see RaceBuilder
+ * @see com.room414.racingbets.dal.domain.entities.Race
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class Race implements Serializable {
+public class RaceDto implements Serializable {
     private static final long serialVersionUID = 8351694393075721386L;
 
     private long id;
     private String name;
-    private Racecourse racecourse;
-    /**
-     * Race's start date and time.
-     */
+    private RacecourseDto racecourseDto;
     private Timestamp start;
     private BigDecimal minBet;
-    /**
-     * Bookmaker part from bets
-     */
     private double commission;
-    /**
-     * Description of ground conditions
-     */
     private TrackCondition trackCondition;
     private RaceType raceType;
     private RaceStatus raceStatus;
 
     private int raceClass;
 
-    /**
-     * Horse min age.
-     */
     private int minAge;
 
-    /**
-     * Horse
-     *
-     * @see Participant#getOfficialRating()
-     */
     private int minRating;
-    /**
-     * Horse max OR.
-     *
-     * @see Participant#getOfficialRating()
-     */
     private int maxRating;
 
     private float distance;
 
-    private List<Participant> participants;
-    /**
-     * Map place -> price
-     */
+    private List<ParticipantDto> participants;
     private Map<Integer, BigDecimal> prizes;
 
-    public Race() {
-    }
-
-    public static RaceBuilder builder() {
-        return new RaceBuilder();
+    public RaceDto() {
     }
 
     public long getId() {
@@ -92,12 +61,12 @@ public class Race implements Serializable {
         this.name = name;
     }
 
-    public Racecourse getRacecourse() {
-        return racecourse;
+    public RacecourseDto getRacecourseDto() {
+        return racecourseDto;
     }
 
-    public void setRacecourse(Racecourse racecourse) {
-        this.racecourse = racecourse;
+    public void setRacecourseDto(RacecourseDto racecourseDto) {
+        this.racecourseDto = racecourseDto;
     }
 
     public Timestamp getStart() {
@@ -208,7 +177,7 @@ public class Race implements Serializable {
         return prizes.get(place);
     }
 
-    public List<Participant> getParticipants() {
+    public List<ParticipantDto> getParticipants() {
         if (participants != null) {
             return new ArrayList<>(participants);
         } else {
@@ -216,7 +185,7 @@ public class Race implements Serializable {
         }
     }
 
-    public void setParticipants(List<Participant> participants) {
+    public void setParticipants(List<ParticipantDto> participants) {
         if (participants != null) {
             this.participants = new ArrayList<>(participants);
         } else {
@@ -234,69 +203,69 @@ public class Race implements Serializable {
             return false;
         }
 
-        Race race = (Race) o;
+        RaceDto raceDto = (RaceDto) o;
 
-        if (id != race.id) {
+        if (id != raceDto.id) {
             return false;
         }
 
-        if (Double.compare(race.commission, commission) != 0) {
+        if (Double.compare(raceDto.commission, commission) != 0) {
             return false;
         }
 
-        if (raceClass != race.raceClass) {
+        if (raceClass != raceDto.raceClass) {
             return false;
         }
 
-        if (minAge != race.minAge) {
+        if (minAge != raceDto.minAge) {
             return false;
         }
 
-        if (minRating != race.minRating) {
+        if (minRating != raceDto.minRating) {
             return false;
         }
 
-        if (maxRating != race.maxRating) {
+        if (maxRating != raceDto.maxRating) {
             return false;
         }
 
-        if (Float.compare(race.distance, distance) != 0) {
+        if (Float.compare(raceDto.distance, distance) != 0) {
             return false;
         }
 
-        if (name != null ? !name.equals(race.name) : race.name != null) {
+        if (name != null ? !name.equals(raceDto.name) : raceDto.name != null) {
             return false;
         }
 
-        if (racecourse != null ? !racecourse.equals(race.racecourse) : race.racecourse != null) {
+        if (racecourseDto != null ? !racecourseDto.equals(raceDto.racecourseDto) : raceDto.racecourseDto != null) {
             return false;
         }
 
-        if (start != null ? !start.equals(race.start) : race.start != null) {
+        if (start != null ? !start.equals(raceDto.start) : raceDto.start != null) {
             return false;
         }
 
-        if (minBet != null ? minBet.compareTo(race.minBet) != 0 : race.minBet != null) {
+        if (minBet != null ? minBet.compareTo(raceDto.minBet) != 0 : raceDto.minBet != null) {
             return false;
         }
 
-        if (trackCondition != race.trackCondition) {
+        if (trackCondition != raceDto.trackCondition) {
             return false;
         }
 
-        if (raceType != race.raceType) {
+        if (raceType != raceDto.raceType) {
             return false;
         }
 
-        if (raceStatus != race.raceStatus) {
+        if (raceStatus != raceDto.raceStatus) {
             return false;
         }
 
-        if (participants != null ? !participants.equals(race.participants) : race.participants != null) {
+        if (participants != null ? !participants.equals(raceDto.participants) : raceDto.participants != null) {
             return false;
         }
 
-        if (prizes != null ? !EntityHelper.compareMaps(prizes, race.prizes, Comparator.naturalOrder()) : race.prizes != null) {
+        if (prizes != null ? !EntityHelper.compareMaps(prizes, raceDto.prizes, Comparator.naturalOrder()) : raceDto.prizes != null) {
             return false;
         }
 
@@ -310,7 +279,7 @@ public class Race implements Serializable {
         long temp;
         result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (racecourse != null ? racecourse.hashCode() : 0);
+        result = 31 * result + (racecourseDto != null ? racecourseDto.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
 
         temp = minBet != null ? Double.doubleToLongBits(minBet.doubleValue()) : 0;
@@ -341,10 +310,10 @@ public class Race implements Serializable {
 
     @Override
     public String toString() {
-        return "Race{" +
+        return "RaceDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", racecourse=" + racecourse +
+                ", racecourseDto=" + racecourseDto +
                 ", start=" + start +
                 ", minBet=" + minBet +
                 ", commission=" + commission +

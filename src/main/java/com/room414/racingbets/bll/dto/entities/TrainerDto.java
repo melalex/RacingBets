@@ -1,26 +1,20 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
 import com.room414.racingbets.dal.abstraction.entities.Person;
-import com.room414.racingbets.dal.domain.builders.TrainerBuilder;
 
 /**
- * Horse trainer.
- * To create instances of Trainer is recommended to use the TrainerBuilder.
+ * DTO for Trainer class
  *
- * @see TrainerBuilder
+ * @see com.room414.racingbets.dal.domain.entities.Trainer
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class Trainer extends Person {
+public class TrainerDto extends Person {
     private static final long serialVersionUID = -7009460944562959560L;
-
-    public static TrainerBuilder builder() {
-        return new TrainerBuilder();
-    }
 
     @Override
     public String toString() {
-        return "Trainer{" +
+        return "TrainerDto{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

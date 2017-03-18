@@ -124,5 +124,5 @@ src/main/webapp/
 !/database/mysql/main/scripts/application_user.sql
 !/database/mysql/main/shema/horse_racing.mwb
 !/database/mysql/main/scripts/odds_calculation.sql
-!/database/mysql/main/scripts/race.sql
+!/database/mysql/main/scripts/raceDto.sql
 !/src/main/java/com/room414/racingbets/bll/

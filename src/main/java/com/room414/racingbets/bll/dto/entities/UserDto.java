@@ -1,6 +1,5 @@
-package com.room414.racingbets.dal.domain.entities;
+package com.room414.racingbets.bll.dto.entities;
 
-import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.io.Serializable;
@@ -9,14 +8,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Class that represents a system actor.
- * To create instances of ApplicationUser is recommended to use the ApplicationUserBuilder.
+ * DTO for ApplicationUser class
  *
- * @see com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder
+ * @see com.room414.racingbets.dal.domain.entities.ApplicationUser
  * @author Alexander Melashchenko
- * @version 1.0 23 Feb 2017
+ * @version 1.0 18 Mar 2017
  */
-public class ApplicationUser implements Serializable {
+public class UserDto implements Serializable {
     private static final long serialVersionUID = 6029712881413191567L;
 
     private long id;
@@ -25,24 +23,11 @@ public class ApplicationUser implements Serializable {
     private String password;
     private String firstName;
     private String lastName;
-    /**
-     * It indicates whether the user has confirmed email.
-     */
     private boolean isEmailConfirmed;
-    /**
-     * The cash balance of the user.
-     */
     private BigDecimal balance;
-    /**
-     * Roles applied to concrete User.
-     */
     private Set<Role> roles = new HashSet<>();
 
-    public ApplicationUser() {
-    }
-
-    public static ApplicationUserBuilder builder() {
-        return new ApplicationUserBuilder();
+    public UserDto() {
     }
 
     public long getId() {
@@ -139,7 +124,7 @@ public class ApplicationUser implements Serializable {
             return false;
         }
 
-        ApplicationUser that = (ApplicationUser) o;
+        UserDto that = (UserDto) o;
 
         if (id != that.id) {
             return false;
@@ -202,7 +187,7 @@ public class ApplicationUser implements Serializable {
 
     @Override
     public String toString() {
-        return "ApplicationUser{" +
+        return "UserDto{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", email='" + email + '\'' +

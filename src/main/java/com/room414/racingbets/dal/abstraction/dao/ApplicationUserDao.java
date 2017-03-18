@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * DAO for ApplicationUser entity
+ * DAO for UserDto entity
  *
  * @see ApplicationUser
  * @author Alexander Melashchenko
@@ -16,9 +16,9 @@ import java.util.List;
 public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
     // TODO: is good?? (find and count method)
     /**
-     * Search ApplicationUser by prefix.
+     * Search UserDto by prefix.
      *
-     * @param loginPart begin of ApplicationUser login
+     * @param loginPart begin of UserDto login
      * @param offset the number of items that need to skip
      * @param limit elements count in result
      * @return List of ApplicationUsers whose login starts with loginPart or empty if no found.
@@ -26,60 +26,60 @@ public interface ApplicationUserDao extends CrudDao<Long, ApplicationUser> {
     List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit);
 
     /**
-     * @param loginPart begin of ApplicationUser login
+     * @param loginPart begin of UserDto login
      * @return count ApplicationUsers whose login starts with loginPart
      */
     long findByLoginPartCount(String loginPart);
 
     /**
-     * @param login ApplicationUser login
-     * @param password ApplicationUser password
-     * @return ApplicationUser with login == login param
+     * @param login UserDto login
+     * @param password UserDto password
+     * @return UserDto with login == login param
      */
     ApplicationUser findByLoginAndPassword(String login, String password);
 
 
     /**
-     * @param login ApplicationUser login
-     * @param email ApplicationUser email
+     * @param login UserDto login
+     * @param email UserDto email
      * @return ApplicationUsers who's email == email param or login == login param
      */
     List<ApplicationUser> findByLoginAndEmail(String login, String email);
 
     /**
-     * Set ApplicationUser isEmailConfirmed field to true to user with id == id param
+     * Set UserDto isEmailConfirmed field to true to user with id == id param
      *
-     * @param id ApplicationUser id
+     * @param id UserDto id
      */
     void confirmEmail(long id);
 
     /**
-     * Add role to ApplicationUser
+     * Add role to UserDto
      *
-     * @param userId ApplicationUser id
+     * @param userId UserDto id
      * @param role role
      */
     void addRole(long userId, Role role);
 
     /**
-     * Remove role from ApplicationUser
+     * Remove role from UserDto
      *
-     * @param userId ApplicationUser id
+     * @param userId UserDto id
      * @param role role
      */
     void removeRole(long userId, Role role);
 
     /**
-     * @param id ApplicationUser id
+     * @param id UserDto id
      * @param amount amount of money
      * @return true if the money were removed successfully, false if not enough money on the balance sheet
      */
     boolean tryGetMoney(long id, BigDecimal amount);
 
     /**
-     * Add amount param to ApplicationUser balance field
+     * Add amount param to UserDto balance field
      *
-     * @param id ApplicationUser id
+     * @param id UserDto id
      * @param amount amount of money
      */
     void putMoney(long id, BigDecimal amount);
