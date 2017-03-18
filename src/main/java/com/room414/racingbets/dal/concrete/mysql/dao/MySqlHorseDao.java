@@ -6,6 +6,7 @@ import com.room414.racingbets.dal.abstraction.entities.Horse;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,7 +39,7 @@ public class MySqlHorseDao implements HorseDao {
 
     @Override
     public List<Horse> findByNamePart(String namePart, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN trainer AS horse_trainer " +
@@ -103,7 +104,7 @@ public class MySqlHorseDao implements HorseDao {
 
     @Override
     public Horse find(Long id) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN trainer AS horse_trainer " +
@@ -117,7 +118,7 @@ public class MySqlHorseDao implements HorseDao {
 
     @Override
     public List<Horse> findAll() {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN trainer AS horse_trainer " +
@@ -130,7 +131,7 @@ public class MySqlHorseDao implements HorseDao {
 
     @Override
     public List<Horse> findAll(long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM horse " +
                 "INNER JOIN trainer AS horse_trainer " +

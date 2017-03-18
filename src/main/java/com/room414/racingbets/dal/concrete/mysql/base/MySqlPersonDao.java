@@ -40,22 +40,13 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
                 getTableName()
         );
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, entity.getFirstName());
-            statement.setString(2, entity.getLastName());
-            statement.setDate(3, entity.getBirthday());
-
-            MySqlDaoHelper.createEntity(statement, entity::setId);
-
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getFirstName(),
-                    entity.getLastName(),
-                    entity.getBirthday()
-            );
-            throw new DalException(message, e);
-        }
+        executor.create(
+                sqlStatement,
+                entity::setId,
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getBirthday()
+        );
     }
 
     @Override
@@ -65,23 +56,13 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
                 getTableName()
         );
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, startsWith(namePart));
-            statement.setString(2, startsWith(namePart));
-            statement.setLong(3, limit);
-            statement.setLong(4, offset);
-
-            return getResultList(statement, this::mapResultSet);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    startsWith(namePart),
-                    startsWith(namePart),
-                    limit,
-                    offset
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeFindManyQuery(
+                sqlStatement,
+                startsWith(namePart),
+                startsWith(namePart),
+                limit,
+                offset
+        );
     }
 
     @Override
@@ -91,19 +72,11 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
                 getTableName()
         );
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, startsWith(namePart));
-            statement.setString(2, startsWith(namePart));
-
-            return getResult(statement, MySqlMapHelper::mapCount);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    startsWith(namePart),
-                    startsWith(namePart)
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeCountQuery(
+                sqlStatement,
+                startsWith(namePart),
+                startsWith(namePart)
+        );
     }
 
     @Override
@@ -143,23 +116,13 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
                 "UPDATE %s SET first_name = ?, last_name = ?, birthday = ? WHERE id = ?", getTableName()
         );
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, entity.getFirstName());
-            statement.setString(2, entity.getLastName());
-            statement.setDate(3, entity.getBirthday());
-            statement.setLong(4, entity.getId());
-
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getFirstName(),
-                    entity.getLastName(),
-                    entity.getBirthday(),
-                    entity.getId()
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeUpdateQuery(
+                sqlStatement,
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getBirthday(),
+                entity.getId()
+        );
     }
 
     @Override
