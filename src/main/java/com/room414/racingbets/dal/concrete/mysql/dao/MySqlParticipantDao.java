@@ -160,7 +160,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL") 
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
@@ -190,7 +190,7 @@ public class MySqlParticipantDao implements ParticipantDao {
 
     @Override
     public List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit) throws DalException {
-        //language=MySQL
+        @Language("MySQL") 
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +

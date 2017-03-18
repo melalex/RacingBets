@@ -6,6 +6,7 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.entities.Racecourse;
+import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +40,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
 
     @Override
     public List<Racecourse> findByNamePart(String namePart, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.name LIKE ? LIMIT ? OFFSET ?";
 
         return executor.findByColumnPart(sqlStatement, namePart, limit, offset);
@@ -47,7 +48,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
 
     @Override
     public long findByNamePartCount(String namePart) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement = "SELECT COUNT(*) AS count FROM racecourse WHERE name LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, namePart);
@@ -55,35 +56,26 @@ public class MySqlRacecourseDao implements RacecourseDao {
 
     @Override
     public void create(Racecourse entity) {
+        @Language("MySQL")
         final String sqlStatement =
                 "INSERT INTO racecourse " +
                 "   (name, latitude, longitude, contact, clerk) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, entity.getName());
-            statement.setDouble(2, entity.getLatitude());
-            statement.setDouble(3, entity.getLongitude());
-            statement.setString(4, entity.getContact());
-            statement.setString(5, entity.getClerk());
-
-            createEntity(statement, entity::setId);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getName(),
-                    entity.getLatitude(),
-                    entity.getLongitude(),
-                    entity.getContact(),
-                    entity.getClerk()
-            );
-            throw new DalException(message, e);
-        }
+        executor.create(
+                sqlStatement,
+                entity::setId,
+                entity.getName(),
+                entity.getLatitude(),
+                entity.getLongitude(),
+                entity.getContact(),
+                entity.getClerk()
+        );
     }
 
     @Override
     public Racecourse find(Long id) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.id = ?";
 
         return executor.find(id, sqlStatement);
@@ -91,7 +83,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
 
     @Override
     public List<Racecourse> findAll() {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement = "SELECT * FROM racecourse";
 
         return executor.findAll(sqlStatement);
@@ -99,7 +91,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
 
     @Override
     public List<Racecourse> findAll(long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement = "SELECT * FROM racecourse LIMIT ? OFFSET ?";
 
         return executor.findAll(sqlStatement, limit, offset);
@@ -112,32 +104,21 @@ public class MySqlRacecourseDao implements RacecourseDao {
 
     @Override
     public long update(Racecourse entity) {
+        @Language("MySQL")
         String sqlStatement =
                 "UPDATE racecourse " +
                 "SET name = ?, latitude = ?, longitude = ?, contact = ?, clerk = ? " +
                 "WHERE id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, entity.getName());
-            statement.setDouble(2, entity.getLatitude());
-            statement.setDouble(3, entity.getLongitude());
-            statement.setString(4, entity.getContact());
-            statement.setString(5, entity.getClerk());
-            statement.setLong(6, entity.getId());
-
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getName(),
-                    entity.getLatitude(),
-                    entity.getLongitude(),
-                    entity.getContact(),
-                    entity.getClerk(),
-                    entity.getId()
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeUpdateQuery(
+                sqlStatement,
+                entity.getName(),
+                entity.getLatitude(),
+                entity.getLongitude(),
+                entity.getContact(),
+                entity.getClerk(),
+                entity.getId()
+        );
     }
 
     @Override
