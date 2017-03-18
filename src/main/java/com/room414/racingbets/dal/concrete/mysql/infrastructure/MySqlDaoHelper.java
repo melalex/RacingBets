@@ -21,7 +21,7 @@ public class MySqlDaoHelper {
 
     }
 
-    public static String sqlFormat(String sqlPattern, Object ... arguments) {
+    private static String sqlFormat(String sqlPattern, Object ... arguments) {
         String sqlStatement = sqlPattern.replaceAll("\\?", "%s").replaceAll("\\s+", " ");
         return String.format(sqlStatement, arguments);
     }
@@ -51,8 +51,18 @@ public class MySqlDaoHelper {
         return part + "%";
     }
 
-    public static long getCount(PreparedStatement statement) throws SQLException {
+    static void setValues(PreparedStatement preparedStatement, Object... values) throws SQLException {
+        for (int i = 0; i < values.length; i++) {
+            preparedStatement.setObject(i + 1, values[i]);
+        }
+    }
+
+    static long getCount(PreparedStatement statement) throws SQLException {
         return getResult(statement, MySqlMapHelper::mapCount);
+    }
+
+    static long executeUpdate(PreparedStatement statement) throws SQLException {
+        return statement.executeUpdate();
     }
 
     public static <T> T getResult(PreparedStatement statement, Mapper<T> mapper) throws SQLException {
@@ -115,8 +125,6 @@ public class MySqlDaoHelper {
     }
 
     public static void createEntities(PreparedStatement statement, List<Consumer<Long>> idSetters) throws SQLException {
-        int[] affectedRows = statement.executeBatch();
-
         try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
             int i = 0;
             while (generatedKeys.next()) {

@@ -9,5 +9,5 @@ import java.sql.SQLException;
  */
 @FunctionalInterface
 public interface QueryExecutor<T> {
-    T apply(PreparedStatement statement) throws SQLException;
+    T execute(PreparedStatement statement) throws SQLException;
 }

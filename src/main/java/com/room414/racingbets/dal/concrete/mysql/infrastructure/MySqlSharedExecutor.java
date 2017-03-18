@@ -30,68 +30,29 @@ public class MySqlSharedExecutor<T> {
     public long count(String tableName) {
         String sqlStatement = String.format("SELECT COUNT(*) AS count FROM %s", tableName);
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return getCount(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
-            throw new DalException(message, e);
-        }
+        return executeCountQuery(sqlStatement);
     }
 
     public boolean delete(String tableName, Long id) {
         String sqlStatement = String.format("DELETE FROM %s WHERE id = ?", tableName);
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return executeUpdateQuery(sqlStatement, id) > 0;
     }
 
     public T find(long id, String sqlStatement) {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-            return mapResult.apply(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        return executeFindOneQuery(sqlStatement, id);
     }
 
     public List<T> findAll(String sqlStatement) {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            return mapResultList.apply(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement);
-            throw new DalException(message, e);
-        }
+        return executeFindManyQuery(sqlStatement);
     }
 
     public List<T> findAll(String sqlStatement, long limit, long offset) {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, limit);
-            statement.setLong(2, offset);
-
-            return mapResultList.apply(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, limit, offset);
-            throw new DalException(message, e);
-        }
+        return executeFindManyQuery(sqlStatement, limit, offset);
     }
 
     public List<T> findByForeignKey(String sqlStatement, long key, long offset, long limit) {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, key);
-            statement.setLong(2, limit);
-            statement.setLong(3, offset);
-
-            return mapResultList.apply(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, key, limit, offset);
-            throw new DalException(message, e);
-        }
+        return executeFindManyQuery(sqlStatement, key, limit, offset);
     }
 
     public long findByForeignKeyCount(String tableName, String columnName, long key) {
@@ -99,37 +60,40 @@ public class MySqlSharedExecutor<T> {
                 "SELECT Count(*) AS count FROM %s WHERE %s = ?", tableName, columnName
         );
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, key);
-            return getCount(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, key);
-            throw new DalException(message, e);
-        }
+        return executeCountQuery(sqlStatement, key);
     }
 
     public List<T> findByColumnPart(String sqlStatement, String namePart, long limit, long offset) {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, startsWith(namePart));
-            statement.setLong(2, limit);
-            statement.setLong(3, offset);
-
-            return mapResultList.apply(statement);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, startsWith(namePart), limit, offset);
-            throw new DalException(message, e);
-        }
+        return executeFindManyQuery(sqlStatement, startsWith(namePart), limit, offset);
     }
 
     public long findByColumnPartCount(String sqlStatement, String namePart) {
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, startsWith(namePart));
+        return executeCountQuery(sqlStatement, startsWith(namePart));
+    }
 
-            return getCount(statement);
+    public long executeUpdateQuery(String sqlStatement, Object ... objects) {
+        return executeQuery(MySqlDaoHelper::executeUpdate, sqlStatement, objects);
+    }
+
+    public long executeCountQuery(String sqlStatement, Object ... objects) {
+        return executeQuery(MySqlDaoHelper::getCount, sqlStatement, objects);
+    }
+
+    public T executeFindOneQuery(String sqlStatement, Object ... objects) {
+        return executeQuery(mapResult, sqlStatement, objects);
+    }
+
+    public List<T> executeFindManyQuery(String sqlStatement, Object ... objects) {
+        return executeQuery(mapResultList, sqlStatement, objects);
+    }
+
+    private <R> R executeQuery(QueryExecutor<R> queryExecutor, String sqlStatement, Object ... objects) {
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
+            setValues(statement, objects);
+            return queryExecutor.execute(statement);
         } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, startsWith(namePart));
+            String message = defaultErrorMessage(sqlStatement, objects);
             throw new DalException(message, e);
         }
     }
-
 }
