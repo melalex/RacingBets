@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -101,6 +102,25 @@ public class MySqlSharedExecutor<T> {
     private <R> R executeQuery(QueryExecutor<R> queryExecutor, String sqlStatement, Object ... objects) {
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
             setValues(statement, objects);
+            return queryExecutor.execute(statement);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, objects);
+            throw new DalException(message, e);
+        }
+    }
+
+    public T executeFindOneCall(String call, Object ... objects) {
+        return executeCall(mapResult, call, objects);
+    }
+
+    public List<T> executeFindManyCall(String call, Object ... objects) {
+        return executeCall(mapResultList, call, objects);
+    }
+
+    private <R> R executeCall(QueryExecutor<R> queryExecutor, String sqlStatement, Object ... objects) {
+        try(CallableStatement statement = connection.prepareCall(sqlStatement)) {
+            setValues(statement, objects);
+            statement.execute();
             return queryExecutor.execute(statement);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, objects);

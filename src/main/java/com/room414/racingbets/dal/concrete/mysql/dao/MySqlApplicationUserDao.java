@@ -300,7 +300,15 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         @Language("MySQL")
         final String call = "{ CALL add_role(?, ?) }";
 
-        executor.executeSimpleQuery(call, userId, role.getName());
+        try(CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, userId);
+            statement.setString(2, role.getName());
+
+            statement.execute();
+        } catch (SQLException e) {
+            String message = callErrorMessage("add_role", userId, role);
+            throw new DalException(message, e);
+        }
     }
 
     @Override

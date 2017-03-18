@@ -26,11 +26,9 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
 public class MySqlRacecourseDao implements RacecourseDao {
     private static final String TABLE_NAME = "racecourse";
 
-    private Connection connection;
     private MySqlSharedExecutor<Racecourse> executor;
 
     MySqlRacecourseDao(Connection connection) {
-        this.connection = connection;
         this.executor = new MySqlSharedExecutor<>(
                 connection,
                 statement -> getResult(statement, MySqlMapHelper::mapRacecourse),
