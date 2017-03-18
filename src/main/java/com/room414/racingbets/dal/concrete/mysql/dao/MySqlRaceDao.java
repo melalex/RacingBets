@@ -249,8 +249,7 @@ public class MySqlRaceDao implements RaceDao {
         return executor.count(TABLE_NAME);
     }
 
-    @Override
-    public long update(Race entity) {
+    private long updateRace(Race entity) {
         @Language("MySQL")
         final String sqlStatement =
                 "UPDATE race " +
@@ -276,6 +275,49 @@ public class MySqlRaceDao implements RaceDao {
                 entity.getDistance(),
                 entity.getId()
         );
+    }
+
+    private void updateParticipants(Race entity) {
+        @Language("MySQL")
+        String sqlStatement =
+                "UPDATE participant " +
+                "SET number = ?, horse_id = ?, race_id = ?, carried_weight = ?, topspeed = ?, " +
+                "   official_rating = ?, jockey_id = ?, trainer_id = ?, place = ?, odds = ? " +
+                "WHERE id = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
+            List<Participant> participants = entity.getParticipants();
+
+            for (Participant participant : participants) {
+                statement.setInt(1, participant.getNumber());
+                statement.setLong(2, participant.getHorse().getId());
+                statement.setLong(3, entity.getId());
+                statement.setFloat(4, participant.getCarriedWeight());
+                statement.setInt(5, participant.getTopSpeed());
+                statement.setInt(6, participant.getOfficialRating());
+                statement.setLong(7, participant.getJockey().getId());
+                statement.setLong(8, participant.getTrainer().getId());
+                statement.setInt(9, participant.getPlace());
+                statement.setDouble(10, participant.getOdds());
+                statement.setLong(11, participant.getId());
+
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+        } catch (SQLException e) {
+            String message = "Exception during adding participant faze while creating race " + entity.toString();
+            throw new DalException(message, e);
+        }
+    }
+
+    @Override
+    // TODO: need clean up
+    public long update(Race entity) {
+        long racesAffected = updateRace(entity);
+        updateRace(entity);
+
+        return racesAffected;
     }
 
     @Override

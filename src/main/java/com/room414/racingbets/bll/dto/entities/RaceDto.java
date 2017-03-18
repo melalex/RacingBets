@@ -7,7 +7,6 @@ import com.room414.racingbets.dal.domain.infrastructure.EntityHelper;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -23,7 +22,7 @@ public class RaceDto implements Serializable {
     private long id;
     private String name;
     private RacecourseDto racecourseDto;
-    private Timestamp start;
+    private Date start;
     private BigDecimal minBet;
     private double commission;
     private TrackCondition trackCondition;
@@ -69,11 +68,11 @@ public class RaceDto implements Serializable {
         this.racecourseDto = racecourseDto;
     }
 
-    public Timestamp getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(Timestamp start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
