@@ -1,4 +1,4 @@
-package com.room414.racingbets.dal.concrete;
+package com.room414.racingbets.dal.concrete.facade;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
@@ -25,6 +25,7 @@ import java.util.Properties;
  * @author melalex
  * @version 1.0 08 Mar 2017
  */
+// TODO: replace *.property files paths to upper level (maybe WEB?)
 public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
     private static final Path DB_CONFIG_FILE_PATH = Paths.get(
             System.getProperty("user.dir"),
