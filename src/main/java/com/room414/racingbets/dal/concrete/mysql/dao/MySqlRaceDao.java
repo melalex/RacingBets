@@ -109,15 +109,6 @@ public class MySqlRaceDao implements RaceDao {
                 .collect(Collectors.toList());
     }
 
-    private Race mapRace(Statement statement) throws SQLException {
-        List<Race> result = mapRaces(statement);
-        if (!result.isEmpty()) {
-            return result.get(0);
-        } else {
-            return null;
-        }
-    }
-
     private void createRace(Race entity) {
         @Language("MySQL")
         final String sqlStatement =
@@ -135,13 +126,13 @@ public class MySqlRaceDao implements RaceDao {
                 entity.getStart(),
                 entity.getMinBet(),
                 entity.getCommission(),
+                entity.getTrackCondition().getName(),
                 entity.getRaceType().getName(),
                 entity.getRaceClass(),
                 entity.getMinAge(),
                 entity.getMinRating(),
                 entity.getMaxRating(),
-                entity.getDistance(),
-                entity.getTrackCondition().getName()
+                entity.getDistance()
         );
     }
 
@@ -170,13 +161,14 @@ public class MySqlRaceDao implements RaceDao {
                 statement.addBatch();
             }
 
+            statement.executeBatch();
+
             List<Consumer<Long>> idSetters = participants
                     .stream()
                     .map(p -> (Consumer<Long>) p::setId)
                     .collect(Collectors.toList());
 
             createEntities(statement, idSetters);
-
         } catch (SQLException e) {
             String message = "Exception during adding participant faze while creating race " + entity.toString();
             throw new DalException(message, e);
@@ -275,13 +267,14 @@ public class MySqlRaceDao implements RaceDao {
                 entity.getStart(),
                 entity.getMinBet(),
                 entity.getCommission(),
+                entity.getTrackCondition().getName(),
                 entity.getRaceType().getName(),
                 entity.getRaceClass(),
                 entity.getMinAge(),
                 entity.getMinRating(),
                 entity.getMaxRating(),
                 entity.getDistance(),
-                entity.getTrackCondition().getName()
+                entity.getId()
         );
     }
 
@@ -403,7 +396,7 @@ public class MySqlRaceDao implements RaceDao {
                 "FROM race " +
                 "WHERE status = ? AND racecourse_id = ? AND start_date_time BETWEEN ? AND ?";
 
-        return executor.executeCountQuery(sqlStatement, status.getName(), begin, end);
+        return executor.executeCountQuery(sqlStatement, status.getName(), racecourse, begin, end);
     }
 
     @Override

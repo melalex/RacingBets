@@ -2,10 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -42,9 +39,13 @@ public class MySqlSharedExecutor<T> {
     }
 
     public long create(String sqlStatement, Consumer<Long> idSetter, Object ... objects) {
-        QueryExecutor<Long> executor = statement -> createEntity(statement, idSetter);
-        
-        return executeQuery(executor, sqlStatement, objects);
+        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
+            setValues(statement, objects);
+            return createEntity(statement, idSetter);
+        } catch (SQLException e) {
+            String message = defaultErrorMessage(sqlStatement, objects);
+            throw new DalException(message, e);
+        }
     }
 
     public T find(long id, String sqlStatement) {
@@ -82,7 +83,7 @@ public class MySqlSharedExecutor<T> {
     public long executeUpdateQuery(String sqlStatement, Object ... objects) {
         return executeQuery(MySqlDaoHelper::executeUpdate, sqlStatement, objects);
     }
-    
+
     public boolean executeSimpleQuery(String sqlStatement, Object ... objects) {
         return executeQuery(MySqlDaoHelper::execute, sqlStatement, objects);
     }

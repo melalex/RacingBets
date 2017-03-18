@@ -90,7 +90,7 @@ CREATE TABLE `horse_racing_test`.`race` (
   `commission`      DOUBLE UNSIGNED                                                                                                                                    NOT NULL,
   `min_bet`         DECIMAL(12, 2) UNSIGNED                                                                                                                            NOT NULL,
   `racecourse_id`   INT UNSIGNED                                                                                                                                       NOT NULL,
-  `start_date_time` TIMESTAMP                                                                                                                                          NOT NULL,
+  `start_date_time` TIMESTAMP                                                                                                                                          DEFAULT CURRENT_TIMESTAMP,
   `going`           ENUM ('Hard', 'Firm', 'Good to firm', 'Good', 'Good to soft', 'Soft', 'Heavy', 'Fast', 'Standard to fast', 'Standard', 'Standard to slow', 'Slow') NULL,
   `race_type`       ENUM ('flat', 'jump', 'harness')                                                                                                                   NOT NULL,
   `race_class`      INT(2) UNSIGNED                                                                                                                                    NOT NULL,

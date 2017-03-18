@@ -89,7 +89,8 @@ public class MySqlBetDao implements BetDao {
                 entity.getUser().getId(),
                 entity.getBetStatus().getName(),
                 entity.getBetSize(),
-                entity.getBetType().getName()
+                entity.getBetType().getName(),
+                entity.getRaceId()
         );
     }
 
@@ -166,7 +167,7 @@ public class MySqlBetDao implements BetDao {
      */
     @Override
     public Bet find(Long id) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -193,7 +194,7 @@ public class MySqlBetDao implements BetDao {
 
     @Override
     public List<Bet> findAll() {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -219,7 +220,7 @@ public class MySqlBetDao implements BetDao {
 
     @Override
     public List<Bet> findByRaceId(long id, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -247,7 +248,7 @@ public class MySqlBetDao implements BetDao {
 
     @Override
     public List<Bet> findAll(long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
                 "   SELECT * FROM bet " +
@@ -444,6 +445,7 @@ public class MySqlBetDao implements BetDao {
 
 
     private Odds getTrifectaOdds(Bet bet) {
+        @Language("MySQL")
         final String call = "{ CALL get_odds_for_trifecta(?, ?, ?, ?, ?, ?, ?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {
@@ -469,6 +471,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     private Odds getSuperfectaOdds(Bet bet) {
+        @Language("MySQL")
         final String call = "{ CALL get_odds_for_superfecta(?, ?, ?, ?, ?, ?, ?, ?) }";
 
         try(CallableStatement statement = connection.prepareCall(call)) {
