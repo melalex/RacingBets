@@ -74,6 +74,10 @@ public class MySqlSharedExecutor<T> {
     public long executeUpdateQuery(String sqlStatement, Object ... objects) {
         return executeQuery(MySqlDaoHelper::executeUpdate, sqlStatement, objects);
     }
+    
+    public boolean executeSimpleQuery(String sqlStatement, Object ... objects) {
+        return executeQuery(MySqlDaoHelper::execute, sqlStatement, objects);
+    }
 
     public long executeCountQuery(String sqlStatement, Object ... objects) {
         return executeQuery(MySqlDaoHelper::getCount, sqlStatement, objects);

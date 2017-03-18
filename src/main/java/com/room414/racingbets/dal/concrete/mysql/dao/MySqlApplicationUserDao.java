@@ -7,6 +7,7 @@ import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecu
 import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
+import org.intellij.lang.annotations.Language;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -150,7 +151,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public ApplicationUser find(Long id) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -165,7 +166,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findAll() {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -179,7 +180,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findAll(long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -201,37 +202,24 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
      */
     @Override
     public long update(ApplicationUser entity) {
+        @Language("MySQL")
         final String sqlStatement =
                 "UPDATE application_user " +
                 "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
                 "    email = ?, is_email_confirmed = ?, balance = ? " +
                 "WHERE id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, entity.getLogin());
-            statement.setString(2, entity.getPassword());
-            statement.setString(3, entity.getFirstName());
-            statement.setString(4, entity.getLastName());
-            statement.setString(5, entity.getEmail());
-            statement.setBoolean(6, entity.isEmailConfirmed());
-            statement.setBigDecimal(7, entity.getBalance());
-            statement.setLong(8, entity.getId());
-
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getLogin(),
-                    entity.getPassword(),
-                    entity.getFirstName(),
-                    entity.getLastName(),
-                    entity.getEmail(),
-                    entity.isEmailConfirmed(),
-                    entity.getBalance(),
-                    entity.getId()
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeUpdateQuery(
+                sqlStatement,
+                entity.getLogin(),
+                entity.getPassword(),
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getEmail(),
+                entity.isEmailConfirmed(),
+                entity.getBalance(),
+                entity.getId()
+        );
     }
 
     @Override
@@ -241,7 +229,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -259,7 +247,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public long findByLoginPartCount(String loginPart) {
-        //language=MySQL
+        @Language("MySQL")
         final String sqlStatement = "SELECT COUNT(*) AS count FROM application_user WHERE login LIKE ?";
 
         return executor.findByColumnPartCount(sqlStatement, loginPart);
@@ -267,6 +255,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
 
     @Override
     public ApplicationUser findByLoginAndPassword(String login, String password) {
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -278,19 +267,12 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, login);
-            statement.setString(2, password);
-
-            return getResultWithArray(statement, this::mapUsers);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, login, password);
-            throw new DalException(message, e);
-        }
+        return executor.executeFindOneQuery(sqlStatement, login, password);
     }
 
     @Override
     public List<ApplicationUser> findByLoginAndEmail(String login, String email) {
+        @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
                 "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
@@ -302,96 +284,52 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, login);
-            statement.setString(2, email);
-
-            return getResultListWithArray(statement, this::mapUsers);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, login, email);
-            throw new DalException(message, e);
-        }
+        return executor.executeFindManyQuery(sqlStatement, login, email);
     }
 
     @Override
     public void confirmEmail(long id) {
+        @Language("MySQL")
         final String sqlStatement = "UPDATE application_user SET is_email_confirmed = TRUE WHERE id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, id);
-            throw new DalException(message, e);
-        }
+        executor.executeSimpleQuery(sqlStatement, id);
     }
 
     @Override
     public void addRole(long userId, Role role) {
+        @Language("MySQL")
         final String call = "{ CALL add_role(?, ?) }";
 
-        try(CallableStatement statement = connection.prepareCall(call)) {
-            statement.setLong(1, userId);
-            statement.setString(2, role.getName());
-
-            statement.execute();
-        } catch (SQLException e) {
-            String message = callErrorMessage("add_role", userId, role);
-            throw new DalException(message, e);
-        }
+        executor.executeSimpleQuery(call, userId, role.getName());
     }
 
     @Override
     public void removeRole(long userId, Role role) {
+        @Language("MySQL")
         final String sqlStatement = "DELETE FROM role WHERE application_user_id = ? AND name = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setLong(1, userId);
-            statement.setString(2, role.getName());
-
-            statement.execute();
-        } catch (SQLException e) {
-            String message = String.format(
-                    "Exception during removing role %s from user with id  %d", role.getName(), userId
-            );
-            throw new DalException(message, e);
-        }
+        executor.executeUpdateQuery(sqlStatement, userId, role.getName());
     }
 
     @Override
     public boolean tryGetMoney(long id, BigDecimal amount) {
+        @Language("MySQL")
         final String sqlStatement =
                 "UPDATE application_user " +
                 "   SET application_user.balance = application_user.balance - ? " +
                 "WHERE application_user.id = ? AND application_user.balance > ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setBigDecimal(1, amount);
-            statement.setLong(2, id);
-            statement.setBigDecimal(3, amount);
-
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, amount, id, amount);
-            throw new DalException(message, e);
-        }
+        return executor.executeUpdateQuery(sqlStatement, amount, id, amount) > 0;
     }
 
     @Override
     public void putMoney(long id, BigDecimal amount) {
+        @Language("MySQL")
         final String sqlStatement =
                 "UPDATE application_user " +
                 "   SET application_user.balance = application_user.balance + ? " +
                 "WHERE application_user.id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setBigDecimal(1, amount);
-            statement.setLong(2, id);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(sqlStatement, amount, id);
-            throw new DalException(message, e);
-        }
+        executor.executeSimpleQuery(sqlStatement, amount, id);
     }
 }

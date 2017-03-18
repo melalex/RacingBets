@@ -65,6 +65,10 @@ public class MySqlDaoHelper {
         return statement.executeUpdate();
     }
 
+    static boolean execute(PreparedStatement statement) throws SQLException {
+        return statement.execute();
+    }
+
     public static <T> T getResult(PreparedStatement statement, Mapper<T> mapper) throws SQLException {
         try (ResultSet resultSet = statement.executeQuery()) {
             T result = null;
