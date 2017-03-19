@@ -126,3 +126,4 @@ src/main/webapp/
 !/database/mysql/main/scripts/odds_calculation.sql
 !/database/mysql/main/scripts/raceDto.sql
 !/src/main/java/com/room414/racingbets/bll/
+!/META-INF/dozer.xml

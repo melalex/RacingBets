@@ -17,8 +17,8 @@ public class HorseDto implements Serializable {
 
     private long id;
     private String name;
-    private TrainerDto trainerDto;
-    private OwnerDto ownerDto;
+    private TrainerDto trainer;
+    private OwnerDto owner;
     private Date birthday;
     private Gender gender;
     private long sir;
@@ -43,20 +43,20 @@ public class HorseDto implements Serializable {
         this.name = name;
     }
 
-    public TrainerDto getTrainerDto() {
-        return trainerDto;
+    public TrainerDto getTrainer() {
+        return trainer;
     }
 
-    public void setTrainerDto(TrainerDto trainerDto) {
-        this.trainerDto = trainerDto;
+    public void setTrainer(TrainerDto trainer) {
+        this.trainer = trainer;
     }
 
-    public OwnerDto getOwnerDto() {
-        return ownerDto;
+    public OwnerDto getOwner() {
+        return owner;
     }
 
-    public void setOwnerDto(OwnerDto ownerDto) {
-        this.ownerDto = ownerDto;
+    public void setOwner(OwnerDto owner) {
+        this.owner = owner;
     }
 
     public Date getBirthday() {
@@ -111,11 +111,11 @@ public class HorseDto implements Serializable {
             return false;
         }
 
-        if (trainerDto != null ? !trainerDto.equals(horseDto.trainerDto) : horseDto.trainerDto != null) {
+        if (trainer != null ? !trainer.equals(horseDto.trainer) : horseDto.trainer != null) {
             return false;
         }
 
-        if (ownerDto != null ? !ownerDto.equals(horseDto.ownerDto) : horseDto.ownerDto != null) {
+        if (owner != null ? !owner.equals(horseDto.owner) : horseDto.owner != null) {
             return false;
         }
 
@@ -143,8 +143,8 @@ public class HorseDto implements Serializable {
         int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (trainerDto != null ? trainerDto.hashCode() : 0);
-        result = 31 * result + (ownerDto != null ? ownerDto.hashCode() : 0);
+        result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result +  (int) (sir ^ (sir >>> 32));
@@ -158,8 +158,8 @@ public class HorseDto implements Serializable {
         return "HorseDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", trainerDto=" + trainerDto +
-                ", ownerDto=" + ownerDto +
+                ", trainer=" + trainer +
+                ", owner=" + owner +
                 ", birthday=" + birthday +
                 ", gender=" + gender +
                 ", sir=" + sir +

@@ -1,8 +1,6 @@
 package com.room414.racingbets.bll.dto.entities;
 
 
-import com.room414.racingbets.dal.domain.entities.Horse;
-
 import java.io.Serializable;
 
 /**
@@ -17,13 +15,13 @@ public class ParticipantDto implements Serializable {
 
     private long id;
     private int number;
-    private Horse horse;
+    private HorseDto horse;
     private float carriedWeight;
     private int topSpeed;
     private int officialRating;
     private double odds;
-    private JockeyDto jockeyDto;
-    private TrainerDto trainerDto;
+    private JockeyDto jockey;
+    private TrainerDto trainer;
     private int place;
 
     public ParticipantDto() {
@@ -49,11 +47,11 @@ public class ParticipantDto implements Serializable {
         this.number = number;
     }
 
-    public Horse getHorse() {
+    public HorseDto getHorse() {
         return horse;
     }
 
-    public void setHorse(Horse horseEntity) {
+    public void setHorse(HorseDto horseEntity) {
         this.horse = horseEntity;
     }
 
@@ -89,20 +87,20 @@ public class ParticipantDto implements Serializable {
         this.odds = odds;
     }
 
-    public JockeyDto getJockeyDto() {
-        return jockeyDto;
+    public JockeyDto getJockey() {
+        return jockey;
     }
 
-    public void setJockeyDto(JockeyDto jockeyDto) {
-        this.jockeyDto = jockeyDto;
+    public void setJockey(JockeyDto jockey) {
+        this.jockey = jockey;
     }
 
-    public TrainerDto getTrainerDto() {
-        return trainerDto;
+    public TrainerDto getTrainer() {
+        return trainer;
     }
 
-    public void setTrainerDto(TrainerDto trainerDto) {
-        this.trainerDto = trainerDto;
+    public void setTrainer(TrainerDto trainer) {
+        this.trainer = trainer;
     }
 
     public int getPlace() {
@@ -157,11 +155,11 @@ public class ParticipantDto implements Serializable {
             return false;
         }
 
-        if (jockeyDto != null ? !jockeyDto.equals(that.jockeyDto) : that.jockeyDto != null) {
+        if (jockey != null ? !jockey.equals(that.jockey) : that.jockey != null) {
             return false;
         }
 
-        if (trainerDto != null ? !trainerDto.equals(that.trainerDto) : that.trainerDto != null) {
+        if (trainer != null ? !trainer.equals(that.trainer) : that.trainer != null) {
             return false;
         }
 
@@ -183,8 +181,8 @@ public class ParticipantDto implements Serializable {
         temp = Double.doubleToLongBits(odds);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
 
-        result = 31 * result + (jockeyDto != null ? jockeyDto.hashCode() : 0);
-        result = 31 * result + (trainerDto != null ? trainerDto.hashCode() : 0);
+        result = 31 * result + (jockey != null ? jockey.hashCode() : 0);
+        result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
         result = 31 * result + place;
 
         return result;
@@ -200,8 +198,8 @@ public class ParticipantDto implements Serializable {
                 ", topSpeed=" + topSpeed +
                 ", officialRating=" + officialRating +
                 ", odds=" + odds +
-                ", jockeyDto=" + jockeyDto +
-                ", trainerDto=" + trainerDto +
+                ", jockey=" + jockey +
+                ", trainer=" + trainer +
                 ", place=" + place +
                 '}';
     }

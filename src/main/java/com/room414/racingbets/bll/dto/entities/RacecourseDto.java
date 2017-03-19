@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @version 1.0 18 Mar 2017
  */
 public class RacecourseDto implements Serializable {
-    private static final long serialVersionUID = 2069863490131436051L;
+    private static final long serialVersionUID = 118102506777669109L;
 
     private long id;
     private String name;

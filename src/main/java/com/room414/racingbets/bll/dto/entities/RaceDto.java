@@ -21,7 +21,7 @@ public class RaceDto implements Serializable {
 
     private long id;
     private String name;
-    private RacecourseDto racecourseDto;
+    private RacecourseDto racecourse;
     private Date start;
     private BigDecimal minBet;
     private double commission;
@@ -60,12 +60,12 @@ public class RaceDto implements Serializable {
         this.name = name;
     }
 
-    public RacecourseDto getRacecourseDto() {
-        return racecourseDto;
+    public RacecourseDto getRacecourse() {
+        return racecourse;
     }
 
-    public void setRacecourseDto(RacecourseDto racecourseDto) {
-        this.racecourseDto = racecourseDto;
+    public void setRacecourse(RacecourseDto racecourse) {
+        this.racecourse = racecourse;
     }
 
     public Date getStart() {
@@ -236,7 +236,7 @@ public class RaceDto implements Serializable {
             return false;
         }
 
-        if (racecourseDto != null ? !racecourseDto.equals(raceDto.racecourseDto) : raceDto.racecourseDto != null) {
+        if (racecourse != null ? !racecourse.equals(raceDto.racecourse) : raceDto.racecourse != null) {
             return false;
         }
 
@@ -278,7 +278,7 @@ public class RaceDto implements Serializable {
         long temp;
         result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (racecourseDto != null ? racecourseDto.hashCode() : 0);
+        result = 31 * result + (racecourse != null ? racecourse.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
 
         temp = minBet != null ? Double.doubleToLongBits(minBet.doubleValue()) : 0;
@@ -312,7 +312,7 @@ public class RaceDto implements Serializable {
         return "RaceDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", racecourseDto=" + racecourseDto +
+                ", racecourse=" + racecourse +
                 ", start=" + start +
                 ", minBet=" + minBet +
                 ", commission=" + commission +

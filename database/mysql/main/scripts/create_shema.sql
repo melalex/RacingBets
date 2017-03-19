@@ -1,7 +1,7 @@
 CREATE SCHEMA `horse_racing`
   DEFAULT CHARACTER SET utf8;
 
-CREATE TABLE `horse_racing`.`jockeyDto` (
+CREATE TABLE `horse_racing`.`jockey` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45)  NOT NULL,
   `last_name`  VARCHAR(45)  NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE `horse_racing`.`jockeyDto` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 );
 
-CREATE TABLE `horse_racing`.`ownerDto` (
+CREATE TABLE `horse_racing`.`owner` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45)  NOT NULL,
   `last_name`  VARCHAR(45)  NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE `horse_racing`.`ownerDto` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 );
 
-CREATE TABLE `horse_racing`.`trainerDto` (
+CREATE TABLE `horse_racing`.`trainer` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45)  NOT NULL,
   `last_name`  VARCHAR(45)  NOT NULL,
@@ -39,13 +39,13 @@ CREATE TABLE `horse_racing`.`horse` (
   `dam_id`     INT UNSIGNED              NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (trainer_id) REFERENCES trainerDto (id),
-  FOREIGN KEY (owner_id) REFERENCES ownerDto (id),
+  FOREIGN KEY (trainer_id) REFERENCES trainer (id),
+  FOREIGN KEY (owner_id) REFERENCES owner (id),
   FOREIGN KEY (sire_id) REFERENCES horse (id),
   FOREIGN KEY (dam_id) REFERENCES horse (id)
 );
 
-CREATE TABLE `horse_racing`.`racecourseDto` (
+CREATE TABLE `horse_racing`.`racecourse` (
   `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`      VARCHAR(45)  NOT NULL,
   `latitude`  DOUBLE       NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE `horse_racing`.`raceDto` (
   `distance`        FLOAT UNSIGNED                                                                                                                                     NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (racecourse_id) REFERENCES racecourseDto (id)
+  FOREIGN KEY (racecourse_id) REFERENCES racecourse (id)
 );
 
 CREATE TABLE `horse_racing`.`prize` (
@@ -129,8 +129,8 @@ CREATE TABLE `horse_racing`.`participant` (
   FOREIGN KEY (horse_id) REFERENCES horse (id),
   FOREIGN KEY (race_id) REFERENCES raceDto (id)
     ON DELETE CASCADE,
-  FOREIGN KEY (jockey_id) REFERENCES jockeyDto (id),
-  FOREIGN KEY (trainer_id) REFERENCES trainerDto (id)
+  FOREIGN KEY (jockey_id) REFERENCES jockey (id),
+  FOREIGN KEY (trainer_id) REFERENCES trainer (id)
 );
 
 CREATE TABLE `horse_racing`.`bet` (

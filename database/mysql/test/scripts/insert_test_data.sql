@@ -1,29 +1,29 @@
-# jockeyDto table
+# jockey table
 
-INSERT INTO horse_racing_test.jockeyDto (first_name, last_name, birthday) VALUES ('Ruby', 'Nichols', '1982-04-21');
-INSERT INTO horse_racing_test.jockeyDto (first_name, last_name, birthday) VALUES ('Nichols', 'Ruby', '1962-05-19');
-INSERT INTO horse_racing_test.jockeyDto (first_name, last_name, birthday) VALUES ('Doris', 'Franklin', '1984-03-16');
-INSERT INTO horse_racing_test.jockeyDto (first_name, last_name, birthday) VALUES ('Thomas', 'West', '1980-01-19');
-INSERT INTO horse_racing_test.jockeyDto (first_name, last_name, birthday) VALUES ('Alex', 'Strutynski', '1980-04-21');
-INSERT INTO horse_racing_test.jockeyDto (first_name, last_name, birthday) VALUES ('Vova', 'Bog', NULL);
+INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Ruby', 'Nichols', '1982-04-21');
+INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Nichols', 'Ruby', '1962-05-19');
+INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Doris', 'Franklin', '1984-03-16');
+INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Thomas', 'West', '1980-01-19');
+INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Alex', 'Strutynski', '1980-04-21');
+INSERT INTO horse_racing_test.jockey (first_name, last_name, birthday) VALUES ('Vova', 'Bog', NULL);
 
-# trainerDto table
+# trainer table
 
-INSERT INTO horse_racing_test.trainerDto (first_name, last_name, birthday) VALUES ('Ruby', 'Nichols', '1982-04-21');
-INSERT INTO horse_racing_test.trainerDto (first_name, last_name, birthday) VALUES ('Nichols', 'Ruby', '1962-05-19');
-INSERT INTO horse_racing_test.trainerDto (first_name, last_name, birthday) VALUES ('Doris', 'Franklin', '1984-03-16');
-INSERT INTO horse_racing_test.trainerDto (first_name, last_name, birthday) VALUES ('Thomas', 'West', '1980-01-19');
-INSERT INTO horse_racing_test.trainerDto (first_name, last_name, birthday) VALUES ('Alex', 'Strutynski', '1980-04-21');
-INSERT INTO horse_racing_test.trainerDto (first_name, last_name, birthday) VALUES ('Vova', 'Bog', NULL);
+INSERT INTO horse_racing_test.trainer (first_name, last_name, birthday) VALUES ('Ruby', 'Nichols', '1982-04-21');
+INSERT INTO horse_racing_test.trainer (first_name, last_name, birthday) VALUES ('Nichols', 'Ruby', '1962-05-19');
+INSERT INTO horse_racing_test.trainer (first_name, last_name, birthday) VALUES ('Doris', 'Franklin', '1984-03-16');
+INSERT INTO horse_racing_test.trainer (first_name, last_name, birthday) VALUES ('Thomas', 'West', '1980-01-19');
+INSERT INTO horse_racing_test.trainer (first_name, last_name, birthday) VALUES ('Alex', 'Strutynski', '1980-04-21');
+INSERT INTO horse_racing_test.trainer (first_name, last_name, birthday) VALUES ('Vova', 'Bog', NULL);
 
-# ownerDto table
+# owner table
 
-INSERT INTO horse_racing_test.ownerDto (first_name, last_name, birthday) VALUES ('Ruby', 'Nichols', '1982-04-21');
-INSERT INTO horse_racing_test.ownerDto (first_name, last_name, birthday) VALUES ('Nichols', 'Ruby', '1962-05-19');
-INSERT INTO horse_racing_test.ownerDto (first_name, last_name, birthday) VALUES ('Doris', 'Franklin', '1984-03-16');
-INSERT INTO horse_racing_test.ownerDto (first_name, last_name, birthday) VALUES ('Thomas', 'West', '1980-01-19');
-INSERT INTO horse_racing_test.ownerDto (first_name, last_name, birthday) VALUES ('Alex', 'Strutynski', '1980-04-21');
-INSERT INTO horse_racing_test.ownerDto (first_name, last_name, birthday) VALUES ('Vova', 'Bog', NULL);
+INSERT INTO horse_racing_test.owner (first_name, last_name, birthday) VALUES ('Ruby', 'Nichols', '1982-04-21');
+INSERT INTO horse_racing_test.owner (first_name, last_name, birthday) VALUES ('Nichols', 'Ruby', '1962-05-19');
+INSERT INTO horse_racing_test.owner (first_name, last_name, birthday) VALUES ('Doris', 'Franklin', '1984-03-16');
+INSERT INTO horse_racing_test.owner (first_name, last_name, birthday) VALUES ('Thomas', 'West', '1980-01-19');
+INSERT INTO horse_racing_test.owner (first_name, last_name, birthday) VALUES ('Alex', 'Strutynski', '1980-04-21');
+INSERT INTO horse_racing_test.owner (first_name, last_name, birthday) VALUES ('Vova', 'Bog', NULL);
 
 # horse table
 
@@ -59,17 +59,17 @@ INSERT INTO horse_racing_test.horse
 (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
 VALUES ('Prob', 3, 3, '2014-05-01', 'mare', 3, 4);
 
-# racecourseDto table
+# racecourse table
 
-INSERT INTO horse_racing_test.racecourseDto
+INSERT INTO horse_racing_test.racecourse
 (name, latitude, longitude, contact, clerk)
 VALUES ('Ronstring', -22.72528, -47.64917, 'scook0@hud.gov', 'Stephen Cook');
 
-INSERT INTO horse_racing_test.racecourseDto
+INSERT INTO horse_racing_test.racecourse
 (name, latitude, longitude, contact, clerk)
 VALUES ('Fintone', 29.95033, 121.74293, 'ncunningham1@merriam-webster.com', 'Nicole Cunningham');
 
-INSERT INTO horse_racing_test.racecourseDto
+INSERT INTO horse_racing_test.racecourse
 (name, latitude, longitude, contact, clerk)
 VALUES ('Flowdesk', -20.26889, -50.54583, 'ajames2@amazon.co.jp', 'Annie James');
 
