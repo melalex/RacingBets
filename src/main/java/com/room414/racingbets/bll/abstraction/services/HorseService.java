@@ -10,8 +10,8 @@ import java.util.List;
  * @version 1.0 18 Mar 2017
  */
 public interface HorseService {
-    void create(HorseDto jockey);
-    void update(HorseDto jockey);
+    void create(HorseDto horse);
+    void update(HorseDto horse);
     HorseDto find(long id);
     List<HorseDto> search(String searchString, Pager pager);
     List<HorseDto> findAll(Pager pager);

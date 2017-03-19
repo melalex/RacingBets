@@ -10,8 +10,8 @@ import java.util.List;
  * @version 1.0 18 Mar 2017
  */
 public interface ParticipantService {
-    void updatePaticipant(ParticipantDto race);
-    void deletePaticipant(ParticipantDto race);
+    void updatePaticipant(ParticipantDto participant);
+    void deletePaticipant(ParticipantDto participant);
 
     List<ParticipantDto> findByHorse(long id, Pager pager);
     List<ParticipantDto> findByOwner(long id, Pager pager);
