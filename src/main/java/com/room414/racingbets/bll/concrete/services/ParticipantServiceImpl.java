@@ -70,7 +70,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private String findErrorMessage(String entityName, long id, int limit, int offset) {
         return String.format(
-                "Exception during finding by %s with %d on [%d; %d]",
+                "Exception during finding by %s with id %d on [%d; %d]",
                 entityName,
                 id,
                 offset,

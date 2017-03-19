@@ -98,6 +98,10 @@ public class BetServiceImpl implements BetService {
                 return Response.INVALID_BET;
             }
 
+            if (!bet.getUser().isEmailConfirmed()) {
+                return Response.EMAIL_IS_NOT_CONFIRMED;
+            }
+
             boolean moneyTaken = unitOfWork
                     .getApplicationUserDao()
                     .tryGetMoney(bet.getUser().getId(), bet.getBetSize());

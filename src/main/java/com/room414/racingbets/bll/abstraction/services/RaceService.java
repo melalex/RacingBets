@@ -2,6 +2,7 @@ package com.room414.racingbets.bll.abstraction.services;
 
 import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
+import com.room414.racingbets.dal.domain.enums.RaceStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -12,15 +13,12 @@ import java.util.List;
  */
 public interface RaceService {
     void scheduleRace(RaceDto race);
-    void rejecteRace(RaceDto race);
+    void startRace(long id);
+    void rejectRace(long id);
     void finishRace(RaceDto race);
 
-    List<RaceDto> findScheduledByRacecourse(long id, Pager pager);
-    List<RaceDto> findFinishedByRacecourse(long id, Pager pager);
-
-    List<RaceDto> findScheduledByDate(Date date, Pager pager);
-    List<RaceDto> findFinishedByDate(Date date, Pager pager);
-
-    List<RaceDto> findScheduledByDateAndRacecourse(Date date, long id, Pager pager);
-    List<RaceDto> findFinishedByDateAndRacecourse(Date date, long id, Pager pager);
+    List<RaceDto> findByRacecourse(RaceStatus status, long id, Pager pager);
+    List<RaceDto> findByDate(RaceStatus status, Date date, Pager pager);
+    List<RaceDto> findByDateAndRacecourse(RaceStatus status, Date date, long id, Pager pager);
+    List<RaceDto> findByName(RaceStatus status, String name, Pager pager);
 }
