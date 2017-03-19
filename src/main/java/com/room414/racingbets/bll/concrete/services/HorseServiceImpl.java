@@ -4,6 +4,7 @@ import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
 import com.room414.racingbets.bll.abstraction.services.HorseService;
 import com.room414.racingbets.bll.dto.entities.HorseDto;
+import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
@@ -92,11 +93,10 @@ public class HorseServiceImpl implements HorseService {
         int offset = pager.getOffset();
 
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            List<Horse> entities = unitOfWork
-                    .getHorseDao()
-                    .search(searchString, offset, limit);
+            HorseDao horseDao = unitOfWork.getHorseDao();
 
-            int count = unitOfWork.getHorseDao().searchCount(searchString);
+            List<Horse> entities = horseDao.search(searchString, offset, limit);
+            int count = horseDao.searchCount(searchString);
 
             pager.setCount(count);
 
@@ -117,11 +117,10 @@ public class HorseServiceImpl implements HorseService {
         int offset = pager.getOffset();
 
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            List<Horse> entities = unitOfWork
-                    .getHorseDao()
-                    .findAll(offset, limit);
+            HorseDao horseDao = unitOfWork.getHorseDao();
 
-            int count = unitOfWork.getHorseDao().count();
+            List<Horse> entities = horseDao.findAll(offset, limit);
+            int count = horseDao.count();
 
             pager.setCount(count);
 
