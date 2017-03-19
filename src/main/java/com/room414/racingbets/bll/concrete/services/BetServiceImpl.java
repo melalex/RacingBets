@@ -10,6 +10,7 @@ import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.Bet;
+import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +19,7 @@ import org.dozer.Mapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Alexander Melashchenko
@@ -72,6 +74,22 @@ public class BetServiceImpl implements BetService {
         }
     }
 
+    private String makeBetErrorMessage(BetDto bet) {
+        return "Exception during making bet " + bet;
+    }
+
+    private String getOddsErrorMessage(BetDto bet) {
+        return "Exception during getting odds for bet " + bet;
+    }
+
+    private String getBetsOfUserErrorMessage(long user, int limit, int offset) {
+        return String.format("Exception during getting Bets of User with id %d [%d; %d]",
+                user,
+                offset,
+                limit + offset
+        );
+    }
+
     @Override
     public Response makeBet(BetDto bet) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
@@ -104,10 +122,9 @@ public class BetServiceImpl implements BetService {
 
             return Response.SUCCESS;
         } catch (DalException e) {
-            String message = "Exception during bet making";
-            throw new BllException(message, e);
+            throw new BllException(makeBetErrorMessage(bet), e);
         } catch (Throwable t) {
-            String message = "Exception during bet making";
+            String message = makeBetErrorMessage(bet);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -115,11 +132,37 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public OddsDto getOdds(BetDto bet) {
-        return null;
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Bet entity = mapper.map(bet, Bet.class);
+            Odds odds = unitOfWork.getBetDao().getOdds(entity);
+            return mapper.map(odds, OddsDto.class);
+        } catch (DalException e) {
+            String message = getOddsErrorMessage(bet);
+            throw new BllException(message, e);
+        } catch (Throwable t) {
+            String message = getOddsErrorMessage(bet);
+            log.error(message, t);
+            throw new BllException(message, t);
+        }
     }
 
     @Override
     public List<BetDto> getBetsByUser(long id, Pager pager) {
-        return null;
+        int limit = pager.getLimit();
+        int offset = pager.getOffset();
+
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            List<Bet> bets = unitOfWork.getBetDao().findByUserId(id, offset, limit);
+            return bets.stream()
+                    .map(b -> mapper.map(b, BetDto.class))
+                    .collect(Collectors.toList());
+        } catch (DalException e) {
+            String message = getBetsOfUserErrorMessage(id, limit, offset);
+            throw new BllException(message, e);
+        } catch (Throwable t) {
+            String message = getBetsOfUserErrorMessage(id, limit, offset);
+            log.error(message, t);
+            throw new BllException(message, t);
+        }
     }
 }
