@@ -2,12 +2,12 @@ package com.room414.racingbets.bll.concrete.services;
 
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
-import com.room414.racingbets.bll.abstraction.services.HorseService;
-import com.room414.racingbets.bll.dto.entities.HorseDto;
+import com.room414.racingbets.bll.abstraction.services.JockeyService;
+import com.room414.racingbets.bll.dto.entities.JockeyDto;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
-import com.room414.racingbets.dal.domain.entities.Horse;
+import com.room414.racingbets.dal.domain.entities.Jockey;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
@@ -17,65 +17,65 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.*;
+import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.searchErrorMessage;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 19 Mar 2017
  */
-public class HorseServiceImpl implements HorseService {
-    // TODO: is right place?
-    // TODO: is should be static?
-    private Log log = LogFactory.getLog(HorseServiceImpl.class);
+public class JockeyServiceImpl implements JockeyService {
+    private Log log = LogFactory.getLog(JockeyServiceImpl.class);
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+
     private UnitOfWorkFactory factory;
 
-    public HorseServiceImpl(UnitOfWorkFactory factory) {
+    public JockeyServiceImpl(UnitOfWorkFactory factory) {
         this.factory = factory;
     }
 
-    private List<HorseDto> mapList(List<Horse> source) {
+    private List<JockeyDto> mapList(List<Jockey> source) {
         return source.stream()
-                .map(e -> mapper.map(e, HorseDto.class))
+                .map(e -> mapper.map(e, JockeyDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void create(HorseDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            Horse entity = mapper.map(horse, Horse.class);
-            unitOfWork.getHorseDao().create(entity);
+    public void create(JockeyDto jockey) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Jockey entity = mapper.map(jockey, Jockey.class);
+            unitOfWork.getJockeyDao().create(entity);
             unitOfWork.commit();
         } catch (DalException e) {
-            String message = createErrorMessage(horse);
+            String message = createErrorMessage(jockey);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = createErrorMessage(horse);
+            String message = createErrorMessage(jockey);
             log.error(message, t);
             throw new BllException(message, t);
         }
     }
 
     @Override
-    public void update(HorseDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            Horse entity = mapper.map(horse, Horse.class);
-            unitOfWork.getHorseDao().update(entity);
+    public void update(JockeyDto jockey) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Jockey entity = mapper.map(jockey, Jockey.class);
+            unitOfWork.getJockeyDao().update(entity);
             unitOfWork.commit();
         } catch (DalException e) {
-            String message = updateErrorMessage(horse);
+            String message = updateErrorMessage(jockey);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = updateErrorMessage(horse);
+            String message = updateErrorMessage(jockey);
             log.error(message, t);
             throw new BllException(message, t);
         }
     }
 
     @Override
-    public HorseDto find(long id) {
+    public JockeyDto find(long id) {
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            Horse entity = unitOfWork.getHorseDao().find(id);
-            return mapper.map(entity, HorseDto.class);
+            Jockey entity = unitOfWork.getJockeyDao().find(id);
+            return mapper.map(entity, JockeyDto.class);
         } catch (DalException e) {
             String message = findErrorMessage(id);
             throw new BllException(message, e);
@@ -87,13 +87,13 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public List<HorseDto> search(String searchString, Pager pager) {
+    public List<JockeyDto> search(String searchString, Pager pager) {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            List<Horse> entities = unitOfWork
-                    .getHorseDao()
+            List<Jockey> entities = unitOfWork
+                    .getJockeyDao()
                     .findByNamePart(searchString, offset, limit);
 
             return mapList(entities);
@@ -108,13 +108,13 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
-    public List<HorseDto> findAll(Pager pager) {
+    public List<JockeyDto> findAll(Pager pager) {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            List<Horse> entities = unitOfWork
-                    .getHorseDao()
+            List<Jockey> entities = unitOfWork
+                    .getJockeyDao()
                     .findAll(offset, limit);
 
             return mapList(entities);
@@ -131,7 +131,7 @@ public class HorseServiceImpl implements HorseService {
     @Override
     public void delete(long id) {
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            unitOfWork.getHorseDao().delete(id);
+            unitOfWork.getJockeyDao().delete(id);
             unitOfWork.commit();
         } catch (DalException e) {
             String message = deleteErrorMessage(id);
