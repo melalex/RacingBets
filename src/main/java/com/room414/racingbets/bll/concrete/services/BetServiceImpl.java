@@ -6,6 +6,7 @@ import com.room414.racingbets.bll.abstraction.services.BetService;
 import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.OddsDto;
 import com.room414.racingbets.bll.dto.entities.ParticipantDto;
+import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
@@ -152,7 +153,13 @@ public class BetServiceImpl implements BetService {
         int offset = pager.getOffset();
 
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            List<Bet> bets = unitOfWork.getBetDao().findByUserId(id, offset, limit);
+            BetDao betDao = unitOfWork.getBetDao();
+
+            List<Bet> bets = betDao.findByUserId(id, offset, limit);
+            int count = betDao.findByRaceIdCount(id);
+
+            pager.setCount(count);
+
             return bets.stream()
                     .map(b -> mapper.map(b, BetDto.class))
                     .collect(Collectors.toList());
