@@ -8,6 +8,8 @@ import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.intellij.lang.annotations.Language;
 
 import java.math.BigDecimal;
@@ -27,6 +29,8 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
 public class MySqlBetDao implements BetDao {
     private static final String TABLE_NAME = "bet";
     private static final String CALCULATING_ERROR_MESSAGE = "Exception during calculating odds for bet ";
+
+    private Log log = LogFactory.getLog(MySqlBetDao.class);
 
     private Connection connection;
     private MySqlSharedExecutor<Bet> executor;
@@ -115,6 +119,7 @@ public class MySqlBetDao implements BetDao {
         } catch (SQLException e) {
             String message = "Exception during adding bet_participant faze while creating bet "
                     + entity.toString();
+            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -305,6 +310,7 @@ public class MySqlBetDao implements BetDao {
             return Arrays.stream(statement.executeBatch()).sum();
         } catch (SQLException e) {
             String message = "Exception during bets updating";
+            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -403,6 +409,7 @@ public class MySqlBetDao implements BetDao {
             }
         } catch (SQLException e) {
             String message = CALCULATING_ERROR_MESSAGE + bet;
+            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -439,6 +446,7 @@ public class MySqlBetDao implements BetDao {
             }
         } catch (SQLException e) {
             String message = CALCULATING_ERROR_MESSAGE + bet;
+            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -466,6 +474,7 @@ public class MySqlBetDao implements BetDao {
             }
         } catch (SQLException e) {
             String message = CALCULATING_ERROR_MESSAGE + bet;
+            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -493,6 +502,7 @@ public class MySqlBetDao implements BetDao {
             }
         } catch (SQLException e) {
             String message = CALCULATING_ERROR_MESSAGE + bet;
+            log.error(message, e);
             throw new DalException(message, e);
         }
     }

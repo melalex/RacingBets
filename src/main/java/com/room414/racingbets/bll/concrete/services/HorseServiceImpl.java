@@ -24,6 +24,7 @@ public class HorseServiceImpl implements HorseService {
     // TODO: is right place?
     // TODO: is should be static?
     private Log logger = LogFactory.getLog(HorseServiceImpl.class);
+    private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
 
     public HorseServiceImpl(UnitOfWorkFactory factory) {
@@ -31,8 +32,6 @@ public class HorseServiceImpl implements HorseService {
     }
 
     private List<HorseDto> mapList(List<Horse> source) {
-        Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-
         return source.stream()
                 .map(e -> mapper.map(e, HorseDto.class))
                 .collect(Collectors.toList());
@@ -41,34 +40,27 @@ public class HorseServiceImpl implements HorseService {
     @Override
     public void create(HorseDto horse) {
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
             Horse entity = mapper.map(horse, Horse.class);
             unitOfWork.getHorseDao().create(entity);
             unitOfWork.commit();
         } catch (DalException e) {
             String message = "Exception during creating horse entity " + horse;
-            logger.error(message, e);
             throw new BllException(message, e);
-        } catch (Exception e) {
-            String message = "Exception during closing UnitOfWork";
-            logger.error(message, e);
-            throw new BllException(message, e);
+        } catch (Throwable t) {
+            String message = "Exception during creating horse entity " + horse;
+            logger.error(message, t);
+            throw new BllException(message, t);
         }
     }
 
     @Override
     public void update(HorseDto horse) {
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
             Horse entity = mapper.map(horse, Horse.class);
             unitOfWork.getHorseDao().update(entity);
             unitOfWork.commit();
         } catch (DalException e) {
             String message = "Exception during updating horse entity " + horse;
-            logger.error(message, e);
-            throw new BllException(message, e);
-        } catch (Exception e) {
-            String message = "Exception during closing UnitOfWork";
             logger.error(message, e);
             throw new BllException(message, e);
         }
@@ -78,16 +70,14 @@ public class HorseServiceImpl implements HorseService {
     public HorseDto find(long id) {
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Horse entity = unitOfWork.getHorseDao().find(id);
-            Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
             return mapper.map(entity, HorseDto.class);
         } catch (DalException e) {
             String message = "Exception during finding horse entity with id " + id;
-            logger.error(message, e);
             throw new BllException(message, e);
-        } catch (Exception e) {
-            String message = "Exception during closing UnitOfWork";
-            logger.error(message, e);
-            throw new BllException(message, e);
+        } catch (Throwable t) {
+            String message = "Exception during finding horse entity with id " + id;
+            logger.error(message, t);
+            throw new BllException(message, t);
         }
     }
 
@@ -100,32 +90,52 @@ public class HorseServiceImpl implements HorseService {
 
             return mapList(entities);
         } catch (DalException e) {
-            String message = String.format("Exception during searching horses with search string '%s'", searchString);
-            logger.error(message, e);
+            int limit = pager.getLimit();
+            int offset = pager.getOffset();
+            String message = String.format("Exception during searching horses with search string '%s' in [%d; %d]",
+                    searchString,
+                    offset,
+                    offset + limit
+            );
             throw new BllException(message, e);
-        } catch (Exception e) {
-            String message = "Exception during closing UnitOfWork";
-            logger.error(message, e);
-            throw new BllException(message, e);
+        } catch (Throwable t) {
+            int limit = pager.getLimit();
+            int offset = pager.getOffset();
+            String message = String.format("Exception during searching horses with search string '%s' in [%d; %d]",
+                    searchString,
+                    offset,
+                    offset + limit
+            );
+            logger.error(message, t);
+            throw new BllException(message, t);
         }
     }
 
     @Override
     public List<HorseDto> findAll(Pager pager) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             List<Horse> entities = unitOfWork
                     .getHorseDao()
                     .findAll(pager.getOffset(), pager.getLimit());
 
             return mapList(entities);
         } catch (DalException e) {
-            String message = "Exception during getting all horses";
-            logger.error(message, e);
+            int limit = pager.getLimit();
+            int offset = pager.getOffset();
+            String message = String.format("Exception during getting all horses in [%d; %d]",
+                    offset,
+                    offset + limit
+            );
             throw new BllException(message, e);
-        } catch (Exception e) {
-            String message = "Exception during closing UnitOfWork";
-            logger.error(message, e);
-            throw new BllException(message, e);
+        } catch (Throwable t) {
+            int limit = pager.getLimit();
+            int offset = pager.getOffset();
+            String message = String.format("Exception during getting all horses in [%d; %d]",
+                    offset,
+                    offset + limit
+            );
+            logger.error(message, t);
+            throw new BllException(message, t);
         }
     }
 
@@ -136,13 +146,11 @@ public class HorseServiceImpl implements HorseService {
             unitOfWork.commit();
         } catch (DalException e) {
             String message = "Exception during deleting horse with id " + id;
-            logger.error(message, e);
             throw new BllException(message, e);
-        } catch (Exception e) {
-            String message = "Exception during closing UnitOfWork";
-            logger.error(message, e);
-            throw new BllException(message, e);
+        } catch (Throwable t) {
+            String message = "Exception during deleting horse with id " + id;
+            logger.error(message, t);
+            throw new BllException(message, t);
         }
-
     }
 }

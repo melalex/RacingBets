@@ -21,7 +21,7 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 28 Feb 2017
  */
 public class MySqlParticipantDao implements ParticipantDao {
-    private static String TABLE_NAME = "participant";
+    private static final String TABLE_NAME = "participant";
 
     private MySqlSharedExecutor<Participant> executor;
     private MySqlSharedExecutor<Pair<Participant, Timestamp>> foreignExecutor;

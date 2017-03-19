@@ -9,6 +9,8 @@ import com.room414.racingbets.dal.concrete.caching.factories.RedisUnitOfWorkFact
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisSubscriber;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -26,7 +28,7 @@ import java.util.Properties;
  * @version 1.0 08 Mar 2017
  */
 // TODO: replace *.property files paths to upper level (maybe WEB?)
-public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
+public class CachedMySqlDalFactory implements AbstractDalFactory, AutoCloseable {
     private static final Path DB_CONFIG_FILE_PATH = Paths.get(
             System.getProperty("user.dir"),
             "database",
@@ -46,6 +48,8 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
     );
 
     private static CachedMySqlDalFactory ourInstance = createDalFactory();
+
+    private Log log = LogFactory.getLog(CachedMySqlDalFactory.class);
 
     private MainCachePool pool = new MainCachePool();
 
@@ -88,7 +92,9 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
 
 
         } catch (IOException e) {
-            throw new DalException("Exception during mysql connection pool creation", e);
+            String message = "Exception during mysql connection pool creation";
+            log.error(message);
+            throw new DalException(message, e);
         }
     }
 
@@ -107,7 +113,9 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
 
             jedisPool = new JedisPool(new JedisPoolConfig(), host, port, timeout, password, db);
         } catch (IOException e) {
-            throw new DalException("Exception during redis connection pool creation", e);
+            String message = "Exception during redis connection pool creation";
+            log.error(message);
+            throw new DalException(message, e);
         }
     }
 
@@ -130,7 +138,7 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         jedisPool.close();
     }
 }

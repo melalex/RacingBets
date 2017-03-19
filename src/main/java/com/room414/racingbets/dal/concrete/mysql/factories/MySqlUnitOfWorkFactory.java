@@ -4,6 +4,8 @@ import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.mysql.dao.MySqlUnitOfWork;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -13,6 +15,8 @@ import java.sql.SQLException;
  * @version 1.0 02 Mar 2017
  */
 public class MySqlUnitOfWorkFactory implements UnitOfWorkFactory {
+    private Log log = LogFactory.getLog(MySqlUnitOfWorkFactory.class);
+
     private DataSource connectionPool;
 
     public MySqlUnitOfWorkFactory(DataSource connectionPool) {
@@ -23,7 +27,9 @@ public class MySqlUnitOfWorkFactory implements UnitOfWorkFactory {
         try {
             return new MySqlUnitOfWork(connectionPool.getConnection());
         } catch (SQLException e) {
-            throw new DalException("Can't get new connection from pool", e);
+            String message = "Can't get new connection from pool";
+            log.error(message);
+            throw new DalException(message, e);
         }
     }
 }

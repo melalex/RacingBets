@@ -28,4 +28,7 @@ public interface UnitOfWork extends AutoCloseable {
      * this method is called on a closed connection
      */
     void rollback();
+
+    @Override
+    void close();
 }
