@@ -17,4 +17,7 @@ public interface CachingUnitOfWork extends AutoCloseable {
 
     void commit();
     void rollback();
+
+    @Override
+    void close();
 }

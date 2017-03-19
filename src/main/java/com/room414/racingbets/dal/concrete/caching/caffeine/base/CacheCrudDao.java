@@ -39,14 +39,14 @@ public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
     }
 
     @Override
-    public List<T> findAll(long offset, long limit) {
+    public List<T> findAll(int offset, int limit) {
         final String key = String.format("find:all:%d:%d", limit, offset);
 
         return cache.getManyCached(key, () -> dao.findAll(offset, limit));
     }
 
     @Override
-    public long count() {
+    public int count() {
         final String key = "count";
 
         return cache.getCachedCount(key, () -> dao.count());

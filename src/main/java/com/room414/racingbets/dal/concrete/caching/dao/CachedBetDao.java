@@ -3,7 +3,6 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 import com.room414.racingbets.dal.abstraction.cache.BetCache;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
-import com.room414.racingbets.dal.concrete.caching.caffeine.caches.CaffeineBetCache;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 
@@ -30,28 +29,28 @@ public class CachedBetDao extends CacheCrudDao<Bet> implements BetDao {
     }
 
     @Override
-    public List<Bet> findByUserId(long id, long offset, long limit) {
+    public List<Bet> findByUserId(long id, int offset, int limit) {
         String key = String.format("find:user:%d:%d:%d", id, limit, offset);
 
         return cache.getManyCached(key, () -> dao.findByUserId(id, offset, limit));
     }
 
     @Override
-    public long findByUserIdCount(long id) {
+    public int findByUserIdCount(long id) {
         String key = "find:user:id";
 
         return cache.getCachedCount(key, () -> dao.findByUserIdCount(id));
     }
 
     @Override
-    public List<Bet> findByRaceId(long id, long offset, long limit) {
+    public List<Bet> findByRaceId(long id, int offset, int limit) {
         String key = String.format("find:race:%d:%d:%d", id, limit, offset);
 
         return cache.getManyCached(key, () -> dao.findByRaceId(id, offset, limit));
     }
 
     @Override
-    public long findByRaceIdCount(long id) {
+    public int findByRaceIdCount(long id) {
         String key = "find:race:id";
 
         return cache.getCachedCount(key, () -> dao.findByRaceIdCount(id));

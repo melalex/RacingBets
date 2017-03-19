@@ -239,7 +239,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findAll(long offset, long limit) {
+    public List<Race> findAll(int offset, int limit) {
         @Language("MySQL")
         final String call = "{ CALL find_all_races_limit_offset(?, ?) }";
 
@@ -252,7 +252,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long count() {
+    public int count() {
         return executor.count(TABLE_NAME);
     }
 
@@ -343,7 +343,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, long offset, long limit) {
+    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, int offset, int limit) {
         @Language("MySQL")
         final String call = "{ CALL find_by_racecourse_id(?, ?, ?, ?) }";
 
@@ -356,7 +356,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findByRacecourseIdCount(RaceStatus status, long racecourse) {
+    public int findByRacecourseIdCount(RaceStatus status, long racecourse) {
         @Language("MySQL")
         final String sqlStatement = "SELECT COUNT(*) AS count FROM race WHERE status = ? AND racecourse_id = ?";
 
@@ -364,7 +364,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findByRacecourse(RaceStatus status, String racecourse, long offset, long limit) {
+    public List<Race> findByRacecourse(RaceStatus status, String racecourse, int offset, int limit) {
         @Language("MySQL")
         final String call = "{ CALL find_by_racecourse_name(?, ?, ?, ?) }";
 
@@ -372,7 +372,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findByRacecourseCount(RaceStatus status, String racecourse) {
+    public int findByRacecourseCount(RaceStatus status, String racecourse) {
         @Language("MySQL")
         String sqlStatement =
                 "SELECT  COUNT(*) AS count " +
@@ -385,7 +385,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, long offset, long limit) {
+    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, int offset, int limit) {
         @Language("MySQL")
         final String call = "{ CALL find_in_timestamp_diapason(?, ?, ?, ?, ?) }";
 
@@ -413,7 +413,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) {
+    public int findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT COUNT(*) AS count " +
@@ -424,7 +424,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, long offset, long limit) {
+    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, int offset, int limit) {
         @Language("MySQL")
         final String call = "{ CALL find_in_timestamp_diapason_by_racecourse_id(?, ?, ?, ?, ?, ?) }";
 
@@ -445,7 +445,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findInTimestampDiapasonOnRacecourseCount(
+    public int findInTimestampDiapasonOnRacecourseCount(
             RaceStatus status, long racecourse, Timestamp begin, Timestamp end
     ) {
         @Language("MySQL")
@@ -458,7 +458,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public List<Race> findByNamePart(RaceStatus status, String name, long offset, long limit) {
+    public List<Race> findByNamePart(RaceStatus status, String name, int offset, int limit) {
         @Language("MySQL")
         final String call = "{ CALL find_by_name(?, ?, ?, ?) }";
 
@@ -466,7 +466,7 @@ public class MySqlRaceDao implements RaceDao {
     }
 
     @Override
-    public long findByNamePartCount(RaceStatus status, String name) {
+    public int findByNamePartCount(RaceStatus status, String name) {
         @Language("MySQL")
         String sqlStatement = "SELECT COUNT(*) AS count FROM race WHERE status = ? AND name LIKE ?";
 

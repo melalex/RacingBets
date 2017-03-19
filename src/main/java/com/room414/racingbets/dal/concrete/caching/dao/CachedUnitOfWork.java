@@ -144,7 +144,7 @@ public class CachedUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         unitOfWork.close();
         cache.close();
     }

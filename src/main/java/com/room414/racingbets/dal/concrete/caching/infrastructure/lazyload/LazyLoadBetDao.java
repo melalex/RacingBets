@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 
@@ -29,7 +28,7 @@ public class LazyLoadBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findByUserId(long id, long offset, long limit) {
+    public List<Bet> findByUserId(long id, int offset, int limit) {
         return getBetDao().findByUserId(id, offset, limit);
     }
 
@@ -39,7 +38,7 @@ public class LazyLoadBetDao implements BetDao {
     }
 
     @Override
-    public long findByUserIdCount(long id) {
+    public int findByUserIdCount(long id) {
         return getBetDao().findByUserIdCount(id);
     }
 
@@ -49,17 +48,17 @@ public class LazyLoadBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findByRaceId(long id, long offset, long limit) {
+    public List<Bet> findByRaceId(long id, int offset, int limit) {
         return getBetDao().findByRaceId(id, offset, limit);
     }
 
     @Override
-    public long findByRaceIdCount(long id) {
+    public int findByRaceIdCount(long id) {
         return getBetDao().findByRaceIdCount(id);
     }
 
     @Override
-    public List<Bet> findAll(long offset, long limit) {
+    public List<Bet> findAll(int offset, int limit) {
         return getBetDao().findAll(offset, limit);
     }
 
@@ -69,7 +68,7 @@ public class LazyLoadBetDao implements BetDao {
     }
 
     @Override
-    public long count() {
+    public int count() {
         return getBetDao().count();
     }
 

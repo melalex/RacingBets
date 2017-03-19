@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.JockeyDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Jockey;
 
 import java.util.List;
@@ -48,12 +47,12 @@ public class LazyLoadJockeyDao implements JockeyDao {
     }
 
     @Override
-    public List<Jockey> findAll(long offset, long limit) {
+    public List<Jockey> findAll(int offset, int limit) {
         return getJockeyDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() {
+    public int count() {
         return getJockeyDao().count();
     }
 

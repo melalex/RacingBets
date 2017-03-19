@@ -24,7 +24,7 @@ public abstract class BaseCache<T> implements EntityCache<T> {
 
     private Cache<String, T> cache;
     private Cache<String, List<T>> cacheList;
-    private Cache<String, Long> countCache;
+    private Cache<String, Integer> countCache;
     protected RedisCache redisCache;
 
     public BaseCache(
@@ -61,7 +61,7 @@ public abstract class BaseCache<T> implements EntityCache<T> {
     }
 
     @Override
-    public long getCachedCount(String key, Getter<Long> getter) {
+    public int getCachedCount(String key, Getter<Integer> getter) {
         return countCache.get(
                 key,
                 k -> redisCache.getCachedCount(listNameSpace, key, getter)

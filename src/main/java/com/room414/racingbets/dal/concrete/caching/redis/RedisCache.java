@@ -71,14 +71,14 @@ public class RedisCache implements AutoCloseable {
         }
     }
 
-    public long getCachedCount(String namespace, String key, Getter<Long> getter) {
+    public int getCachedCount(String namespace, String key, Getter<Integer> getter) {
         String value = jedis.hget(namespace, key);
 
         if (value != null) {
-            return Long.valueOf(value);
+            return Integer.valueOf(value);
         }
 
-        Long result = getter.call();
+        Integer result = getter.call();
 
         jedis.hset(namespace, key, String.valueOf(result));
 

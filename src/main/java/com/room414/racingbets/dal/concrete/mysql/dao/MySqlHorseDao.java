@@ -135,7 +135,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> findAll(long offset, long limit) {
+    public List<Horse> findAll(int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM horse " +
@@ -149,7 +149,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public long count() {
+    public int count() {
         return executor.count(TABLE_NAME);
     }
 

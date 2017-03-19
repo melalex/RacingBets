@@ -94,7 +94,7 @@ public class JockeyServiceImpl implements JockeyService {
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             List<Jockey> entities = unitOfWork
                     .getJockeyDao()
-                    .findByNamePart(searchString, offset, limit);
+                    .search(searchString, offset, limit);
 
             return mapList(entities);
         } catch (DalException e) {

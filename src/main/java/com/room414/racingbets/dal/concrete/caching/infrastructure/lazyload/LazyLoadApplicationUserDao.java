@@ -45,12 +45,12 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public List<ApplicationUser> findAll(long offset, long limit) {
+    public List<ApplicationUser> findAll(int offset, int limit) {
         return getApplicationUserDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() {
+    public int count() {
         return getApplicationUserDao().count();
     }
 

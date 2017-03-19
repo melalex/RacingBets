@@ -1,8 +1,10 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.*;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author Alexander Melashchenko
@@ -111,7 +113,11 @@ public class MySqlTestingUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void close() throws Exception {
-        connection.close();
+    public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new DalException(e);
+        }
     }
 }

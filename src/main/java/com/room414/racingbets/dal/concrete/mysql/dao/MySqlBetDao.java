@@ -131,7 +131,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findByUserId(long id, long offset, long limit) {
+    public List<Bet> findByUserId(long id, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -159,7 +159,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public long findByUserIdCount(long id) {
+    public int findByUserIdCount(long id) {
         final String columnName = "application_user_id";
 
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
@@ -224,7 +224,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findByRaceId(long id, long offset, long limit) {
+    public List<Bet> findByRaceId(long id, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -252,7 +252,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public List<Bet> findAll(long offset, long limit) {
+    public List<Bet> findAll(int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM (" +
@@ -279,7 +279,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public long findByRaceIdCount(long id) {
+    public int findByRaceIdCount(long id) {
         final String columnName = "race_id";
 
         return executor.findByForeignKeyCount(TABLE_NAME, columnName, id);
@@ -316,7 +316,7 @@ public class MySqlBetDao implements BetDao {
     }
 
     @Override
-    public long count() {
+    public int count() {
         return executor.count(TABLE_NAME);
     }
 

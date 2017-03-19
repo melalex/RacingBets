@@ -187,7 +187,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public List<ApplicationUser> findAll(long offset, long limit) {
+    public List<ApplicationUser> findAll(int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
@@ -201,7 +201,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public long count() {
+    public int count() {
         return executor.count(TABLE_NAME);
     }
 

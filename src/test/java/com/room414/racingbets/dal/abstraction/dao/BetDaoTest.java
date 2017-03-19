@@ -84,7 +84,7 @@ class BetDaoTest {
     void findAllLimitOffset_nonexistent_returnedEmptyList() {
         BetDao dao = getDao();
 
-        List<Bet> result = dao.findAll(300L, 400L);
+        List<Bet> result = dao.findAll(300, 400);
 
         assert result.isEmpty() : "result is not empty";
     }

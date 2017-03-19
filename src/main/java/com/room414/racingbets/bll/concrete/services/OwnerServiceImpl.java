@@ -53,13 +53,13 @@ public class OwnerServiceImpl implements OwnerService {
     public void update(OwnerDto owner) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Owner entity = mapper.map(owner, Owner.class);
-            unitOfWork.getJockeyDao().update(entity);
+            unitOfWork.getOwnerDao().update(entity);
             unitOfWork.commit();
         } catch (DalException e) {
-            String message = updateErrorMessage(jockey);
+            String message = updateErrorMessage(owner);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = updateErrorMessage(jockey);
+            String message = updateErrorMessage(owner);
             log.error(message, t);
             throw new BllException(message, t);
         }

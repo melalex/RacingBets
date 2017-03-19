@@ -86,7 +86,7 @@ class ApplicationUserDaoTest {
     void findAllLimitOffset_nonexistent_returnedEmptyList() {
         ApplicationUserDao dao = getDao();
 
-        List<ApplicationUser> result = dao.findAll(300L, 400L);
+        List<ApplicationUser> result = dao.findAll(300, 400);
 
         assert result.isEmpty() : "result is not empty";
     }

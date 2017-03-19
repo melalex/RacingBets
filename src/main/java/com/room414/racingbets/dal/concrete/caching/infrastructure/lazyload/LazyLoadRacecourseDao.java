@@ -48,12 +48,12 @@ public class LazyLoadRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public List<Racecourse> findAll(long offset, long limit) throws DalException {
+    public List<Racecourse> findAll(int offset, int limit) throws DalException {
         return getRacecourseDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() throws DalException {
+    public int count() throws DalException {
         return getRacecourseDao().count();
     }
 

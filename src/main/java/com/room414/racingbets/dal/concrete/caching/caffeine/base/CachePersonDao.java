@@ -21,16 +21,16 @@ public abstract class CachePersonDao<T extends Person> extends CacheCrudDao<T> i
     }
 
     @Override
-    public List<T> findByNamePart(String namePart, long offset, long limit) {
+    public List<T> search(String namePart, int offset, int limit) {
         String key = String.format("find:name:%s:%d:%d", namePart, limit, offset);
 
-        return cache.getManyCached(key, () -> dao.findByNamePart(namePart, offset, limit));
+        return cache.getManyCached(key, () -> dao.search(namePart, offset, limit));
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
+    public int searchCount(String namePart) {
         String key = "find:name:count:" + namePart;
 
-        return cache.getCachedCount(key, () -> dao.findByNamePartCount(namePart));
+        return cache.getCachedCount(key, () -> dao.searchCount(namePart));
     }
 }

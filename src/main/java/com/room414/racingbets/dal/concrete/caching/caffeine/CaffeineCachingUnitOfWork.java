@@ -149,7 +149,7 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         redisUnitOfWork.close();
     }
 }

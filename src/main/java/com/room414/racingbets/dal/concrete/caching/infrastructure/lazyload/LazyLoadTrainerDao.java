@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.TrainerDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 
 import java.util.List;
@@ -48,12 +47,12 @@ public class LazyLoadTrainerDao implements TrainerDao {
     }
 
     @Override
-    public List<Trainer> findAll(long offset, long limit) {
+    public List<Trainer> findAll(int offset, int limit) {
         return getTrainerDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() {
+    public int count() {
         return getTrainerDao().count();
     }
 

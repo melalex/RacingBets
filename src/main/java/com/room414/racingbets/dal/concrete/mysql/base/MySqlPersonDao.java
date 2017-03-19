@@ -93,7 +93,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public List<T> findAll(long offset, long limit) {
+    public List<T> findAll(int offset, int limit) {
         String sqlStatement = String.format(
                 "SELECT * FROM %s LIMIT ? OFFSET ?", getTableName()
         );
@@ -102,7 +102,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public long count() {
+    public int count() {
         return executor.count(getTableName());
     }
 

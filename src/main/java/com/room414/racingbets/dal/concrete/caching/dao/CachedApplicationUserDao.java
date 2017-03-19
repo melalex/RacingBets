@@ -34,17 +34,17 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
+    public List<ApplicationUser> search(String loginPart, int offset, int limit) {
         String key = String.format("find:login:part:%s:%d:%d", loginPart, limit, offset);
 
-        return cache.getManyCached(key, () -> dao.findByLoginPart(loginPart, offset, limit));
+        return cache.getManyCached(key, () -> dao.search(loginPart, offset, limit));
     }
 
     @Override
-    public long findByLoginPartCount(String loginPart) {
+    public int searchCount(String loginPart) {
         String key = "find:login:part:count:" + loginPart;
 
-        return cache.getCachedCount(key, () -> dao.findByLoginPartCount(loginPart));
+        return cache.getCachedCount(key, () -> dao.searchCount(loginPart));
     }
 
     @Override

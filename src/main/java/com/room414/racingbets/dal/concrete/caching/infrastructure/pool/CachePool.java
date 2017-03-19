@@ -20,7 +20,7 @@ public class CachePool<T> {
 
     private Cache<String, T> cache;
     private Cache<String, List<T>> listCache;
-    private Cache<String, Long> countCache;
+    private Cache<String, Integer> countCache;
 
     CachePool(String cacheNamespace) {
         this.cacheNamespace = cacheNamespace;
@@ -61,11 +61,11 @@ public class CachePool<T> {
         return listCache;
     }
 
-    public Cache<String, Long> getCountCache() {
+    public Cache<String, Integer> getCountCache() {
         return countCache;
     }
 
-    public Map<String, Cache> getCacheByNamespaceMap() {
+    Map<String, Cache> getCacheByNamespaceMap() {
         Map<String, Cache> result = new HashMap<>();
 
         result.put(cacheNamespace, cache);

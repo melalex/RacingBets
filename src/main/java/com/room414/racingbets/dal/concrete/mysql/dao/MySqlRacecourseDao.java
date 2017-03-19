@@ -85,7 +85,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public List<Racecourse> findAll(long offset, long limit) {
+    public List<Racecourse> findAll(int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement = "SELECT * FROM racecourse LIMIT ? OFFSET ?";
 
@@ -93,7 +93,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public long count() throws DalException {
+    public int count() throws DalException {
         return executor.count(TABLE_NAME);
     }
 

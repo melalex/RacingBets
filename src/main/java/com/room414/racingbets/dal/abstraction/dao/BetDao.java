@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 
@@ -17,22 +16,22 @@ public interface BetDao extends CrudDao<Long, Bet> {
     /**
      * @return bets made by the user with id == id param
      */
-    List<Bet> findByUserId(long id, long offset, long limit);
+    List<Bet> findByUserId(long id, int offset, int limit);
 
     /**
      * @return number of bets made by the user with id == id param
      */
-    long findByUserIdCount(long id);
+    int findByUserIdCount(long id);
 
     /**
      * @return bets make on RaceDto with id == id param
      */
-    List<Bet> findByRaceId(long id, long offset, long limit);
+    List<Bet> findByRaceId(long id, int offset, int limit);
 
     /**
      * @return number of bets make on RaceDto with id == id param
      */
-    long findByRaceIdCount(long id);
+    int findByRaceIdCount(long id);
 
     /**
      * Update all bets in the list.

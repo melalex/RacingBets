@@ -12,7 +12,7 @@ import java.util.List;
 public interface EntityCache<T> {
     T getOneCached(String key, Getter<T> getter);
     List<T> getManyCached(String key, Getter<List<T>> getter);
-    long getCachedCount(String key, Getter<Long> getter);
+    int getCachedCount(String key, Getter<Integer> getter);
 
     void deleteOneCached(String key);
     void deleteAllCached();

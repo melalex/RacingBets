@@ -36,12 +36,12 @@ public interface CrudDao<K, E> {
      * @param limit elements count in result
      * @return All entities that stores in data store.
      */
-    List<E> findAll(long offset, long limit);
+    List<E> findAll(int offset, int limit);
 
     /**
      * @return count of entities in data store.
      */
-    long count();
+    int count();
 
     /**
      * Updates value of entity param in data store. If entity has inner list it will not be updated

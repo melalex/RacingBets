@@ -30,7 +30,7 @@ public class MySqlSharedExecutor<T> {
         this.mapResultList = mapResultList;
     }
 
-    public long count(String tableName) {
+    public int count(String tableName) {
         String sqlStatement = String.format("SELECT COUNT(*) AS count FROM %s", tableName);
 
         return executeCountQuery(sqlStatement);

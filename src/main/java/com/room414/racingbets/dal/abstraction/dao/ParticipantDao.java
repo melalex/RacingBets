@@ -17,17 +17,17 @@ public interface ParticipantDao extends CrudDao<Long, Participant> {
     /**
      * @return List of Participants and race timestamp.
      */
-    List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit);
-    long findByHorseIdCount(long id);
+    List<Pair<Participant, Timestamp>> findByHorseId(long id, int offset, int limit);
+    int findByHorseIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit);
-    long findByOwnerIdCount(long id);
+    List<Pair<Participant, Timestamp>> findByOwnerId(long id, int offset, int limit);
+    int findByOwnerIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit);
-    long findByJockeyIdCount(long id);
+    List<Pair<Participant, Timestamp>> findByJockeyId(long id, int offset, int limit);
+    int findByJockeyIdCount(long id);
 
-    List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit);
-    long findByTrainerIdCount(long id);
+    List<Pair<Participant, Timestamp>> findByTrainerId(long id, int offset, int limit);
+    int findByTrainerIdCount(long id);
 
     // TODO: add some aggregation queries for statistic
 }

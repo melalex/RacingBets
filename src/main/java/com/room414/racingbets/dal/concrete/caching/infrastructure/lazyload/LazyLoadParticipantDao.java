@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.Participant;
 
@@ -30,7 +29,7 @@ public class LazyLoadParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByHorseId(long id, long offset, long limit) {
+    public List<Pair<Participant, Timestamp>> findByHorseId(long id, int offset, int limit) {
         return getParticipantDao().findByHorseId(id, offset, limit);
     }
 
@@ -40,12 +39,12 @@ public class LazyLoadParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public long findByHorseIdCount(long id) {
+    public int findByHorseIdCount(long id) {
         return getParticipantDao().findByHorseIdCount(id);
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByOwnerId(long id, long offset, long limit) {
+    public List<Pair<Participant, Timestamp>> findByOwnerId(long id, int offset, int limit) {
         return getParticipantDao().findByOwnerId(id, offset, limit);
     }
 
@@ -55,37 +54,37 @@ public class LazyLoadParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public long findByOwnerIdCount(long id) {
+    public int findByOwnerIdCount(long id) {
         return getParticipantDao().findByOwnerIdCount(id);
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, long offset, long limit) {
+    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, int offset, int limit) {
         return getParticipantDao().findByJockeyId(id, offset, limit);
     }
 
     @Override
-    public List<Participant> findAll(long offset, long limit) {
+    public List<Participant> findAll(int offset, int limit) {
         return getParticipantDao().findAll(offset, limit);
     }
 
     @Override
-    public long findByJockeyIdCount(long id) {
+    public int findByJockeyIdCount(long id) {
         return getParticipantDao().findByJockeyIdCount(id);
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, long offset, long limit) {
+    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, int offset, int limit) {
         return getParticipantDao().findByTrainerId(id, offset, limit);
     }
 
     @Override
-    public long count() {
+    public int count() {
         return getParticipantDao().count();
     }
 
     @Override
-    public long findByTrainerIdCount(long id) {
+    public int findByTrainerIdCount(long id) {
         return getParticipantDao().findByTrainerIdCount(id);
     }
 

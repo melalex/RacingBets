@@ -94,7 +94,11 @@ public class HorseServiceImpl implements HorseService {
         try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             List<Horse> entities = unitOfWork
                     .getHorseDao()
-                    .findByNamePart(searchString, offset, limit);
+                    .search(searchString, offset, limit);
+
+            int count = unitOfWork.getHorseDao().searchCount(searchString);
+
+            pager.setCount(count);
 
             return mapList(entities);
         } catch (DalException e) {
@@ -116,6 +120,10 @@ public class HorseServiceImpl implements HorseService {
             List<Horse> entities = unitOfWork
                     .getHorseDao()
                     .findAll(offset, limit);
+
+            int count = unitOfWork.getHorseDao().count();
+
+            pager.setCount(count);
 
             return mapList(entities);
         } catch (DalException e) {

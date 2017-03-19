@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.OwnerDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Owner;
 
 import java.util.List;
@@ -48,12 +47,12 @@ public class LazyLoadOwnerDao implements OwnerDao {
     }
 
     @Override
-    public List<Owner> findAll(long offset, long limit) {
+    public List<Owner> findAll(int offset, int limit) {
         return getOwnerDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() {
+    public int count() {
         return getOwnerDao().count();
     }
 

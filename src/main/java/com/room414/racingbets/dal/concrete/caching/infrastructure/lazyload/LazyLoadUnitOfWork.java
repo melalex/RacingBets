@@ -79,7 +79,7 @@ public class LazyLoadUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         getUnitOfWork().close();
     }
 }

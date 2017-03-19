@@ -47,12 +47,12 @@ public class LazyLoadHorseDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> findAll(long offset, long limit) {
+    public List<Horse> findAll(int offset, int limit) {
         return getHorseDao().findAll(offset, limit);
     }
 
     @Override
-    public long count() {
+    public int count() {
         return getHorseDao().count();
     }
 

@@ -26,9 +26,9 @@ class BaseCacheTest {
     private CachePool<Pair<String, Integer>> cachePool;
 
     private BaseCache<Pair<String, Integer>> createBaseCache() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Constructor<CachePool> constructor = CachePool.class.getDeclaredConstructor();
+        Constructor<CachePool> constructor = CachePool.class.getDeclaredConstructor(String.class);
         constructor.setAccessible(true);
-        cachePool = constructor.newInstance();
+        cachePool = constructor.newInstance("test");
 
         RedisCache redisCache = mock(RedisCache.class);
 
@@ -85,80 +85,15 @@ class BaseCacheTest {
     void getCachedCount() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         BaseCache<Pair<String, Integer>> baseCache = createBaseCache();
 
-        long target = System.currentTimeMillis();
+        int target = (int) System.currentTimeMillis();
         String key = "get:cached:count:" + target;
 
         long result = baseCache.getCachedCount(key, () -> target);
 
         assert target == result : defaultAssertionFailMessage(result, target);
 
-        result = cachePool.getCountCache().get(key, k -> (long) -1);
+        result = cachePool.getCountCache().get(key, k -> -1);
 
         assert target == result : defaultAssertionFailMessage(result, target);
-    }
-
-    @Test
-    void deleteOneCached() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BaseCache<Pair<String, Integer>> baseCache = createBaseCache();
-
-        String key = "get:cached:" + System.currentTimeMillis();
-        Pair<String, Integer> target = new Pair<>("Cache", 1);
-
-        baseCache.getOneCached(key, () -> target);
-
-        baseCache.deleteOneCached(key);
-
-        assert cachePool.getCache().getIfPresent(key) == null : "Cache didn't be invalidate";
-    }
-
-    @Test
-    void deleteAllCached() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BaseCache<Pair<String, Integer>> baseCache = createBaseCache();
-
-        long targetCount = System.currentTimeMillis();
-
-        String key = "get:cached:" + targetCount;
-
-        Pair<String, Integer> target = new Pair<>("Cache", 1);
-
-        List<Pair<String, Integer>> targetList = new LinkedList<>();
-        targetList.add(new Pair<>("Cache", 1));
-        targetList.add(new Pair<>("Cache", 1));
-        targetList.add(new Pair<>("Cache", 1));
-
-        baseCache.getOneCached(key, () -> target);
-        baseCache.getManyCached(key, () -> targetList);
-        baseCache.getCachedCount(key, () -> targetCount);
-
-        baseCache.deleteAllCached();
-
-        assert cachePool.getCache().asMap().isEmpty() : "Cache didn't be invalidate";
-        assert cachePool.getListCache().asMap().isEmpty() : "List Cache didn't be invalidate";
-        assert cachePool.getCountCache().asMap().isEmpty() : "Count Cache didn't be invalidate";
-    }
-
-    @Test
-    void deleteManyCached() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BaseCache<Pair<String, Integer>> baseCache = createBaseCache();
-
-        String key = "get:cached:" + System.currentTimeMillis();
-
-        List<Pair<String, Integer>> targetList1 = new LinkedList<>();
-        targetList1.add(new Pair<>("Cache", 1));
-        targetList1.add(new Pair<>("Cache", 1));
-        targetList1.add(new Pair<>("Cache", 1));
-
-        List<Pair<String, Integer>> targetList2 = new LinkedList<>();
-        targetList2.add(new Pair<>("Cache", 1));
-        targetList2.add(new Pair<>("Cache", 1));
-        targetList2.add(new Pair<>("Cache", 1));
-
-
-        baseCache.getManyCached(key, () -> targetList1);
-        baseCache.getManyCached(key, () -> targetList2);
-
-        baseCache.deleteManyCached();
-
-        assert cachePool.getListCache().asMap().isEmpty() : "List Cache didn't be invalidate";
     }
 }

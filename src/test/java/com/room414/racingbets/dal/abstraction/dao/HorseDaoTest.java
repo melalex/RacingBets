@@ -92,7 +92,7 @@ class HorseDaoTest {
     @Tag("read")
     void findAllLimitOffset_nonexistent_returnedEmptyList() {
         HorseDao horseDao = getHorseDao();
-        List<Horse> result = horseDao.findAll(300L, 400L);
+        List<Horse> result = horseDao.findAll(300, 400);
 
         assert result.isEmpty() : "result is not empty";
     }

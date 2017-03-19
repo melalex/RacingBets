@@ -96,7 +96,7 @@ class RaceDaoTest {
     void findAllLimitOffset_nonexistent_returnedEmptyList() {
         RaceDao dao = getDao();
 
-        List<Race> result = dao.findAll(300L, 400L);
+        List<Race> result = dao.findAll(300, 400);
 
         assert result.isEmpty() : "result is not empty";
     }
