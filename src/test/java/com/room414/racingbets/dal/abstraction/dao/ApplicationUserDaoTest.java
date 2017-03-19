@@ -122,7 +122,7 @@ class ApplicationUserDaoTest {
 
         expectedResult.add(storage.getApplicationUser(1));
 
-        List<ApplicationUser> result = dao.findByLoginPart("pgor", 0, 1);
+        List<ApplicationUser> result = dao.search("pgor", 0, 1);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
 
@@ -134,7 +134,7 @@ class ApplicationUserDaoTest {
         ApplicationUserDao dao = getDao();
         long expectedResult = 1;
 
-        long result = dao.findByLoginPartCount("pgor");
+        long result = dao.searchCount("pgor");
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
 

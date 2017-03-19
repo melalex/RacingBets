@@ -28,8 +28,8 @@ public class LazyLoadRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) {
-        return getRacecourseDao().findByNamePart(namePart, offset, limit);
+    public List<Racecourse> search(String namePart, int offset, int limit) {
+        return getRacecourseDao().search(namePart, offset, limit);
     }
 
     @Override
@@ -38,8 +38,8 @@ public class LazyLoadRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
-        return getRacecourseDao().findByNamePartCount(namePart);
+    public int searchCount(String namePart) {
+        return getRacecourseDao().searchCount(namePart);
     }
 
     @Override

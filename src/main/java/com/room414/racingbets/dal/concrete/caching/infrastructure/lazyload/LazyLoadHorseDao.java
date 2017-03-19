@@ -27,8 +27,8 @@ public class LazyLoadHorseDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> findByNamePart(String namePart, long offset, long limit) {
-        return getHorseDao().findByNamePart(namePart, offset, limit);
+    public List<Horse> search(String namePart, int offset, int limit) {
+        return getHorseDao().search(namePart, offset, limit);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class LazyLoadHorseDao implements HorseDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
-        return getHorseDao().findByNamePartCount(namePart);
+    public int searchCount(String namePart) {
+        return getHorseDao().searchCount(namePart);
     }
 
     @Override

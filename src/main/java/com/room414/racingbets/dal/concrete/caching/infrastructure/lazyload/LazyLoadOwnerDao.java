@@ -28,8 +28,8 @@ public class LazyLoadOwnerDao implements OwnerDao {
     }
 
     @Override
-    public List<Owner> findByNamePart(String namePart, long offset, long limit) {
-        return getOwnerDao().findByNamePart(namePart, offset, limit);
+    public List<Owner> search(String namePart, int offset, int limit) {
+        return getOwnerDao().search(namePart, offset, limit);
     }
 
     @Override
@@ -38,8 +38,8 @@ public class LazyLoadOwnerDao implements OwnerDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
-        return getOwnerDao().findByNamePartCount(namePart);
+    public int searchCount(String namePart) {
+        return getOwnerDao().searchCount(namePart);
     }
 
     @Override

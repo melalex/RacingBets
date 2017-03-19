@@ -42,7 +42,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public List<Horse> findByNamePart(String namePart, long offset, long limit) {
+    public List<Horse> search(String namePart, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM horse " +
@@ -100,7 +100,7 @@ public class MySqlHorseDao implements HorseDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
+    public int searchCount(String namePart) {
         @Language("MySQL")
         final String sqlStatement = "SELECT COUNT(*) AS count FROM horse WHERE name LIKE ?";
 

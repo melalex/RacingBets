@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 
@@ -8,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * DAO for ParticipantDto entity
+ * DAO for Participant entity
  *
  * @see Participant
  * @author Alexander Melashchenko

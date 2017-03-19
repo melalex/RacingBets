@@ -7,7 +7,7 @@ import com.room414.racingbets.dal.domain.entities.Odds;
 import java.util.List;
 
 /**
- * DAO for BetDto entity
+ * DAO for Bet entity
  *
  * @see Bet
  * @author Alexander Melashchenko

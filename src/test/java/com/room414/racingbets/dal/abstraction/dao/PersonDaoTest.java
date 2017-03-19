@@ -216,15 +216,15 @@ class PersonDaoTest {
     List<DynamicTest> findByNamePartCount_tests() throws Exception {
         return Arrays.asList(
                 DynamicTest.dynamicTest(
-                        "findByNamePartCount for JockeyDto",
+                        "searchCount for JockeyDto",
                         () -> findByNamePartCount(unitOfWork.getJockeyDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePartCount for TrainerDto",
+                        "searchCount for TrainerDto",
                         () -> findByNamePartCount(unitOfWork.getTrainerDao())
                 ),
                 DynamicTest.dynamicTest(
-                        "findByNamePartCount for OwnerDto",
+                        "searchCount for OwnerDto",
                         () -> findByNamePartCount(unitOfWork.getOwnerDao())
                 )
         );
@@ -369,15 +369,15 @@ class PersonDaoTest {
         expectedResult1.add(getter.apply(1L));
         expectedResult2.add(getter.apply(2L));
 
-        List<T> result1 = personDao.findByNamePart("Ru", 0, 1);
-        List<T> result2 = personDao.findByNamePart("Ru", 1, 1);
+        List<T> result1 = personDao.search("Ru", 0, 1);
+        List<T> result2 = personDao.search("Ru", 1, 1);
 
         assert result1.equals(expectedResult1) : defaultAssertionFailMessage(result1, expectedResult1);
         assert result2.equals(expectedResult2) : defaultAssertionFailMessage(result2, expectedResult2);
     }
 
     private <T extends Person> void findByNamePart_nonexistent_returnedEmptyList(PersonDao<T> personDao) {
-        List<T> result = personDao.findByNamePart("bla-bla-bla", 0, 300);
+        List<T> result = personDao.search("bla-bla-bla", 0, 300);
 
         assert result.isEmpty() : "result is not empty";
     }
@@ -385,7 +385,7 @@ class PersonDaoTest {
     private <T extends Person> void findByNamePartCount(PersonDao<T> personDao) throws Exception {
         long expectedResult = 2;
 
-        long result = personDao.findByNamePartCount("Ru");
+        long result = personDao.searchCount("Ru");
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }

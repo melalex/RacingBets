@@ -236,7 +236,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
+    public List<ApplicationUser> search(String loginPart, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT application_user.id, application_user.login, application_user.first_name, " +
@@ -254,7 +254,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public long findByLoginPartCount(String loginPart) {
+    public int searchCount(String loginPart) {
         @Language("MySQL")
         final String sqlStatement = "SELECT COUNT(*) AS count FROM application_user WHERE login LIKE ?";
 

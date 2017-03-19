@@ -46,7 +46,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public List<T> findByNamePart(String namePart, long offset, long limit) {
+    public List<T> search(String namePart, int offset, int limit) {
         String sqlStatement = String.format(
                 "SELECT * FROM %s WHERE first_name LIKE ? OR last_name LIKE ? LIMIT ? OFFSET ?",
                 getTableName()
@@ -62,7 +62,7 @@ public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
+    public int searchCount(String namePart) {
         String sqlStatement = String.format(
                 "SELECT COUNT(*) as count FROM %s WHERE first_name LIKE ? OR last_name LIKE ?",
                 getTableName()

@@ -69,7 +69,7 @@ public class MySqlSharedExecutor<T> {
         return executeFindManyQuery(sqlStatement, key, limit, offset);
     }
 
-    public long findByForeignKeyCount(String tableName, String columnName, long key) {
+    public int findByForeignKeyCount(String tableName, String columnName, long key) {
         final String sqlStatement = String.format(
                 "SELECT Count(*) AS count FROM %s WHERE %s = ?", tableName, columnName
         );
@@ -81,11 +81,11 @@ public class MySqlSharedExecutor<T> {
         return executeFindManyQuery(sqlStatement, startsWith(namePart), limit, offset);
     }
 
-    public long findByColumnPartCount(String sqlStatement, String namePart) {
+    public int findByColumnPartCount(String sqlStatement, String namePart) {
         return executeCountQuery(sqlStatement, startsWith(namePart));
     }
 
-    public long executeUpdateQuery(String sqlStatement, Object ... objects) {
+    public int executeUpdateQuery(String sqlStatement, Object ... objects) {
         return executeQuery(MySqlDaoHelper::executeUpdate, sqlStatement, objects);
     }
 
@@ -93,7 +93,7 @@ public class MySqlSharedExecutor<T> {
         return executeQuery(MySqlDaoHelper::execute, sqlStatement, objects);
     }
 
-    public long executeCountQuery(String sqlStatement, Object ... objects) {
+    public int executeCountQuery(String sqlStatement, Object ... objects) {
         return executeQuery(MySqlDaoHelper::getCount, sqlStatement, objects);
     }
 

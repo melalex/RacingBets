@@ -57,11 +57,11 @@ public class MySqlDaoHelper {
         }
     }
 
-    static long getCount(PreparedStatement statement) throws SQLException {
+    static int getCount(PreparedStatement statement) throws SQLException {
         return getResult(statement, MySqlMapHelper::mapCount);
     }
 
-    static long executeUpdate(PreparedStatement statement) throws SQLException {
+    static int executeUpdate(PreparedStatement statement) throws SQLException {
         return statement.executeUpdate();
     }
 

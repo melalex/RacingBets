@@ -28,8 +28,8 @@ public class LazyLoadTrainerDao implements TrainerDao {
     }
 
     @Override
-    public List<Trainer> findByNamePart(String namePart, long offset, long limit) {
-        return getTrainerDao().findByNamePart(namePart, offset, limit);
+    public List<Trainer> search(String namePart, int offset, int limit) {
+        return getTrainerDao().search(namePart, offset, limit);
     }
 
     @Override
@@ -38,8 +38,8 @@ public class LazyLoadTrainerDao implements TrainerDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
-        return getTrainerDao().findByNamePartCount(namePart);
+    public int searchCount(String namePart) {
+        return getTrainerDao().searchCount(namePart);
     }
 
     @Override

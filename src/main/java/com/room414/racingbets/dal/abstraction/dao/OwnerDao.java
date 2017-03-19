@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.domain.entities.Owner;
 import java.util.List;
 
 /**
- * DAO for OwnerDto entity.
+ * DAO for Owner entity.
  *
  * @see Owner
  * @author Alexander Melashchenko

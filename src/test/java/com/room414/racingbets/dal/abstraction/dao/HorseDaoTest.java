@@ -130,8 +130,8 @@ class HorseDaoTest {
 
         expectedResult2.add(storage.getHorse(8));
 
-        List<Horse> result1 = horseDao.findByNamePart("Pro", 0, 1);
-        List<Horse> result2 = horseDao.findByNamePart("Pro", 1, 1);
+        List<Horse> result1 = horseDao.search("Pro", 0, 1);
+        List<Horse> result2 = horseDao.search("Pro", 1, 1);
 
         assert result1.equals(expectedResult1) : defaultAssertionFailMessage(result1, expectedResult1);
         assert result2.equals(expectedResult2) : defaultAssertionFailMessage(result2, expectedResult2);
@@ -140,7 +140,7 @@ class HorseDaoTest {
     @Test
     @Tag("read")
     void findByNamePart_nonexistent_returnedEmptyList() {
-        List<Horse> result = getHorseDao().findByNamePart("bla-bla-bla", 0L, 1L);
+        List<Horse> result = getHorseDao().search("bla-bla-bla", 0, 1);
 
         assert result.isEmpty() : "result is not empty";
 
@@ -151,7 +151,7 @@ class HorseDaoTest {
     void findByNamePartCount() {
         long expectedResult = 2;
 
-        long result = getHorseDao().findByNamePartCount("Pro");
+        long result = getHorseDao().searchCount("Pro");
 
         assert result == expectedResult : defaultAssertionFailMessage(result, expectedResult);
 

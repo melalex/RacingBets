@@ -117,7 +117,7 @@ class RacecourseDaoTest {
 
         expectedResult.add(storage.getRacecourse(1));
 
-        List<Racecourse> result = dao.findByNamePart("Ron", 0, 1);
+        List<Racecourse> result = dao.search("Ron", 0, 1);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -127,7 +127,7 @@ class RacecourseDaoTest {
     void findByNamePart_nonexistent_returnedEmptyList() {
         RacecourseDao dao = getRacecourseDao();
 
-        List<Racecourse> result = dao.findByNamePart("bla-bla-bla", 0L, 1L);
+        List<Racecourse> result = dao.search("bla-bla-bla", 0, 1);
 
         assert result.isEmpty() : "result is not empty";
 
@@ -139,7 +139,7 @@ class RacecourseDaoTest {
         RacecourseDao dao = getRacecourseDao();
         long expectedResult = 1;
 
-        long result = dao.findByNamePartCount("Ron");
+        long result = dao.searchCount("Ron");
 
         assert result == expectedResult : defaultAssertionFailMessage(result, expectedResult);
 

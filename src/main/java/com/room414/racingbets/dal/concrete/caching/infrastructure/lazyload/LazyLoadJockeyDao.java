@@ -28,8 +28,8 @@ public class LazyLoadJockeyDao implements JockeyDao {
     }
 
     @Override
-    public List<Jockey> findByNamePart(String namePart, long offset, long limit) {
-        return getJockeyDao().findByNamePart(namePart, offset, limit);
+    public List<Jockey> search(String namePart, int offset, int limit) {
+        return getJockeyDao().search(namePart, offset, limit);
     }
 
     @Override
@@ -38,8 +38,8 @@ public class LazyLoadJockeyDao implements JockeyDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
-        return getJockeyDao().findByNamePartCount(namePart);
+    public int searchCount(String namePart) {
+        return getJockeyDao().searchCount(namePart);
     }
 
     @Override

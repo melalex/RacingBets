@@ -40,8 +40,8 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public List<ApplicationUser> findByLoginPart(String loginPart, long offset, long limit) {
-        return getApplicationUserDao().findByLoginPart(loginPart, offset, limit);
+    public List<ApplicationUser> search(String loginPart, int offset, int limit) {
+        return getApplicationUserDao().search(loginPart, offset, limit);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public long findByLoginPartCount(String loginPart) {
-        return getApplicationUserDao().findByLoginPartCount(loginPart);
+    public int searchCount(String loginPart) {
+        return getApplicationUserDao().searchCount(loginPart);
     }
 
     @Override

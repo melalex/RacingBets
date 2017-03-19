@@ -34,7 +34,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public List<Racecourse> findByNamePart(String namePart, long offset, long limit) {
+    public List<Racecourse> search(String namePart, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement = "SELECT * FROM racecourse WHERE racecourse.name LIKE ? LIMIT ? OFFSET ?";
 
@@ -42,7 +42,7 @@ public class MySqlRacecourseDao implements RacecourseDao {
     }
 
     @Override
-    public long findByNamePartCount(String namePart) {
+    public int searchCount(String namePart) {
         @Language("MySQL")
         final String sqlStatement = "SELECT COUNT(*) AS count FROM racecourse WHERE name LIKE ?";
 

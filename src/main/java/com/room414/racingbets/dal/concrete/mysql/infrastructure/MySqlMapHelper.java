@@ -18,10 +18,10 @@ public class MySqlMapHelper {
 
     }
 
-    static long mapCount(ResultSet resultSet) throws SQLException {
+    static int mapCount(ResultSet resultSet) throws SQLException {
         final String COUNT_COLUMN = "count";
 
-        return resultSet.getLong(COUNT_COLUMN);
+        return resultSet.getInt(COUNT_COLUMN);
     }
 
     public static Jockey mapJockey(ResultSet resultSet) throws SQLException {

@@ -12,14 +12,6 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 26 Feb 2017
  */
-public interface HorseDao extends CrudDao<Long, Horse> {
-    /**
-     * @return List of Horses whose name starts with namePart or empty list if no found.
-     */
-    List<Horse> findByNamePart(String namePart, long offset, long limit);
+public interface HorseDao extends SearchDao<Long, Horse> {
 
-    /**
-     * @return count of Horses whose name starts with namePart
-     */
-    long findByNamePartCount(String namePart);
 }
