@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface BetService {
     enum Response {
+        INVALID_BET,
         NOT_ENOUGH_MONEY,
         RACE_IS_STARTED,
         SUCCESS

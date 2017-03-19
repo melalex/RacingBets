@@ -42,7 +42,7 @@ public class HorseServiceImpl implements HorseService {
 
     @Override
     public void create(HorseDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Horse entity = mapper.map(horse, Horse.class);
             unitOfWork.getHorseDao().create(entity);
             unitOfWork.commit();
@@ -58,7 +58,7 @@ public class HorseServiceImpl implements HorseService {
 
     @Override
     public void update(HorseDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Horse entity = mapper.map(horse, Horse.class);
             unitOfWork.getHorseDao().update(entity);
             unitOfWork.commit();
@@ -74,7 +74,7 @@ public class HorseServiceImpl implements HorseService {
 
     @Override
     public HorseDto find(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Horse entity = unitOfWork.getHorseDao().find(id);
             return mapper.map(entity, HorseDto.class);
         } catch (DalException e) {
@@ -92,7 +92,7 @@ public class HorseServiceImpl implements HorseService {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             HorseDao horseDao = unitOfWork.getHorseDao();
 
             List<Horse> entities = horseDao.search(searchString, offset, limit);
@@ -137,7 +137,7 @@ public class HorseServiceImpl implements HorseService {
 
     @Override
     public void delete(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getHorseDao().delete(id);
             unitOfWork.commit();
         } catch (DalException e) {

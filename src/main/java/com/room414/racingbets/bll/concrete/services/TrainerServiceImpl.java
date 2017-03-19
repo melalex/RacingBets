@@ -40,7 +40,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public void create(TrainerDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Trainer entity = mapper.map(horse, Trainer.class);
             unitOfWork.getTrainerDao().create(entity);
             unitOfWork.commit();
@@ -56,7 +56,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public void update(TrainerDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Trainer entity = mapper.map(horse, Trainer.class);
             unitOfWork.getTrainerDao().update(entity);
             unitOfWork.commit();
@@ -72,7 +72,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public TrainerDto find(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Trainer entity = unitOfWork.getTrainerDao().find(id);
             return mapper.map(entity, TrainerDto.class);
         } catch (DalException e) {
@@ -90,7 +90,7 @@ public class TrainerServiceImpl implements TrainerService {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             TrainerDao horseDao = unitOfWork.getTrainerDao();
 
             List<Trainer> entities = horseDao.search(searchString, offset, limit);
@@ -135,7 +135,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public void delete(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getTrainerDao().delete(id);
             unitOfWork.commit();
         } catch (DalException e) {

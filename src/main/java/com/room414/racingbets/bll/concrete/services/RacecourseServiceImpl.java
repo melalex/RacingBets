@@ -40,7 +40,7 @@ public class RacecourseServiceImpl implements RacecourseService {
 
     @Override
     public void create(RacecourseDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Racecourse entity = mapper.map(horse, Racecourse.class);
             unitOfWork.getRacecourseDao().create(entity);
             unitOfWork.commit();
@@ -56,7 +56,7 @@ public class RacecourseServiceImpl implements RacecourseService {
 
     @Override
     public void update(RacecourseDto horse) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Racecourse entity = mapper.map(horse, Racecourse.class);
             unitOfWork.getRacecourseDao().update(entity);
             unitOfWork.commit();
@@ -72,7 +72,7 @@ public class RacecourseServiceImpl implements RacecourseService {
 
     @Override
     public RacecourseDto find(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Racecourse entity = unitOfWork.getRacecourseDao().find(id);
             return mapper.map(entity, RacecourseDto.class);
         } catch (DalException e) {
@@ -90,7 +90,7 @@ public class RacecourseServiceImpl implements RacecourseService {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             RacecourseDao horseDao = unitOfWork.getRacecourseDao();
 
             List<Racecourse> entities = horseDao.search(searchString, offset, limit);
@@ -135,7 +135,7 @@ public class RacecourseServiceImpl implements RacecourseService {
 
     @Override
     public void delete(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getRacecourseDao().delete(id);
             unitOfWork.commit();
         } catch (DalException e) {

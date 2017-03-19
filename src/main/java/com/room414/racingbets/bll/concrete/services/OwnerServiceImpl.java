@@ -74,7 +74,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public OwnerDto find(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Owner entity = unitOfWork.getOwnerDao().find(id);
             return mapper.map(entity, OwnerDto.class);
         } catch (DalException e) {
@@ -92,7 +92,7 @@ public class OwnerServiceImpl implements OwnerService {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             OwnerDao ownerDao = unitOfWork.getOwnerDao();
 
             List<Owner> entities = ownerDao.search(searchString, offset, limit);
@@ -137,7 +137,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public void delete(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getOwnerDao().delete(id);
             unitOfWork.commit();
         } catch (DalException e) {

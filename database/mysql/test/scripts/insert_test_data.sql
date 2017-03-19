@@ -73,56 +73,56 @@ INSERT INTO horse_racing_test.racecourse
 (name, latitude, longitude, contact, clerk)
 VALUES ('Flowdesk', -20.26889, -50.54583, 'ajames2@amazon.co.jp', 'Annie James');
 
-# raceDto table
+# race table
 
-INSERT INTO horse_racing_test.raceDto
+INSERT INTO horse_racing_test.race
 (name, status, commission, min_bet, racecourse_id, start_date_time, going, race_type, race_class, min_age, min_rating, max_rating, distance)
 VALUES ('Gembucket', 'finished', 0.14, 2, 1, '2017-03-08 10:32:36', 'Hard', 'flat', 1, 3, 50, 70, 8.1);
 
-INSERT INTO horse_racing_test.raceDto
+INSERT INTO horse_racing_test.race
 (name, status, commission, min_bet, racecourse_id, start_date_time, going, race_type, race_class, min_age, min_rating, max_rating, distance)
 VALUES ('Ventosanzap', 'riding', 0.14, 2, 1, '2017-03-09 13:44:56', 'Firm', 'jump', 2, 2, 0, 70, 8.1);
 
-INSERT INTO horse_racing_test.raceDto
+INSERT INTO horse_racing_test.race
 (name, status, commission, min_bet, racecourse_id, start_date_time, going, race_type, race_class, min_age, min_rating, max_rating, distance)
 VALUES ('Duobam', 'scheduled', 0.14, 2, 2, '2017-03-10 12:00:00', NULL, 'harness', 2, 2, 0, 60, 10.1);
 
 # participant table
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (1, 1, 1, 1, 1, 50, 70, 70, 2.1, 1);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (2, 2, 1, 2, 2, 50, 70, 70, 1, 2);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (3, 3, 1, 3, 3, 50, 70, 70, 0.5, 3);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (1, 4, 2, 4, 4, 50, 70, 70, 2.1, 1);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (2, 5, 2, 5, 5, 50, 70, 70, 1, 2);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (3, 3, 2, 1, 1, 50, 70, 70, 0.5, 3);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (1, 2, 3, 2, 2, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (2, 1, 3, 3, 3, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO horse_racing_test.participant
-(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, oddsDto, place)
+(number, horse_id, race_id, jockey_id, trainer_id, carried_weight, topspeed, official_rating, odds, place)
 VALUES (3, 3, 3, 4, 4, NULL, NULL, NULL, NULL, NULL);
 
 # prize table

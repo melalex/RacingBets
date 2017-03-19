@@ -75,7 +75,7 @@ public class JockeyServiceImpl implements JockeyService {
 
     @Override
     public JockeyDto find(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Jockey entity = unitOfWork.getJockeyDao().find(id);
             return mapper.map(entity, JockeyDto.class);
         } catch (DalException e) {
@@ -93,7 +93,7 @@ public class JockeyServiceImpl implements JockeyService {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             JockeyDao jockeyDao = unitOfWork.getJockeyDao();
 
             List<Jockey> entities = jockeyDao.search(searchString, offset, limit);
@@ -138,7 +138,7 @@ public class JockeyServiceImpl implements JockeyService {
 
     @Override
     public void delete(long id) {
-        try(UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getJockeyDao().delete(id);
             unitOfWork.commit();
         } catch (DalException e) {
