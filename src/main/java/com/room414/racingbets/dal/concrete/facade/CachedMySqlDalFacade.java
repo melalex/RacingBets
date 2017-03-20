@@ -1,7 +1,7 @@
 package com.room414.racingbets.dal.concrete.facade;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
+import com.room414.racingbets.dal.abstraction.facade.DalFacade;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.factories.CachedUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.factories.CaffeineCachingUnitOfWorkFactory;
@@ -15,7 +15,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.sql.DataSource;
-import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +27,7 @@ import java.util.Properties;
  * @version 1.0 08 Mar 2017
  */
 // TODO: replace *.property files paths to upper level (maybe WEB?)
-public class CachedMySqlDalFactory implements AbstractDalFactory, AutoCloseable {
+public class CachedMySqlDalFacade implements DalFacade, AutoCloseable {
     private static final Path DB_CONFIG_FILE_PATH = Paths.get(
             System.getProperty("user.dir"),
             "database",
@@ -47,9 +46,9 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, AutoCloseable 
             "redisConfig.properties"
     );
 
-    private static CachedMySqlDalFactory ourInstance = createDalFactory();
+    private static CachedMySqlDalFacade ourInstance = new CachedMySqlDalFacade();
 
-    private Log log = LogFactory.getLog(CachedMySqlDalFactory.class);
+    private Log log = LogFactory.getLog(CachedMySqlDalFacade.class);
 
     private MainCachePool pool = new MainCachePool();
 
@@ -58,31 +57,31 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, AutoCloseable 
 
     private UnitOfWorkFactory factory;
 
-    public static CachedMySqlDalFactory getInstance() {
+    public static CachedMySqlDalFacade getInstance() {
         return ourInstance;
     }
 
-    private CachedMySqlDalFactory() {
+    private CachedMySqlDalFacade() {
 
     }
 
-    private static CachedMySqlDalFactory createDalFactory() {
-        CachedMySqlDalFactory newInstance = new CachedMySqlDalFactory();
+    public void initDal() {
+        initDal(DB_CONFIG_FILE_PATH.toString(), REDIS_CONFIG_FILE_PATH.toString());
+    }
 
-        newInstance.initMySqlConnectionPool();
-        newInstance.initRedisConnectionPool();
-        newInstance.initRedisSubscriber();
-        newInstance.initUnitOfWorkFactory();
-
-        return newInstance;
+    public void initDal(String mysqlPropertiesFilePath, String redisPropertiesFilePath) {
+        this.initMySqlConnectionPool(mysqlPropertiesFilePath);
+        this.initRedisConnectionPool(redisPropertiesFilePath);
+        this.initRedisSubscriber();
+        this.initUnitOfWorkFactory();
     }
 
     // TODO: initialize data source
-    private void initMySqlConnectionPool() {
+    private void initMySqlConnectionPool(String mysqlPropertiesFilePath) {
         try {
             Properties properties = new Properties();
 
-            InputStream is = new FileInputStream(DB_CONFIG_FILE_PATH.toString());
+            InputStream is = new FileInputStream(mysqlPropertiesFilePath);
             properties.load(is);
 
             String url = properties.getProperty("jdbc.url");
@@ -98,11 +97,11 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, AutoCloseable 
         }
     }
 
-    private void initRedisConnectionPool() {
+    private void initRedisConnectionPool(String redisPropertiesFilePath) {
         try {
             Properties properties = new Properties();
 
-            InputStream is = new FileInputStream(REDIS_CONFIG_FILE_PATH.toString());
+            InputStream is = new FileInputStream(redisPropertiesFilePath);
             properties.load(is);
 
             String host = properties.getProperty("redis.host");
@@ -133,7 +132,7 @@ public class CachedMySqlDalFactory implements AbstractDalFactory, AutoCloseable 
     }
 
     @Override
-    public UnitOfWorkFactory createUnitOfWorkFactory() {
+    public UnitOfWorkFactory getUnitOfWorkFactory() {
         return factory;
     }
 
