@@ -3,6 +3,7 @@ package com.room414.racingbets.bll.concrete.services;
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
+import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.createErrorMessage;
+import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.defaultErrorMessage;
 
 /**
  * @author Alexander Melashchenko
@@ -33,30 +35,23 @@ public class RaceServiceImpl implements RaceService {
     private Log log = LogFactory.getLog(RaceServiceImpl.class);
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
+    private ErrorHandleDecorator<RaceDto> decorator;
 
     public RaceServiceImpl(UnitOfWorkFactory factory) {
         this.factory = factory;
+        this.decorator = new ErrorHandleDecorator<>(factory, log);
     }
 
     @Override
     public void scheduleRace(RaceDto race) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            race.setRaceStatus(RaceStatus.SCHEDULED);
-            Race entity = mapper.map(race, Race.class);
-            unitOfWork.getRaceDao().create(entity);
-            unitOfWork.commit();
-        } catch (DalException e) {
-            String message = createErrorMessage(race);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = createErrorMessage(race);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
+        decorator.create(race, this::create);
     }
 
-    private String startRaceErrorMessage(long id) {
-        return "Exception during starting race with id " + id;
+    private void create(UnitOfWork unitOfWork, RaceDto race) {
+        race.setRaceStatus(RaceStatus.SCHEDULED);
+        Race entity = mapper.map(race, Race.class);
+        unitOfWork.getRaceDao().create(entity);
+        unitOfWork.commit();
     }
 
     @Override
@@ -66,10 +61,10 @@ public class RaceServiceImpl implements RaceService {
             unitOfWork.getRaceDao().updateStatus(id, RaceStatus.RIDING);
             unitOfWork.commit();
         } catch (DalException e) {
-            String message = startRaceErrorMessage(id);
+            String message = defaultErrorMessage("startRace", id);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = startRaceErrorMessage(id);
+            String message = defaultErrorMessage("startRace", id);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -85,47 +80,6 @@ public class RaceServiceImpl implements RaceService {
     // TODO: isolation level
     public void finishRace(RaceDto race) {
         // TODO: implementation
-    }
-
-    private String findByRacecourseErrorMessage(RaceStatus status, long id, int limit, int offset) {
-        return String.format(
-                "Exception during finding races with status %s by Racecourse with id %d on [%d; %d]",
-                status,
-                id,
-                offset,
-                offset + limit
-        );
-    }
-
-    private String findInTimeDiapasonErrorMessage(RaceStatus status, Date date, int limit, int offset) {
-        return String.format(
-                "Exception during finding races with status %s on %s on [%d; %d]",
-                status,
-                date,
-                offset,
-                offset + limit
-        );
-    }
-
-    private String findByDateAndRacecourseErrorMessage(RaceStatus status, Date date, long id, int limit, int offset) {
-        return String.format(
-                "Exception during finding races with status %s in Racecourse with id %d on %s on [%d; %d]",
-                status,
-                id,
-                date,
-                offset,
-                offset + limit
-        );
-    }
-
-    private String findByNameErrorMessage(RaceStatus status, String name, int limit, int offset) {
-        return String.format(
-                "Exception during finding races with status %s and name %s on [%d; %d]",
-                status,
-                name,
-                offset,
-                offset + limit
-        );
     }
 
     private List<RaceDto> mapList(List<Race> source) {
@@ -167,10 +121,10 @@ public class RaceServiceImpl implements RaceService {
 
             return mapList(list);
         } catch (DalException e) {
-            String message = findByRacecourseErrorMessage(status, id, limit, offset);
+            String message = defaultErrorMessage("findByRacecourse", status, id, limit, offset);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = findByRacecourseErrorMessage(status, id, limit, offset);
+            String message = defaultErrorMessage("findByRacecourse", status, id, limit, offset);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -203,10 +157,10 @@ public class RaceServiceImpl implements RaceService {
 
             return mapList(list);
         } catch (DalException e) {
-            String message = findInTimeDiapasonErrorMessage(status, date, limit, offset);
+            String message = defaultErrorMessage("findByDate", status, date, limit, offset);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = findInTimeDiapasonErrorMessage(status, date, limit, offset);
+            String message = defaultErrorMessage("findByDate", status, date, limit, offset);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -241,10 +195,10 @@ public class RaceServiceImpl implements RaceService {
 
             return mapList(list);
         } catch (DalException e) {
-            String message = findByDateAndRacecourseErrorMessage(status, date, id, limit, offset);
+            String message = defaultErrorMessage("findByDateAndRacecourse", status, date, id, limit, offset);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = findByDateAndRacecourseErrorMessage(status, date, id, limit, offset);
+            String message = defaultErrorMessage("findByDateAndRacecourse", status, date, id, limit, offset);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -265,10 +219,10 @@ public class RaceServiceImpl implements RaceService {
 
             return mapList(entities);
         } catch (DalException e) {
-            String message = findByNameErrorMessage(status, name, limit, offset);
+            String message = defaultErrorMessage("findByName", status, name, limit, offset);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = findByNameErrorMessage(status, name, limit, offset);
+            String message = defaultErrorMessage("findByName", status, name, limit, offset);
             log.error(message, t);
             throw new BllException(message, t);
         }

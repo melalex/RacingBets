@@ -3,6 +3,7 @@ package com.room414.racingbets.bll.concrete.services;
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
 import com.room414.racingbets.bll.abstraction.services.ParticipantService;
+import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.ParticipantDto;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
@@ -20,8 +21,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.deleteErrorMessage;
-import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.updateErrorMessage;
 
 /**
  * @author Alexander Melashchenko
@@ -31,41 +30,32 @@ public class ParticipantServiceImpl implements ParticipantService {
     private Log log = LogFactory.getLog(ParticipantServiceImpl.class);
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
+    private ErrorHandleDecorator<ParticipantDto> decorator;
 
     public ParticipantServiceImpl(UnitOfWorkFactory factory) {
         this.factory = factory;
+        this.decorator = new ErrorHandleDecorator<>(factory, log);
     }
 
     @Override
-    public void update(ParticipantDto horse) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            Participant entity = mapper.map(horse, Participant.class);
-            unitOfWork.getParticipantDao().update(entity);
-            unitOfWork.commit();
-        } catch (DalException e) {
-            String message = updateErrorMessage(horse);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = updateErrorMessage(horse);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
+    public void update(ParticipantDto participant) {
+        decorator.update(participant, this::update);
     }
 
+    private void update(UnitOfWork unitOfWork, ParticipantDto participant) {
+        Participant entity = mapper.map(participant, Participant.class);
+        unitOfWork.getParticipantDao().update(entity);
+        unitOfWork.commit();
+    }
 
     @Override
     public void delete(long id) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            unitOfWork.getParticipantDao().delete(id);
-            unitOfWork.commit();
-        } catch (DalException e) {
-            String message = deleteErrorMessage(id);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = deleteErrorMessage(id);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
+        decorator.delete(id, this::delete);
+    }
+
+    private void delete(UnitOfWork unitOfWork, long id) {
+        unitOfWork.getParticipantDao().delete(id);
+        unitOfWork.commit();
     }
 
     private String findErrorMessage(String entityName, long id, int limit, int offset) {

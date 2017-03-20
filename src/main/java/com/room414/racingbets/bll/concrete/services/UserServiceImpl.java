@@ -3,6 +3,7 @@ package com.room414.racingbets.bll.concrete.services;
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
 import com.room414.racingbets.bll.abstraction.services.UserService;
+import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
@@ -28,9 +29,11 @@ public class UserServiceImpl implements UserService {
     private Log log = LogFactory.getLog(UserServiceImpl.class);
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
+    private ErrorHandleDecorator<UserDto> decorator;
 
     public UserServiceImpl(UnitOfWorkFactory factory) {
         this.factory = factory;
+        this.decorator = new ErrorHandleDecorator<>(factory, log);
     }
 
     @Override
@@ -68,34 +71,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserDto horse) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            ApplicationUser entity = mapper.map(horse, ApplicationUser.class);
-            unitOfWork.getApplicationUserDao().update(entity);
-            unitOfWork.commit();
-        } catch (DalException e) {
-            String message = updateErrorMessage(horse);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = updateErrorMessage(horse);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
+    public void update(UserDto user) {
+        decorator.update(user, this::update);
     }
 
     @Override
-    // TODO: add token logic
-    // TODO: add error message
     public boolean confirmEmail(long id, String token) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getApplicationUserDao().confirmEmail(id);
             unitOfWork.commit();
             return false;
         } catch (DalException e) {
-            String message = "";
+            String message = defaultErrorMessage("confirmEmail", id, token);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = "";
+            String message = defaultErrorMessage("confirmEmail", id, token);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -107,10 +97,10 @@ public class UserServiceImpl implements UserService {
             unitOfWork.getApplicationUserDao().addRole(id, role);
             unitOfWork.commit();
         } catch (DalException e) {
-            String message = "";
+            String message = defaultErrorMessage("addRole", id, role);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = "";
+            String message = defaultErrorMessage("addRole", id, role);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -122,10 +112,10 @@ public class UserServiceImpl implements UserService {
             unitOfWork.getApplicationUserDao().removeRole(id, role);
             unitOfWork.commit();
         } catch (DalException e) {
-            String message = "";
+            String message = defaultErrorMessage("removeRole", id, role);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = "";
+            String message = defaultErrorMessage("removeRole", id, role);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -133,22 +123,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(long id) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            unitOfWork.getApplicationUserDao().delete(id);
-            unitOfWork.commit();
-        } catch (DalException e) {
-            String message = deleteErrorMessage(id);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = deleteErrorMessage(id);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
+        decorator.delete(id, this::delete);
     }
 
     @Override
     public UserDto find(long id) {
-        return null;
+        return decorator.find(id, this::find);
     }
 
     @Override
@@ -160,10 +140,10 @@ public class UserServiceImpl implements UserService {
 
             return mapper.map(entity, UserDto.class);
         } catch (DalException e) {
-            String message = "";
+            String message = defaultErrorMessage("findByLoginPassword", login, password);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = "";
+            String message = defaultErrorMessage("findByLoginPassword", login, password);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -177,49 +157,49 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll(Pager pager) {
-        int limit = pager.getLimit();
-        int offset = pager.getOffset();
-
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
-
-            List<ApplicationUser> entities = ownerDao.findAll(offset, limit);
-            int count = ownerDao.count();
-
-            pager.setCount(count);
-
-            return mapList(entities);
-        } catch (DalException e) {
-            String message = findAllErrorMessage(limit, offset);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = findAllErrorMessage(limit, offset);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
+        return decorator.findAll(pager, this::findAll);
     }
 
     @Override
     public List<UserDto> search(String login, Pager pager) {
-        int limit = pager.getLimit();
-        int offset = pager.getOffset();
+        return decorator.search(login, pager, this::search);
+    }
 
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
+    private void update(UnitOfWork unitOfWork, UserDto user) {
+        ApplicationUser entity = mapper.map(user, ApplicationUser.class);
+        unitOfWork.getApplicationUserDao().update(entity);
+        unitOfWork.commit();
+    }
 
-            List<ApplicationUser> entities = ownerDao.search(login, offset, limit);
-            int count = ownerDao.searchCount(login);
+    private void delete(UnitOfWork unitOfWork, long id) {
+        unitOfWork.getApplicationUserDao().delete(id);
+        unitOfWork.commit();
+    }
 
-            pager.setCount(count);
+    public UserDto find(UnitOfWork unitOfWork, long id) {
+        ApplicationUser user = unitOfWork.getApplicationUserDao().find(id);
+        return mapper.map(user, UserDto.class);
+    }
 
-            return mapList(entities);
-        } catch (DalException e) {
-            String message = searchErrorMessage(login, limit, offset);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = searchErrorMessage(login, limit, offset);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
+    public List<UserDto> findAll(UnitOfWork unitOfWork, Pager pager) {
+        ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
+
+        List<ApplicationUser> entities = ownerDao.findAll(pager.getOffset(), pager.getLimit());
+        int count = ownerDao.count();
+
+        pager.setCount(count);
+
+        return mapList(entities);
+    }
+
+    public List<UserDto> search(UnitOfWork unitOfWork, String login, Pager pager) {
+        ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
+
+        List<ApplicationUser> entities = ownerDao.search(login, pager.getOffset(), pager.getLimit());
+        int count = ownerDao.searchCount(login);
+
+        pager.setCount(count);
+
+        return mapList(entities);
     }
 }

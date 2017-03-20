@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.defaultErrorMessage;
+
 /**
  * @author Alexander Melashchenko
  * @version 1.0 19 Mar 2017
@@ -75,22 +77,6 @@ public class BetServiceImpl implements BetService {
         }
     }
 
-    private String makeBetErrorMessage(BetDto bet) {
-        return "Exception during making bet " + bet;
-    }
-
-    private String getOddsErrorMessage(BetDto bet) {
-        return "Exception during getting odds for bet " + bet;
-    }
-
-    private String getBetsOfUserErrorMessage(long user, int limit, int offset) {
-        return String.format("Exception during getting Bets of User with id %d [%d; %d]",
-                user,
-                offset,
-                limit + offset
-        );
-    }
-
     @Override
     public Response makeBet(BetDto bet) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
@@ -127,9 +113,9 @@ public class BetServiceImpl implements BetService {
 
             return Response.SUCCESS;
         } catch (DalException e) {
-            throw new BllException(makeBetErrorMessage(bet), e);
+            throw new BllException(defaultErrorMessage("makeBet", bet), e);
         } catch (Throwable t) {
-            String message = makeBetErrorMessage(bet);
+            String message = defaultErrorMessage("makeBet", bet);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -142,10 +128,10 @@ public class BetServiceImpl implements BetService {
             Odds odds = unitOfWork.getBetDao().getOdds(entity);
             return mapper.map(odds, OddsDto.class);
         } catch (DalException e) {
-            String message = getOddsErrorMessage(bet);
+            String message = defaultErrorMessage("getOdds", bet);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = getOddsErrorMessage(bet);
+            String message = defaultErrorMessage("getOdds", bet);
             log.error(message, t);
             throw new BllException(message, t);
         }
@@ -168,10 +154,10 @@ public class BetServiceImpl implements BetService {
                     .map(b -> mapper.map(b, BetDto.class))
                     .collect(Collectors.toList());
         } catch (DalException e) {
-            String message = getBetsOfUserErrorMessage(id, limit, offset);
+            String message = defaultErrorMessage("getOdds", id, pager);
             throw new BllException(message, e);
         } catch (Throwable t) {
-            String message = getBetsOfUserErrorMessage(id, limit, offset);
+            String message = defaultErrorMessage("getOdds", id, pager);
             log.error(message, t);
             throw new BllException(message, t);
         }
