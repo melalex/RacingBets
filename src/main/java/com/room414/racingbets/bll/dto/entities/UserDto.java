@@ -1,5 +1,6 @@
 package com.room414.racingbets.bll.dto.entities;
 
+import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.io.Serializable;
@@ -26,6 +27,7 @@ public class UserDto implements Serializable {
     private boolean isEmailConfirmed;
     private BigDecimal balance;
     private Set<Role> roles = new HashSet<>();
+    private Language language;
 
     public UserDto() {
     }
@@ -114,6 +116,15 @@ public class UserDto implements Serializable {
         return roles.contains(role);
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -124,41 +135,45 @@ public class UserDto implements Serializable {
             return false;
         }
 
-        UserDto that = (UserDto) o;
+        UserDto userDto = (UserDto) o;
 
-        if (id != that.id) {
+        if (id != userDto.id) {
             return false;
         }
 
-        if (isEmailConfirmed != that.isEmailConfirmed) {
+        if (isEmailConfirmed != userDto.isEmailConfirmed) {
             return false;
         }
 
-        if (login != null ? !login.equals(that.login) : that.login != null) {
+        if (login != null ? !login.equals(userDto.login) : userDto.login != null) {
             return false;
         }
 
-        if (email != null ? !email.equals(that.email) : that.email != null) {
+        if (email != null ? !email.equals(userDto.email) : userDto.email != null) {
             return false;
         }
 
-        if (password != null ? !password.equals(that.password) : that.password != null) {
+        if (password != null ? !password.equals(userDto.password) : userDto.password != null) {
             return false;
         }
 
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) {
+        if (firstName != null ? !firstName.equals(userDto.firstName) : userDto.firstName != null) {
             return false;
         }
 
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) {
+        if (lastName != null ? !lastName.equals(userDto.lastName) : userDto.lastName != null) {
             return false;
         }
 
-        if (balance != null ? balance.compareTo(that.balance) != 0 : that.balance != null) {
+        if (balance != null ? !balance.equals(userDto.balance) : userDto.balance != null) {
             return false;
         }
 
-        if (roles != null ? !roles.equals(that.roles) : that.roles != null) {
+        if (roles != null ? !roles.equals(userDto.roles) : userDto.roles != null) {
+            return false;
+        }
+
+        if (language != userDto.language) {
             return false;
         }
 
@@ -167,7 +182,6 @@ public class UserDto implements Serializable {
 
     @Override
     public int hashCode() {
-        long temp;
         int result = (int) (id ^ (id >>> 32));
 
         result = 31 * result + (login != null ? login.hashCode() : 0);
@@ -176,11 +190,9 @@ public class UserDto implements Serializable {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (isEmailConfirmed ? 1 : 0);
-
-        temp = balance != null ? Double.doubleToLongBits(balance.doubleValue()) : 0;
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-
+        result = 31 * result + (balance != null ? balance.hashCode() : 0);
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        result = 31 * result + (language != null ? language.hashCode() : 0);
 
         return result;
     }
@@ -197,6 +209,7 @@ public class UserDto implements Serializable {
                 ", isEmailConfirmed=" + isEmailConfirmed +
                 ", balance=" + balance +
                 ", roles=" + roles +
+                ", language=" + language +
                 '}';
     }
 }

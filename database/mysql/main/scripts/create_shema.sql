@@ -65,7 +65,8 @@ CREATE TABLE `horse_racing`.`application_user` (
   `email`              VARCHAR(45)             NOT NULL,
   `is_email_confirmed` BOOL                    NOT NULL,
   `balance`            DECIMAL(12, 2) UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
+  `language`           ENUM ('en', 'ru')       NOT NULL DEFAULT 'en'
+    PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `login_UNIQUE` (`login` ASC),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC)
@@ -88,7 +89,7 @@ CREATE TABLE `horse_racing`.`raceDto` (
   `commission`      DOUBLE UNSIGNED                                                                                                                                    NOT NULL,
   `min_bet`         DECIMAL(12, 2) UNSIGNED                                                                                                                            NOT NULL,
   `racecourse_id`   INT UNSIGNED                                                                                                                                       NOT NULL,
-  `start_date_time` TIMESTAMP                                                                                                                                          DEFAULT CURRENT_TIMESTAMP,
+  `start_date_time` TIMESTAMP                                                                                                                                                   DEFAULT CURRENT_TIMESTAMP,
   `going`           ENUM ('Hard', 'Firm', 'Good to firm', 'Good', 'Good to soft', 'Soft', 'Heavy', 'Fast', 'Standard to fast', 'Standard', 'Standard to slow', 'Slow') NULL,
   `race_type`       ENUM ('flat', 'jump', 'harness')                                                                                                                   NOT NULL,
   `race_class`      INT(2) UNSIGNED                                                                                                                                    NOT NULL,
@@ -122,7 +123,7 @@ CREATE TABLE `horse_racing`.`participant` (
   `carried_weight`  FLOAT UNSIGNED  NULL,
   `topspeed`        INT(3) UNSIGNED NULL,
   `official_rating` INT(5) UNSIGNED NULL,
-  `oddsDto`            DOUBLE UNSIGNED NULL,
+  `oddsDto`         DOUBLE UNSIGNED NULL,
   `place`           INT(2) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),

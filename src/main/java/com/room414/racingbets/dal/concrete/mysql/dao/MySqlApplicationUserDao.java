@@ -57,6 +57,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         final String isEmailConfirmedColumnName = "application_user.is_email_confirmed";
         final String passwordColumnName = "application_user.password";
         final String balanceColumnName = "application_user.balance";
+        final String languageColumnName = "application_user.language";
         final String roleNameColumnName = "role.name";
 
         ApplicationUserBuilder builder;
@@ -74,7 +75,8 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                         .setEmail(resultSet.getString(emailColumnName))
                         .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
                         .setPassword(resultSet.getString(passwordColumnName))
-                        .setBalance(resultSet.getBigDecimal(balanceColumnName));
+                        .setBalance(resultSet.getBigDecimal(balanceColumnName))
+                        .setLanguage(resultSet.getString(languageColumnName));
 
                 builderById.put(id, builder);
             }
@@ -91,8 +93,8 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     private void createApplicationUser(ApplicationUser entity) {
         final String sqlStatement =
                 "INSERT INTO application_user " +
-                "   (login, password, first_name, last_name, email, is_email_confirmed, balance) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "   (login, password, first_name, last_name, email, is_email_confirmed, balance, language) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getLogin());
@@ -102,6 +104,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
             statement.setString(5, entity.getEmail());
             statement.setBoolean(6, entity.isEmailConfirmed());
             statement.setBigDecimal(7, entity.getBalance());
+            statement.setString(8, entity.getLanguage().getName());
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {
@@ -161,9 +164,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     public ApplicationUser find(Long id) {
         @Language("MySQL")
         final String sqlStatement =
-                "SELECT application_user.id, application_user.login, application_user.first_name, " +
-                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
-                "   application_user.password, application_user.balance, role.name " +
+                "SELECT * " +
                 "FROM application_user " +
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id " +
@@ -176,9 +177,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     public List<ApplicationUser> findAll() {
         @Language("MySQL")
         final String sqlStatement =
-                "SELECT application_user.id, application_user.login, application_user.first_name, " +
-                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
-                "   application_user.password, application_user.balance, role.name " +
+                "SELECT * " +
                 "FROM application_user " +
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
@@ -190,9 +189,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     public List<ApplicationUser> findAll(int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
-                "SELECT application_user.id, application_user.login, application_user.first_name, " +
-                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
-                "   application_user.password, application_user.balance, role.name " +
+                "SELECT * " +
                 "FROM (SELECT * FROM application_user LIMIT ? OFFSET ?) AS application_user " +
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
@@ -214,7 +211,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         final String sqlStatement =
                 "UPDATE application_user " +
                 "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
-                "    email = ?, is_email_confirmed = ?, balance = ? " +
+                "    email = ?, is_email_confirmed = ?, balance = ?, language = ? " +
                 "WHERE id = ?";
 
         return executor.executeUpdateQuery(
@@ -226,6 +223,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 entity.getEmail(),
                 entity.isEmailConfirmed(),
                 entity.getBalance(),
+                entity.getLanguage().getName(),
                 entity.getId()
         );
     }
@@ -239,9 +237,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     public List<ApplicationUser> search(String loginPart, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
-                "SELECT application_user.id, application_user.login, application_user.first_name, " +
-                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
-                "   application_user.password, application_user.balance, role.name " +
+                "SELECT * " +
                 "FROM (" +
                 "   SELECT * FROM application_user " +
                 "   WHERE application_user.login LIKE ? " +
@@ -265,9 +261,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     public ApplicationUser findByLoginAndPassword(String login, String password) {
         @Language("MySQL")
         final String sqlStatement =
-                "SELECT application_user.id, application_user.login, application_user.first_name, " +
-                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
-                "   application_user.password, application_user.balance, role.name " +
+                "SELECT * " +
                 "FROM (" +
                 "   SELECT * FROM application_user " +
                 "   WHERE application_user.login = ? AND application_user.password = ?" +
@@ -282,9 +276,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     public List<ApplicationUser> findByLoginAndEmail(String login, String email) {
         @Language("MySQL")
         final String sqlStatement =
-                "SELECT application_user.id, application_user.login, application_user.first_name, " +
-                "   application_user.last_name, application_user.email, application_user.is_email_confirmed," +
-                "   application_user.password, application_user.balance, role.name " +
+                "SELECT * " +
                 "FROM (" +
                 "   SELECT * FROM application_user " +
                 "   WHERE application_user.login = ? OR application_user.email = ?" +

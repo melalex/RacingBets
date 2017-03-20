@@ -4,6 +4,7 @@ import com.room414.racingbets.dal.domain.builders.*;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.BetType;
+import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
@@ -566,6 +567,7 @@ public class EntityStorage {
                         .setEmail("pgordon0@google.ru")
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(827.32))
+                        .setLanguage(Language.ENGLISH)
                         .addRole(Role.ADMIN)
                         .addRole(Role.BOOKMAKER)
                         .addRole(Role.HANDICAPPER)
@@ -582,6 +584,7 @@ public class EntityStorage {
                         .setEmail("slawrence1@geocities.com")
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(924.23))
+                        .setLanguage(Language.ENGLISH)
                         .addRole(Role.BOOKMAKER)
                         .addRole(Role.HANDICAPPER)
         );
@@ -597,6 +600,7 @@ public class EntityStorage {
                         .setEmail("hbanks2@adobe.com")
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(256.71))
+                        .setLanguage(Language.ENGLISH)
                         .addRole(Role.HANDICAPPER)
         );
 
@@ -611,6 +615,7 @@ public class EntityStorage {
                         .setEmail("lallen3@virginia.edu")
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(385.59))
+                        .setLanguage(Language.ENGLISH)
                         .addRole(Role.HANDICAPPER)
         );
 
@@ -625,6 +630,7 @@ public class EntityStorage {
                         .setEmail("pandrews4@artisteer.com")
                         .setEmailConfirmed(true)
                         .setBalance(BigDecimal.valueOf(749.38))
+                        .setLanguage(Language.ENGLISH)
                         .addRole(Role.HANDICAPPER)
         );
     }

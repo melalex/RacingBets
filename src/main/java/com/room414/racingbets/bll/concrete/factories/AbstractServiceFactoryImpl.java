@@ -2,6 +2,7 @@ package com.room414.racingbets.bll.concrete.factories;
 
 import com.room414.racingbets.bll.abstraction.factories.*;
 import com.room414.racingbets.dal.abstraction.facade.DalFacade;
+import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 
 /**
  * @author Alexander Melashchenko
@@ -18,16 +19,16 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
     private TrainerServiceFactory trainerServiceFactory;
     private UserServiceFactory userServiceFactory;
 
-    public AbstractServiceFactoryImpl(DalFacade dalFactory) {
-        this.betServiceFactory = new BetServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.horseServiceFactory = new HorseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.jockeyServiceFactory = new JockeyServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.ownerServiceFactory = new OwnerServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.participantServiceFactory = new ParticipantServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.racecourseServiceFactory = new RacecourseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.raceServiceFactory = new RaceServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.trainerServiceFactory = new TrainerServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.userServiceFactory = new UserServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+    public AbstractServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory) {
+        this.betServiceFactory = new BetServiceFactoryImpl(unitOfWorkFactory);
+        this.horseServiceFactory = new HorseServiceFactoryImpl(unitOfWorkFactory);
+        this.jockeyServiceFactory = new JockeyServiceFactoryImpl(unitOfWorkFactory);
+        this.ownerServiceFactory = new OwnerServiceFactoryImpl(unitOfWorkFactory);
+        this.participantServiceFactory = new ParticipantServiceFactoryImpl(unitOfWorkFactory);
+        this.racecourseServiceFactory = new RacecourseServiceFactoryImpl(unitOfWorkFactory);
+        this.raceServiceFactory = new RaceServiceFactoryImpl(unitOfWorkFactory);
+        this.trainerServiceFactory = new TrainerServiceFactoryImpl(unitOfWorkFactory);
+        this.userServiceFactory = new UserServiceFactoryImpl(unitOfWorkFactory);
     }
 
     @Override
