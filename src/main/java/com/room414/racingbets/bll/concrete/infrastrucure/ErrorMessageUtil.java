@@ -15,11 +15,11 @@ public class ErrorMessageUtil {
         return "Exception during creating entity " + object;
     }
 
-    public static String updateErrorMessage(Object object) {
+    static String updateErrorMessage(Object object) {
         return "Exception during updating entity " + object;
     }
 
-    public static String searchErrorMessage(String searchString, int limit, int offset) {
+    static String searchErrorMessage(String searchString, int limit, int offset) {
         return String.format("Exception during searching entities with search string '%s' in [%d; %d]",
                 searchString,
                 offset,
@@ -27,18 +27,18 @@ public class ErrorMessageUtil {
         );
     }
 
-    public static String findAllErrorMessage(int limit, int offset) {
+    static String findAllErrorMessage(int limit, int offset) {
         return String.format("Exception during getting all entities in [%d; %d]",
                 offset,
                 offset + limit
         );
     }
 
-    public static String deleteErrorMessage(long id) {
+    static String deleteErrorMessage(long id) {
         return "Exception during deleting horse with id " + id;
     }
 
-    public static String findErrorMessage(long id) {
+    static String findErrorMessage(long id) {
         return "Exception during finding horse entity with id " + id;
     }
 

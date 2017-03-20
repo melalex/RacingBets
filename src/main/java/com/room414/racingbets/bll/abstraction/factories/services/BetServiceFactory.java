@@ -1,4 +1,4 @@
-package com.room414.racingbets.bll.abstraction.factories;
+package com.room414.racingbets.bll.abstraction.factories.services;
 
 import com.room414.racingbets.bll.abstraction.services.BetService;
 

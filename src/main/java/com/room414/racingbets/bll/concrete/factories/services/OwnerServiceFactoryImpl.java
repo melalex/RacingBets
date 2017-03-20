@@ -1,6 +1,6 @@
-package com.room414.racingbets.bll.concrete.factories;
+package com.room414.racingbets.bll.concrete.factories.services;
 
-import com.room414.racingbets.bll.abstraction.factories.OwnerServiceFactory;
+import com.room414.racingbets.bll.abstraction.factories.services.OwnerServiceFactory;
 import com.room414.racingbets.bll.abstraction.services.OwnerService;
 import com.room414.racingbets.bll.concrete.services.OwnerServiceImpl;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
@@ -12,7 +12,7 @@ import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 public class OwnerServiceFactoryImpl implements OwnerServiceFactory {
     private UnitOfWorkFactory unitOfWorkFactory;
 
-    public OwnerServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory) {
+    OwnerServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory) {
         this.unitOfWorkFactory = unitOfWorkFactory;
     }
 

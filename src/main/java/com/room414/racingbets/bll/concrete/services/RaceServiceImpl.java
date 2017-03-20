@@ -2,6 +2,7 @@ package com.room414.racingbets.bll.concrete.services;
 
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
+import com.room414.racingbets.bll.abstraction.infrastructure.mail.RaceResultMessenger;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
 import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
@@ -24,7 +25,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.createErrorMessage;
 import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.defaultErrorMessage;
 
 /**
@@ -36,10 +36,12 @@ public class RaceServiceImpl implements RaceService {
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
     private ErrorHandleDecorator<RaceDto> decorator;
+    private RaceResultMessenger messenger;
 
-    public RaceServiceImpl(UnitOfWorkFactory factory) {
+    public RaceServiceImpl(UnitOfWorkFactory factory, RaceResultMessenger messenger) {
         this.factory = factory;
         this.decorator = new ErrorHandleDecorator<>(factory, log);
+        this.messenger = messenger;
     }
 
     @Override

@@ -1,6 +1,6 @@
-package com.room414.racingbets.bll.concrete.factories;
+package com.room414.racingbets.bll.concrete.factories.services;
 
-import com.room414.racingbets.bll.abstraction.factories.TrainerServiceFactory;
+import com.room414.racingbets.bll.abstraction.factories.services.TrainerServiceFactory;
 import com.room414.racingbets.bll.abstraction.services.TrainerService;
 import com.room414.racingbets.bll.concrete.services.TrainerServiceImpl;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
@@ -12,7 +12,7 @@ import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 public class TrainerServiceFactoryImpl implements TrainerServiceFactory {
     private UnitOfWorkFactory unitOfWorkFactory;
 
-    public TrainerServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory) {
+    TrainerServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory) {
         this.unitOfWorkFactory = unitOfWorkFactory;
     }
 

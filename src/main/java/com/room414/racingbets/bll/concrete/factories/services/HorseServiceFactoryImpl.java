@@ -1,6 +1,6 @@
-package com.room414.racingbets.bll.concrete.factories;
+package com.room414.racingbets.bll.concrete.factories.services;
 
-import com.room414.racingbets.bll.abstraction.factories.HorseServiceFactory;
+import com.room414.racingbets.bll.abstraction.factories.services.HorseServiceFactory;
 import com.room414.racingbets.bll.abstraction.services.HorseService;
 import com.room414.racingbets.bll.concrete.services.HorseServiceImpl;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
@@ -12,7 +12,7 @@ import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 public class HorseServiceFactoryImpl implements HorseServiceFactory {
     private UnitOfWorkFactory unitOfWorkFactory;
 
-    public HorseServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory) {
+    HorseServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory) {
         this.unitOfWorkFactory = unitOfWorkFactory;
     }
 
