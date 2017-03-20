@@ -76,11 +76,13 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
+    // TODO: isolation level
     public void rejectRace(long id) {
         // TODO: implementation
     }
 
     @Override
+    // TODO: isolation level
     public void finishRace(RaceDto race) {
         // TODO: implementation
     }
