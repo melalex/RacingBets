@@ -1,6 +1,6 @@
 package com.room414.racingbets.bll.abstraction.services;
 
-import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
+import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.dto.entities.RacecourseDto;
 
 import java.util.List;

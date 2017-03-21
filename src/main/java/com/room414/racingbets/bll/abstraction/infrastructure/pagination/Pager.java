@@ -1,4 +1,4 @@
-package com.room414.racingbets.bll.abstraction.infrastructure;
+package com.room414.racingbets.bll.abstraction.infrastructure.pagination;
 
 /**
  * @author Alexander Melashchenko

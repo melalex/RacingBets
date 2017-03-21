@@ -1,6 +1,6 @@
 package com.room414.racingbets.bll.concrete.infrastrucure.decorated;
 
-import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
+import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 
 import java.util.List;

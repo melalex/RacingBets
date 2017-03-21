@@ -1,7 +1,7 @@
 package com.room414.racingbets.bll.concrete.services;
 
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
-import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
+import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.infrastructure.mail.EmailConfirmMessenger;
 import com.room414.racingbets.bll.abstraction.services.UserService;
 import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;

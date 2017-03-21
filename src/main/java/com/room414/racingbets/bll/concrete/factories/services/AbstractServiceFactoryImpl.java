@@ -2,7 +2,7 @@ package com.room414.racingbets.bll.concrete.factories.services;
 
 import com.room414.racingbets.bll.abstraction.factories.infrastructure.MessengerFactory;
 import com.room414.racingbets.bll.abstraction.factories.services.*;
-import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
+import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
 
 /**
  * @author Alexander Melashchenko
@@ -20,17 +20,17 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
     private TrainerServiceFactory trainerServiceFactory;
     private UserServiceFactory userServiceFactory;
 
-    public AbstractServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory, MessengerFactory messengerFactory) {
-        this.accountServiceFactory = new AccountServiceFactoryImpl();
-        this.betServiceFactory = new BetServiceFactoryImpl(unitOfWorkFactory);
-        this.horseServiceFactory = new HorseServiceFactoryImpl(unitOfWorkFactory);
-        this.jockeyServiceFactory = new JockeyServiceFactoryImpl(unitOfWorkFactory);
-        this.ownerServiceFactory = new OwnerServiceFactoryImpl(unitOfWorkFactory);
-        this.participantServiceFactory = new ParticipantServiceFactoryImpl(unitOfWorkFactory);
-        this.racecourseServiceFactory = new RacecourseServiceFactoryImpl(unitOfWorkFactory);
-        this.raceServiceFactory = new RaceServiceFactoryImpl(unitOfWorkFactory, messengerFactory);
-        this.trainerServiceFactory = new TrainerServiceFactoryImpl(unitOfWorkFactory);
-        this.userServiceFactory = new UserServiceFactoryImpl(unitOfWorkFactory, messengerFactory);
+    public AbstractServiceFactoryImpl(AbstractDalFactory dalFactory, MessengerFactory messengerFactory) {
+        this.accountServiceFactory = new AccountServiceFactoryImpl(dalFactory.getTokenStorageFactory());
+        this.betServiceFactory = new BetServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+        this.horseServiceFactory = new HorseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+        this.jockeyServiceFactory = new JockeyServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+        this.ownerServiceFactory = new OwnerServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+        this.participantServiceFactory = new ParticipantServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+        this.racecourseServiceFactory = new RacecourseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+        this.raceServiceFactory = new RaceServiceFactoryImpl(dalFactory.getUnitOfWorkFactory(), messengerFactory);
+        this.trainerServiceFactory = new TrainerServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
+        this.userServiceFactory = new UserServiceFactoryImpl(dalFactory.getUnitOfWorkFactory(), messengerFactory);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.room414.racingbets.bll.concrete.services;
 
-import com.room414.racingbets.bll.abstraction.infrastructure.Pager;
+import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.JockeyService;
 import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.JockeyDto;
