@@ -127,6 +127,14 @@ public class ApplicationUser implements Serializable {
         }
     }
 
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        roles.remove(role);
+    }
+
     public boolean isInRole(Role role) {
         return roles.contains(role);
     }

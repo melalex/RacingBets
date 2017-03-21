@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
             }
 
             if (result == 0) {
+                user.addRole(Role.HANDICAPPER);
                 ApplicationUser entity = mapper.map(user, ApplicationUser.class);
                 unitOfWork.getApplicationUserDao().create(entity);
                 unitOfWork.commit();

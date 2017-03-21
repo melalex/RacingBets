@@ -9,6 +9,9 @@ import com.room414.racingbets.bll.dto.entities.UserDto;
  */
 public interface AccountService {
     Jwt getToken(UserDto user);
+    String getToken(Jwt jwt);
+    Jwt getToken(String token);
+
     boolean isValid(Jwt jwt);
     long refreshToken(String refreshToken);
 

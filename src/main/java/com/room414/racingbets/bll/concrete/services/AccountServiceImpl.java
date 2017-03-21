@@ -22,6 +22,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public String getToken(Jwt jwt) {
+        return null;
+    }
+
+    @Override
+    public Jwt getToken(String token) {
+        return null;
+    }
+
+    @Override
     public boolean isValid(Jwt jwt) {
         return false;
     }
