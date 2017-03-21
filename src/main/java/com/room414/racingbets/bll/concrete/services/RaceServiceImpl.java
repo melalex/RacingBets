@@ -2,7 +2,7 @@ package com.room414.racingbets.bll.concrete.services;
 
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
-import com.room414.racingbets.bll.abstraction.infrastructure.mail.RaceResultMessenger;
+import com.room414.racingbets.bll.abstraction.services.MessageService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
 import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
@@ -36,52 +36,14 @@ public class RaceServiceImpl implements RaceService {
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
     private ErrorHandleDecorator<RaceDto> decorator;
-    private RaceResultMessenger messenger;
+    private MessageService messenger;
+    private int betsPerQuery;
 
-    public RaceServiceImpl(UnitOfWorkFactory factory, RaceResultMessenger messenger) {
+    public RaceServiceImpl(UnitOfWorkFactory factory, MessageService messenger, int betsPerQuery) {
         this.factory = factory;
         this.decorator = new ErrorHandleDecorator<>(factory, log);
         this.messenger = messenger;
-    }
-
-    @Override
-    public void scheduleRace(RaceDto race) {
-        decorator.create(race, this::create);
-    }
-
-    private void create(UnitOfWork unitOfWork, RaceDto race) {
-        race.setRaceStatus(RaceStatus.SCHEDULED);
-        Race entity = mapper.map(race, Race.class);
-        unitOfWork.getRaceDao().create(entity);
-        unitOfWork.commit();
-    }
-
-    @Override
-    // TODO: Schedule this job
-    public void startRace(long id) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            unitOfWork.getRaceDao().updateStatus(id, RaceStatus.RIDING);
-            unitOfWork.commit();
-        } catch (DalException e) {
-            String message = defaultErrorMessage("startRace", id);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("startRace", id);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
-    }
-
-    @Override
-    // TODO: isolation level
-    public void rejectRace(long id) {
-        // TODO: implementation
-    }
-
-    @Override
-    // TODO: isolation level
-    public void finishRace(RaceDto race) {
-        // TODO: implementation
+        this.betsPerQuery = betsPerQuery;
     }
 
     private List<RaceDto> mapList(List<Race> source) {
@@ -106,6 +68,61 @@ public class RaceServiceImpl implements RaceService {
         Timestamp dayEnd = new Timestamp(cal.getTime().getTime());
 
         return new Pair<>(dayStart, dayEnd);
+    }
+
+    @Override
+    public void scheduleRace(RaceDto race) {
+        decorator.create(race, this::create);
+    }
+
+    @Override
+    // TODO: Schedule this job
+    public void startRace(long id) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            unitOfWork.getRaceDao().updateStatus(id, RaceStatus.RIDING);
+            unitOfWork.commit();
+        } catch (DalException e) {
+            String message = defaultErrorMessage("startRace", id);
+            throw new BllException(message, e);
+        } catch (Throwable t) {
+            String message = defaultErrorMessage("startRace", id);
+            log.error(message, t);
+            throw new BllException(message, t);
+        }
+    }
+
+    @Override
+    // TODO: isolation level
+    public void rejectRace(long id) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+
+        }
+    }
+
+    @Override
+    // TODO: isolation level
+    public void finishRace(RaceDto race) {
+        // TODO: implementation
+    }
+
+    @Override
+    public void update(RaceDto horse) {
+        decorator.update(horse, this::update);
+    }
+
+    @Override
+    public void delete(long id) {
+        decorator.delete(id, this::delete);
+    }
+
+    @Override
+    public RaceDto find(long id) {
+        return decorator.find(id, this::find);
+    }
+
+    @Override
+    public List<RaceDto> findAll(Pager pager) {
+        return decorator.findAll(pager, this::findAll);
     }
 
     @Override
@@ -228,5 +245,39 @@ public class RaceServiceImpl implements RaceService {
             log.error(message, t);
             throw new BllException(message, t);
         }
+    }
+
+    private void create(UnitOfWork unitOfWork, RaceDto race) {
+        race.setRaceStatus(RaceStatus.SCHEDULED);
+        Race entity = mapper.map(race, Race.class);
+        unitOfWork.getRaceDao().create(entity);
+        unitOfWork.commit();
+    }
+
+    private void update(UnitOfWork unitOfWork, RaceDto horse) {
+        Race entity = mapper.map(horse, Race.class);
+        unitOfWork.getRaceDao().update(entity);
+        unitOfWork.commit();
+    }
+
+    private RaceDto find(UnitOfWork unitOfWork, long id) {
+        Race entity = unitOfWork.getRaceDao().find(id);
+        return entity != null ? mapper.map(entity, RaceDto.class) : null;
+    }
+
+    private List<RaceDto> findAll(UnitOfWork unitOfWork, Pager pager) {
+        RaceDao horseDao = unitOfWork.getRaceDao();
+
+        List<Race> entities = horseDao.findAll(pager.getOffset(), pager.getLimit());
+        int count = horseDao.count();
+
+        pager.setCount(count);
+
+        return mapList(entities);
+    }
+
+    private void delete(UnitOfWork unitOfWork, long id) {
+        unitOfWork.getRaceDao().delete(id);
+        unitOfWork.commit();
     }
 }

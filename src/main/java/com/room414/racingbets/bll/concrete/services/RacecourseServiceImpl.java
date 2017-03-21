@@ -78,7 +78,7 @@ public class RacecourseServiceImpl implements RacecourseService {
 
     private RacecourseDto find(UnitOfWork unitOfWork, long id) {
         Racecourse entity = unitOfWork.getRacecourseDao().find(id);
-        return mapper.map(entity, RacecourseDto.class);
+        return entity != null ? mapper.map(entity, RacecourseDto.class) : null;
     }
 
     private List<RacecourseDto> search(UnitOfWork unitOfWork, String searchString, Pager pager) {

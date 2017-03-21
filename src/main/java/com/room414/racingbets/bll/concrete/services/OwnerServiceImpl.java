@@ -78,7 +78,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     private OwnerDto find(UnitOfWork unitOfWork, long id) {
         Owner entity = unitOfWork.getOwnerDao().find(id);
-        return mapper.map(entity, OwnerDto.class);
+        return entity != null ? mapper.map(entity, OwnerDto.class) : null;
     }
 
     private List<OwnerDto> search(UnitOfWork unitOfWork, String searchString, Pager pager) {

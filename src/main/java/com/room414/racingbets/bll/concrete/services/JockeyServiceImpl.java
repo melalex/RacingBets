@@ -78,7 +78,7 @@ public class JockeyServiceImpl implements JockeyService {
 
     private JockeyDto find(UnitOfWork unitOfWork, long id) {
         Jockey entity = unitOfWork.getJockeyDao().find(id);
-        return mapper.map(entity, JockeyDto.class);
+        return entity != null ? mapper.map(entity, JockeyDto.class) : null;
     }
 
     private List<JockeyDto> search(UnitOfWork unitOfWork, String searchString, Pager pager) {

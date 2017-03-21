@@ -31,7 +31,6 @@ public class JwtBuilderImpl implements JwtBuilder {
         return this;
     }
 
-    @Override
     public JwtBuilderImpl setExpire(long expireIn) {
         this.expire = expireIn;
         return this;
@@ -61,8 +60,7 @@ public class JwtBuilderImpl implements JwtBuilder {
         return this;
     }
 
-    @Override
-    public JwtBuilder setSignature(String signature) {
+    JwtBuilder setSignature(String signature) {
         this.signature = signature;
         return this;
     }

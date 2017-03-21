@@ -80,7 +80,7 @@ public class HorseServiceImpl implements HorseService {
 
     private HorseDto find(UnitOfWork unitOfWork, long id) {
         Horse entity = unitOfWork.getHorseDao().find(id);
-        return mapper.map(entity, HorseDto.class);
+        return entity != null ? mapper.map(entity, HorseDto.class) : null;
     }
 
     private List<HorseDto> search(UnitOfWork unitOfWork, String searchString, Pager pager) {

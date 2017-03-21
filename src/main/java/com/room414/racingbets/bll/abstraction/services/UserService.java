@@ -21,6 +21,7 @@ public interface UserService {
     void addRole(long id, Role role);
     void removeRole(long id, Role role);
     void delete(long id);
+    void confirmEmail(long userId);
 
     UserDto find(long id);
     UserDto findByLoginPassword(String login, String password);

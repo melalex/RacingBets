@@ -17,6 +17,12 @@ public interface RaceService {
     void rejectRace(long id);
     void finishRace(RaceDto race);
 
+    void update(RaceDto horse);
+    void delete(long id);
+
+    RaceDto find(long id);
+    List<RaceDto> findAll(Pager pager);
+
     List<RaceDto> findByRacecourse(RaceStatus status, long id, Pager pager);
     List<RaceDto> findByDate(RaceStatus status, Date date, Pager pager);
     List<RaceDto> findByDateAndRacecourse(RaceStatus status, Date date, long id, Pager pager);

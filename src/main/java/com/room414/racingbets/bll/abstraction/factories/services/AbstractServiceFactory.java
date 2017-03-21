@@ -10,6 +10,7 @@ public interface AbstractServiceFactory {
     BetServiceFactory createBetServiceFactory();
     HorseServiceFactory createHorseServiceFactory();
     JockeyServiceFactory createJockeyServiceFactory();
+    MessageServiceFactory createMessageServiceFactory();
     OwnerServiceFactory createOwnerServiceFactory();
     ParticipantServiceFactory createParticipantServiceFactory();
     RacecourseServiceFactory createRacecourseServiceFactory();

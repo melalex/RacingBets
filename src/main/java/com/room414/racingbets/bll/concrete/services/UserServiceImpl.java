@@ -2,7 +2,6 @@ package com.room414.racingbets.bll.concrete.services;
 
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
-import com.room414.racingbets.bll.abstraction.infrastructure.mail.EmailConfirmMessenger;
 import com.room414.racingbets.bll.abstraction.services.UserService;
 import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.UserDto;
@@ -31,17 +30,14 @@ public class UserServiceImpl implements UserService {
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
     private ErrorHandleDecorator<UserDto> decorator;
-    private EmailConfirmMessenger messenger;
 
-    public UserServiceImpl(UnitOfWorkFactory factory, EmailConfirmMessenger messenger) {
+    public UserServiceImpl(UnitOfWorkFactory factory) {
         this.factory = factory;
         this.decorator = new ErrorHandleDecorator<>(factory, log);
-        this.messenger = messenger;
     }
 
     @Override
     // TODO: Password hashcode
-    // TODO: Confirm tokens
     public int create(UserDto user) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ApplicationUserDao dao = unitOfWork.getApplicationUserDao();
@@ -130,6 +126,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(long id) {
         decorator.delete(id, this::delete);
+    }
+
+    @Override
+    public void confirmEmail(long userId) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            unitOfWork.getApplicationUserDao().confirmEmail(userId);
+            unitOfWork.commit();
+        } catch (DalException e) {
+            String message = defaultErrorMessage("confirmEmail", e);
+            throw new BllException(message, e);
+        } catch (Throwable t) {
+            String message = defaultErrorMessage("confirmEmail", t);
+            log.error(message, t);
+            throw new BllException(message, t);
+        }
     }
 
     @Override
