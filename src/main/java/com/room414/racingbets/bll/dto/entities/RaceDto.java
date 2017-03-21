@@ -192,6 +192,11 @@ public class RaceDto implements Serializable {
         }
     }
 
+    public ParticipantDto getParticipant(int place) {
+        return participants.get(place);
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

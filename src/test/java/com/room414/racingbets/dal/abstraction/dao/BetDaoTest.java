@@ -312,4 +312,16 @@ class BetDaoTest {
     void update() {
         // bet update is redundant
     }
+
+    @Test
+    @Tag("write")
+    void fixRaceResult() {
+        // TODO: test this
+    }
+
+    @Test
+    @Tag("write")
+    void rejectBets(long raceId) {
+        // TODO: test this
+    }
 }

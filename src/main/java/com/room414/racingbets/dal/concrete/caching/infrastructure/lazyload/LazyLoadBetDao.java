@@ -4,6 +4,7 @@ import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
+import com.room414.racingbets.dal.domain.entities.Race;
 
 import java.util.List;
 
@@ -86,4 +87,15 @@ public class LazyLoadBetDao implements BetDao {
     public boolean delete(Long id) {
         return getBetDao().delete(id);
     }
+
+    @Override
+    public void fixRaceResult(Race race) {
+        getBetDao().fixRaceResult(race);
+    }
+
+    @Override
+    public void rejectBets(long raceId) {
+        getBetDao().rejectBets(raceId);
+    }
+
 }

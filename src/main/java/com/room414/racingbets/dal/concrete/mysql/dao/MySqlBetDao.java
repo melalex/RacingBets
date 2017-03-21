@@ -8,6 +8,7 @@ import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import com.room414.racingbets.dal.domain.entities.Race;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.intellij.lang.annotations.Language;
@@ -336,6 +337,41 @@ public class MySqlBetDao implements BetDao {
                 entity.getBetType().getName(),
                 entity.getId()
         );
+    }
+
+    @Override
+    public void fixRaceResult(Race race) {
+        @Language("MySQL")
+        final String call = "{ CALL fix_race_result(?, ?, ?, ?, ?) }";
+
+        try (CallableStatement statement = connection.prepareCall(call)) {
+            statement.setLong(1, race.getId());
+            statement.setLong(2, race.getParticipant(1).getId());
+            statement.setLong(3, race.getParticipant(2).getId());
+            statement.setLong(4, race.getParticipant(3).getId());
+            statement.setLong(5, race.getParticipant(4).getId());
+
+            statement.execute();
+        } catch (SQLException e) {
+            String message = callErrorMessage("fix_race_result");
+            log.error(message, e);
+            throw new DalException(message, e);
+        }
+    }
+
+    @Override
+    public void rejectBets(long raceId) {
+        @Language("MySQL")
+        final String sqlStatement =
+                "UPDATE bet " +
+                "SET bet.status = 'rejected' " +
+                "WHERE bet.race_id = ?";
+
+        executor.executeUpdateQuery(
+                sqlStatement,
+                raceId
+        );
+
     }
 
     @Override

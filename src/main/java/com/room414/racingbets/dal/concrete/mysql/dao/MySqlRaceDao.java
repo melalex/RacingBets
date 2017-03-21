@@ -321,6 +321,7 @@ public class MySqlRaceDao implements RaceDao {
 
     @Override
     // TODO: need clean up
+    // TODO: test cascade update
     public long update(Race entity) {
         long racesAffected = updateRace(entity);
         updateParticipants(entity);

@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
+import com.room414.racingbets.dal.domain.entities.Race;
 
 import java.util.List;
 
@@ -47,4 +48,22 @@ public interface BetDao extends CrudDao<Long, Bet> {
      *      </a>
      */
     Odds getOdds(Bet bet);
+
+
+    /**
+     * Update {@code Bet}s status to {@code BetStatus.WIN} or {@code BetStatus.LOSE} base on race result
+     *
+     * @param race {@code Race} which bets should be update
+     * @see com.room414.racingbets.dal.domain.enums.BetStatus
+     */
+    void fixRaceResult(Race race);
+
+
+    /**
+     * Change {@code Bet}s status to {@code BetStatus.REJECTED}
+     *
+     * @param raceId {@code Race} which bets should be update
+     * @see com.room414.racingbets.dal.domain.enums.BetStatus#REJECTED
+     */
+    void rejectBets(long raceId);
 }

@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
+import com.room414.racingbets.dal.domain.entities.Race;
 
 import java.util.List;
 
@@ -65,5 +66,15 @@ public class CachedBetDao extends CacheCrudDao<Bet> implements BetDao {
     @Override
     public Odds getOdds(Bet bet) {
         return cache.getOdds(bet, () -> dao.getOdds(bet));
+    }
+
+    @Override
+    public void fixRaceResult(Race race) {
+        dao.fixRaceResult(race);
+    }
+
+    @Override
+    public void rejectBets(long raceId) {
+        dao.rejectBets(raceId);
     }
 }
