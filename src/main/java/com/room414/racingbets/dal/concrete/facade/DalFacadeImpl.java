@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.facade;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.facade.DalFacade;
+import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.factories.CachedUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.factories.CaffeineCachingUnitOfWorkFactory;
@@ -27,7 +28,7 @@ import java.util.Properties;
  * @version 1.0 08 Mar 2017
  */
 // TODO: replace *.property files paths to upper level (maybe WEB?)
-public class CachedMySqlDalFacade implements DalFacade, AutoCloseable {
+public class DalFacadeImpl implements DalFacade, AutoCloseable {
     private static final Path DB_CONFIG_FILE_PATH = Paths.get(
             System.getProperty("user.dir"),
             "database",
@@ -46,34 +47,35 @@ public class CachedMySqlDalFacade implements DalFacade, AutoCloseable {
             "redisConfig.properties"
     );
 
-    private static CachedMySqlDalFacade ourInstance = new CachedMySqlDalFacade();
+    private static DalFacadeImpl ourInstance = new DalFacadeImpl();
 
-    private Log log = LogFactory.getLog(CachedMySqlDalFacade.class);
+    private Log log = LogFactory.getLog(DalFacadeImpl.class);
 
     private MainCachePool pool = new MainCachePool();
 
     private JedisPool jedisPool;
     private DataSource mysqlPool;
 
-    private UnitOfWorkFactory factory;
+    private AbstractDalFactory factory;
 
-    public static CachedMySqlDalFacade getInstance() {
+    public static DalFacadeImpl getInstance() {
         return ourInstance;
     }
 
-    private CachedMySqlDalFacade() {
+    private DalFacadeImpl() {
 
     }
 
-    public void initDal() {
-        initDal(DB_CONFIG_FILE_PATH.toString(), REDIS_CONFIG_FILE_PATH.toString());
-    }
-
-    public void initDal(String mysqlPropertiesFilePath, String redisPropertiesFilePath) {
-        this.initMySqlConnectionPool(mysqlPropertiesFilePath);
-        this.initRedisConnectionPool(redisPropertiesFilePath);
+    /**
+     * @param mysqlProperties path to *.property file with mysql connection configuration
+     * @param redisProperties path to *.property file with redis connection configuration
+     * @param dalFactoryProperties path to *.property file with {@code AbstractDalFactory} configuration
+     */
+    public void initDal(String mysqlProperties, String redisProperties, String  dalFactoryProperties) {
+        this.initMySqlConnectionPool(mysqlProperties);
+        this.initRedisConnectionPool(redisProperties);
         this.initRedisSubscriber();
-        this.initUnitOfWorkFactory();
+        this.initDalFactory(dalFactoryProperties);
     }
 
     // TODO: initialize data source
@@ -91,7 +93,7 @@ public class CachedMySqlDalFacade implements DalFacade, AutoCloseable {
 
 
         } catch (IOException e) {
-            String message = "Exception during mysql connection pool creation";
+            String message = "Exception during reading mysql connection properties";
             log.error(message);
             throw new DalException(message, e);
         }
@@ -112,7 +114,7 @@ public class CachedMySqlDalFacade implements DalFacade, AutoCloseable {
 
             jedisPool = new JedisPool(new JedisPoolConfig(), host, port, timeout, password, db);
         } catch (IOException e) {
-            String message = "Exception during redis connection pool creation";
+            String message = "Exception during reading redis connection pool properties";
             log.error(message);
             throw new DalException(message, e);
         }
@@ -123,16 +125,12 @@ public class CachedMySqlDalFacade implements DalFacade, AutoCloseable {
         redisSubscriber.subscribe(jedisPool.getResource());
     }
 
-    private void initUnitOfWorkFactory() {
-        RedisUnitOfWorkFactory redisUnitOfWorkFactory = new RedisUnitOfWorkFactory(this.jedisPool);
-        UnitOfWorkFactory unitOfWorkFactory = new MySqlUnitOfWorkFactory(mysqlPool);
-        CaffeineCachingUnitOfWorkFactory cachingUnitOfWorkFactory = new CaffeineCachingUnitOfWorkFactory(redisUnitOfWorkFactory, pool);
-
-        this.factory = new CachedUnitOfWorkFactory(unitOfWorkFactory, cachingUnitOfWorkFactory);
+    private void initDalFactory(String dalFactoryProperties) {
+        this.factory = AbstractDalFactoryImpl.create(mysqlPool, jedisPool, dalFactoryProperties);
     }
 
     @Override
-    public UnitOfWorkFactory getUnitOfWorkFactory() {
+    public AbstractDalFactory getDalFactory() {
         return factory;
     }
 
