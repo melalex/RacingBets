@@ -1,5 +1,6 @@
 package com.room414.racingbets.bll.concrete.factories.services;
 
+import com.room414.racingbets.bll.abstraction.factories.infrastructure.JwtFactory;
 import com.room414.racingbets.bll.abstraction.factories.infrastructure.MessengerFactory;
 import com.room414.racingbets.bll.abstraction.factories.services.*;
 import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
@@ -20,8 +21,8 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
     private TrainerServiceFactory trainerServiceFactory;
     private UserServiceFactory userServiceFactory;
 
-    public AbstractServiceFactoryImpl(AbstractDalFactory dalFactory, MessengerFactory messengerFactory) {
-        this.accountServiceFactory = new AccountServiceFactoryImpl(dalFactory.getTokenStorageFactory());
+    public AbstractServiceFactoryImpl(AbstractDalFactory dalFactory, MessengerFactory messengerFactory, JwtFactory jwtFactory) {
+        this.accountServiceFactory = new AccountServiceFactoryImpl(dalFactory.getTokenStorageFactory(), jwtFactory);
         this.betServiceFactory = new BetServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.horseServiceFactory = new HorseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.jockeyServiceFactory = new JockeyServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());

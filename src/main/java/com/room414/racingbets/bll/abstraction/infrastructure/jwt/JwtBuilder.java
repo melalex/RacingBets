@@ -9,12 +9,10 @@ import java.util.Collection;
  * @version 1.0 21 Mar 2017
  */
 public interface JwtBuilder {
-    JwtBuilder setExpire(long expireIn);
     JwtBuilder setUserId(long id);
     JwtBuilder setEmail(String email);
     JwtBuilder setRoles(Collection<Role> roles);
     JwtBuilder addRole(Role role);
-    JwtBuilder setSignature(String signature);
 
     Jwt build();
 }

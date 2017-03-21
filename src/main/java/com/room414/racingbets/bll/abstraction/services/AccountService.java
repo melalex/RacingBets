@@ -13,8 +13,10 @@ public interface AccountService {
     Jwt getToken(String token);
 
     boolean isValid(Jwt jwt);
-    long refreshToken(String refreshToken);
 
-    String confirmToken(UserDto user);
-    boolean confirmEmail(String token);
+    String getRefreshToken(long userId);
+    long getIdByRefreshToken(String refreshToken);
+
+    String getConfirmToken(long userId);
+    long getIdByConfirmToken(String confirmToken);
 }

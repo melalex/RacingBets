@@ -2,6 +2,7 @@ package com.room414.racingbets.bll.concrete.infrastrucure.jwt;
 
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtBuilder;
+import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtEncoder;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.util.Collection;
@@ -18,7 +19,7 @@ public class JwtBuilderImpl implements JwtBuilder {
     private String email;
     private Collection<Role> roles;
     private String signature;
-    private String secret;
+    private JwtEncoder encoder;
 
     public JwtBuilderImpl setAlgorithm(String algorithm) {
         this.algorithm = algorithm;
@@ -66,8 +67,8 @@ public class JwtBuilderImpl implements JwtBuilder {
         return this;
     }
 
-    public JwtBuilderImpl setSecret(String secret) {
-        this.secret = secret;
+    public JwtBuilderImpl setEncoder(JwtEncoder encoder) {
+        this.encoder = encoder;
         return this;
     }
 
@@ -81,7 +82,7 @@ public class JwtBuilderImpl implements JwtBuilder {
         jwt.setEmail(email);
         jwt.setUserId(id);
         jwt.setRoles(roles);
-        jwt.setSignature(signature == null ? JwtUtil.generateSignature(jwt, secret) : signature);
+        jwt.setSignature(signature == null ? encoder.generateSignature(jwt) : signature);
 
         return jwt;
     }
