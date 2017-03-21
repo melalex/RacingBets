@@ -6,6 +6,7 @@ package com.room414.racingbets.bll.abstraction.factories.services;
  * @version 1.0 20 Mar 2017
  */
 public interface AbstractServiceFactory {
+    AccountServiceFactory createAccountServiceFactory();
     BetServiceFactory createBetServiceFactory();
     HorseServiceFactory createHorseServiceFactory();
     JockeyServiceFactory createJockeyServiceFactory();

@@ -9,6 +9,7 @@ import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
  * @version 1.0 20 Mar 2017
  */
 public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
+    private AccountServiceFactory accountServiceFactory;
     private BetServiceFactory betServiceFactory;
     private HorseServiceFactory horseServiceFactory;
     private JockeyServiceFactory jockeyServiceFactory;
@@ -20,6 +21,7 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
     private UserServiceFactory userServiceFactory;
 
     public AbstractServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory, MessengerFactory messengerFactory) {
+        this.accountServiceFactory = new AccountServiceFactoryImpl();
         this.betServiceFactory = new BetServiceFactoryImpl(unitOfWorkFactory);
         this.horseServiceFactory = new HorseServiceFactoryImpl(unitOfWorkFactory);
         this.jockeyServiceFactory = new JockeyServiceFactoryImpl(unitOfWorkFactory);
@@ -29,6 +31,11 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
         this.raceServiceFactory = new RaceServiceFactoryImpl(unitOfWorkFactory, messengerFactory);
         this.trainerServiceFactory = new TrainerServiceFactoryImpl(unitOfWorkFactory);
         this.userServiceFactory = new UserServiceFactoryImpl(unitOfWorkFactory, messengerFactory);
+    }
+
+    @Override
+    public AccountServiceFactory createAccountServiceFactory() {
+        return accountServiceFactory;
     }
 
     @Override
