@@ -17,6 +17,7 @@ public class JwtBuilderImpl implements JwtBuilder {
     private long id;
     private String email;
     private Collection<Role> roles;
+    private String signature;
     private String secret;
 
     public JwtBuilderImpl setAlgorithm(String algorithm) {
@@ -59,6 +60,12 @@ public class JwtBuilderImpl implements JwtBuilder {
         return this;
     }
 
+    @Override
+    public JwtBuilder setSignature(String signature) {
+        this.signature = signature;
+        return this;
+    }
+
     public JwtBuilderImpl setSecret(String secret) {
         this.secret = secret;
         return this;
@@ -74,7 +81,7 @@ public class JwtBuilderImpl implements JwtBuilder {
         jwt.setEmail(email);
         jwt.setUserId(id);
         jwt.setRoles(roles);
-        jwt.setSignature(JwtUtil.generateSignature(jwt, secret));
+        jwt.setSignature(signature == null ? JwtUtil.generateSignature(jwt, secret) : signature);
 
         return jwt;
     }

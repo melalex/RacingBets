@@ -8,4 +8,5 @@ import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtBuilder;
  */
 public interface JwtBuilderFactory {
     JwtBuilder create();
+    String getSecret();
 }

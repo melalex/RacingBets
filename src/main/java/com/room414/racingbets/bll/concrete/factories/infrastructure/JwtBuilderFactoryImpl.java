@@ -24,6 +24,7 @@ public class JwtBuilderFactoryImpl implements JwtBuilderFactory {
         this.expire = expire;
     }
 
+    @Override
     public String getSecret() {
         return secret;
     }

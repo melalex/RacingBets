@@ -14,6 +14,7 @@ public interface JwtBuilder {
     JwtBuilder setEmail(String email);
     JwtBuilder setRoles(Collection<Role> roles);
     JwtBuilder addRole(Role role);
+    JwtBuilder setSignature(String signature);
 
     Jwt build();
 }
