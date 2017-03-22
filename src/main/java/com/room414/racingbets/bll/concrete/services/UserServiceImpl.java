@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    // TODO: Password hashcode
     public int create(UserDto user) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ApplicationUserDao dao = unitOfWork.getApplicationUserDao();
