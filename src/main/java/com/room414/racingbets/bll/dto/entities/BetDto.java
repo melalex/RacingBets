@@ -93,6 +93,11 @@ public class BetDto implements Serializable {
         }
     }
 
+    // TODO: delete this method
+    public void setParticipant(int place, ParticipantDto participant) {
+        participants.put(place, participant);
+    }
+
     public ParticipantDto getParticipantByPlace(int place) {
         if (participants != null) {
             return participants.get(place);
@@ -100,6 +105,7 @@ public class BetDto implements Serializable {
             return null;
         }
     }
+
 
     @Override
     public boolean equals(Object o) {

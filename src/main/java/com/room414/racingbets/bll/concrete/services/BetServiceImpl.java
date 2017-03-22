@@ -47,18 +47,18 @@ public class BetServiceImpl implements BetService {
                         && participants.get(2) != null
                         && participants.get(3) != null;
             case PLACE:
-                return participants.size() == 3
+                return participants.size() == 2
                         && participants.get(1) != null
                         && participants.get(2) != null;
             case WIN:
-                return participants.size() == 3
+                return participants.size() == 1
                         && participants.get(1) != null;
             case QUINELLA:
-                return participants.size() == 3
+                return participants.size() == 2
                         && participants.get(1) != null
                         && participants.get(2) != null;
             case EXACTA:
-                return participants.size() == 3
+                return participants.size() == 2
                         && participants.get(1) != null
                         && participants.get(2) != null;
             case TRIFECTA:
@@ -67,7 +67,7 @@ public class BetServiceImpl implements BetService {
                         && participants.get(2) != null
                         && participants.get(3) != null;
             case SUPERFECTA:
-                return participants.size() == 3
+                return participants.size() == 4
                         && participants.get(1) != null
                         && participants.get(2) != null
                         && participants.get(3) != null
