@@ -17,7 +17,6 @@ public interface UserService {
 
     int create(UserDto user);
     void update(UserDto user);
-    boolean confirmEmail(long id, String token);
     void addRole(long id, Role role);
     void removeRole(long id, Role role);
     void delete(long id);

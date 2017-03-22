@@ -188,6 +188,10 @@ public class ApplicationUser implements Serializable {
             return false;
         }
 
+        if (salt != null ? !salt.equals(user.salt) : user.salt != null) {
+            return false;
+        }
+
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) {
             return false;
         }
@@ -196,7 +200,7 @@ public class ApplicationUser implements Serializable {
             return false;
         }
 
-        if (balance != null ? !balance.equals(user.balance) : user.balance != null) {
+        if (balance != null ? balance.compareTo(user.balance) != 0 : user.balance != null) {
             return false;
         }
 
@@ -218,10 +222,14 @@ public class ApplicationUser implements Serializable {
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (salt != null ? salt.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (isEmailConfirmed ? 1 : 0);
-        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+
+        long temp = balance != null ? Double.doubleToLongBits(balance.doubleValue()) : 0;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
         result = 31 * result + (language != null ? language.hashCode() : 0);
 
@@ -235,6 +243,7 @@ public class ApplicationUser implements Serializable {
                 ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", isEmailConfirmed=" + isEmailConfirmed +
@@ -243,5 +252,4 @@ public class ApplicationUser implements Serializable {
                 ", language=" + language +
                 '}';
     }
-
 }

@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alexander Melashchenko

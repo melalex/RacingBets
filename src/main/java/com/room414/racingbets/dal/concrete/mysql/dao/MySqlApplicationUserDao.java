@@ -95,7 +95,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     private void createApplicationUser(ApplicationUser entity) {
         final String sqlStatement =
                 "INSERT INTO application_user " +
-                "   (login, password, salt, first_name, last_name, email, is_email_confirmed, balance, language) " +
+                "   (login, password_hash, salt, first_name, last_name, email, is_email_confirmed, balance, language) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
@@ -124,11 +124,13 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                     sqlStatement,
                     entity.getLogin(),
                     entity.getPassword(),
+                    entity.getSalt(),
                     entity.getFirstName(),
                     entity.getLastName(),
                     entity.getEmail(),
                     entity.isEmailConfirmed(),
-                    entity.getBalance()
+                    entity.getBalance(),
+                    entity.getLanguage()
             );
 
             log.error(message, e);
@@ -213,7 +215,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         @Language("MySQL")
         final String sqlStatement =
                 "UPDATE application_user " +
-                "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
+                "SET login = ?, password_hash = ?, first_name = ?, last_name = ?, " +
                 "    email = ?, is_email_confirmed = ?, balance = ?, language = ? " +
                 "WHERE id = ?";
 

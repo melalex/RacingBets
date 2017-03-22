@@ -196,8 +196,8 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    public void update(RaceDto horse) {
-        decorator.update(horse, this::update);
+    public void update(RaceDto race) {
+        decorator.update(race, this::update);
     }
 
     @Override

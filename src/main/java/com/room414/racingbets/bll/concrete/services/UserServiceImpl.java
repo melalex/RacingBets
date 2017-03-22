@@ -113,22 +113,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean confirmEmail(long id, String token) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            unitOfWork.getApplicationUserDao().confirmEmail(id);
-            unitOfWork.commit();
-            return false;
-        } catch (DalException e) {
-            String message = defaultErrorMessage("confirmEmail", id, token);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("confirmEmail", id, token);
-            log.error(message, t);
-            throw new BllException(message, t);
-        }
-    }
-
-    @Override
     public void addRole(long id, Role role) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getApplicationUserDao().addRole(id, role);

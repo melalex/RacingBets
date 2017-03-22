@@ -17,7 +17,7 @@ public interface RaceService {
     void rejectRace(RaceDto race);
     void finishRace(RaceDto race);
 
-    void update(RaceDto horse);
+    void update(RaceDto race);
     void delete(long id);
 
     RaceDto find(long id);
