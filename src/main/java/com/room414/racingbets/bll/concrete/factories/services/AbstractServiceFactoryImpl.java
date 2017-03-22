@@ -5,6 +5,8 @@ import com.room414.racingbets.bll.abstraction.factories.services.MessageServiceF
 import com.room414.racingbets.bll.abstraction.factories.services.*;
 import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
 
+import java.util.Properties;
+
 /**
  * @author Alexander Melashchenko
  * @version 1.0 20 Mar 2017
@@ -24,12 +26,14 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
 
     public AbstractServiceFactoryImpl(
             AbstractDalFactory dalFactory,
-            MessageServiceFactory messageServiceFactory,
-            RaceServiceFactory raceServiceFactory,
-            JwtFactory jwtFactory
+            JwtFactory jwtFactory,
+            Properties properties
     ) {
-        this.messageServiceFactory = messageServiceFactory;
-        this.raceServiceFactory = raceServiceFactory;
+        this.messageServiceFactory = new MessageServiceFactoryImpl(properties);
+        this.userServiceFactory = new UserServiceFactoryImpl(dalFactory.getUnitOfWorkFactory(), properties);
+        this.raceServiceFactory = new RaceServiceFactoryImpl(
+                dalFactory.getUnitOfWorkFactory(), messageServiceFactory, properties
+        );
 
         this.accountServiceFactory = new AccountServiceFactoryImpl(dalFactory.getTokenStorageFactory(), jwtFactory);
         this.betServiceFactory = new BetServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
@@ -39,7 +43,6 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
         this.participantServiceFactory = new ParticipantServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.racecourseServiceFactory = new RacecourseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.trainerServiceFactory = new TrainerServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.userServiceFactory = new UserServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
     }
 
     @Override

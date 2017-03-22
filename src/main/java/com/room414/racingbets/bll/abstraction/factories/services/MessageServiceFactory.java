@@ -7,5 +7,5 @@ import com.room414.racingbets.bll.abstraction.services.MessageService;
  * @version 1.0 21 Mar 2017
  */
 public interface MessageServiceFactory {
-    MessageService createRaceResultMessageService();
+    MessageService getMessageService();
 }
