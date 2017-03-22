@@ -5,6 +5,7 @@ import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtBuilder;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtDecoder;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtEncoder;
 import com.room414.racingbets.bll.concrete.infrastrucure.jwt.JwtBuilderImpl;
+import com.room414.racingbets.bll.concrete.infrastrucure.jwt.JwtDecoderImpl;
 import com.room414.racingbets.bll.concrete.infrastrucure.jwt.JwtEncoderImpl;
 
 import java.util.GregorianCalendar;
@@ -20,12 +21,14 @@ public class JwtFactoryImpl implements JwtFactory {
     private long expire;
 
     private JwtEncoder encoder;
+    private JwtDecoder decoder;
 
     public JwtFactoryImpl(String secret, String algorithm, String type, long expire) {
         this.algorithm = algorithm;
         this.type = type;
         this.expire = expire;
         this.encoder = new JwtEncoderImpl(secret);
+        this.decoder = new JwtDecoderImpl();
     }
 
 
@@ -44,7 +47,7 @@ public class JwtFactoryImpl implements JwtFactory {
 
     @Override
     public JwtDecoder getDecoder() {
-        return null;
+        return decoder;
     }
 
     @Override

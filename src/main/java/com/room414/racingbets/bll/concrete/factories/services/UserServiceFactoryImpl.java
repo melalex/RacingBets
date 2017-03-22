@@ -18,6 +18,7 @@ public class UserServiceFactoryImpl implements UserServiceFactory {
 
     @Override
     public UserService create() {
-        return new UserServiceImpl(unitOfWorkFactory);
+        // TODO: properties
+        return new UserServiceImpl(unitOfWorkFactory, "SHA1PRNG");
     }
 }

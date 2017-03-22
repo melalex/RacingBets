@@ -49,7 +49,7 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
 
     @Override
     public ApplicationUser findByLogin(String login) {
-        String key = getFindByLoginAndPasswordKey(login, password);
+        String key = getFindByLogin(login);
 
         return cache.getOneCached(key, () -> dao.findByLogin(login));
     }
@@ -96,15 +96,15 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
         cache.deleteManyCached();
     }
 
-    private String  getFindByLoginAndPasswordKey(String login, String password) {
-        return String.format("find:login:password:%s:%s", login, password);
+    private String getFindByLogin(String login) {
+        return String.format("find:login:%s", login);
     }
 
     private void removeFromCacheById(long id) {
         ApplicationUser user = find(id);
 
         if (user != null) {
-            String idLoginPassword = getFindByLoginAndPasswordKey(user.getLogin(), user.getPassword());
+            String idLoginPassword = getFindByLogin(user.getLogin());
             String idKey = getFindByIdKey(id);
 
             cache.deleteOneCached(idLoginPassword);

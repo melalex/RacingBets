@@ -84,7 +84,7 @@ public class MessageServiceImpl implements MessageService {
         sendMessage(message -> {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
             message.setSubject("sendConfirmMessage");
-            message.setText("Hello, this is sample for to check send email using JavaMailAPI ");
+            message.setText("Confirm email token: " + token);
         });
     }
 }

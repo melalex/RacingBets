@@ -6,6 +6,7 @@ import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtEncoder;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * @author Alexander Melashchenko
@@ -20,6 +21,13 @@ public class JwtBuilderImpl implements JwtBuilder {
     private Collection<Role> roles;
     private String signature;
     private JwtEncoder encoder;
+
+    private Collection<Role> getRoles() {
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
+        return roles;
+    }
 
     public JwtBuilderImpl setAlgorithm(String algorithm) {
         this.algorithm = algorithm;
@@ -56,7 +64,7 @@ public class JwtBuilderImpl implements JwtBuilder {
 
     @Override
     public JwtBuilderImpl addRole(Role role) {
-        roles.add(role);
+        getRoles().add(role);
         return this;
     }
 
@@ -79,7 +87,7 @@ public class JwtBuilderImpl implements JwtBuilder {
         jwt.setExpire(expire);
         jwt.setEmail(email);
         jwt.setUserId(id);
-        jwt.setRoles(roles);
+        jwt.setRoles(getRoles());
         jwt.setSignature(signature == null ? encoder.generateSignature(jwt) : signature);
 
         return jwt;

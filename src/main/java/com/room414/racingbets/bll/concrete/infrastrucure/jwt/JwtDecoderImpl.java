@@ -39,13 +39,13 @@ public class JwtDecoderImpl implements JwtDecoder {
         try {
             String[] parts = token.split("\\.");
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode header = mapper.readTree(Base64.encodeBase64URLSafeString(parts[0].getBytes()));
-            JsonNode payload = mapper.readTree(Base64.encodeBase64URLSafeString(parts[1].getBytes()));
+            JsonNode header = mapper.readTree(Base64.decodeBase64(parts[0]));
+            JsonNode payload = mapper.readTree(Base64.decodeBase64(parts[1]));
             String signature = parts[2];
 
             return new JwtBuilderImpl()
-                    .setType(header.get("alg").asText())
-                    .setAlgorithm(header.get("typ").asText())
+                    .setType(header.get("typ").asText())
+                    .setAlgorithm(header.get("alg").asText())
                     .setExpire(payload.get("exp").asLong())
                     .setUserId(payload.get("sub").asLong())
                     .setEmail(payload.get("eml").asText())
