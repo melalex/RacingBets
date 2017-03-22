@@ -142,23 +142,23 @@ INSERT INTO horse_racing_test.prize (race_id, prize_size, place) VALUES (3, 100,
 # application_user table
 
 INSERT INTO horse_racing_test.application_user
-(login, password, first_name, last_name, email, is_email_confirmed, balance)
+(login, password_hash, first_name, last_name, email, is_email_confirmed, balance)
 VALUES ('pgordon0', 'kJ182n', 'Paula', 'Gordon', 'pgordon0@google.ru', TRUE, 827.32);
 
 INSERT INTO horse_racing_test.application_user
-(login, password, first_name, last_name, email, is_email_confirmed, balance)
+(login, password_hash, first_name, last_name, email, is_email_confirmed, balance)
 VALUES ('slawrence1', 'tBHdVXlvv', 'Shirley', 'Lawrence', 'slawrence1@geocities.com', TRUE, 924.23);
 
 INSERT INTO horse_racing_test.application_user
-(login, password, first_name, last_name, email, is_email_confirmed, balance)
+(login, password_hash, first_name, last_name, email, is_email_confirmed, balance)
 VALUES ('hbanks2', 'RgoMu22lO', 'Harold', 'Banks', 'hbanks2@adobe.com', TRUE, 256.71);
 
 INSERT INTO horse_racing_test.application_user
-(login, password, first_name, last_name, email, is_email_confirmed, balance)
+(login, password_hash, first_name, last_name, email, is_email_confirmed, balance)
 VALUES ('lallen3', 'WCeXA5', 'Lois', 'Allen', 'lallen3@virginia.edu', TRUE, 385.59);
 
 INSERT INTO horse_racing_test.application_user
-(login, password, first_name, last_name, email, is_email_confirmed, balance)
+(login, password_hash, first_name, last_name, email, is_email_confirmed, balance)
 VALUES ('pandrews4', 'uRKNaCqj2B', 'Paula', 'Andrews', 'pandrews4@artisteer.com', TRUE, 749.38);
 
 # role table

@@ -11,11 +11,14 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,10 +33,42 @@ public class UserServiceImpl implements UserService {
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
     private ErrorHandleDecorator<UserDto> decorator;
+    private String randomAlgorithm;
 
-    public UserServiceImpl(UnitOfWorkFactory factory) {
+    public UserServiceImpl(UnitOfWorkFactory factory, String randomAlgorithm) {
         this.factory = factory;
         this.decorator = new ErrorHandleDecorator<>(factory, log);
+        this.randomAlgorithm = randomAlgorithm;
+    }
+
+    private String getSalt() {
+        try {
+            SecureRandom sr = SecureRandom.getInstance(randomAlgorithm);
+            byte[] salt = new byte[16];
+            sr.nextBytes(salt);
+            return new String(salt);
+        } catch (NoSuchAlgorithmException e) {
+            String message = "No algorithm named " + randomAlgorithm;
+            log.error(message, e);
+            throw new BllException(message, e);
+        }
+    }
+
+    private String getSecurePassword(String passwordToHash, String salt) {
+        String passwordHash = Base64.encodeBase64URLSafeString(passwordToHash.getBytes());
+        return Base64.encodeBase64URLSafeString((passwordHash + salt).getBytes());
+    }
+
+    private void hashPassword(ApplicationUser user) {
+        String salt = getSalt();
+        String password = getSecurePassword(user.getPassword(), salt);
+        user.setSalt(salt);
+        user.setPassword(password);
+    }
+
+    private boolean isValid(String password, ApplicationUser user) {
+        String passwordHash = getSecurePassword(password, user.getSalt());
+        return passwordHash.equals(user.getPassword());
     }
 
     @Override
@@ -56,6 +91,7 @@ public class UserServiceImpl implements UserService {
             if (result == 0) {
                 user.addRole(Role.HANDICAPPER);
                 ApplicationUser entity = mapper.map(user, ApplicationUser.class);
+                hashPassword(entity);
                 unitOfWork.getApplicationUserDao().create(entity);
                 unitOfWork.commit();
                 return SUCCESS;
@@ -153,9 +189,13 @@ public class UserServiceImpl implements UserService {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ApplicationUser entity = unitOfWork
                     .getApplicationUserDao()
-                    .findByLoginAndPassword(login, password);
+                    .findByLogin(login);
 
-            return mapper.map(entity, UserDto.class);
+            if (entity == null) {
+                return null;
+            }
+
+            return isValid(password, entity) ? mapper.map(entity, UserDto.class) : null;
         } catch (DalException e) {
             String message = defaultErrorMessage("findByLoginPassword", login, password);
             throw new BllException(message, e);

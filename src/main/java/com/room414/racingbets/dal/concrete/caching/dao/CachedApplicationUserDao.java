@@ -48,10 +48,10 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
-    public ApplicationUser findByLoginAndPassword(String login, String password) {
+    public ApplicationUser findByLogin(String login) {
         String key = getFindByLoginAndPasswordKey(login, password);
 
-        return cache.getOneCached(key, () -> dao.findByLoginAndPassword(login, password));
+        return cache.getOneCached(key, () -> dao.findByLogin(login));
     }
 
     @Override

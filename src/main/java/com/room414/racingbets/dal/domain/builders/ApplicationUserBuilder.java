@@ -21,6 +21,7 @@ public class ApplicationUserBuilder {
     private String login;
     private String email;
     private String password;
+    private String salt;
     private String firstName;
     private String lastName;
     private boolean isEmailConfirmed;
@@ -52,6 +53,11 @@ public class ApplicationUserBuilder {
 
     public ApplicationUserBuilder setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public ApplicationUserBuilder setSalt(String salt) {
+        this.salt = salt;
         return this;
     }
 
@@ -121,6 +127,7 @@ public class ApplicationUserBuilder {
         applicationUser.setId(id);
         applicationUser.setLogin(login);
         applicationUser.setPassword(password);
+        applicationUser.setSalt(salt);
         applicationUser.setEmail(email);
         applicationUser.setFirstName(firstName);
         applicationUser.setLastName(lastName);

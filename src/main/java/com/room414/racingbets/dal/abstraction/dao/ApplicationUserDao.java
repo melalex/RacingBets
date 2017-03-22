@@ -14,13 +14,11 @@ import java.util.List;
  * @version 1.0 27 Feb 2017
  */
 public interface ApplicationUserDao extends SearchDao<Long, ApplicationUser> {
-    // TODO: is good?? (find and count method)
     /**
      * @param login ApplicationUser login
-     * @param password ApplicationUser password
      * @return UserDto with login == login param
      */
-    ApplicationUser findByLoginAndPassword(String login, String password);
+    ApplicationUser findByLogin(String login);
 
 
     /**

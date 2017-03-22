@@ -16,7 +16,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,7 +82,7 @@ public class JwtEncoderImpl implements JwtEncoder {
             SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), algorithm);
             mac.init(secretKey);
 
-            return Arrays.toString(mac.doFinal((header + "." + payload).getBytes()));
+            return new String(mac.doFinal((header + "." + payload).getBytes()));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             String message = defaultErrorMessage("generateSignature", jwt, header, payload);
             log.error(message, e);

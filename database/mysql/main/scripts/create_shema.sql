@@ -59,7 +59,8 @@ CREATE TABLE `horse_racing`.`racecourse` (
 CREATE TABLE `horse_racing`.`application_user` (
   `id`                 INT UNSIGNED            NOT NULL AUTO_INCREMENT,
   `login`              VARCHAR(45)             NOT NULL,
-  `password`           VARCHAR(45)             NOT NULL,
+  `password_hash`      VARCHAR(45)             NOT NULL,
+  `salt`               VARCHAR(45)             NOT NULL,
   `first_name`         VARCHAR(45)             NOT NULL,
   `last_name`          VARCHAR(45)             NOT NULL,
   `email`              VARCHAR(45)             NOT NULL,

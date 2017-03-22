@@ -55,7 +55,8 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         final String lastNameColumnName = "application_user.last_name";
         final String emailColumnName = "application_user.email";
         final String isEmailConfirmedColumnName = "application_user.is_email_confirmed";
-        final String passwordColumnName = "application_user.password";
+        final String passwordColumnName = "application_user.password_hash";
+        final String saltColumnName = "application_user.salt";
         final String balanceColumnName = "application_user.balance";
         final String languageColumnName = "application_user.language";
         final String roleNameColumnName = "role.name";
@@ -75,6 +76,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                         .setEmail(resultSet.getString(emailColumnName))
                         .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
                         .setPassword(resultSet.getString(passwordColumnName))
+                        .setSalt(resultSet.getString(saltColumnName))
                         .setBalance(resultSet.getBigDecimal(balanceColumnName))
                         .setLanguage(resultSet.getString(languageColumnName));
 
@@ -93,18 +95,19 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     private void createApplicationUser(ApplicationUser entity) {
         final String sqlStatement =
                 "INSERT INTO application_user " +
-                "   (login, password, first_name, last_name, email, is_email_confirmed, balance, language) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "   (login, password, salt, first_name, last_name, email, is_email_confirmed, balance, language) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getLogin());
             statement.setString(2, entity.getPassword());
-            statement.setString(3, entity.getFirstName());
-            statement.setString(4, entity.getLastName());
-            statement.setString(5, entity.getEmail());
-            statement.setBoolean(6, entity.isEmailConfirmed());
-            statement.setBigDecimal(7, entity.getBalance());
-            statement.setString(8, entity.getLanguage().getName());
+            statement.setString(3, entity.getSalt());
+            statement.setString(4, entity.getFirstName());
+            statement.setString(5, entity.getLastName());
+            statement.setString(6, entity.getEmail());
+            statement.setBoolean(7, entity.isEmailConfirmed());
+            statement.setBigDecimal(8, entity.getBalance());
+            statement.setString(9, entity.getLanguage().getName());
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {
@@ -258,18 +261,18 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public ApplicationUser findByLoginAndPassword(String login, String password) {
+    public ApplicationUser findByLogin(String login) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * " +
                 "FROM (" +
                 "   SELECT * FROM application_user " +
-                "   WHERE application_user.login = ? AND application_user.password = ?" +
+                "   WHERE application_user.login = ? " +
                 ") AS application_user " +
                 "LEFT OUTER JOIN role " +
                 "   ON application_user.id = role.application_user_id";
 
-        return executor.executeFindOneQuery(sqlStatement, login, password);
+        return executor.executeFindOneQuery(sqlStatement, login);
     }
 
     @Override

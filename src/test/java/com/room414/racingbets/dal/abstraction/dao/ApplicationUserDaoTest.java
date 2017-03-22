@@ -148,7 +148,7 @@ class ApplicationUserDaoTest {
 
         ApplicationUser expectedResult = storage.getApplicationUser(1);
 
-        ApplicationUser result = dao.findByLoginAndPassword("pgordon0", "kJ182n");
+        ApplicationUser result = dao.findByLogin("pgordon0");
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }

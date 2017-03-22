@@ -24,6 +24,7 @@ public class ApplicationUser implements Serializable {
     private String login;
     private String email;
     private String password;
+    private String salt;
     private String firstName;
     private String lastName;
     /**
@@ -77,6 +78,14 @@ public class ApplicationUser implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getFirstName() {

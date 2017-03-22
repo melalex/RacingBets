@@ -65,8 +65,8 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public ApplicationUser findByLoginAndPassword(String login, String password) {
-        return getApplicationUserDao().findByLoginAndPassword(login, password);
+    public ApplicationUser findByLogin(String login) {
+        return getApplicationUserDao().findByLogin(login);
     }
 
     @Override
