@@ -23,18 +23,23 @@ public class TokenStorageDelegate implements AutoCloseable {
     public String createToken(long id) {
         // TODO: maybe get something more powerful
         String token = UUID.randomUUID().toString();
-        String key = namespace + ":" + token;
+        String key = getKeyByToken(token);
 
         Pipeline pipeline = jedis.pipelined();
         pipeline.set(key, String.valueOf(id));
         pipeline.expire(key, expireIn);
+        pipeline.sync();
 
         return token;
     }
 
-    public long getIdByToken(String refreshToken) {
-        String idString = jedis.get(refreshToken);
+    public long getIdByToken(String token) {
+        String idString = jedis.get(getKeyByToken(token));
         return idString != null ? Long.valueOf(idString) : 0;
+    }
+
+    private String getKeyByToken(String token) {
+        return namespace + ":" + token;
     }
 
     @Override

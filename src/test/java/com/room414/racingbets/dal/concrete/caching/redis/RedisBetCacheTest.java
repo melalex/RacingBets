@@ -94,31 +94,6 @@ class RedisBetCacheTest {
     }
 
     @Test
-    void deleteOdds() throws IOException {
-        long raceId = System.currentTimeMillis();
-
-        Bet target = Bet.builder()
-                .setBetSize(BigDecimal.valueOf(100))
-                .setBetType(BetType.WIN)
-                .setParticipantById(1, 1)
-                .setRaceId(raceId)
-                .build();
-
-        Odds odds = new Odds(200, 100, 0.14);
-        Odds result = cache.getOdds(target, () -> odds);
-
-        assert result.equals(odds) : defaultAssertionFailMessage(result, odds);
-
-        cache.deleteOdds(raceId);
-        cache.commit();
-
-        Odds mock = new Odds(0, 0, 0);
-        result = cache.getOdds(target, () -> mock);
-
-        assert result.equals(mock) : defaultAssertionFailMessage(result, mock);
-    }
-
-    @Test
     void getOdds_getterReturnNull_IllegalArgumentExceptionThrown() {
         Bet mock = Bet.builder()
                 .setBetSize(BigDecimal.valueOf(100))
