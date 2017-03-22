@@ -14,7 +14,7 @@ import java.util.List;
 public interface RaceService {
     void scheduleRace(RaceDto race);
     void startRace(long id);
-    void rejectRace(long id);
+    void rejectRace(RaceDto race);
     void finishRace(RaceDto race);
 
     void update(RaceDto horse);

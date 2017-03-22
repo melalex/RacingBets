@@ -5,7 +5,6 @@ import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 
-import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -20,22 +19,22 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendWinMessage(UserDto user, BetDto bet, RaceDto race, Locale locale) {
+    public void sendWinMessage(BetDto bet, RaceDto race) {
 
     }
 
     @Override
-    public void sendLoseMessage(UserDto user, BetDto bet, RaceDto race, Locale locale) {
+    public void sendLoseMessage(BetDto bet, RaceDto race) {
 
     }
 
     @Override
-    public void sendRejectMessage(UserDto user, BetDto bet, RaceDto race, Locale locale) {
+    public void sendRejectMessage(BetDto bet, RaceDto race) {
 
     }
 
     @Override
-    public void sendConfirmMessage(UserDto user, String token, Locale locale) {
+    public void sendConfirmMessage(UserDto user, String token) {
 
     }
 }
