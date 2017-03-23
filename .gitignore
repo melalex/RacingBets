@@ -58,7 +58,6 @@ fabric.properties
 
 ### Java ###
 # Compiled class file
-*.class
 
 # Log file
 *.log
@@ -73,7 +72,6 @@ fabric.properties
 *.jar
 *.war
 *.ear
-*.zip
 *.tar.gz
 *.rar
 
@@ -127,3 +125,5 @@ src/main/webapp/
 !/database/mysql/main/scripts/raceDto.sql
 !/src/main/java/com/room414/racingbets/bll/
 !/META-INF/dozer.xml
+!/src/META-INF/
+!/src/main/java/com/room414/racingbets/web/

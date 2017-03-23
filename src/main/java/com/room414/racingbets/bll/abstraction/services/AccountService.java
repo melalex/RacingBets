@@ -2,6 +2,7 @@ package com.room414.racingbets.bll.abstraction.services;
 
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
 import com.room414.racingbets.bll.dto.entities.UserDto;
+import com.room414.racingbets.dal.domain.enums.Role;
 
 /**
  * @author Alexander Melashchenko
@@ -13,6 +14,7 @@ public interface AccountService {
     Jwt getToken(String token);
 
     boolean isValid(Jwt jwt);
+    boolean isInRole(String token, Role role);
 
     String getRefreshToken(long userId);
     long getIdByRefreshToken(String refreshToken);

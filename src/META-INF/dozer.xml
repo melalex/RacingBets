@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping>
+        <class-a>com.room414.racingbets.dal.domain.entities.Bet</class-a>
+        <class-b>com.room414.racingbets.bll.dto.entities.BetDto</class-b>
+
+        <field>
+            <a>participants</a>
+            <b>participants</b>
+            <a-hint>com.room414.racingbets.dal.domain.entities.Participant</a-hint>
+            <b-hint>com.room414.racingbets.bll.dto.entities.ParticipantDto</b-hint>
+        </field>
+    </mapping>
+
+</mappings>

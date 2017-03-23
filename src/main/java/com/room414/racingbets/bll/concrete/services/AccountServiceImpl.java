@@ -7,6 +7,10 @@ import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.abstraction.factories.TokenStorageFactory;
 import com.room414.racingbets.dal.abstraction.tokens.ConfirmEmailTokenStorage;
 import com.room414.racingbets.dal.abstraction.tokens.RefreshTokenStorage;
+import com.room414.racingbets.dal.domain.enums.Role;
+
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * @author Alexander Melashchenko
@@ -44,7 +48,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean isValid(Jwt jwt) {
         String expectedSignature = jwtFactory.getEncoder().generateSignature(jwt);
-        return expectedSignature.equals(jwt.getSignature());
+        long now = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")).getTime().getTime();
+        return expectedSignature.equals(jwt.getSignature())
+                && jwt.getExpire() > now;
+    }
+
+    @Override
+    public boolean isInRole(String token, Role role) {
+        Jwt jwt = jwtFactory.getDecoder().decode(token);
+        return isValid(jwt) && jwt.isInRole(role);
     }
 
     @Override
