@@ -1,6 +1,5 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.*;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
@@ -10,11 +9,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
 
@@ -40,6 +37,27 @@ class ParticipantDaoTest {
 
     private static ParticipantDao getParticipantDao() {
         return unitOfWork.getParticipantDao();
+    }
+
+    private RaceParticipantThumbnail map(Race race, Participant participant) {
+        return RaceParticipantThumbnail
+                .builder()
+                .setId(race.getId())
+                .setStart(race.getStart())
+                .setCommission(race.getCommission())
+                .setDistance(race.getDistance())
+                .setMaxRating(race.getMaxRating())
+                .setMinAge(race.getMinAge())
+                .setMinBet(race.getMinBet())
+                .setMinRating(race.getMinRating())
+                .setName(race.getName())
+                .setRaceClass(race.getRaceClass())
+                .setRaceType(race.getRaceType())
+                .setRaceStatus(race.getRaceStatus())
+                .setTrackCondition(race.getTrackCondition())
+                .setRacecourse(race.getRacecourse())
+                .setParticipant(participant)
+                .build();
     }
 
     @Test
@@ -128,25 +146,14 @@ class ParticipantDaoTest {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
-        List<Participant> expectedResultParticipants = new LinkedList<>();
-        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+        List<RaceParticipantThumbnail> expectedResult = new LinkedList<>();
 
-        expectedResultParticipants.add(storage.getParticipant(1));
-        expectedResultParticipants.add(storage.getParticipant(8));
+        expectedResult.add(map(storage.getRace(1), storage.getParticipant(1)));
+        expectedResult.add(map(storage.getRace(3), storage.getParticipant(8)));
 
-        expectedResultTimestamps.add(storage.getRace(1).getStart());
-        expectedResultTimestamps.add(storage.getRace(3).getStart());
+        List<RaceParticipantThumbnail> result = dao.findByHorseId(targetId, 0, 2);
 
-        List<Pair<Participant, Timestamp>> result = dao.findByHorseId(targetId, 0, 2);
-        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
-        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
-
-        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
-                resultParticipants, expectedResultParticipants
-        );
-        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
-                resultTimestamps, expectedResultTimestamps
-        );
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -168,25 +175,14 @@ class ParticipantDaoTest {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
-        List<Participant> expectedResultParticipants = new LinkedList<>();
-        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+        List<RaceParticipantThumbnail> expectedResult = new LinkedList<>();
 
-        expectedResultParticipants.add(storage.getParticipant(1));
-        expectedResultParticipants.add(storage.getParticipant(8));
+        expectedResult.add(map(storage.getRace(1), storage.getParticipant(1)));
+        expectedResult.add(map(storage.getRace(3), storage.getParticipant(8)));
 
-        expectedResultTimestamps.add(storage.getRace(1).getStart());
-        expectedResultTimestamps.add(storage.getRace(3).getStart());
+        List<RaceParticipantThumbnail> result = dao.findByOwnerId(targetId, 0, 2);
 
-        List<Pair<Participant, Timestamp>> result = dao.findByOwnerId(targetId, 0, 2);
-        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
-        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
-
-        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
-                resultParticipants, expectedResultParticipants
-        );
-        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
-                resultTimestamps, expectedResultTimestamps
-        );
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -208,25 +204,14 @@ class ParticipantDaoTest {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
-        List<Participant> expectedResultParticipants = new LinkedList<>();
-        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+        List<RaceParticipantThumbnail> expectedResult = new LinkedList<>();
 
-        expectedResultParticipants.add(storage.getParticipant(1));
-        expectedResultParticipants.add(storage.getParticipant(6));
+        expectedResult.add(map(storage.getRace(1), storage.getParticipant(1)));
+        expectedResult.add(map(storage.getRace(2), storage.getParticipant(6)));
 
-        expectedResultTimestamps.add(storage.getRace(1).getStart());
-        expectedResultTimestamps.add(storage.getRace(2).getStart());
+        List<RaceParticipantThumbnail> result = dao.findByJockeyId(targetId, 0, 2);
 
-        List<Pair<Participant, Timestamp>> result = dao.findByJockeyId(targetId, 0, 2);
-        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
-        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
-
-        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
-                resultParticipants, expectedResultParticipants
-        );
-        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
-                resultTimestamps, expectedResultTimestamps
-        );
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test
@@ -248,25 +233,14 @@ class ParticipantDaoTest {
         final long targetId = 1;
 
         ParticipantDao dao = getParticipantDao();
-        List<Participant> expectedResultParticipants = new LinkedList<>();
-        List<Timestamp> expectedResultTimestamps = new LinkedList<>();
+        List<RaceParticipantThumbnail> expectedResult = new LinkedList<>();
 
-        expectedResultParticipants.add(storage.getParticipant(1));
-        expectedResultParticipants.add(storage.getParticipant(6));
+        expectedResult.add(map(storage.getRace(1), storage.getParticipant(1)));
+        expectedResult.add(map(storage.getRace(2), storage.getParticipant(6)));
 
-        expectedResultTimestamps.add(storage.getRace(1).getStart());
-        expectedResultTimestamps.add(storage.getRace(2).getStart());
+        List<RaceParticipantThumbnail> result = dao.findByTrainerId(targetId, 0, 2);
 
-        List<Pair<Participant, Timestamp>> result = dao.findByTrainerId(targetId, 0, 2);
-        List<Participant> resultParticipants = result.stream().map(Pair::getFirstElement).collect(Collectors.toList());
-        List<Timestamp> resultTimestamps = result.stream().map(Pair::getSecondElement).collect(Collectors.toList());
-
-        assert resultParticipants.equals(expectedResultParticipants) : defaultAssertionFailMessage(
-                resultParticipants, expectedResultParticipants
-        );
-        assert resultTimestamps.equals(expectedResultTimestamps) : defaultAssertionFailMessage(
-                resultTimestamps, expectedResultTimestamps
-        );
+        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
 
     @Test

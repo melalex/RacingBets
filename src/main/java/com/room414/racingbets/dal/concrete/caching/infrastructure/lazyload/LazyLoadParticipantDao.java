@@ -2,10 +2,9 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload;
 
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import com.room414.racingbets.dal.domain.entities.RaceParticipantThumbnail;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -29,7 +28,7 @@ public class LazyLoadParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByHorseId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByHorseId(long id, int offset, int limit) {
         return getParticipantDao().findByHorseId(id, offset, limit);
     }
 
@@ -44,7 +43,7 @@ public class LazyLoadParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByOwnerId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByOwnerId(long id, int offset, int limit) {
         return getParticipantDao().findByOwnerId(id, offset, limit);
     }
 
@@ -59,7 +58,7 @@ public class LazyLoadParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByJockeyId(long id, int offset, int limit) {
         return getParticipantDao().findByJockeyId(id, offset, limit);
     }
 
@@ -74,7 +73,7 @@ public class LazyLoadParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByTrainerId(long id, int offset, int limit) {
         return getParticipantDao().findByTrainerId(id, offset, limit);
     }
 

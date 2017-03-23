@@ -2,9 +2,8 @@ package com.room414.racingbets.bll.abstraction.services;
 
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.dto.entities.ParticipantDto;
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
+import com.room414.racingbets.bll.dto.entities.RaceParticipantThumbnailDto;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,8 +14,8 @@ public interface ParticipantService {
     void update(ParticipantDto participant);
     void delete(long id);
 
-    List<Pair<ParticipantDto, Date>> findByHorse(long id, Pager pager);
-    List<Pair<ParticipantDto, Date>> findByOwner(long id, Pager pager);
-    List<Pair<ParticipantDto, Date>> findByJockey(long id, Pager pager);
-    List<Pair<ParticipantDto, Date>> findByTrainer(long id, Pager pager);
+    List<RaceParticipantThumbnailDto> findByHorse(long id, Pager pager);
+    List<RaceParticipantThumbnailDto> findByOwner(long id, Pager pager);
+    List<RaceParticipantThumbnailDto> findByJockey(long id, Pager pager);
+    List<RaceParticipantThumbnailDto> findByTrainer(long id, Pager pager);
 }

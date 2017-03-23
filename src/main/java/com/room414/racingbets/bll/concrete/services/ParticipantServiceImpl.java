@@ -5,19 +5,18 @@ import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.ParticipantService;
 import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.ParticipantDto;
+import com.room414.racingbets.bll.dto.entities.RaceParticipantThumbnailDto;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import com.room414.racingbets.dal.domain.entities.RaceParticipantThumbnail;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,26 +67,22 @@ public class ParticipantServiceImpl implements ParticipantService {
         );
     }
 
-    private List<Pair<ParticipantDto, Date>> mapList(List<Pair<Participant, Timestamp>> source) {
+    private List<RaceParticipantThumbnailDto> mapList(List<RaceParticipantThumbnail> source) {
         return source
                 .stream()
-                .map(p -> {
-                    ParticipantDto participant = mapper.map(p.getFirstElement(), ParticipantDto.class);
-                    Date date = new Date(p.getSecondElement().getTime());
-                    return new Pair<>(participant, date);
-                })
+                .map(p -> mapper.map(p, RaceParticipantThumbnailDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Pair<ParticipantDto, Date>> findByHorse(long id, Pager pager) {
+    public List<RaceParticipantThumbnailDto> findByHorse(long id, Pager pager) {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ParticipantDao participantDao = unitOfWork.getParticipantDao();
 
-            List<Pair<Participant, Timestamp>> list = participantDao.findByHorseId(id, offset, limit);
+            List<RaceParticipantThumbnail> list = participantDao.findByHorseId(id, offset, limit);
             int count = participantDao.findByHorseIdCount(id);
 
             pager.setCount(count);
@@ -104,14 +99,14 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public List<Pair<ParticipantDto, Date>> findByOwner(long id, Pager pager) {
+    public List<RaceParticipantThumbnailDto> findByOwner(long id, Pager pager) {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ParticipantDao participantDao = unitOfWork.getParticipantDao();
 
-            List<Pair<Participant, Timestamp>> list = participantDao.findByOwnerId(id, offset, limit);
+            List<RaceParticipantThumbnail> list = participantDao.findByOwnerId(id, offset, limit);
             int count = participantDao.findByOwnerIdCount(id);
 
             pager.setCount(count);
@@ -128,14 +123,14 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public List<Pair<ParticipantDto, Date>> findByJockey(long id, Pager pager) {
+    public List<RaceParticipantThumbnailDto> findByJockey(long id, Pager pager) {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ParticipantDao participantDao = unitOfWork.getParticipantDao();
 
-            List<Pair<Participant, Timestamp>> list = participantDao.findByJockeyId(id, offset, limit);
+            List<RaceParticipantThumbnail> list = participantDao.findByJockeyId(id, offset, limit);
             int count = participantDao.findByJockeyIdCount(id);
 
             pager.setCount(count);
@@ -152,14 +147,14 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public List<Pair<ParticipantDto, Date>> findByTrainer(long id, Pager pager) {
+    public List<RaceParticipantThumbnailDto> findByTrainer(long id, Pager pager) {
         int limit = pager.getLimit();
         int offset = pager.getOffset();
 
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ParticipantDao participantDao = unitOfWork.getParticipantDao();
 
-            List<Pair<Participant, Timestamp>> list = participantDao.findByTrainerId(id, offset, limit);
+            List<RaceParticipantThumbnail> list = participantDao.findByTrainerId(id, offset, limit);
             int count = participantDao.findByTrainerIdCount(id);
 
             pager.setCount(count);

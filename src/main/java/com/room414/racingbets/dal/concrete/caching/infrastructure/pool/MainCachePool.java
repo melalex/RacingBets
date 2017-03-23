@@ -2,10 +2,8 @@ package com.room414.racingbets.dal.concrete.caching.infrastructure.pool;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.*;
 
-import java.sql.Timestamp;
 import java.util.Map;
 
 /**
@@ -23,7 +21,7 @@ public class MainCachePool {
     private static final String RACECOURSE_NAMESPACE = "racecourse";
     private static final String TRAINER_NAMESPACE = "trainer";
     private static final String ODDS_NAMESPACE = "odds";
-    private static final String WHO_AND_WHEN_NAMESPACE = "who:when";
+    private static final String THUMBNAIL_NAMESPACE = "who:when";
 
     private CachePool<ApplicationUser> applicationUserCachePool = new CachePool<>(APPLICATION_USER_NAMESPACE);
     private CachePool<Bet> betCachePool = new CachePool<>(BET_NAMESPACE);
@@ -35,7 +33,7 @@ public class MainCachePool {
     private CachePool<Racecourse> racecourseCachePool = new CachePool<>(RACECOURSE_NAMESPACE);
     private CachePool<Trainer> trainerCachePool = new CachePool<>(TRAINER_NAMESPACE);
     private CachePool<Odds> oddsCachePool = new CachePool<>(ODDS_NAMESPACE);
-    private CachePool<Pair<Participant, Timestamp>> whoAndWhenCachePool = new CachePool<>(WHO_AND_WHEN_NAMESPACE);
+    private CachePool<RaceParticipantThumbnail> thumbnailCachePool = new CachePool<>(THUMBNAIL_NAMESPACE);
 
     private Map<String, Cache> cacheByNamespaceMap = createCacheByNamespaceMap();
 
@@ -51,7 +49,7 @@ public class MainCachePool {
                 .addMap(racecourseCachePool.getCacheByNamespaceMap())
                 .addMap(trainerCachePool.getCacheByNamespaceMap())
                 .addMap(oddsCachePool.getCacheByNamespaceMap())
-                .addMap(whoAndWhenCachePool.getCacheByNamespaceMap())
+                .addMap(thumbnailCachePool.getCacheByNamespaceMap())
                 .build();
     }
 
@@ -99,8 +97,8 @@ public class MainCachePool {
         return oddsCachePool;
     }
 
-    public CachePool<Pair<Participant, Timestamp>> getWhoAndWhenCachePool() {
-        return whoAndWhenCachePool;
+    public CachePool<RaceParticipantThumbnail> getThumbnailCachePool() {
+        return thumbnailCachePool;
     }
 
 
@@ -144,7 +142,7 @@ public class MainCachePool {
         return ODDS_NAMESPACE;
     }
 
-    public static String getWhoAndWhenNamespace() {
-        return WHO_AND_WHEN_NAMESPACE;
+    public static String getThumbnailNamespace() {
+        return THUMBNAIL_NAMESPACE;
     }
 }

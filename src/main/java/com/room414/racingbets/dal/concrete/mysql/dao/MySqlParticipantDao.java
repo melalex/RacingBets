@@ -5,7 +5,7 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Participant;
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
+import com.room414.racingbets.dal.domain.entities.RaceParticipantThumbnail;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.*;
@@ -24,7 +24,7 @@ public class MySqlParticipantDao implements ParticipantDao {
     private static final String TABLE_NAME = "participant";
 
     private MySqlSharedExecutor<Participant> executor;
-    private MySqlSharedExecutor<Pair<Participant, Timestamp>> foreignExecutor;
+    private MySqlSharedExecutor<RaceParticipantThumbnail> foreignExecutor;
 
     MySqlParticipantDao(Connection connection) {
         this.executor = new MySqlSharedExecutor<>(
@@ -34,8 +34,8 @@ public class MySqlParticipantDao implements ParticipantDao {
         );
         this.foreignExecutor = new MySqlSharedExecutor<>(
                 connection,
-                statement -> getResult(statement, this::mapWhoAndWhen),
-                statement -> getResultList(statement, this::mapWhoAndWhen)
+                statement -> getResult(statement, this::mapRaceParticipantThumbnail),
+                statement -> getResultList(statement, this::mapRaceParticipantThumbnail)
         );
     }
 
@@ -147,24 +147,50 @@ public class MySqlParticipantDao implements ParticipantDao {
         return executor.delete(TABLE_NAME, id);
     }
 
-    private Pair<Participant, Timestamp> mapWhoAndWhen(ResultSet resultSet) throws SQLException {
-        final String RACE_START_COLUMN = "race.start_date_time";
+    private RaceParticipantThumbnail mapRaceParticipantThumbnail(ResultSet resultSet) throws SQLException {
+        final String idColumnName = "race.id";
+        final String startColumnName = "race.start_date_time";
+        final String commissionColumnName = "race.commission";
+        final String distanceColumnName = "race.distance";
+        final String maxRatingColumnName = "race.max_rating";
+        final String minAgeColumnName = "race.min_age";
+        final String minBetColumnName = "race.min_bet";
+        final String minRatingColumnName = "race.min_rating";
+        final String nameColumnName = "race.name";
+        final String raceClassColumnName = "race.race_class";
+        final String raceTypeColumnName = "race.race_type";
+        final String statusColumnName = "race.status";
+        final String goingColumnName = "race.going";
 
-        Pair<Participant, Timestamp> result = new Pair<>();
-
-        result.setFirstElement(MySqlMapHelper.mapParticipant(resultSet));
-        result.setSecondElement(resultSet.getTimestamp(RACE_START_COLUMN));
-
-        return result;
+        return RaceParticipantThumbnail
+                .builder()
+                .setId(resultSet.getLong(idColumnName))
+                .setStart(resultSet.getTimestamp(startColumnName))
+                .setCommission(resultSet.getDouble(commissionColumnName))
+                .setDistance(resultSet.getFloat(distanceColumnName))
+                .setMaxRating(resultSet.getInt(maxRatingColumnName))
+                .setMinAge(resultSet.getInt(minAgeColumnName))
+                .setMinBet(resultSet.getBigDecimal(minBetColumnName))
+                .setMinRating(resultSet.getInt(minRatingColumnName))
+                .setName(resultSet.getString(nameColumnName))
+                .setRaceClass(resultSet.getInt(raceClassColumnName))
+                .setRaceType(resultSet.getString(raceTypeColumnName))
+                .setRaceStatus(resultSet.getString(statusColumnName))
+                .setTrackCondition(resultSet.getString(goingColumnName))
+                .setRacecourse(MySqlMapHelper.mapRacecourse(resultSet))
+                .setParticipant(MySqlMapHelper.mapParticipant(resultSet))
+                .build();
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByHorseId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByHorseId(long id, int offset, int limit) {
         @Language("MySQL") 
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
                 "   ON participant.race_id = race.id " +
+                "INNER JOIN racecourse " +
+                "   ON race.racecourse_id = racecourse.id " +
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN jockey " +
@@ -189,12 +215,14 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByOwnerId(long id, int offset, int limit) throws DalException {
+    public List<RaceParticipantThumbnail> findByOwnerId(long id, int offset, int limit) throws DalException {
         @Language("MySQL") 
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
                 "   ON participant.race_id = race.id " +
+                "INNER JOIN racecourse " +
+                "   ON race.racecourse_id = racecourse.id " +
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN jockey " +
@@ -227,12 +255,14 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByJockeyId(long id, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
                 "   ON participant.race_id = race.id " +
+                "INNER JOIN racecourse " +
+                "   ON race.racecourse_id = racecourse.id " +
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN jockey " +
@@ -257,12 +287,14 @@ public class MySqlParticipantDao implements ParticipantDao {
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByTrainerId(long id, int offset, int limit) {
         @Language("MySQL")
         final String sqlStatement =
                 "SELECT * FROM participant " +
                 "INNER JOIN race " +
                 "   ON participant.race_id = race.id " +
+                "INNER JOIN racecourse " +
+                "   ON race.racecourse_id = racecourse.id " +
                 "INNER JOIN trainer " +
                 "   ON participant.trainer_id = trainer.id " +
                 "INNER JOIN jockey " +

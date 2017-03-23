@@ -2,11 +2,10 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 
 import com.room414.racingbets.dal.abstraction.cache.ParticipantCache;
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
-import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.CacheCrudDao;
 import com.room414.racingbets.dal.domain.entities.Participant;
+import com.room414.racingbets.dal.domain.entities.RaceParticipantThumbnail;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -24,10 +23,10 @@ public class CachedParticipantDao extends CacheCrudDao<Participant> implements P
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByHorseId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByHorseId(long id, int offset, int limit) {
         final String key = String.format("find:horse:%d:%d:%d", id, limit, offset);
 
-        return cache.getWhoAndWhenCached(key, () -> dao.findByHorseId(id, offset, limit));
+        return cache.getThumbnailCached(key, () -> dao.findByHorseId(id, offset, limit));
     }
 
     @Override
@@ -38,10 +37,10 @@ public class CachedParticipantDao extends CacheCrudDao<Participant> implements P
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByOwnerId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByOwnerId(long id, int offset, int limit) {
         final String key = String.format("find:owner:%d:%d:%d", id, limit, offset);
 
-        return cache.getWhoAndWhenCached(key, () -> dao.findByOwnerId(id, offset, limit));
+        return cache.getThumbnailCached(key, () -> dao.findByOwnerId(id, offset, limit));
     }
 
     @Override
@@ -52,10 +51,10 @@ public class CachedParticipantDao extends CacheCrudDao<Participant> implements P
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByJockeyId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByJockeyId(long id, int offset, int limit) {
         final String key = String.format("find:jockey:%d:%d:%d", id, limit, offset);
 
-        return cache.getWhoAndWhenCached(key, () -> dao.findByJockeyId(id, offset, limit));
+        return cache.getThumbnailCached(key, () -> dao.findByJockeyId(id, offset, limit));
     }
 
     @Override
@@ -66,10 +65,10 @@ public class CachedParticipantDao extends CacheCrudDao<Participant> implements P
     }
 
     @Override
-    public List<Pair<Participant, Timestamp>> findByTrainerId(long id, int offset, int limit) {
+    public List<RaceParticipantThumbnail> findByTrainerId(long id, int offset, int limit) {
         final String key = String.format("find:trainer:%d:%d:%d", id, limit, offset);
 
-        return cache.getWhoAndWhenCached(key, () -> dao.findByTrainerId(id, offset, limit));
+        return cache.getThumbnailCached(key, () -> dao.findByTrainerId(id, offset, limit));
     }
 
     @Override

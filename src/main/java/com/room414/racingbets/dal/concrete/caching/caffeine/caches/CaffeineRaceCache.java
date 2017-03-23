@@ -37,7 +37,7 @@ public class CaffeineRaceCache extends BaseCache<Race> implements RaceCache {
     @Override
     public void deleteOneCached(String key) {
         super.deleteOneCached(key);
-        participantCache.deleteWhoAndWhen();
+        participantCache.deleteThumbnail();
     }
 
     @Override
