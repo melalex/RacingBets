@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
+import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
@@ -89,6 +90,7 @@ public class UserServiceImpl implements UserService {
 
             if (result == 0) {
                 user.addRole(Role.HANDICAPPER);
+                user.setBalance(new BigDecimal(0));
                 ApplicationUser entity = mapper.map(user, ApplicationUser.class);
                 hashPassword(entity);
                 unitOfWork.getApplicationUserDao().create(entity);
@@ -105,11 +107,6 @@ public class UserServiceImpl implements UserService {
             log.error(message, t);
             throw new BllException(message, t);
         }
-    }
-
-    @Override
-    public void update(UserDto user) {
-        decorator.update(user, this::update);
     }
 
     @Override
@@ -205,11 +202,6 @@ public class UserServiceImpl implements UserService {
         return decorator.search(login, pager, this::search);
     }
 
-    private void update(UnitOfWork unitOfWork, UserDto user) {
-        ApplicationUser entity = mapper.map(user, ApplicationUser.class);
-        unitOfWork.getApplicationUserDao().update(entity);
-        unitOfWork.commit();
-    }
 
     private void delete(UnitOfWork unitOfWork, long id) {
         unitOfWork.getApplicationUserDao().delete(id);

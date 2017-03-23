@@ -16,7 +16,6 @@ public interface UserService {
     int SUCCESS = 0b100;
 
     int create(UserDto user);
-    void update(UserDto user);
     void addRole(long id, Role role);
     void removeRole(long id, Role role);
     void delete(long id);

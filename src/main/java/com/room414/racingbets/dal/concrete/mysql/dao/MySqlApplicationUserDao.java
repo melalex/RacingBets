@@ -215,19 +215,19 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         @Language("MySQL")
         final String sqlStatement =
                 "UPDATE application_user " +
-                "SET login = ?, password_hash = ?, first_name = ?, last_name = ?, " +
-                "    email = ?, is_email_confirmed = ?, balance = ?, language = ? " +
+                "SET login = ?, password_hash = ?, salt = ?, first_name = ?, last_name = ?, " +
+                "    email = ?, is_email_confirmed = ?, language = ? " +
                 "WHERE id = ?";
 
         return executor.executeUpdateQuery(
                 sqlStatement,
                 entity.getLogin(),
                 entity.getPassword(),
+                entity.getSalt(),
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getEmail(),
                 entity.isEmailConfirmed(),
-                entity.getBalance(),
                 entity.getLanguage().getName(),
                 entity.getId()
         );
