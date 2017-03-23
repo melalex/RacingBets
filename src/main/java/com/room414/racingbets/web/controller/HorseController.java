@@ -25,49 +25,49 @@ public class HorseController {
     /**
      * PUT: horse/
      */
-    void create(HttpServletRequest req, HttpServletResponse resp) {
+    public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: horse/{id}
      */
-    void update(HttpServletRequest req, HttpServletResponse resp) {
+    public void update(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: horse/{id}
      */
-    void find(HttpServletRequest req, HttpServletResponse resp) {
+    public void find(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: horse/search/{namePart}
      */
-    void search(HttpServletRequest req, HttpServletResponse resp) {
+    public void search(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: horse/all/{page}
      */
-    void findAll(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAll(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: horse/participant/{id}
      */
-    void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * DELETE: horse/{id}
      */
-    void delete(HttpServletRequest req, HttpServletResponse resp) {
+    public void delete(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 }

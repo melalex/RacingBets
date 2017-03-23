@@ -25,49 +25,49 @@ public class OwnerController {
     /**
      * PUT: owner/
      */
-    void create(HttpServletRequest req, HttpServletResponse resp) {
+    public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: owner/{id}
      */
-    void update(HttpServletRequest req, HttpServletResponse resp) {
+    public void update(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: owner/{id}
      */
-    void find(HttpServletRequest req, HttpServletResponse resp) {
+    public void find(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: owner/search/{namePart}
      */
-    void search(HttpServletRequest req, HttpServletResponse resp) {
+    public void search(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: owner/all/{page}
      */
-    void findAll(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAll(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: owner/participant/{id}
      */
-    void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * DELETE: owner/{id}
      */
-    void delete(HttpServletRequest req, HttpServletResponse resp) {
+    public void delete(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 

@@ -25,63 +25,63 @@ public class AccountController {
     /**
      * PUT: account/register
      */
-    void register(HttpServletRequest req, HttpServletResponse resp) {
+    public void register(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: account/login
      */
-    void login(HttpServletRequest req, HttpServletResponse resp) {
+    public void login(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: account/add/role
      */
-    void addRole(HttpServletRequest req, HttpServletResponse resp) {
+    public void addRole(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: account/remove/role
      */
-    void removeRole(HttpServletRequest req, HttpServletResponse resp) {
+    public void removeRole(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: account/add/money
      */
-    void addMoney(HttpServletRequest req, HttpServletResponse resp) {
+    public void addMoney(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: account/confirm
      */
-    void confirmEmail(HttpServletRequest req, HttpServletResponse resp) {
+    public void confirmEmail(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: account/all/{page}
      */
-    void getAll(HttpServletRequest req, HttpServletResponse resp) {
+    public void getAll(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: account/search/{loginPart}/{page}
      */
-    void search(HttpServletRequest req, HttpServletResponse resp) {
+    public void search(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: account/detail/{id}
      */
-    void detail(HttpServletRequest req, HttpServletResponse resp) {
+    public void detail(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 }

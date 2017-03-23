@@ -25,49 +25,49 @@ public class RacecourceController {
     /**
      * PUT: racecourse/
      */
-    void create(HttpServletRequest req, HttpServletResponse resp) {
+    public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: racecourse/{id}
      */
-    void update(HttpServletRequest req, HttpServletResponse resp) {
+    public void update(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: racecourse/{id}
      */
-    void find(HttpServletRequest req, HttpServletResponse resp) {
+    public void find(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: racecourse/search/{namePart}
      */
-    void search(HttpServletRequest req, HttpServletResponse resp) {
+    public void search(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: racecourse/all/{page}
      */
-    void findAll(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAll(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: racecourse/participant/{id}
      */
-    void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * DELETE: racecourse/{id}
      */
-    void delete(HttpServletRequest req, HttpServletResponse resp) {
+    public void delete(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 

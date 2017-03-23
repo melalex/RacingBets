@@ -25,51 +25,49 @@ public class TrainerController {
     /**
      * PUT: trainer/
      */
-    void create(HttpServletRequest req, HttpServletResponse resp) {
+    public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * POST: trainer/{id}
      */
-    void update(HttpServletRequest req, HttpServletResponse resp) {
+    public void update(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: trainer/{id}
      */
-    void find(HttpServletRequest req, HttpServletResponse resp) {
+    public void find(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: trainer/search/{namePart}
      */
-    void search(HttpServletRequest req, HttpServletResponse resp) {
+    public void search(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: trainer/all/{page}
      */
-    void findAll(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAll(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * GET: trainer/participant/{id}
      */
-    void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
+    public void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
      * DELETE: trainer/{id}
      */
-    void delete(HttpServletRequest req, HttpServletResponse resp) {
+    public void delete(HttpServletRequest req, HttpServletResponse resp) {
 
     }
-
-
 }
