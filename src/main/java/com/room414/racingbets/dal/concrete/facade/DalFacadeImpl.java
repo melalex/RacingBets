@@ -10,6 +10,7 @@ import com.room414.racingbets.dal.concrete.caching.factories.RedisUnitOfWorkFact
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisSubscriber;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import redis.clients.jedis.JedisPool;
@@ -54,7 +55,7 @@ public class DalFacadeImpl implements DalFacade, AutoCloseable {
     private MainCachePool pool = new MainCachePool();
 
     private JedisPool jedisPool;
-    private DataSource mysqlPool;
+    private BasicDataSource mysqlPool;
 
     private AbstractDalFactory factory;
 
@@ -78,7 +79,6 @@ public class DalFacadeImpl implements DalFacade, AutoCloseable {
         this.initDalFactory(dalFactoryProperties);
     }
 
-    // TODO: initialize data source
     private void initMySqlConnectionPool(String mysqlPropertiesFilePath) {
         try {
             Properties properties = new Properties();
@@ -90,7 +90,14 @@ public class DalFacadeImpl implements DalFacade, AutoCloseable {
             String driver = properties.getProperty("jdbc.driver");
             String username = properties.getProperty("jdbc.username");
             String password = properties.getProperty("jdbc.password");
+            int maxConnections = Integer.parseInt(properties.getProperty("jdbc.connection.max.count"));
 
+            mysqlPool = new BasicDataSource();
+            mysqlPool.setDriverClassName(driver);
+            mysqlPool.setUrl(url);
+            mysqlPool.setUsername(username);
+            mysqlPool.setPassword(password);
+            mysqlPool.setMaxTotal(maxConnections);
 
         } catch (IOException e) {
             String message = "Exception during reading mysql connection properties";
