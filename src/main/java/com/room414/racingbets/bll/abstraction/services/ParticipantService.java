@@ -14,6 +14,7 @@ public interface ParticipantService {
     void update(ParticipantDto participant);
     void delete(long id);
 
+    // TODO: migrate RaceParticipantThumbnailDto -> Race
     List<RaceParticipantThumbnailDto> findByHorse(long id, Pager pager);
     List<RaceParticipantThumbnailDto> findByOwner(long id, Pager pager);
     List<RaceParticipantThumbnailDto> findByJockey(long id, Pager pager);

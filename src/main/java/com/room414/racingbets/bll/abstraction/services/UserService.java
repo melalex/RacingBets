@@ -10,6 +10,7 @@ import java.util.List;
  * @author Alexander Melashchenko
  * @version 1.0 18 Mar 2017
  */
+// TODO: roles and user relationship conflict
 public interface UserService {
     int EMAIL_EXISTS = 0b001;
     int LOGIN_EXISTS = 0b010;

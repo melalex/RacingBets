@@ -3,6 +3,9 @@ package com.room414.racingbets.web.controller;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.HorseService;
 import com.room414.racingbets.bll.abstraction.services.ParticipantService;
+import com.room414.racingbets.bll.dto.entities.HorseDto;
+import com.room414.racingbets.dal.domain.enums.Role;
+import com.room414.racingbets.web.util.ControllerUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,11 +25,20 @@ public class HorseController {
         this.participantService = participantService;
     }
 
+    private boolean isValid(HorseDto dto) {
+        return false;
+    }
+
     /**
      * PUT: horse/
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) {
-
+        String token = ControllerUtil.getTokenFromRequest(req);
+        if (accountService.isInRole(token, Role.ADMIN)) {
+            
+        } else {
+            // TODO: add logic
+        }
     }
 
     /**

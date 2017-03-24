@@ -1,11 +1,21 @@
 package com.room414.racingbets.web.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.MessageService;
 import com.room414.racingbets.bll.abstraction.services.UserService;
+import com.room414.racingbets.bll.dto.entities.UserDto;
+import com.room414.racingbets.dal.domain.enums.Role;
+import com.room414.racingbets.web.model.RegistrationFormViewModel;
+import com.room414.racingbets.web.util.ControllerUtil;
+import org.dozer.DozerBeanMapperSingletonWrapper;
+import org.dozer.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import static com.room414.racingbets.web.util.Validator.isValid;
 
 /**
  * @author Alexander Melashchenko
@@ -25,8 +35,48 @@ public class AccountController {
     /**
      * PUT: account/register
      */
-    public void register(HttpServletRequest req, HttpServletResponse resp) {
+    // TODO: refactor this
+    public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        RegistrationFormViewModel viewModel = jsonMapper.readValue(
+                req.getParameter("data"),
+                RegistrationFormViewModel.class
+        );
 
+        if (isValid(viewModel)) {
+            resp.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+            return;
+        }
+
+        Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
+        UserDto userDto = beanMapper.map(viewModel, UserDto.class);
+
+    }
+
+    /**
+     * PUT: account/create
+     */
+    // TODO: refactor this
+    public void createUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String token = ControllerUtil.getTokenFromRequest(req);
+
+        if (accountService.isInRole(token, Role.ADMIN)) {
+            ObjectMapper jsonMapper = new ObjectMapper();
+            UserDto user = jsonMapper.readValue(
+                    req.getParameter("data"),
+                    UserDto.class
+            );
+
+            if (isValid(user)) {
+                resp.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                return;
+            }
+
+            int result = userService.create(user);
+
+        } else {
+            resp.setStatus(401);
+        }
     }
 
     /**
