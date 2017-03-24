@@ -1,7 +1,7 @@
 package com.room414.racingbets.web.util;
 
 import com.room414.racingbets.bll.dto.entities.UserDto;
-import com.room414.racingbets.web.model.RegistrationFormViewModel;
+import com.room414.racingbets.web.model.viewmodels.RegistrationFormViewModel;
 
 /**
  * @author Alexander Melashchenko

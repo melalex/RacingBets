@@ -1,4 +1,4 @@
-package com.room414.racingbets.web.model;
+package com.room414.racingbets.web.model.viewmodels;
 
 import com.room414.racingbets.dal.domain.enums.Language;
 

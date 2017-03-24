@@ -2,11 +2,15 @@ package com.room414.racingbets.web.infrastructure;
 
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 
+import java.io.Serializable;
+
 /**
  * @author Alexander Melashchenko
  * @version 1.0 24 Mar 2017
  */
-public class PagerImpl implements Pager {
+public class PagerImpl implements Pager, Serializable {
+    private static final long serialVersionUID = -8178968734227331056L;
+
     private int limit;
     private int page;
     private int count;
