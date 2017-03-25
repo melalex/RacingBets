@@ -9,25 +9,39 @@ import com.room414.racingbets.bll.abstraction.services.HorseService;
 import com.room414.racingbets.bll.abstraction.services.ParticipantService;
 import com.room414.racingbets.bll.dto.entities.HorseDto;
 import com.room414.racingbets.dal.domain.enums.Role;
+import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.util.ControllerUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
+
+import static com.room414.racingbets.web.util.ControllerUtil.createResponseBuilder;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 23 Mar 2017
  */
 public class HorseController {
+    private static final String ENTITY_TYPE = "Horse";
+
     private HorseService horseService;
     private AccountService accountService;
     private ParticipantService participantService;
 
-    public HorseController(HorseService horseService, AccountService accountService, ParticipantService participantService) {
+    private Locale locale;
+
+    public HorseController(
+            HorseService horseService,
+            AccountService accountService,
+            ParticipantService participantService,
+            Locale locale
+    ) {
         this.horseService = horseService;
         this.accountService = accountService;
         this.participantService = participantService;
+        this.locale = locale;
     }
 
     private boolean isValid(HorseDto dto) {
@@ -38,6 +52,7 @@ public class HorseController {
      * POST: horse/
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) {
+        ResponseBuilder<HorseDto> horseResponseBuilder = createResponseBuilder(resp, locale, ENTITY_TYPE);
         try {
             String token = ControllerUtil.getTokenFromRequest(req);
             if (accountService.isInRole(token, Role.ADMIN)) {

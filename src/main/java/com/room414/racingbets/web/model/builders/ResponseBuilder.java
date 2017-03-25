@@ -12,7 +12,6 @@ import java.util.List;
  * @version 1.0 25 Mar 2017
  */
 public class ResponseBuilder<T> {
-    private Status status;
     private int count;
     private String type;
     private List<T> result = new LinkedList<>();
@@ -27,6 +26,10 @@ public class ResponseBuilder<T> {
     public ResponseBuilder<T> setType(String type) {
         this.type = type;
         return this;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public ResponseBuilder<T> addAllResults(List<T> result) {
@@ -53,7 +56,7 @@ public class ResponseBuilder<T> {
         Response<T> response = new Response<>();
 
         response.setStatus(Status.SUCCESS);
-        response.setCount(count);
+        response.setCount(count != 0 ? count : result.size());
         response.setResult(result);
         response.setType(type);
 
@@ -64,7 +67,7 @@ public class ResponseBuilder<T> {
         Response<ErrorViewModel> response = new Response<>();
 
         response.setStatus(Status.SUCCESS);
-        response.setCount(count);
+        response.setCount(count != 0 ? count : errors.size());
         response.setResult(errors);
         response.setType(type);
 
