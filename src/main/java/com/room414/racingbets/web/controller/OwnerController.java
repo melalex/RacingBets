@@ -23,14 +23,14 @@ public class OwnerController {
     }
 
     /**
-     * PUT: owner/
+     * POST: owner/
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: owner/{id}
+     * PUT: owner/{id}
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) {
 

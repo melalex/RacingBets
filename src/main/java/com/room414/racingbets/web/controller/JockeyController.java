@@ -23,14 +23,14 @@ public class JockeyController {
     }
 
     /**
-     * PUT: jockey/
+     * POST: jockey/
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: jockey/{id}
+     * PUT: jockey/{id}
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) {
 

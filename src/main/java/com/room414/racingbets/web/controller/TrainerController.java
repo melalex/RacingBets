@@ -23,14 +23,14 @@ public class TrainerController {
     }
 
     /**
-     * PUT: trainer/
+     * POST: trainer/
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: trainer/{id}
+     * PUT: trainer/{id}
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) {
 

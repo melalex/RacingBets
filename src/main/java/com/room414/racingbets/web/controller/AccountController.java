@@ -27,7 +27,6 @@ public class AccountController {
     /**
      * POST: account/register
      */
-    // TODO: POST -> PUT
     // TODO: refactor this
     public void register(HttpServletRequest req, HttpServletResponse resp) {
 //        ObjectMapper jsonMapper = new ObjectMapper();
@@ -47,7 +46,7 @@ public class AccountController {
     }
 
     /**
-     * PUT: account/create
+     * POST: account/create
      */
     // TODO: refactor this
     public void createUser(HttpServletRequest req, HttpServletResponse resp) {
@@ -73,35 +72,35 @@ public class AccountController {
     }
 
     /**
-     * POST: account/login
+     * PUT: account/login
      */
     public void login(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: account/add/role
+     * PUT: account/add/role
      */
     public void addRole(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: account/remove/role
+     * PUT: account/remove/role
      */
     public void removeRole(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: account/add/money
+     * PUT: account/add/money
      */
     public void addMoney(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: account/confirm
+     * PUT: account/confirm
      */
     public void confirmEmail(HttpServletRequest req, HttpServletResponse resp) {
 

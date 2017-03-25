@@ -23,14 +23,14 @@ public class RacecourceController {
     }
 
     /**
-     * PUT: racecourse/
+     * POST: racecourse/
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: racecourse/{id}
+     * PUT: racecourse/{id}
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) {
 

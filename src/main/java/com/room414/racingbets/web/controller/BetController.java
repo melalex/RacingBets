@@ -20,7 +20,7 @@ public class BetController {
     }
 
     /**
-     * PUT: bet/
+     * POST: bet/
      */
     public void makeBet(HttpServletRequest req, HttpServletResponse resp) {
 

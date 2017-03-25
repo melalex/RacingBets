@@ -21,35 +21,35 @@ public class RaceController {
     }
 
     /**
-     * PUT: race/
+     * POST: race/
      */
     public void scheduleRace(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: race/start/{id}
+     * PUT: race/start/{id}
      */
     public void startRace(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: race/reject/{id}
+     * PUT: race/reject/{id}
      */
     public void rejectRace(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: race/finish/{id}
+     * PUT: race/finish/{id}
      */
     public void finishRace(HttpServletRequest req, HttpServletResponse resp) {
 
     }
 
     /**
-     * POST: race/update/{id}
+     * PUT: race/update/{id}
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) {
 

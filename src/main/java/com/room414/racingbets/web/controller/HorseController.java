@@ -35,7 +35,7 @@ public class HorseController {
     }
 
     /**
-     * PUT: horse/
+     * POST: horse/
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -65,7 +65,7 @@ public class HorseController {
     }
 
     /**
-     * POST: horse/{id}
+     * PUT: horse/{id}
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) {
         try {
