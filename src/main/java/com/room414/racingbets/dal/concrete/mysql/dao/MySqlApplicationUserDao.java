@@ -7,8 +7,6 @@ import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecu
 import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.intellij.lang.annotations.Language;
 
 import java.math.BigDecimal;
@@ -31,8 +29,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
 public class MySqlApplicationUserDao implements ApplicationUserDao {
     private static final int MYSQL_DUPLICATE = 1062;
     private static final String TABLE_NAME = "application_user";
-
-    private Log log = LogFactory.getLog(MySqlApplicationUserDao.class);
 
     private Connection connection;
     private MySqlSharedExecutor<ApplicationUser> executor;
@@ -133,8 +129,6 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                     entity.getLanguage()
             );
 
-            log.error(message, e);
-
             throw new DalException(message, e);
         }
     }
@@ -154,7 +148,6 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
             statement.executeBatch();
         } catch (SQLException e) {
             String message = "Exception during adding role faze while creating user " + entity.toString();
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -312,7 +305,6 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
             statement.execute();
         } catch (SQLException e) {
             String message = callErrorMessage("add_role", userId, role);
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }

@@ -5,8 +5,6 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.entities.Horse;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
@@ -26,8 +24,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  */
 public class MySqlHorseDao implements HorseDao {
     private static final String TABLE_NAME = "horse";
-
-    private Log log = LogFactory.getLog(MySqlHorseDao.class);
 
     private Connection connection;
     private MySqlSharedExecutor<Horse> executor;
@@ -94,7 +90,6 @@ public class MySqlHorseDao implements HorseDao {
                     entity.getSir() != 0 ? entity.getSir() : "NULL",
                     entity.getDam() != 0 ? entity.getDam() : "NULL"
             );
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -194,7 +189,6 @@ public class MySqlHorseDao implements HorseDao {
                     entity.getDam() != 0 ? entity.getDam() : "NULL",
                     entity.getId()
             );
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }

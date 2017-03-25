@@ -3,20 +3,12 @@ package com.room414.racingbets.dal.concrete.facade;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.facade.DalFacade;
 import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
-import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
-import com.room414.racingbets.dal.concrete.caching.factories.CachedUnitOfWorkFactory;
-import com.room414.racingbets.dal.concrete.caching.factories.CaffeineCachingUnitOfWorkFactory;
-import com.room414.racingbets.dal.concrete.caching.factories.RedisUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisSubscriber;
-import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +41,6 @@ public class DalFacadeImpl implements DalFacade, AutoCloseable {
     );
 
     private static DalFacadeImpl ourInstance = new DalFacadeImpl();
-
-    private Log log = LogFactory.getLog(DalFacadeImpl.class);
 
     private MainCachePool pool = new MainCachePool();
 
@@ -101,7 +91,6 @@ public class DalFacadeImpl implements DalFacade, AutoCloseable {
 
         } catch (IOException e) {
             String message = "Exception during reading mysql connection properties";
-            log.error(message);
             throw new DalException(message, e);
         }
     }
@@ -122,7 +111,6 @@ public class DalFacadeImpl implements DalFacade, AutoCloseable {
             jedisPool = new JedisPool(new JedisPoolConfig(), host, port, timeout, password, db);
         } catch (IOException e) {
             String message = "Exception during reading redis connection pool properties";
-            log.error(message);
             throw new DalException(message, e);
         }
     }

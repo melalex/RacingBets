@@ -6,8 +6,6 @@ import com.room414.racingbets.bll.concrete.infrastrucure.Messenger;
 import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.bll.dto.entities.UserDto;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -20,7 +18,6 @@ import java.util.Properties;
  */
 // TODO: add implementation
 public class MessageServiceImpl implements MessageService {
-    private Log log = LogFactory.getLog(MessageServiceImpl.class);
     private Properties properties;
 
     public MessageServiceImpl(Properties properties) {
@@ -46,7 +43,6 @@ public class MessageServiceImpl implements MessageService {
             Transport.send(message);
         } catch (MessagingException e) {
             String message = "Exception during sending mail with properties " + properties;
-            log.error(message, e);
             throw new BllException(message, e);
         }
 

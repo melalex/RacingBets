@@ -9,8 +9,6 @@ import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtEncoder;
 import com.room414.racingbets.dal.domain.enums.Role;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -27,7 +25,6 @@ import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil
  * @version 1.0 21 Mar 2017
  */
 public class JwtEncoderImpl implements JwtEncoder {
-    private Log log = LogFactory.getLog(JwtEncoderImpl.class);
     private String secret;
 
     public JwtEncoderImpl(String secret) {
@@ -85,7 +82,6 @@ public class JwtEncoderImpl implements JwtEncoder {
             return new String(mac.doFinal((header + "." + payload).getBytes()));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             String message = defaultErrorMessage("generateSignature", jwt, header, payload);
-            log.error(message, e);
             throw new BllException(message, e);
         }
     }

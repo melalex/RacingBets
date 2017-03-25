@@ -2,8 +2,6 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.*;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,8 +14,6 @@ import java.sql.SQLException;
  * @version 1.0 28 Feb 2017
  */
 public class MySqlUnitOfWork implements UnitOfWork {
-    private Log log = LogFactory.getLog(MySqlUnitOfWork.class);
-
     private Connection connection;
 
     private ApplicationUserDao applicationUserDao;
@@ -120,7 +116,6 @@ public class MySqlUnitOfWork implements UnitOfWork {
             connection.commit();
         } catch (SQLException e) {
             String message = "Exception during committing transaction";
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -131,7 +126,6 @@ public class MySqlUnitOfWork implements UnitOfWork {
             connection.rollback();
         } catch (SQLException e) {
             String message = "Exception during the rollback transaction";
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -142,7 +136,6 @@ public class MySqlUnitOfWork implements UnitOfWork {
             connection.close();
         } catch (SQLException e) {
             String message = "Exception during clothing connection";
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }

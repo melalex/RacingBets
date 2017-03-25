@@ -7,9 +7,6 @@ import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtDecoder;
 import com.room414.racingbets.dal.domain.enums.Role;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import sun.misc.BASE64Decoder;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -22,7 +19,6 @@ import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil
  * @version 1.0 21 Mar 2017
  */
 public class JwtDecoderImpl implements JwtDecoder {
-    private Log log = LogFactory.getLog(JwtDecoderImpl.class);
 
     private Collection<Role> asCollection(JsonNode nodes) {
         Collection<Role> roles = new HashSet<>();
@@ -54,7 +50,6 @@ public class JwtDecoderImpl implements JwtDecoder {
                     .build();
         } catch (IOException e) {
             String message = defaultErrorMessage("decode", token);
-            log.error(message, e);
             throw new BllException(message, e);
         }
     }

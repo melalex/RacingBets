@@ -1,6 +1,5 @@
 package com.room414.racingbets.bll.concrete.services;
 
-import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.BetService;
 import com.room414.racingbets.bll.dto.entities.BetDto;
@@ -8,13 +7,10 @@ import com.room414.racingbets.bll.dto.entities.OddsDto;
 import com.room414.racingbets.bll.dto.entities.ParticipantDto;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -22,14 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.defaultErrorMessage;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 19 Mar 2017
  */
 public class BetServiceImpl implements BetService {
-    private Log log = LogFactory.getLog(BetService.class);
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
 
@@ -112,12 +106,6 @@ public class BetServiceImpl implements BetService {
             unitOfWork.commit();
 
             return Response.SUCCESS;
-        } catch (DalException e) {
-            throw new BllException(defaultErrorMessage("makeBet", bet), e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("makeBet", bet);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -127,13 +115,6 @@ public class BetServiceImpl implements BetService {
             Bet entity = mapper.map(bet, Bet.class);
             Odds odds = unitOfWork.getBetDao().getOdds(entity);
             return mapper.map(odds, OddsDto.class);
-        } catch (DalException e) {
-            String message = defaultErrorMessage("getOdds", bet);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("getOdds", bet);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -153,13 +134,6 @@ public class BetServiceImpl implements BetService {
             return bets.stream()
                     .map(b -> mapper.map(b, BetDto.class))
                     .collect(Collectors.toList());
-        } catch (DalException e) {
-            String message = defaultErrorMessage("getOdds", id, pager);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("getOdds", id, pager);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 }

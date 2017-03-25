@@ -22,13 +22,13 @@ import java.util.Properties;
  */
 public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
     private static final Path CONFIG_FILE_PATH = Paths.get(
-            System.getProperty("user.dir"),
-            "database",
-            "mysql",
+            "target",
+            "classes",
+            "datasource",
             "test",
-            "config",
             "mysqlConfig.properties"
     );
+
     private static MySqlTestingUnitOfWorkFactory ourInstance = createFactory();
 
     private String url;

@@ -3,17 +3,13 @@ package com.room414.racingbets.bll.concrete.services;
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.UserService;
-import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -23,22 +19,18 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.*;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 20 Mar 2017
  */
 public class UserServiceImpl implements UserService {
-    private Log log = LogFactory.getLog(UserServiceImpl.class);
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
-    private ErrorHandleDecorator<UserDto> decorator;
     private String randomAlgorithm;
 
     public UserServiceImpl(UnitOfWorkFactory factory, String randomAlgorithm) {
         this.factory = factory;
-        this.decorator = new ErrorHandleDecorator<>(factory, log);
         this.randomAlgorithm = randomAlgorithm;
     }
 
@@ -50,7 +42,6 @@ public class UserServiceImpl implements UserService {
             return new String(salt);
         } catch (NoSuchAlgorithmException e) {
             String message = "No algorithm named " + randomAlgorithm;
-            log.error(message, e);
             throw new BllException(message, e);
         }
     }
@@ -99,13 +90,6 @@ public class UserServiceImpl implements UserService {
             } else {
                 return result;
             }
-        } catch (DalException e) {
-            String message = createErrorMessage(user);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = createErrorMessage(user);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -114,13 +98,6 @@ public class UserServiceImpl implements UserService {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getApplicationUserDao().addRole(id, role);
             unitOfWork.commit();
-        } catch (DalException e) {
-            String message = defaultErrorMessage("addRole", id, role);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("addRole", id, role);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -129,19 +106,15 @@ public class UserServiceImpl implements UserService {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getApplicationUserDao().removeRole(id, role);
             unitOfWork.commit();
-        } catch (DalException e) {
-            String message = defaultErrorMessage("removeRole", id, role);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("removeRole", id, role);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
     @Override
     public void delete(long id) {
-        decorator.delete(id, this::delete);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            unitOfWork.getApplicationUserDao().delete(id);
+            unitOfWork.commit();
+        }
     }
 
     @Override
@@ -149,19 +122,15 @@ public class UserServiceImpl implements UserService {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getApplicationUserDao().confirmEmail(userId);
             unitOfWork.commit();
-        } catch (DalException e) {
-            String message = defaultErrorMessage("confirmEmail", e);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("confirmEmail", t);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
     @Override
     public UserDto find(long id) {
-        return decorator.find(id, this::find);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            ApplicationUser user = unitOfWork.getApplicationUserDao().find(id);
+            return mapper.map(user, UserDto.class);
+        }
     }
 
     @Override
@@ -176,13 +145,6 @@ public class UserServiceImpl implements UserService {
             }
 
             return isValid(password, entity) ? mapper.map(entity, UserDto.class) : null;
-        } catch (DalException e) {
-            String message = defaultErrorMessage("findByLoginPassword", login, password);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("findByLoginPassword", login, password);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -194,44 +156,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll(Pager pager) {
-        return decorator.findAll(pager, this::findAll);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
+
+            List<ApplicationUser> entities = ownerDao.findAll(pager.getOffset(), pager.getLimit());
+            int count = ownerDao.count();
+
+            pager.setCount(count);
+
+            return mapList(entities);
+        }
     }
 
     @Override
     public List<UserDto> search(String login, Pager pager) {
-        return decorator.search(login, pager, this::search);
-    }
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
 
+            List<ApplicationUser> entities = ownerDao.search(login, pager.getOffset(), pager.getLimit());
+            int count = ownerDao.searchCount(login);
 
-    private void delete(UnitOfWork unitOfWork, long id) {
-        unitOfWork.getApplicationUserDao().delete(id);
-        unitOfWork.commit();
-    }
+            pager.setCount(count);
 
-    public UserDto find(UnitOfWork unitOfWork, long id) {
-        ApplicationUser user = unitOfWork.getApplicationUserDao().find(id);
-        return mapper.map(user, UserDto.class);
-    }
-
-    public List<UserDto> findAll(UnitOfWork unitOfWork, Pager pager) {
-        ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
-
-        List<ApplicationUser> entities = ownerDao.findAll(pager.getOffset(), pager.getLimit());
-        int count = ownerDao.count();
-
-        pager.setCount(count);
-
-        return mapList(entities);
-    }
-
-    public List<UserDto> search(UnitOfWork unitOfWork, String login, Pager pager) {
-        ApplicationUserDao ownerDao = unitOfWork.getApplicationUserDao();
-
-        List<ApplicationUser> entities = ownerDao.search(login, pager.getOffset(), pager.getLimit());
-        int count = ownerDao.searchCount(login);
-
-        pager.setCount(count);
-
-        return mapList(entities);
+            return mapList(entities);
+        }
     }
 }

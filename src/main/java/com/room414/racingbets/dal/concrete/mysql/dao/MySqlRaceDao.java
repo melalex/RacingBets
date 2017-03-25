@@ -8,8 +8,6 @@ import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.intellij.lang.annotations.Language;
 
 import java.math.BigDecimal;
@@ -31,8 +29,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  */
 public class MySqlRaceDao implements RaceDao {
     private static String TABLE_NAME = "race";
-
-    private Log log = LogFactory.getLog(MySqlRaceDao.class);
 
 
     private Connection connection;
@@ -176,7 +172,6 @@ public class MySqlRaceDao implements RaceDao {
             createEntities(statement, idSetters);
         } catch (SQLException e) {
             String message = "Exception during adding participant faze while creating race " + entity.toString();
-            log.error(message, e);
             throw new DalException(message, e);
         }
 
@@ -199,7 +194,6 @@ public class MySqlRaceDao implements RaceDao {
             statement.executeBatch();
         } catch (SQLException e) {
             String message = "Exception during adding prizes faze while creating race " + entity.toString();
-            log.error(message, e);
             throw new DalException(message, e);
         }
 
@@ -314,7 +308,6 @@ public class MySqlRaceDao implements RaceDao {
             statement.executeBatch();
         } catch (SQLException e) {
             String message = "Exception during adding participant faze while creating race " + entity.toString();
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -408,7 +401,6 @@ public class MySqlRaceDao implements RaceDao {
                     limit,
                     offset
             );
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }

@@ -1,17 +1,14 @@
 package com.room414.racingbets.bll.concrete.services;
 
-import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.MessageService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
-import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.Bet;
@@ -19,8 +16,6 @@ import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -32,23 +27,19 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.room414.racingbets.bll.concrete.infrastrucure.ErrorMessageUtil.defaultErrorMessage;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 19 Mar 2017
  */
 public class RaceServiceImpl implements RaceService {
-    private Log log = LogFactory.getLog(RaceServiceImpl.class);
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
-    private ErrorHandleDecorator<RaceDto> decorator;
     private MessageService messageService;
     private int betsPerQuery;
 
     public RaceServiceImpl(UnitOfWorkFactory factory, MessageService messageService, int betsPerQuery) {
         this.factory = factory;
-        this.decorator = new ErrorHandleDecorator<>(factory, log);
         this.messageService = messageService;
         this.betsPerQuery = betsPerQuery;
     }
@@ -86,7 +77,12 @@ public class RaceServiceImpl implements RaceService {
 
     @Override
     public void scheduleRace(RaceDto race) {
-        decorator.create(race, this::create);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            race.setRaceStatus(RaceStatus.SCHEDULED);
+            Race entity = mapper.map(race, Race.class);
+            unitOfWork.getRaceDao().create(entity);
+            unitOfWork.commit();
+        }
     }
 
     @Override
@@ -95,13 +91,6 @@ public class RaceServiceImpl implements RaceService {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             unitOfWork.getRaceDao().updateStatus(id, RaceStatus.RIDING);
             unitOfWork.commit();
-        } catch (DalException e) {
-            String message = defaultErrorMessage("startRace", id);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("startRace", id);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -130,13 +119,6 @@ public class RaceServiceImpl implements RaceService {
             }
 
             unitOfWork.commit();
-        } catch (DalException e) {
-            String message = defaultErrorMessage("rejectRace", race);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("rejectRace", race);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -185,34 +167,46 @@ public class RaceServiceImpl implements RaceService {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             fixRaceResult(unitOfWork, race);
             payOff(unitOfWork, race);
-        } catch (DalException e) {
-            String message = defaultErrorMessage("finishRace", race);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("finishRace", race);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
     @Override
     public void update(RaceDto race) {
-        decorator.update(race, this::update);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Race entity = mapper.map(race, Race.class);
+            unitOfWork.getRaceDao().update(entity);
+            unitOfWork.commit();
+        }
     }
 
     @Override
     public void delete(long id) {
-        decorator.delete(id, this::delete);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            unitOfWork.getRaceDao().delete(id);
+            unitOfWork.commit();
+        }
     }
 
     @Override
     public RaceDto find(long id) {
-        return decorator.find(id, this::find);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Race entity = unitOfWork.getRaceDao().find(id);
+            return entity != null ? mapper.map(entity, RaceDto.class) : null;
+        }
     }
 
     @Override
     public List<RaceDto> findAll(Pager pager) {
-        return decorator.findAll(pager, this::findAll);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            RaceDao horseDao = unitOfWork.getRaceDao();
+
+            List<Race> entities = horseDao.findAll(pager.getOffset(), pager.getLimit());
+            int count = horseDao.count();
+
+            pager.setCount(count);
+
+            return mapRaceList(entities);
+        }
     }
 
     @Override
@@ -229,13 +223,6 @@ public class RaceServiceImpl implements RaceService {
             pager.setCount(count);
 
             return mapRaceList(list);
-        } catch (DalException e) {
-            String message = defaultErrorMessage("findByRacecourse", status, id, limit, offset);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("findByRacecourse", status, id, limit, offset);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -265,13 +252,6 @@ public class RaceServiceImpl implements RaceService {
             pager.setCount(count);
 
             return mapRaceList(list);
-        } catch (DalException e) {
-            String message = defaultErrorMessage("findByDate", status, date, limit, offset);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("findByDate", status, date, limit, offset);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -303,13 +283,6 @@ public class RaceServiceImpl implements RaceService {
             pager.setCount(count);
 
             return mapRaceList(list);
-        } catch (DalException e) {
-            String message = defaultErrorMessage("findByDateAndRacecourse", status, date, id, limit, offset);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("findByDateAndRacecourse", status, date, id, limit, offset);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
     }
 
@@ -327,47 +300,6 @@ public class RaceServiceImpl implements RaceService {
             pager.setCount(count);
 
             return mapRaceList(entities);
-        } catch (DalException e) {
-            String message = defaultErrorMessage("findByName", status, name, limit, offset);
-            throw new BllException(message, e);
-        } catch (Throwable t) {
-            String message = defaultErrorMessage("findByName", status, name, limit, offset);
-            log.error(message, t);
-            throw new BllException(message, t);
         }
-    }
-
-    private void create(UnitOfWork unitOfWork, RaceDto race) {
-        race.setRaceStatus(RaceStatus.SCHEDULED);
-        Race entity = mapper.map(race, Race.class);
-        unitOfWork.getRaceDao().create(entity);
-        unitOfWork.commit();
-    }
-
-    private void update(UnitOfWork unitOfWork, RaceDto horse) {
-        Race entity = mapper.map(horse, Race.class);
-        unitOfWork.getRaceDao().update(entity);
-        unitOfWork.commit();
-    }
-
-    private RaceDto find(UnitOfWork unitOfWork, long id) {
-        Race entity = unitOfWork.getRaceDao().find(id);
-        return entity != null ? mapper.map(entity, RaceDto.class) : null;
-    }
-
-    private List<RaceDto> findAll(UnitOfWork unitOfWork, Pager pager) {
-        RaceDao horseDao = unitOfWork.getRaceDao();
-
-        List<Race> entities = horseDao.findAll(pager.getOffset(), pager.getLimit());
-        int count = horseDao.count();
-
-        pager.setCount(count);
-
-        return mapRaceList(entities);
-    }
-
-    private void delete(UnitOfWork unitOfWork, long id) {
-        unitOfWork.getRaceDao().delete(id);
-        unitOfWork.commit();
     }
 }

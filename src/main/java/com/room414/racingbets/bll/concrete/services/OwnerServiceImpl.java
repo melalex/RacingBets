@@ -2,13 +2,11 @@ package com.room414.racingbets.bll.concrete.services;
 
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.OwnerService;
-import com.room414.racingbets.bll.concrete.infrastrucure.ErrorHandleDecorator;
 import com.room414.racingbets.bll.dto.entities.OwnerDto;
 import com.room414.racingbets.dal.abstraction.dao.OwnerDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.Owner;
-import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -22,10 +20,10 @@ import java.util.stream.Collectors;
  */
 public class OwnerServiceImpl implements OwnerService {
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-    private ErrorHandleDecorator<OwnerDto> decorator;
+    private UnitOfWorkFactory factory;
 
     public OwnerServiceImpl(UnitOfWorkFactory factory) {
-        this.decorator = new ErrorHandleDecorator<>(factory, LogFactory.getLog(OwnerServiceImpl.class));
+        this.factory = factory;
     }
 
     private List<OwnerDto> mapList(List<Owner> source) {
@@ -35,76 +33,64 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public void create(OwnerDto horse) {
-        decorator.create(horse, this::create);
+    public void create(OwnerDto owner) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Owner entity = mapper.map(owner, Owner.class);
+            unitOfWork.getOwnerDao().create(entity);
+            unitOfWork.commit();
+        }
     }
 
     @Override
-    public void update(OwnerDto horse) {
-        decorator.create(horse, this::update);
+    public void update(OwnerDto owner) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Owner entity = mapper.map(owner, Owner.class);
+            unitOfWork.getOwnerDao().update(entity);
+            unitOfWork.commit();
+        }
     }
 
     @Override
     public OwnerDto find(long id) {
-        return decorator.find(id, this::find);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Owner entity = unitOfWork.getOwnerDao().find(id);
+            return entity != null ? mapper.map(entity, OwnerDto.class) : null;
+        }
     }
 
     @Override
     public List<OwnerDto> search(String searchString, Pager pager) {
-        return decorator.search(searchString, pager, this::search);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            OwnerDao ownerDao = unitOfWork.getOwnerDao();
+
+            List<Owner> entities = ownerDao.search(searchString, pager.getOffset(), pager.getLimit());
+            int count = ownerDao.searchCount(searchString);
+
+            pager.setCount(count);
+
+            return mapList(entities);
+        }
     }
 
     @Override
     public List<OwnerDto> findAll(Pager pager) {
-        return decorator.findAll(pager, this::findAll);
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            OwnerDao ownerDao = unitOfWork.getOwnerDao();
+
+            List<Owner> entities = ownerDao.findAll(pager.getOffset(), pager.getLimit());
+            int count = ownerDao.count();
+
+            pager.setCount(count);
+
+            return mapList(entities);
+        }
     }
 
     @Override
     public void delete(long id) {
-        decorator.delete(id, this::delete);
-    }
-
-    private void create(UnitOfWork unitOfWork, OwnerDto horse) {
-        Owner entity = mapper.map(horse, Owner.class);
-        unitOfWork.getOwnerDao().create(entity);
-        unitOfWork.commit();
-    }
-
-    private void update(UnitOfWork unitOfWork, OwnerDto horse) {
-        Owner entity = mapper.map(horse, Owner.class);
-        unitOfWork.getOwnerDao().update(entity);
-        unitOfWork.commit();
-    }
-
-    private OwnerDto find(UnitOfWork unitOfWork, long id) {
-        Owner entity = unitOfWork.getOwnerDao().find(id);
-        return entity != null ? mapper.map(entity, OwnerDto.class) : null;
-    }
-
-    private List<OwnerDto> search(UnitOfWork unitOfWork, String searchString, Pager pager) {
-        OwnerDao horseDao = unitOfWork.getOwnerDao();
-
-        List<Owner> entities = horseDao.search(searchString, pager.getOffset(), pager.getLimit());
-        int count = horseDao.searchCount(searchString);
-
-        pager.setCount(count);
-
-        return mapList(entities);
-    }
-
-    private List<OwnerDto> findAll(UnitOfWork unitOfWork, Pager pager) {
-        OwnerDao horseDao = unitOfWork.getOwnerDao();
-
-        List<Owner> entities = horseDao.findAll(pager.getOffset(), pager.getLimit());
-        int count = horseDao.count();
-
-        pager.setCount(count);
-
-        return mapList(entities);
-    }
-
-    private void delete(UnitOfWork unitOfWork, long id) {
-        unitOfWork.getOwnerDao().delete(id);
-        unitOfWork.commit();
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            unitOfWork.getOwnerDao().delete(id);
+            unitOfWork.commit();
+        }
     }
 }

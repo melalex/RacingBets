@@ -12,8 +12,6 @@ import com.room414.racingbets.dal.concrete.caching.factories.RedisUnitOfWorkFact
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
 import com.room414.racingbets.dal.concrete.mysql.factories.MySqlUnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.tokens.factories.RedisTokenStorageFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import redis.clients.jedis.JedisPool;
 
 import javax.sql.DataSource;
@@ -27,8 +25,6 @@ import java.util.Properties;
  * @version 1.0 21 Mar 2017
  */
 public class AbstractDalFactoryImpl implements AbstractDalFactory {
-    private static final Log LOG = LogFactory.getLog(AbstractDalFactoryImpl.class);
-
     private UnitOfWorkFactory unitOfWorkFactory;
     private TokenStorageFactory tokenStorageFactory;
 
@@ -64,7 +60,6 @@ public class AbstractDalFactoryImpl implements AbstractDalFactory {
             return properties;
         } catch (IOException e) {
             String message = "Exception during reading AbstractDalFactory properties";
-            LOG.error(message);
             throw new DalException(message, e);
         }
     }

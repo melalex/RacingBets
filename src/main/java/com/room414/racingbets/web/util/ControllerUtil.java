@@ -3,6 +3,7 @@ package com.room414.racingbets.web.util;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.viewmodels.ErrorViewModel;
+import com.room414.racingbets.web.model.viewmodels.Response;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +42,12 @@ public class ControllerUtil {
         return token;
     }
 
+    public static <T> void writeToResponse(HttpServletResponse httpServletResponse, Response<T> response) throws IOException {
+        PrintWriter writer = httpServletResponse.getWriter();
+        writer.write(response.toJson());
+        writer.close();
+    }
+
     public static <T> void permissionDenied(
             HttpServletResponse resp,
             ResponseBuilder<T> respBuilder,
@@ -55,8 +62,9 @@ public class ControllerUtil {
         );
         respBuilder.addError(error);
 
-        PrintWriter writer = resp.getWriter();
-        writer.close();
+        resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
+        writeToResponse(resp, respBuilder.buildErrorResponse());
     }
 
     /**

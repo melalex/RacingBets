@@ -1,8 +1,6 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.sql.*;
 import java.util.List;
@@ -18,8 +16,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 03 Mar 2017
  */
 public class MySqlSharedExecutor<T> {
-    private Log log = LogFactory.getLog(MySqlSharedExecutor.class);
-
     private Connection connection;
     private QueryExecutor<T> mapResult;
     private QueryExecutor<List<T>> mapResultList;
@@ -48,7 +44,6 @@ public class MySqlSharedExecutor<T> {
             return createEntity(statement, idSetter);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, objects);
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -111,7 +106,6 @@ public class MySqlSharedExecutor<T> {
             return queryExecutor.execute(statement);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, objects);
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
@@ -131,7 +125,6 @@ public class MySqlSharedExecutor<T> {
             return queryExecutor.execute(statement);
         } catch (SQLException e) {
             String message = defaultErrorMessage(sqlStatement, objects);
-            log.error(message, e);
             throw new DalException(message, e);
         }
     }
