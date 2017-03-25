@@ -127,3 +127,4 @@ src/main/webapp/
 !/META-INF/dozer.xml
 !/src/META-INF/
 !/src/main/java/com/room414/racingbets/web/
+!/src/main/resources/

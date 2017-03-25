@@ -36,7 +36,7 @@ public class DalFacadeImpl implements DalFacade, AutoCloseable {
             "mysql",
             "main",
             "config",
-            "dbConfig.properties"
+            "mysqlConfig.properties"
     );
 
     private static final Path REDIS_CONFIG_FILE_PATH = Paths.get(

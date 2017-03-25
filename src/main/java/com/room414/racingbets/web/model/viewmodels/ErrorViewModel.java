@@ -31,6 +31,16 @@ public class ErrorViewModel implements Serializable {
      */
     private String propertyName;
 
+    public ErrorViewModel() {
+    }
+
+    public ErrorViewModel(ErrorCode code, String message, String objectName, String propertyName) {
+        this.code = code;
+        this.message = message;
+        this.objectName = objectName;
+        this.propertyName = propertyName;
+    }
+
     public ErrorCode getCode() {
         return code;
     }

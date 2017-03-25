@@ -25,8 +25,9 @@ public class AccountController {
     }
 
     /**
-     * PUT: account/register
+     * POST: account/register
      */
+    // TODO: POST -> PUT
     // TODO: refactor this
     public void register(HttpServletRequest req, HttpServletResponse resp) {
 //        ObjectMapper jsonMapper = new ObjectMapper();
