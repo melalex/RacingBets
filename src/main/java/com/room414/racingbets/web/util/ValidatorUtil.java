@@ -1,5 +1,6 @@
 package com.room414.racingbets.web.util;
 
+import com.room414.racingbets.bll.dto.base.PersonDto;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.viewmodels.Error;
@@ -63,5 +64,13 @@ public class ValidatorUtil {
             Error error = new Error(ErrorCode.INVALID_ERROR, message, type, name);
             builder.addToErrors(error);
         }
+    }
+
+    public static <T extends PersonDto> void validatePerson(T form, ResponseBuilder<T> builder, Locale locale, String type) {
+        notNull(form.getFirstName(), builder, locale, "firstName", type);
+        notNull(form.getLastName(), builder, locale, "lastName", type);
+
+        validateString(form.getFirstName(), builder, locale, "firstName", type);
+        validateString(form.getLastName(), builder, locale, "lastName", type);
     }
 }
