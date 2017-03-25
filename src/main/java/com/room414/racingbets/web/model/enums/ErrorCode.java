@@ -33,7 +33,7 @@ public enum ErrorCode {
      */
     TYPE_MISMATCH("TypeMismatch"),
     /**
-     * An ID (usually a masterTariffId) is required to process the request,
+     * An ID is required to process the request,
      * but none was supplied.
      */
     MISSING_ID("MissingId"),

@@ -16,4 +16,19 @@
         </field>
     </mapping>
 
+    <mapping>
+        <class-a>com.room414.racingbets.bll.dto.entities.HorseDto</class-a>
+        <class-b>com.room414.racingbets.web.model.viewmodels.HorseForm</class-b>
+
+        <field>
+            <a>owner.id</a>
+            <b>owner</b>
+        </field>
+
+        <field>
+            <a>trainer.id</a>
+            <b>trainer</b>
+        </field>
+    </mapping>
+
 </mappings>

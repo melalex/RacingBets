@@ -2,11 +2,15 @@ package com.room414.racingbets.web.model.viewmodels;
 
 import com.room414.racingbets.dal.domain.enums.Language;
 
+import java.io.Serializable;
+
 /**
  * @author Alexander Melashchenko
  * @version 1.0 24 Mar 2017
  */
-public class RegistrationFormViewModel {
+public class RegistrationForm implements Serializable {
+    private static final long serialVersionUID = 3553020485031355723L;
+
     private String login;
     private String password;
     private String firstName;
@@ -67,7 +71,7 @@ public class RegistrationFormViewModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RegistrationFormViewModel that = (RegistrationFormViewModel) o;
+        RegistrationForm that = (RegistrationForm) o;
 
         if (login != null ? !login.equals(that.login) : that.login != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
@@ -90,7 +94,7 @@ public class RegistrationFormViewModel {
 
     @Override
     public String toString() {
-        return "RegistrationFormViewModel{" +
+        return "RegistrationForm{" +
                 "login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +

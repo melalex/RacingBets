@@ -30,9 +30,9 @@ public class AccountController {
     // TODO: refactor this
     public void register(HttpServletRequest req, HttpServletResponse resp) {
 //        ObjectMapper jsonMapper = new ObjectMapper();
-//        RegistrationFormViewModel viewModel = jsonMapper.readValue(
+//        RegistrationForm viewModel = jsonMapper.readValue(
 //                req.getParameter("data"),
-//                RegistrationFormViewModel.class
+//                RegistrationForm.class
 //        );
 //
 //        if (isValid(viewModel)) {
