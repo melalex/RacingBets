@@ -1,6 +1,7 @@
 package com.room414.racingbets.bll.concrete.services;
 
 import com.room414.racingbets.bll.abstraction.exceptions.BllException;
+import com.room414.racingbets.bll.abstraction.infrastructure.CheckResult;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.UserService;
 import com.room414.racingbets.bll.dto.entities.UserDto;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +34,30 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UnitOfWorkFactory factory, String randomAlgorithm) {
         this.factory = factory;
         this.randomAlgorithm = randomAlgorithm;
+    }
+
+    class CheckResultImpl implements CheckResult {
+        private List<ApplicationUser> applicationUsers;
+        private String login;
+        private String email;
+
+        private CheckResultImpl(List<ApplicationUser> applicationUsers, String login, String email) {
+            this.applicationUsers = applicationUsers;
+            this.login = login;
+            this.email = email;
+        }
+
+        public boolean isEmailExists() {
+            return applicationUsers
+                    .stream()
+                    .anyMatch(u -> u.getEmail().equals(email));
+        }
+
+        public boolean isLoginExists() {
+            return applicationUsers
+                    .stream()
+                    .anyMatch(u -> u.getLogin().equals(login));
+        }
     }
 
     private String getSalt() {
@@ -64,50 +90,59 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int create(UserDto user) {
+    public CheckResult checkLoginAndEmail(String login, String email) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ApplicationUserDao dao = unitOfWork.getApplicationUserDao();
-            List<ApplicationUser> users = dao.findByLoginAndEmail(user.getLogin(), user.getEmail());
+            List<ApplicationUser> users = dao.findByLoginAndEmail(login, email);
 
-            int result = 0;
-            for (ApplicationUser u: users){
-                if (u.getEmail().equals(user.getEmail())) {
-                    result |= EMAIL_EXISTS;
-                }
-                if (u.getLogin().equals(user.getLogin())) {
-                    result |= LOGIN_EXISTS;
-                }
-            }
-
-            if (result == 0) {
-                user.addRole(Role.HANDICAPPER);
-                user.setBalance(new BigDecimal(0));
-                ApplicationUser entity = mapper.map(user, ApplicationUser.class);
-                hashPassword(entity);
-                unitOfWork.getApplicationUserDao().create(entity);
-                unitOfWork.commit();
-                return SUCCESS;
-            } else {
-                return result;
-            }
+            return new CheckResultImpl(users, login, email);
         }
     }
 
     @Override
-    public void addRole(long id, Role role) {
+    public void create(UserDto user) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            unitOfWork.getApplicationUserDao().addRole(id, role);
+            user.addRole(Role.HANDICAPPER);
+            user.setBalance(new BigDecimal(0));
+            ApplicationUser entity = mapper.map(user, ApplicationUser.class);
+            hashPassword(entity);
+            unitOfWork.getApplicationUserDao().create(entity);
             unitOfWork.commit();
         }
     }
 
     @Override
-    public void removeRole(long id, Role role) {
+    public void setRoles(long id, Set<Role> roles) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            unitOfWork.getApplicationUserDao().removeRole(id, role);
+            unitOfWork.getApplicationUserDao().setRoles(id, roles);
             unitOfWork.commit();
         }
     }
+
+    @Override
+    public void update(UserDto user) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            ApplicationUserDao dao = unitOfWork.getApplicationUserDao();
+
+            ApplicationUser entityToUpdate = mapper.map(user, ApplicationUser.class);
+            ApplicationUser entityFromStorage = dao.find(user.getId());
+
+            if (entityToUpdate.equals(entityFromStorage)) {
+                return;
+            }
+
+            if (!entityToUpdate.getEmail().equals(entityFromStorage.getEmail())) {
+                entityToUpdate.setEmailConfirmed(false);
+            }
+
+            entityToUpdate.setPassword(getSecurePassword(user.getPassword(), entityFromStorage.getSalt()));
+
+            dao.update(entityToUpdate);
+
+            unitOfWork.commit();
+        }
+    }
+
 
     @Override
     public void delete(long id) {

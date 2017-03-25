@@ -5,13 +5,14 @@ import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * DAO for ApplicationUser entity
  *
- * @see ApplicationUser
  * @author Alexander Melashchenko
  * @version 1.0 27 Feb 2017
+ * @see ApplicationUser
  */
 public interface ApplicationUserDao extends SearchDao<Long, ApplicationUser> {
     /**
@@ -36,23 +37,15 @@ public interface ApplicationUserDao extends SearchDao<Long, ApplicationUser> {
     void confirmEmail(long id);
 
     /**
-     * Add role to ApplicationUser
+     * Set roles of {@code ApplicationUser}
      *
      * @param userId ApplicationUser id
-     * @param role role
+     * @param roles  roles to set
      */
-    void addRole(long userId, Role role);
+    void setRoles(long userId, Set<Role> roles);
 
     /**
-     * Remove role from ApplicationUser
-     *
-     * @param userId ApplicationUser id
-     * @param role role
-     */
-    void removeRole(long userId, Role role);
-
-    /**
-     * @param id ApplicationUser id
+     * @param id     ApplicationUser id
      * @param amount amount of money
      * @return true if the money were removed successfully, false if not enough money on the balance sheet
      */
@@ -61,7 +54,7 @@ public interface ApplicationUserDao extends SearchDao<Long, ApplicationUser> {
     /**
      * Add amount param to ApplicationUser balance field
      *
-     * @param id ApplicationUser id
+     * @param id     ApplicationUser id
      * @param amount amount of money
      */
     void putMoney(long id, BigDecimal amount);

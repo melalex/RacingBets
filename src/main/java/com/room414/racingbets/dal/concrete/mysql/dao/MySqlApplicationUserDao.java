@@ -12,9 +12,7 @@ import org.intellij.lang.annotations.Language;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
@@ -294,27 +292,32 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void addRole(long userId, Role role) {
+    public void setRoles(long userId, Set<Role> roles) {
         @Language("MySQL")
-        final String call = "{ CALL add_role(?, ?) }";
+        final String deleteSqlStatement = "DELETE FROM role WHERE application_user_id = ?";
+        @Language("MySQL")
+        final String insertSqlStatement = "INSERT INTO role (application_user_id, name) VALUES (?, ?)";
 
-        try(CallableStatement statement = connection.prepareCall(call)) {
-            statement.setLong(1, userId);
-            statement.setString(2, role.getName());
+        try(PreparedStatement deleteStatement = connection.prepareStatement(deleteSqlStatement);
+            PreparedStatement insertStatement = connection.prepareStatement(insertSqlStatement)) {
 
-            statement.execute();
+            deleteStatement.setLong(1, userId);
+            deleteStatement.execute();
+
+            for (Role role : roles) {
+                insertStatement.setLong(1, userId);
+                insertStatement.setString(2, role.getName());
+                insertStatement.addBatch();
+            }
+            insertStatement.executeBatch();
         } catch (SQLException e) {
-            String message = callErrorMessage("add_role", userId, role);
+            String message = String.format(
+                    "Exception during setting roles %s to user with id %d",
+                    Arrays.toString(roles.toArray()),
+                    userId
+            );
             throw new DalException(message, e);
         }
-    }
-
-    @Override
-    public void removeRole(long userId, Role role) {
-        @Language("MySQL")
-        final String sqlStatement = "DELETE FROM role WHERE application_user_id = ? AND name = ?";
-
-        executor.executeUpdateQuery(sqlStatement, userId, role.getName());
     }
 
     @Override

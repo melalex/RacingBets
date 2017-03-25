@@ -1,10 +1,12 @@
 package com.room414.racingbets.bll.abstraction.services;
 
+import com.room414.racingbets.bll.abstraction.infrastructure.CheckResult;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Alexander Melashchenko
@@ -16,9 +18,10 @@ public interface UserService {
     int LOGIN_EXISTS = 0b010;
     int SUCCESS = 0b100;
 
-    int create(UserDto user);
-    void addRole(long id, Role role);
-    void removeRole(long id, Role role);
+    CheckResult checkLoginAndEmail(String login, String email);
+    void create(UserDto user);
+    void setRoles(long id, Set<Role> roles);
+    void update(UserDto user);
     void delete(long id);
     void confirmEmail(long userId);
 
@@ -26,4 +29,5 @@ public interface UserService {
     UserDto findByLoginPassword(String login, String password);
     List<UserDto> findAll(Pager pager);
     List<UserDto> search(String login, Pager pager);
+
 }

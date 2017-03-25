@@ -17,6 +17,9 @@ public class ResponseBuilder<T> {
     private List<T> result = new LinkedList<>();
     private List<ErrorViewModel> errors = new LinkedList<>();
 
+    public boolean hasErrors() {
+        return errors.size() > 0;
+    }
 
     public ResponseBuilder<T> setCount(int count) {
         this.count = count;

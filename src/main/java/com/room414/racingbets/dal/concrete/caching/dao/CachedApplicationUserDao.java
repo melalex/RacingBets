@@ -8,6 +8,7 @@ import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Alexander Melashchenko
@@ -69,15 +70,8 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
-    public void addRole(long userId, Role role) {
-        dao.addRole(userId, role);
-        cache.deleteManyCached();
-        removeFromCacheById(userId);
-    }
-
-    @Override
-    public void removeRole(long userId, Role role) {
-        dao.removeRole(userId, role);
+    public void setRoles(long userId, Set<Role> roles) {
+        dao.setRoles(userId, roles);
         cache.deleteManyCached();
         removeFromCacheById(userId);
     }

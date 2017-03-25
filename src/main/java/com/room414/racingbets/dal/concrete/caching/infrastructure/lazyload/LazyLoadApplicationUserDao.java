@@ -8,6 +8,7 @@ import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Alexander Melashchenko
@@ -85,13 +86,8 @@ public class LazyLoadApplicationUserDao implements ApplicationUserDao {
     }
 
     @Override
-    public void addRole(long userId, Role role) {
-        getApplicationUserDao().addRole(userId, role);
-    }
-
-    @Override
-    public void removeRole(long userId, Role role) {
-        getApplicationUserDao().removeRole(userId, role);
+    public void setRoles(long userId, Set<Role> roles) {
+        getApplicationUserDao().setRoles(userId, roles);
     }
 
     @Override

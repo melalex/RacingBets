@@ -14,8 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
 
@@ -346,21 +348,25 @@ class ApplicationUserDaoTest {
 
     @Test
     @Tag("write")
-    void addRoleAndRemoveRole() {
+    void setRoles() {
         final long targetId = 3L;
-        Role newRole = Role.ADMIN;
+        Set<Role> newRoles = new HashSet<>();
+
+        newRoles.add(Role.ADMIN);
+        newRoles.add(Role.HANDICAPPER);
+
         ApplicationUserDao dao = getDao();
 
         ApplicationUser entity = dao.find(targetId);
-        assert !entity.isInRole(newRole) : "entity already in role";
+        Set<Role> oldRoles = entity.getRoles();
 
-        dao.addRole(entity.getId(), newRole);
-        entity = dao.find(targetId);
-        assert entity.isInRole(newRole) : "Dao didn't add role to user";
+        assert !oldRoles.equals(newRoles) : "entity already in role";
 
-        dao.removeRole(entity.getId(), newRole);
+        dao.setRoles(entity.getId(), newRoles);
         entity = dao.find(targetId);
-        assert !entity.isInRole(newRole) : "Dao didn't remove role from user";
+        assert entity.getRoles().equals(newRoles) : "Dao didn't add role to user";
+
+        dao.setRoles(entity.getId(), oldRoles);
     }
 
     @Test
