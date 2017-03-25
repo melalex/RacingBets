@@ -38,6 +38,7 @@ public class TrainerServiceImpl implements TrainerService {
             Trainer entity = mapper.map(trainer, Trainer.class);
             unitOfWork.getTrainerDao().create(entity);
             unitOfWork.commit();
+            trainer.setId(entity.getId());
         }
     }
 

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-import static com.room414.racingbets.web.util.ControllerUtil.createResponseBuilder;
+import static com.room414.racingbets.web.util.ControllerUtil.*;
 
 /**
  * @author Alexander Melashchenko
@@ -51,31 +51,28 @@ public class HorseController {
     /**
      * POST: horse/
      */
-    public void create(HttpServletRequest req, HttpServletResponse resp) {
-        ResponseBuilder<HorseDto> horseResponseBuilder = createResponseBuilder(resp, locale, ENTITY_TYPE);
+    public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<HorseDto> responseBuilder = createResponseBuilder(resp, locale, ENTITY_TYPE);
         try {
             String token = ControllerUtil.getTokenFromRequest(req);
             if (accountService.isInRole(token, Role.ADMIN)) {
                 ObjectMapper jsonMapper = new ObjectMapper();
                 HorseDto horse = jsonMapper.readValue(
-                        req.getParameter("data"),
+                        req.getReader(),
                         HorseDto.class
                 );
 
                 horseService.create(horse);
 
+                responseBuilder.addToResult(horse);
                 resp.setStatus(HttpServletResponse.SC_CREATED);
+
+                writeToResponse(resp, responseBuilder.buildSuccessResponse());
             } else {
-                // TODO: add logic
+                permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (BllException e) {
-            // TODO: add logic
         } catch (JsonParseException e) {
-            // TODO: add logic
-        } catch (JsonMappingException e) {
-            // TODO: add logic
-        } catch (IOException e) {
-            // TODO: add logic
+            invalidRequestBody(resp, responseBuilder, locale);
         }
     }
 

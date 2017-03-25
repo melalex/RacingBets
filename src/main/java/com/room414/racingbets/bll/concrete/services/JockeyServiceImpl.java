@@ -38,6 +38,7 @@ public class JockeyServiceImpl implements JockeyService {
             Jockey entity = mapper.map(jockey, Jockey.class);
             unitOfWork.getJockeyDao().create(entity);
             unitOfWork.commit();
+            jockey.setId(entity.getId());
         }
     }
 

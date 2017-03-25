@@ -38,6 +38,7 @@ public class OwnerServiceImpl implements OwnerService {
             Owner entity = mapper.map(owner, Owner.class);
             unitOfWork.getOwnerDao().create(entity);
             unitOfWork.commit();
+            owner.setId(entity.getId());
         }
     }
 

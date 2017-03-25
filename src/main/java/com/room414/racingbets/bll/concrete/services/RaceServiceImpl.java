@@ -82,6 +82,7 @@ public class RaceServiceImpl implements RaceService {
             Race entity = mapper.map(race, Race.class);
             unitOfWork.getRaceDao().create(entity);
             unitOfWork.commit();
+            race.setId(entity.getId());
         }
     }
 

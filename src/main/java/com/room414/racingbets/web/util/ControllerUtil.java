@@ -2,7 +2,7 @@ package com.room414.racingbets.web.util;
 
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
-import com.room414.racingbets.web.model.viewmodels.ErrorViewModel;
+import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.model.viewmodels.Response;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,29 +42,41 @@ public class ControllerUtil {
         return token;
     }
 
-    public static <T> void writeToResponse(HttpServletResponse httpServletResponse, Response<T> response) throws IOException {
+    public static <T> void writeToResponse(HttpServletResponse httpServletResponse,
+                                           Response<T> response) throws IOException {
         PrintWriter writer = httpServletResponse.getWriter();
         writer.write(response.toJson());
         writer.close();
     }
 
-    public static <T> void permissionDenied(
-            HttpServletResponse resp,
-            ResponseBuilder<T> respBuilder,
-            Locale locale
-    ) throws IOException {
+    public static <T> void invalidRequestBody(HttpServletResponse resp,
+                                              ResponseBuilder<T> builder,
+                                              Locale locale) throws IOException {
+        String messageForResponse = ResourceBundle
+                .getBundle(ControllerUtil.ERROR_MESSAGE_BUNDLE, locale)
+                .getString("invalid.request.body");
+
+        Error error = new Error(ErrorCode.INVALID_REQUEST_BODY, messageForResponse, builder.getType(), null);
+        builder.addToErrors(error);
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        writeToResponse(resp, builder.buildErrorResponse());
+    }
+
+    public static <T> void permissionDenied(HttpServletResponse resp,
+                                            ResponseBuilder<T> builder,
+                                            Locale locale) throws IOException {
         String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("permission.denied");
-        ErrorViewModel error = new ErrorViewModel(
+        Error error = new Error(
                 ErrorCode.INSUFFICIENT_PERMISSIONS,
                 message,
-                respBuilder.getType(),
+                builder.getType(),
                 null
         );
-        respBuilder.addError(error);
+        builder.addToErrors(error);
 
         resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-        writeToResponse(resp, respBuilder.buildErrorResponse());
+        writeToResponse(resp, builder.buildErrorResponse());
     }
 
     /**
@@ -75,7 +87,8 @@ public class ControllerUtil {
         resp.setCharacterEncoding(ENCODING);
         resp.setLocale(locale);
 
-        ResponseBuilder<T> result = new ResponseBuilder<>();;
+        ResponseBuilder<T> result = new ResponseBuilder<>();
+        ;
         result.setType(type);
         return result;
     }

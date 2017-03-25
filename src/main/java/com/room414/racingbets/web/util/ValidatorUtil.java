@@ -7,9 +7,9 @@ import com.room414.racingbets.web.model.viewmodels.RegistrationFormViewModel;
  * @author Alexander Melashchenko
  * @version 1.0 24 Mar 2017
  */
-public class Validator {
+public class ValidatorUtil {
 
-    private Validator() {
+    private ValidatorUtil() {
 
     }
 

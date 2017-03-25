@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
             hashPassword(entity);
             unitOfWork.getApplicationUserDao().create(entity);
             unitOfWork.commit();
+            user.setId(entity.getId());
         }
     }
 

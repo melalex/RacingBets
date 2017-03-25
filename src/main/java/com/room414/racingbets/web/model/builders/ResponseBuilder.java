@@ -1,7 +1,7 @@
 package com.room414.racingbets.web.model.builders;
 
 import com.room414.racingbets.web.model.enums.Status;
-import com.room414.racingbets.web.model.viewmodels.ErrorViewModel;
+import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.model.viewmodels.Response;
 
 import java.util.LinkedList;
@@ -15,7 +15,7 @@ public class ResponseBuilder<T> {
     private int count;
     private String type;
     private List<T> result = new LinkedList<>();
-    private List<ErrorViewModel> errors = new LinkedList<>();
+    private List<Error> errors = new LinkedList<>();
 
     public boolean hasErrors() {
         return errors.size() > 0;
@@ -35,22 +35,22 @@ public class ResponseBuilder<T> {
         return type;
     }
 
-    public ResponseBuilder<T> addAllResults(List<T> result) {
+    public ResponseBuilder<T> addAllToResult(List<T> result) {
         this.result.addAll(result);
         return this;
     }
 
-    public ResponseBuilder<T> addReesponse(T result) {
+    public ResponseBuilder<T> addToResult(T result) {
         this.result.add(result);
         return this;
     }
 
-    public ResponseBuilder<T> addAllErrors(List<ErrorViewModel> errors) {
+    public ResponseBuilder<T> addAllToErrors(List<Error> errors) {
         this.errors.addAll(errors);
         return this;
     }
 
-    public ResponseBuilder<T> addError(ErrorViewModel error) {
+    public ResponseBuilder<T> addToErrors(Error error) {
         this.errors.add(error);
         return this;
     }
@@ -66,8 +66,8 @@ public class ResponseBuilder<T> {
         return response;
     }
 
-    public Response<ErrorViewModel> buildErrorResponse() {
-        Response<ErrorViewModel> response = new Response<>();
+    public Response<Error> buildErrorResponse() {
+        Response<Error> response = new Response<>();
 
         response.setStatus(Status.SUCCESS);
         response.setCount(count != 0 ? count : errors.size());

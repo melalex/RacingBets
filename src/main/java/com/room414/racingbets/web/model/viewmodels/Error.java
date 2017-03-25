@@ -8,13 +8,13 @@ import java.io.Serializable;
  * @author Alexander Melashchenko
  * @version 1.0 24 Mar 2017
  */
-public class ErrorViewModel implements Serializable {
+public class Error implements Serializable {
     private static final long serialVersionUID = -9185930142812556682L;
 
     /**
      * Error code. Unique string identifying the type of error
      */
-    private ErrorCode code;
+    private String code;
     /**
      * Localized user readable message describing the error
      */
@@ -31,22 +31,22 @@ public class ErrorViewModel implements Serializable {
      */
     private String propertyName;
 
-    public ErrorViewModel() {
+    public Error() {
     }
 
-    public ErrorViewModel(ErrorCode code, String message, String objectName, String propertyName) {
-        this.code = code;
+    public Error(ErrorCode code, String message, String objectName, String propertyName) {
+        this.code = code.getName();
         this.message = message;
         this.objectName = objectName;
         this.propertyName = propertyName;
     }
 
     public ErrorCode getCode() {
-        return code;
+        return ErrorCode.getErrorCode(code);
     }
 
     public void setCode(ErrorCode code) {
-        this.code = code;
+        this.code = code.getName();
     }
 
     public String getMessage() {
@@ -78,9 +78,9 @@ public class ErrorViewModel implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ErrorViewModel that = (ErrorViewModel) o;
+        Error that = (Error) o;
 
-        if (code != that.code) return false;
+        if (code != null ? !code.equals(that.code) : that.code != null) return false;
         if (message != null ? !message.equals(that.message) : that.message != null) return false;
         if (objectName != null ? !objectName.equals(that.objectName) : that.objectName != null) return false;
         return propertyName != null ? propertyName.equals(that.propertyName) : that.propertyName == null;
@@ -97,7 +97,7 @@ public class ErrorViewModel implements Serializable {
 
     @Override
     public String toString() {
-        return "ErrorViewModel{" +
+        return "Error{" +
                 "code=" + code +
                 ", message='" + message + '\'' +
                 ", objectName='" + objectName + '\'' +

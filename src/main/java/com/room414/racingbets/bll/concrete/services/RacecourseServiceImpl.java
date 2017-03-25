@@ -38,6 +38,7 @@ public class RacecourseServiceImpl implements RacecourseService {
             Racecourse entity = mapper.map(racecourse, Racecourse.class);
             unitOfWork.getRacecourseDao().create(entity);
             unitOfWork.commit();
+            racecourse.setId(entity.getId());
         }
     }
 

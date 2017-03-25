@@ -105,6 +105,8 @@ public class BetServiceImpl implements BetService {
 
             unitOfWork.commit();
 
+            bet.setId(entity.getId());
+
             return Response.SUCCESS;
         }
     }

@@ -7,7 +7,7 @@ import com.room414.racingbets.bll.abstraction.services.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.room414.racingbets.web.util.Validator.isValid;
+import static com.room414.racingbets.web.util.ValidatorUtil.isValid;
 
 /**
  * @author Alexander Melashchenko

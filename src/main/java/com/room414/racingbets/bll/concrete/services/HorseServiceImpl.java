@@ -38,6 +38,7 @@ public class HorseServiceImpl implements HorseService {
             Horse entity = mapper.map(horse, Horse.class);
             unitOfWork.getHorseDao().create(entity);
             unitOfWork.commit();
+            horse.setId(entity.getId());
         }
     }
 
