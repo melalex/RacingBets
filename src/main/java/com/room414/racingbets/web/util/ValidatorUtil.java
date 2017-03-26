@@ -13,6 +13,11 @@ import java.util.ResourceBundle;
  * @version 1.0 24 Mar 2017
  */
 public class ValidatorUtil {
+    public static final int STRING_MAX_LENGTH = 45;
+    public static final int STRING_MIN_LENGTH = 1;
+
+    public static final int AUTH_STRING_MAX_LENGTH = 45;
+    public static final int AUTH_STRING_MIN_LENGTH = 1;
 
     private ValidatorUtil() {
 
@@ -112,7 +117,7 @@ public class ValidatorUtil {
         validateString(form.getFirstName(), builder, locale, "firstName", type);
         validateString(form.getLastName(), builder, locale, "lastName", type);
 
-        validateStringLength(form.getFirstName(), 1, 45, builder, locale, "firstName", type);
-        validateStringLength(form.getLastName(), 1, 45, builder, locale, "lastName", type);
+        validateStringLength(form.getFirstName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, builder, locale, "firstName", type);
+        validateStringLength(form.getLastName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, builder, locale, "lastName", type);
     }
 }

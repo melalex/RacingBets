@@ -5,6 +5,7 @@ import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.domain.enums.Role;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -14,16 +15,14 @@ import java.util.Set;
  */
 // TODO: roles and user relationship conflict
 public interface UserService {
-    int EMAIL_EXISTS = 0b001;
-    int LOGIN_EXISTS = 0b010;
-    int SUCCESS = 0b100;
-
     CheckResult checkLoginAndEmail(String login, String email);
     void create(UserDto user);
     void setRoles(long id, Set<Role> roles);
+
     void update(UserDto user);
     void delete(long id);
     void confirmEmail(long userId);
+    void putMoney(long id, BigDecimal amount);
 
     UserDto find(long id);
     UserDto findByLoginPassword(String login, String password);

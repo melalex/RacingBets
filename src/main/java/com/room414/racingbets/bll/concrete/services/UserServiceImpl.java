@@ -162,6 +162,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void putMoney(long id, BigDecimal amount) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            unitOfWork.getApplicationUserDao().putMoney(id, amount);
+            unitOfWork.commit();
+        }
+    }
+
+    @Override
     public UserDto find(long id) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             ApplicationUser user = unitOfWork.getApplicationUserDao().find(id);

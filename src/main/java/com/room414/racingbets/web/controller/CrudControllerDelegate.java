@@ -9,6 +9,7 @@ import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.infrastructure.PagerImpl;
 import com.room414.racingbets.web.infrastructure.Validator;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
+import com.room414.racingbets.web.util.ControllerUtil;
 import com.room414.racingbets.web.util.ResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
@@ -179,18 +180,6 @@ public class CrudControllerDelegate<F, D> {
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
-        String token = getTokenFromRequest(req);
-        if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-            long id = getIdFromRequest(req);
-
-            crudService.delete(id);
-
-            resp.setStatus(HttpServletResponse.SC_OK);
-
-            writeToResponse(resp, responseBuilder.buildSuccessResponse());
-        } else {
-            permissionDenied(resp, responseBuilder, locale);
-        }
+        ControllerUtil.delete(req, resp, responseBuilder, accountService, locale, crudService::delete);
     }
-
 }

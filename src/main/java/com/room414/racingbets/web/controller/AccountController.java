@@ -1,19 +1,24 @@
 package com.room414.racingbets.web.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.bll.abstraction.infrastructure.CheckResult;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
+import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.MessageService;
 import com.room414.racingbets.bll.abstraction.services.UserService;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
+import com.room414.racingbets.dal.domain.enums.Role;
+import com.room414.racingbets.web.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.model.viewmodels.RegistrationForm;
 import com.room414.racingbets.web.model.viewmodels.Token;
+import com.room414.racingbets.web.util.ControllerUtil;
 import com.room414.racingbets.web.util.ResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
@@ -21,10 +26,13 @@ import org.dozer.Mapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
-import static com.room414.racingbets.web.util.RequestUtil.getBasicAuthFromRequest;
+import static com.room414.racingbets.web.util.RequestUtil.*;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
 import static com.room414.racingbets.web.util.ValidatorUtil.*;
 
@@ -35,8 +43,8 @@ import static com.room414.racingbets.web.util.ValidatorUtil.*;
  */
 public class AccountController {
     private static final String ENTITY_TYPE = "User";
-    private static final String TOKEN_TYPE = "Token";
     private static final String REFRESH_TOKEN_PARAM_NAME = "Refresh-token";
+    private static final int ENTITY_LIMIT = 20;
 
     private AccountService accountService;
     private UserService userService;
@@ -81,11 +89,11 @@ public class AccountController {
         validateString(form.getEmail(), responseBuilder, locale, "email", ENTITY_TYPE);
         validateString(form.getPassword(), responseBuilder, locale, "password", ENTITY_TYPE);
 
-        validateStringLength(form.getFirstName(), 1, 45, responseBuilder, locale, "firstName", ENTITY_TYPE);
-        validateStringLength(form.getLastName(), 1, 45,responseBuilder, locale, "lastName", ENTITY_TYPE);
-        validateStringLength(form.getLogin(), 6, 45,responseBuilder, locale, "login", ENTITY_TYPE);
-        validateStringLength(form.getEmail(), 6, 45,responseBuilder, locale, "email", ENTITY_TYPE);
-        validateStringLength(form.getPassword(), 6, 45,responseBuilder, locale, "password", ENTITY_TYPE);
+        validateStringLength(form.getFirstName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, responseBuilder, locale, "firstName", ENTITY_TYPE);
+        validateStringLength(form.getLastName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH,responseBuilder, locale, "lastName", ENTITY_TYPE);
+        validateStringLength(form.getLogin(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "login", ENTITY_TYPE);
+        validateStringLength(form.getEmail(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "email", ENTITY_TYPE);
+        validateStringLength(form.getPassword(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "password", ENTITY_TYPE);
 
         validateEmail(form.getEmail(), responseBuilder, locale, "email", ENTITY_TYPE);
 
@@ -109,7 +117,7 @@ public class AccountController {
     }
 
     /**
-     * POST: account/register
+     * POST: /account/register
      */
     public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<Token> responseBuilder = createResponseBuilder(resp);
@@ -143,7 +151,7 @@ public class AccountController {
     }
 
     /**
-     * PUT: account/login
+     * PUT: /account/login
      */
     public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Pair<String, String> credentials = getBasicAuthFromRequest(req);
@@ -171,7 +179,7 @@ public class AccountController {
     }
 
     /**
-     * PUT: account/refresh
+     * PUT: /account/refresh
      */
     public void refresh(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String refreshToken = req.getParameter(REFRESH_TOKEN_PARAM_NAME);
@@ -209,44 +217,123 @@ public class AccountController {
     }
 
     /**
-     * PUT: account/roles
+     * PUT: /account/roles/{id}
      */
-    public void setRoles(HttpServletRequest req, HttpServletResponse resp) {
+    public void setRoles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<Object> responseBuilder = createResponseBuilder(resp);
+        try {
+            String token = getTokenFromRequest(req);
+            if (accountService.isInRole(token, Role.ADMIN)) {
+                ObjectMapper jsonMapper = new ObjectMapper();
+                JavaType type = jsonMapper.getTypeFactory().constructCollectionLikeType(Set.class, Role.class);
+                Set<Role> form = jsonMapper.readValue(
+                        req.getReader(),
+                        type
+                );
+
+                long id = getIdFromRequest(req);
+
+                userService.setRoles(id, form);
+
+                resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+
+                writeToResponse(resp, responseBuilder.buildSuccessResponse());
+            } else {
+                permissionDenied(resp, responseBuilder, locale);
+            }
+        } catch (JsonParseException e) {
+            invalidRequest(resp, responseBuilder, locale);
+        }
+    }
+
+    /**
+     * PUT: /account/balance/{id}
+     */
+    public void addMoney(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
+        try {
+            String token = getTokenFromRequest(req);
+            if (accountService.isInRole(token, Role.BOOKMAKER)) {
+                ObjectMapper jsonMapper = new ObjectMapper();
+                BigDecimal form = jsonMapper.readValue(
+                        req.getReader(),
+                        BigDecimal.class
+                );
+
+                long id = getIdFromRequest(req);
+
+                userService.putMoney(id, form);
+
+                resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+
+                writeToResponse(resp, responseBuilder.buildSuccessResponse());
+            } else {
+                permissionDenied(resp, responseBuilder, locale);
+            }
+        } catch (JsonParseException e) {
+            invalidRequest(resp, responseBuilder, locale);
+        }
 
     }
 
     /**
-     * PUT: account/add/money
+     * PUT: /account/confirm/{token}
      */
-    public void addMoney(HttpServletRequest req, HttpServletResponse resp) {
+    public void confirmEmail(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
 
+        String[] uri = req.getRequestURI().split("/");
+        String token = uri[uri.length - 1];
+
+        long id = accountService.getIdByConfirmToken(token);
+        userService.confirmEmail(id);
+
+        resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+
+        writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
     /**
-     * PUT: account/confirm
+     * GET: /account/{id}
      */
-    public void confirmEmail(HttpServletRequest req, HttpServletResponse resp) {
+    public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
+        long id = getIdFromRequest(req);
 
+        responseBuilder.addToResult(userService.find(id));
+
+        resp.setStatus(HttpServletResponse.SC_FOUND);
+        writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
     /**
-     * GET: account/?page={page}
+     * GET: /account?query={query};page={page}
      */
-    public void getAll(HttpServletRequest req, HttpServletResponse resp) {
+    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String query = req.getParameter("query");
+        int page = getPageFromRequest(req);
+        Pager pager = new PagerImpl(ENTITY_LIMIT, page);
+        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
+        List<UserDto> horses;
 
+        if (query != null) {
+            horses = userService.search(query, pager);
+        } else {
+            horses = userService.findAll(pager);
+        }
+
+        responseBuilder.addAllToResult(horses);
+        responseBuilder.setCount(pager.getCount());
+
+        resp.setStatus(HttpServletResponse.SC_FOUND);
+        writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
     /**
-     * GET: account/search/?query={loginPart};page={page}
+     * DELETE: account/{id}
      */
-    public void search(HttpServletRequest req, HttpServletResponse resp) {
-
-    }
-
-    /**
-     * GET: account/{id}
-     */
-    public void find(HttpServletRequest req, HttpServletResponse resp) {
-
+    public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
+        ControllerUtil.delete(req, resp, responseBuilder, accountService, locale, userService::delete);
     }
 }
