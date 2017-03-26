@@ -6,7 +6,8 @@ package com.room414.racingbets.dal.abstraction.tokens;
  */
 public interface RefreshTokenStorage extends AutoCloseable {
     String createToken(long id);
-    long getIdByToken(String refreshToken);
+    long getIdByToken(String token);
+    void deleteToken(String token);
 
     @Override
     void close();

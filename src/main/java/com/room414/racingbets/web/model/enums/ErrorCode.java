@@ -70,11 +70,8 @@ public enum ErrorCode {
     /**
      * The date range is not valid. Usually caused by a fromDateTime being after a toDateTime.
      */
-    INVALID_DATE_RANGE("InvalidDateRange"),
-    /**
-     * The date range is not valid. Usually caused by a fromDateTime being after a toDateTime.
-     */
-    INVALID_REQUEST_BODY("InvalidRequestBody");
+    INVALID_DATE_RANGE("InvalidDateRange");
+
 
     private String name;
 

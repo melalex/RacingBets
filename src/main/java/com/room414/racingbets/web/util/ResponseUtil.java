@@ -34,14 +34,21 @@ public class ResponseUtil {
         writer.close();
     }
 
-    public static <T> void invalidRequestBody(HttpServletResponse resp,
-                                              ResponseBuilder<T> builder,
-                                              Locale locale) throws IOException {
+    public static <T> void invalidRequest(HttpServletResponse resp,
+                                          ResponseBuilder<T> builder,
+                                          Locale locale) throws IOException {
         String messageForResponse = ResourceBundle
                 .getBundle(ERROR_MESSAGE_BUNDLE, locale)
-                .getString("invalid.request.body");
+                .getString("invalid.request");
 
-        Error error = new Error(ErrorCode.INVALID_REQUEST_BODY, messageForResponse, builder.getType(), null);
+        invalidRequest(resp, builder, messageForResponse);
+    }
+
+    public static <T> void invalidRequest(HttpServletResponse resp,
+                                          ResponseBuilder<T> builder,
+                                          String message) throws IOException {
+
+        Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, builder.getType(), null);
         builder.addToErrors(error);
         resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         writeToResponse(resp, builder.buildErrorResponse());

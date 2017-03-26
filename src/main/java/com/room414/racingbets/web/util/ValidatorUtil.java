@@ -55,11 +55,50 @@ public class ValidatorUtil {
         }
     }
 
+    public static <T> void validateStringLength(String property,
+                                                int min,
+                                                int max,
+                                                ResponseBuilder<T> builder,
+                                                Locale locale,
+                                                String name,
+                                                String type) {
+        if (property == null) {
+            return;
+        }
+
+        if (property.length() > max || property.length() < min) {
+            String message = ResourceBundle
+                    .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
+                    .getString("invalid.string.length");
+
+            message = String.format(message, min, max);
+
+            Error error = new Error(ErrorCode.INVALID_ERROR, message, type, name);
+            builder.addToErrors(error);
+        }
+    }
+
     public static <T> void validateForeignKey(long property, ResponseBuilder<T> builder, Locale locale, String name, String type) {
         if (property < 0) {
             String message = ResourceBundle
                     .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
                     .getString("invalid.foreign.key");
+
+            Error error = new Error(ErrorCode.INVALID_ERROR, message, type, name);
+            builder.addToErrors(error);
+        }
+    }
+
+    public static <T> void validateEmail(String property, ResponseBuilder<T> builder, Locale locale, String name, String type) {
+        if (property == null) {
+            return;
+        }
+        String pattern = "^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@" +
+                "[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
+        if (!property.matches(pattern)) {
+            String message = ResourceBundle
+                    .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
+                    .getString("invalid.email");
 
             Error error = new Error(ErrorCode.INVALID_ERROR, message, type, name);
             builder.addToErrors(error);
@@ -72,5 +111,8 @@ public class ValidatorUtil {
 
         validateString(form.getFirstName(), builder, locale, "firstName", type);
         validateString(form.getLastName(), builder, locale, "lastName", type);
+
+        validateStringLength(form.getFirstName(), 1, 45, builder, locale, "firstName", type);
+        validateStringLength(form.getLastName(), 1, 45, builder, locale, "lastName", type);
     }
 }

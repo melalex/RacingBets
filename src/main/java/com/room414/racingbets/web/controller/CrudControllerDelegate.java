@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.CrudService;
-import com.room414.racingbets.bll.dto.entities.HorseDto;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.infrastructure.PagerImpl;
 import com.room414.racingbets.web.infrastructure.Validator;
@@ -70,7 +69,7 @@ public class CrudControllerDelegate<F, D> {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         try {
             String token = getTokenFromRequest(req);
-            if (accountService.isInRole(token, Role.ADMIN)) {
+            if (token != null && accountService.isInRole(token, Role.ADMIN)) {
                 ObjectMapper jsonMapper = new ObjectMapper();
                 F form = jsonMapper.readValue(
                         req.getReader(),
@@ -97,7 +96,7 @@ public class CrudControllerDelegate<F, D> {
                 permissionDenied(resp, responseBuilder, locale);
             }
         } catch (JsonParseException e) {
-            invalidRequestBody(resp, responseBuilder, locale);
+            invalidRequest(resp, responseBuilder, locale);
         }
     }
 
@@ -108,7 +107,7 @@ public class CrudControllerDelegate<F, D> {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         try {
             String token = getTokenFromRequest(req);
-            if (accountService.isInRole(token, Role.ADMIN)) {
+            if (token != null && accountService.isInRole(token, Role.ADMIN)) {
                 ObjectMapper jsonMapper = new ObjectMapper();
                 F form = jsonMapper.readValue(
                         req.getReader(),
@@ -135,7 +134,7 @@ public class CrudControllerDelegate<F, D> {
                 permissionDenied(resp, responseBuilder, locale);
             }
         } catch (JsonParseException e) {
-            invalidRequestBody(resp, responseBuilder, locale);
+            invalidRequest(resp, responseBuilder, locale);
         }
     }
 
@@ -181,7 +180,7 @@ public class CrudControllerDelegate<F, D> {
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         String token = getTokenFromRequest(req);
-        if (accountService.isInRole(token, Role.ADMIN)) {
+        if (token != null && accountService.isInRole(token, Role.ADMIN)) {
             long id = getIdFromRequest(req);
 
             crudService.delete(id);

@@ -38,6 +38,10 @@ public class TokenStorageDelegate implements AutoCloseable {
         return idString != null ? Long.valueOf(idString) : 0;
     }
 
+    public void deleteToken(String token) {
+        jedis.del(getKeyByToken(token));
+    }
+
     private String getKeyByToken(String token) {
         return namespace + ":" + token;
     }

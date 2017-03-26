@@ -10,14 +10,17 @@ import com.room414.racingbets.dal.domain.enums.Role;
  */
 public interface AccountService {
     Jwt getToken(UserDto user);
+    String getTokenString(UserDto user);
     String getToken(Jwt jwt);
     Jwt getToken(String token);
+
 
     boolean isValid(Jwt jwt);
     boolean isInRole(String token, Role role);
 
-    String getRefreshToken(long userId);
+    String getRefreshToken(long id);
     long getIdByRefreshToken(String refreshToken);
+    void deleteRefreshToken(String refreshToken);
 
     String getConfirmToken(long userId);
     long getIdByConfirmToken(String confirmToken);

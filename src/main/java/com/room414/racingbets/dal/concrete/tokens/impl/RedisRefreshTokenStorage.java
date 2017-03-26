@@ -23,8 +23,13 @@ public class RedisRefreshTokenStorage implements RefreshTokenStorage {
     }
 
     @Override
-    public long getIdByToken(String refreshToken) {
-        return delegate.getIdByToken(refreshToken);
+    public long getIdByToken(String token) {
+        return delegate.getIdByToken(token);
+    }
+
+    @Override
+    public void deleteToken(String token) {
+        delegate.deleteToken(token);
     }
 
     @Override

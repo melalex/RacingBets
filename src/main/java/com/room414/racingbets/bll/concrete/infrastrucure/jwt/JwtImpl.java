@@ -32,7 +32,7 @@ public class JwtImpl implements Jwt {
         return algorithm;
     }
 
-    public void setAlgorithm(String algorithm) {
+    void setAlgorithm(String algorithm) {
         this.algorithm = algorithm;
     }
 
@@ -41,7 +41,7 @@ public class JwtImpl implements Jwt {
         return expire;
     }
 
-    public void setExpire(long expire) {
+    void setExpire(long expire) {
         this.expire = expire;
     }
 
@@ -50,7 +50,7 @@ public class JwtImpl implements Jwt {
         return id;
     }
 
-    public void setUserId(long id) {
+    void setUserId(long id) {
         this.id = id;
     }
 
@@ -82,7 +82,7 @@ public class JwtImpl implements Jwt {
         return signature;
     }
 
-    public void setSignature(String signature) {
+    void setSignature(String signature) {
         this.signature = signature;
     }
 

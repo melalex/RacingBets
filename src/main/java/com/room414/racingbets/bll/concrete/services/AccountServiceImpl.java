@@ -36,6 +36,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public String getTokenString(UserDto user) {
+        return getToken(getToken(user));
+    }
+
+    @Override
     public String getToken(Jwt jwt) {
         return jwtFactory.getEncoder().encode(jwt);
     }
@@ -60,9 +65,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String getRefreshToken(long userId) {
+    public String getRefreshToken(long id) {
         try (RefreshTokenStorage refreshTokenStorage = tokenStorageFactory.createRefreshTokenStorage()) {
-            return refreshTokenStorage.createToken(userId);
+            return refreshTokenStorage.createToken(id);
         }
     }
 
@@ -70,6 +75,13 @@ public class AccountServiceImpl implements AccountService {
     public long getIdByRefreshToken(String refreshToken) {
         try (RefreshTokenStorage refreshTokenStorage = tokenStorageFactory.createRefreshTokenStorage()) {
             return refreshTokenStorage.getIdByToken(refreshToken);
+        }
+    }
+
+    @Override
+    public void deleteRefreshToken(String refreshToken) {
+        try (RefreshTokenStorage refreshTokenStorage = tokenStorageFactory.createRefreshTokenStorage()) {
+            refreshTokenStorage.deleteToken(refreshToken);
         }
     }
 
