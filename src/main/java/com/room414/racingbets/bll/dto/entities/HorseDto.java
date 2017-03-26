@@ -21,8 +21,6 @@ public class HorseDto implements Serializable {
     private OwnerDto owner;
     private Date birthday;
     private Gender gender;
-    private long sir;
-    private long dam;
 
     public HorseDto() {
     }
@@ -75,22 +73,6 @@ public class HorseDto implements Serializable {
         this.gender = gender;
     }
 
-    public long getSir() {
-        return sir;
-    }
-
-    public void setSir(long sir) {
-        this.sir = sir;
-    }
-
-    public long getDam() {
-        return dam;
-    }
-
-    public void setDam(long dam) {
-        this.dam = dam;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -127,14 +109,6 @@ public class HorseDto implements Serializable {
             return false;
         }
 
-        if (sir != horseDto.sir) {
-            return false;
-        }
-
-        if (dam != horseDto.dam) {
-            return false;
-        }
-
         return true;
     }
 
@@ -147,8 +121,6 @@ public class HorseDto implements Serializable {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result +  (int) (sir ^ (sir >>> 32));
-        result = 31 * result +  (int) (dam ^ (dam >>> 32));
 
         return result;
     }
@@ -162,8 +134,6 @@ public class HorseDto implements Serializable {
                 ", owner=" + owner +
                 ", birthday=" + birthday +
                 ", gender=" + gender +
-                ", sir=" + sir +
-                ", dam=" + dam +
                 '}';
     }
 }

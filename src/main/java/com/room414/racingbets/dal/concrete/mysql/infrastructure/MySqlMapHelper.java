@@ -155,8 +155,6 @@ public class MySqlMapHelper {
         final String nameColumnName = namespace + ".name";
         final String birthdayColumnName = namespace + ".birthday";
         final String genderColumnName = namespace + ".gender";
-        final String sirColumnName = namespace + ".sire_id";
-        final String damColumnName = namespace + ".dam_id";
 
         final String trainerNamespace = "horse_trainer";
         final String ownerNamespace = "horse_owner";
@@ -167,8 +165,6 @@ public class MySqlMapHelper {
                 .setName(resultSet.getString(nameColumnName))
                 .setBirthday(resultSet.getDate(birthdayColumnName))
                 .setGender(resultSet.getString(genderColumnName))
-                .setSir(resultSet.getLong(sirColumnName))
-                .setDam(resultSet.getLong(damColumnName))
                 .setOwner(mapOwner(resultSet, ownerNamespace))
                 .setTrainer(mapTrainer(resultSet, trainerNamespace))
                 .build();

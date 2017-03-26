@@ -23,8 +23,6 @@ public class Horse implements Serializable {
     private Owner owner;
     private Date birthday;
     private Gender gender;
-    private long sir;
-    private long dam;
 
     public Horse() {
     }
@@ -81,22 +79,6 @@ public class Horse implements Serializable {
         this.gender = gender;
     }
 
-    public long getSir() {
-        return sir;
-    }
-
-    public void setSir(long sir) {
-        this.sir = sir;
-    }
-
-    public long getDam() {
-        return dam;
-    }
-
-    public void setDam(long dam) {
-        this.dam = dam;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -133,14 +115,6 @@ public class Horse implements Serializable {
             return false;
         }
 
-        if (sir != horse.sir) {
-            return false;
-        }
-
-        if (dam != horse.dam) {
-            return false;
-        }
-
         return true;
     }
 
@@ -153,8 +127,6 @@ public class Horse implements Serializable {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result +  (int) (sir ^ (sir >>> 32));
-        result = 31 * result +  (int) (dam ^ (dam >>> 32));
 
         return result;
     }
@@ -168,8 +140,6 @@ public class Horse implements Serializable {
                 ", owner=" + owner +
                 ", birthday=" + birthday +
                 ", gender=" + gender +
-                ", sir=" + sir +
-                ", dam=" + dam +
                 '}';
     }
 }

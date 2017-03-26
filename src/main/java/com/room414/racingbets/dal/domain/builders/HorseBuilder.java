@@ -21,8 +21,6 @@ public class HorseBuilder {
     private Owner owner;
     private Date birthday;
     private Gender gender;
-    private long sir;
-    private long dam;
 
     public HorseBuilder setId(long id) {
         this.id = id;
@@ -71,15 +69,6 @@ public class HorseBuilder {
         return this;
     }
 
-    public HorseBuilder setSir(long sir) {
-        this.sir = sir;
-        return this;
-    }
-
-    public HorseBuilder setDam(long dam) {
-        this.dam = dam;
-        return this;
-    }
 
     public Horse build() {
         Horse horse = new Horse();
@@ -90,8 +79,6 @@ public class HorseBuilder {
         horse.setOwner(owner);
         horse.setBirthday(birthday);
         horse.setGender(gender);
-        horse.setSir(sir);
-        horse.setDam(dam);
 
         return horse;
     }

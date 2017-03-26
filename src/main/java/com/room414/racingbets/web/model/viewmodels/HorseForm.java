@@ -18,8 +18,6 @@ public class HorseForm implements Serializable {
     private long owner;
     private Date birthday;
     private Gender gender;
-    private long sir;
-    private long dam;
 
     public long getId() {
         return id;
@@ -69,21 +67,6 @@ public class HorseForm implements Serializable {
         this.gender = gender;
     }
 
-    public long getSir() {
-        return sir;
-    }
-
-    public void setSir(long sir) {
-        this.sir = sir;
-    }
-
-    public long getDam() {
-        return dam;
-    }
-
-    public void setDam(long dam) {
-        this.dam = dam;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -95,23 +78,22 @@ public class HorseForm implements Serializable {
         if (id != horseForm.id) return false;
         if (trainer != horseForm.trainer) return false;
         if (owner != horseForm.owner) return false;
-        if (sir != horseForm.sir) return false;
-        if (dam != horseForm.dam) return false;
         if (name != null ? !name.equals(horseForm.name) : horseForm.name != null) return false;
         if (birthday != null ? !birthday.equals(horseForm.birthday) : horseForm.birthday != null) return false;
+
         return gender == horseForm.gender;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
+
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (int) (trainer ^ (trainer >>> 32));
         result = 31 * result + (int) (owner ^ (owner >>> 32));
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + (int) (sir ^ (sir >>> 32));
-        result = 31 * result + (int) (dam ^ (dam >>> 32));
+
         return result;
     }
 
@@ -124,8 +106,6 @@ public class HorseForm implements Serializable {
                 ", owner=" + owner +
                 ", birthday=" + birthday +
                 ", gender=" + gender +
-                ", sir=" + sir +
-                ", dam=" + dam +
                 '}';
     }
 }

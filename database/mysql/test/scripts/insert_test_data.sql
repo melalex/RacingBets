@@ -28,36 +28,36 @@ INSERT INTO horse_racing_test.owner (first_name, last_name, birthday) VALUES ('V
 # horse table
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Fixflex', 5, 1, '2008-02-22', 'mare', NULL, NULL);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Fixflex', 5, 1, '2008-02-22', 'mare');
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Wrapsafe', 4, 2, '2005-08-04', 'stallion', NULL, NULL);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Wrapsafe', 4, 2, '2005-08-04', 'stallion');
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Prodder', 3, 3, '2011-12-26', 'mare', 2, 1);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Prodder', 3, 3, '2011-12-26', 'mare');
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Span', 2, 4, '2011-03-27', 'stallion', 2, 1);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Span', 2, 4, '2011-03-27', 'stallion');
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Treeflex', 1, 5, '2013-05-01', 'mare', 3, 4);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Treeflex', 1, 5, '2013-05-01', 'mare');
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Alphazap', 4, 2, '2000-10-25', 'stallion', NULL, NULL);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Alphazap', 4, 2, '2000-10-25', 'stallion');
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Aerified', 2, 4, '2010-11-27', 'stallion', 2, 1);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Aerified', 2, 4, '2010-11-27', 'stallion');
 
 INSERT INTO horse_racing_test.horse
-(name, trainer_id, owner_id, birthday, gender, sire_id, dam_id)
-VALUES ('Prob', 3, 3, '2014-05-01', 'mare', 3, 4);
+(name, trainer_id, owner_id, birthday, gender)
+VALUES ('Prob', 3, 3, '2014-05-01', 'mare');
 
 # racecourse table
 

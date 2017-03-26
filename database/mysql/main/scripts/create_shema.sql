@@ -35,14 +35,10 @@ CREATE TABLE `horse_racing`.`horse` (
   `owner_id`   INT UNSIGNED              NOT NULL,
   `birthday`   DATE                      NOT NULL,
   `gender`     ENUM ('mare', 'stallion') NOT NULL,
-  `sire_id`    INT UNSIGNED              NULL,
-  `dam_id`     INT UNSIGNED              NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (trainer_id) REFERENCES trainer (id),
-  FOREIGN KEY (owner_id) REFERENCES owner (id),
-  FOREIGN KEY (sire_id) REFERENCES horse (id),
-  FOREIGN KEY (dam_id) REFERENCES horse (id)
+  FOREIGN KEY (owner_id) REFERENCES owner (id)
 );
 
 CREATE TABLE `horse_racing`.`racecourse` (

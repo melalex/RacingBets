@@ -61,9 +61,6 @@ public class HorseController {
 
         validateForeignKey(form.getOwner(), responseBuilder, locale, "owner", ENTITY_TYPE);
         validateForeignKey(form.getTrainer(), responseBuilder, locale, "trainer", ENTITY_TYPE);
-
-        validateForeignKey(form.getDam(), responseBuilder, locale, "dam", ENTITY_TYPE);
-        validateForeignKey(form.getSir(), responseBuilder, locale, "sir", ENTITY_TYPE);
     }
 
     /**
