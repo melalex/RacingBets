@@ -1,16 +1,12 @@
 package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
-import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.entities.Horse;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
@@ -25,11 +21,9 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
 public class MySqlHorseDao implements HorseDao {
     private static final String TABLE_NAME = "horse";
 
-    private Connection connection;
     private MySqlSharedExecutor<Horse> executor;
 
     MySqlHorseDao(Connection connection) {
-        this.connection = connection;
         this.executor = new MySqlSharedExecutor<>(
                 connection,
                 statement -> getResult(statement, MySqlMapHelper::mapHorse),
@@ -54,44 +48,21 @@ public class MySqlHorseDao implements HorseDao {
 
     @Override
     public void create(Horse entity) {
+        @Language("MySQL")
         final String sqlStatement =
                 "INSERT INTO horse " +
-                "   (name, trainer_id, owner_id, birthday, gender, sire_id, dam_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "   (name, trainer_id, owner_id, birthday, gender) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, entity.getName());
-            statement.setLong(2, entity.getTrainer().getId());
-            statement.setLong(3, entity.getOwner().getId());
-            statement.setDate(4, entity.getBirthday());
-            statement.setString(5, entity.getGender().getName());
-
-            if (entity.getSir() != 0) {
-                statement.setLong(6, entity.getSir());
-            } else {
-                statement.setNull(6, java.sql.Types.INTEGER);
-            }
-
-            if (entity.getDam() != 0) {
-                statement.setLong(7, entity.getDam());
-            } else {
-                statement.setNull(7, java.sql.Types.INTEGER);
-            }
-
-            createEntity(statement, entity::setId);
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getName(),
-                    entity.getTrainer().getId(),
-                    entity.getOwner().getId(),
-                    entity.getBirthday(),
-                    entity.getGender().getName(),
-                    entity.getSir() != 0 ? entity.getSir() : "NULL",
-                    entity.getDam() != 0 ? entity.getDam() : "NULL"
-            );
-            throw new DalException(message, e);
-        }
+        executor.create(
+                sqlStatement,
+                entity::setId,
+                entity.getName(),
+                entity.getTrainer().getId(),
+                entity.getOwner().getId(),
+                entity.getBirthday(),
+                entity.getGender().getName()
+        );
     }
 
     @Override
@@ -150,47 +121,21 @@ public class MySqlHorseDao implements HorseDao {
 
     @Override
     public long update(Horse entity) {
+        @Language("MySQL")
         final String sqlStatement =
                 "UPDATE horse " +
-                "SET name = ?, trainer_id = ?, owner_id = ?, birthday = ?, gender = ?, sire_id = ?, dam_id = ? " +
+                "SET name = ?, trainer_id = ?, owner_id = ?, birthday = ?, gender = ? " +
                 "WHERE id = ?";
 
-        try(PreparedStatement statement = connection.prepareStatement(sqlStatement)) {
-            statement.setString(1, entity.getName());
-            statement.setLong(2, entity.getTrainer().getId());
-            statement.setLong(3, entity.getOwner().getId());
-            statement.setDate(4, entity.getBirthday());
-            statement.setString(5, entity.getGender().getName());
-
-            if (entity.getSir() != 0) {
-                statement.setLong(6, entity.getSir());
-            } else {
-                statement.setNull(6, java.sql.Types.INTEGER);
-            }
-
-            if (entity.getDam() != 0) {
-                statement.setLong(7, entity.getDam());
-            } else {
-                statement.setNull(7, java.sql.Types.INTEGER);
-            }
-
-            statement.setLong(8, entity.getId());
-
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            String message = defaultErrorMessage(
-                    sqlStatement,
-                    entity.getName(),
-                    entity.getTrainer().getId(),
-                    entity.getOwner().getId(),
-                    entity.getBirthday(),
-                    entity.getGender().getName(),
-                    entity.getSir() != 0 ? entity.getSir() : "NULL",
-                    entity.getDam() != 0 ? entity.getDam() : "NULL",
-                    entity.getId()
-            );
-            throw new DalException(message, e);
-        }
+        return executor.executeUpdateQuery(
+                sqlStatement,
+                entity.getName(),
+                entity.getTrainer().getId(),
+                entity.getOwner().getId(),
+                entity.getBirthday(),
+                entity.getGender().getName(),
+                entity.getId()
+        );
     }
 
     @Override

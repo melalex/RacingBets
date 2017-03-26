@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
 import com.room414.racingbets.dal.domain.builders.RaceBuilder;
+import com.room414.racingbets.dal.domain.entities.FilterCallParams;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
@@ -206,10 +207,41 @@ public class MySqlRaceDao implements RaceDao {
         createPrizes(entity);
     }
 
+    private List<Race> callFilterProcedure(FilterCallParams params) {
+        @Language("MySQL")
+        final String call = "{ CALL filter_races(?, ?, ?, ?, ?, ?, ?, ?) }";
+
+        try (CallableStatement statement = connection.prepareCall(call)) {
+            setNullable(statement, 1, params.getRaceStatus().getName(), Types.VARCHAR);
+            setNullable(statement, 2, params.getId(), Types.INTEGER);
+            setNullable(statement, 3, params.getRacecourseId(), Types.INTEGER);
+            setNullable(statement, 4, params.getName(), Types.VARCHAR);
+            setNullable(statement, 5, params.getBegin(), Types.TIMESTAMP);
+            setNullable(statement, 6, params.getEnd(), Types.TIMESTAMP);
+            setNullable(statement, 7, params.getLimit(), Types.INTEGER);
+            setNullable(statement, 8, params.getOffset(), Types.INTEGER);
+
+            statement.execute();
+
+            return mapRaces(statement);
+        } catch (SQLException e) {
+            String message = callErrorMessage("filter_races", params);
+            throw new DalException(message, e);
+        }
+    }
+
+    private void setNullable(PreparedStatement statement, int number, Object value, int type) throws SQLException {
+        if (value != null) {
+            statement.setObject(number, value);
+        } else {
+            statement.setNull(number, type);
+        }
+    }
+
     @Override
     public Race find(Long id) {
         @Language("MySQL")
-        final String call = "{ CALL find_race_by_id(?) }";
+        final String call = "{ CALL filter_races(?, ?, ?, ?, ?, ?, ?, ?) }";
 
         try {
             return executor.executeFindOneCall(call, id);
@@ -248,6 +280,131 @@ public class MySqlRaceDao implements RaceDao {
     @Override
     public int count() {
         return executor.count(TABLE_NAME);
+    }
+
+    private List<Race> findByColumnPart(String call, RaceStatus status, String part, long offset, long limit) throws DalException {
+        try {
+            return executor.executeFindManyCall(call, status.getName(), startsWith(part), limit, offset);
+        } catch (DalException e) {
+            String message = callErrorMessage(call, status, part, limit, offset);
+            throw new DalException(message, e);
+        }
+    }
+
+    @Override
+    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, int offset, int limit) {
+        @Language("MySQL")
+        final String call = "{ CALL find_by_racecourse_id(?, ?, ?, ?) }";
+
+        try {
+            return executor.executeFindManyCall(call, status.getName(), racecourse, limit, offset);
+        } catch (DalException e) {
+            String message = callErrorMessage("find_by_racecourse_id", status, racecourse, limit, offset);
+            throw new DalException(message, e);
+        }
+    }
+
+    @Override
+    public int findByRacecourseIdCount(RaceStatus status, long racecourse) {
+        @Language("MySQL")
+        final String sqlStatement = "SELECT COUNT(*) AS count FROM race WHERE status = ? AND racecourse_id = ?";
+
+        return executor.executeCountQuery(sqlStatement, status.getName(), racecourse);
+    }
+
+    @Override
+    public List<Race> findByRacecourse(RaceStatus status, String racecourse, int offset, int limit) {
+        @Language("MySQL")
+        final String call = "{ CALL find_by_racecourse_name(?, ?, ?, ?) }";
+
+        return findByColumnPart(call, status, racecourse, offset, limit);
+    }
+
+    @Override
+    public int findByRacecourseCount(RaceStatus status, String racecourse) {
+        @Language("MySQL")
+        String sqlStatement =
+                "SELECT  COUNT(*) AS count " +
+                        "FROM race " +
+                        "   INNER JOIN racecourse " +
+                        "       ON race.racecourse_id = racecourse.id " +
+                        "WHERE status = ? AND racecourse.name LIKE ?";
+
+        return executor.executeCountQuery(sqlStatement, status.getName(), startsWith(racecourse));
+    }
+
+    @Override
+    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, int offset, int limit) {
+        FilterCallParams params = new FilterCallParams();
+
+        params.setRaceStatus(status);
+        params.setBegin(begin);
+        params.setEnd(end);
+        params.setLimit(limit);
+        params.setOffset(offset);
+
+        return callFilterProcedure(params);
+    }
+
+    @Override
+    public int findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) {
+        @Language("MySQL")
+        final String sqlStatement =
+                "SELECT COUNT(*) AS count " +
+                        "FROM race " +
+                        "WHERE status = ? AND start_date_time BETWEEN ? AND ?";
+
+        return executor.executeCountQuery(sqlStatement, status.getName(), begin, end);
+    }
+
+    @Override
+    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, int offset, int limit) {
+        @Language("MySQL")
+        final String call = "{ CALL find_in_timestamp_diapason_by_racecourse_id(?, ?, ?, ?, ?, ?) }";
+
+        try {
+            return executor.executeFindManyCall(call, status.getName(), racecourse, begin, end, limit, offset);
+        } catch (DalException e) {
+            String message = callErrorMessage(
+                    "find_by_racecourse_name",
+                    status,
+                    racecourse,
+                    begin,
+                    end,
+                    limit,
+                    offset
+            );
+            throw new DalException(message, e);
+        }
+    }
+
+    @Override
+    public int findInTimestampDiapasonOnRacecourseCount(
+            RaceStatus status, long racecourse, Timestamp begin, Timestamp end
+    ) {
+        @Language("MySQL")
+        final String sqlStatement =
+                "SELECT COUNT(*) AS count " +
+                        "FROM race " +
+                        "WHERE status = ? AND racecourse_id = ? AND start_date_time BETWEEN ? AND ?";
+
+        return executor.executeCountQuery(sqlStatement, status.getName(), racecourse, begin, end);
+    }
+
+    @Override
+    public List<Race> findByNamePart(RaceStatus status, String name, int offset, int limit) {
+        @Language("MySQL")
+        final String call = "{ CALL find_by_name(?, ?, ?, ?) }";
+
+        return findByColumnPart(call, status, name, offset, limit);
+    }
+
+    @Override
+    public int findByNamePartCount(RaceStatus status, String name) {
+        @Language("MySQL")
+        String sqlStatement = "SELECT COUNT(*) AS count FROM race WHERE status = ? AND name LIKE ?";
+
+        return executor.executeCountQuery(sqlStatement, status.getName(), startsWith(name));
     }
 
     private long updateRace(Race entity) {
@@ -325,145 +482,6 @@ public class MySqlRaceDao implements RaceDao {
     @Override
     public boolean delete(Long id) {
         return executor.delete(TABLE_NAME, id);
-    }
-
-    private List<Race> findByColumnPart(String call, RaceStatus status, String part, long offset, long limit) throws DalException {
-        try {
-            return executor.executeFindManyCall(call, status.getName(), startsWith(part), limit, offset);
-        } catch (DalException e) {
-            String message = callErrorMessage(call, status, part, limit, offset);
-            throw new DalException(message, e);
-        }
-    }
-
-    @Override
-    public List<Race> findByRacecourseId(RaceStatus status, long racecourse, int offset, int limit) {
-        @Language("MySQL")
-        final String call = "{ CALL find_by_racecourse_id(?, ?, ?, ?) }";
-
-        try {
-            return executor.executeFindManyCall(call, status.getName(), racecourse, limit, offset);
-        } catch (DalException e) {
-            String message = callErrorMessage("find_by_racecourse_id", status, racecourse, limit, offset);
-            throw new DalException(message, e);
-        }
-    }
-
-    @Override
-    public int findByRacecourseIdCount(RaceStatus status, long racecourse) {
-        @Language("MySQL")
-        final String sqlStatement = "SELECT COUNT(*) AS count FROM race WHERE status = ? AND racecourse_id = ?";
-
-        return executor.executeCountQuery(sqlStatement, status.getName(), racecourse);
-    }
-
-    @Override
-    public List<Race> findByRacecourse(RaceStatus status, String racecourse, int offset, int limit) {
-        @Language("MySQL")
-        final String call = "{ CALL find_by_racecourse_name(?, ?, ?, ?) }";
-
-        return findByColumnPart(call, status, racecourse, offset, limit);
-    }
-
-    @Override
-    public int findByRacecourseCount(RaceStatus status, String racecourse) {
-        @Language("MySQL")
-        String sqlStatement =
-                "SELECT  COUNT(*) AS count " +
-                "FROM race " +
-                "   INNER JOIN racecourse " +
-                "       ON race.racecourse_id = racecourse.id " +
-                "WHERE status = ? AND racecourse.name LIKE ?";
-
-        return executor.executeCountQuery(sqlStatement, status.getName(), startsWith(racecourse));
-    }
-
-    @Override
-    public List<Race> findInTimestampDiapason(RaceStatus status, Timestamp begin, Timestamp end, int offset, int limit) {
-        @Language("MySQL")
-        final String call = "{ CALL find_in_timestamp_diapason(?, ?, ?, ?, ?) }";
-
-        try(CallableStatement statement = connection.prepareCall(call)) {
-            statement.setString(1, status.getName());
-            statement.setTimestamp(2, begin);
-            statement.setTimestamp(3, end);
-            statement.setLong(4, limit);
-            statement.setLong(5, offset);
-
-            statement.execute();
-            return mapRaces(statement);
-        } catch (SQLException e) {
-            String message = callErrorMessage(
-                    "find_by_racecourse_name",
-                    status,
-                    begin,
-                    end,
-                    limit,
-                    offset
-            );
-            throw new DalException(message, e);
-        }
-    }
-
-    @Override
-    public int findInTimestampDiapasonCount(RaceStatus status, Timestamp begin, Timestamp end) {
-        @Language("MySQL")
-        final String sqlStatement =
-                "SELECT COUNT(*) AS count " +
-                "FROM race " +
-                "WHERE status = ? AND start_date_time BETWEEN ? AND ?";
-
-        return executor.executeCountQuery(sqlStatement, status.getName(), begin, end);
-    }
-
-    @Override
-    public List<Race> findInTimestampDiapasonOnRacecourse(RaceStatus status, long racecourse, Timestamp begin, Timestamp end, int offset, int limit) {
-        @Language("MySQL")
-        final String call = "{ CALL find_in_timestamp_diapason_by_racecourse_id(?, ?, ?, ?, ?, ?) }";
-
-        try {
-            return executor.executeFindManyCall(call, status.getName(), racecourse, begin, end, limit, offset);
-        } catch (DalException e) {
-            String message = callErrorMessage(
-                    "find_by_racecourse_name",
-                    status,
-                    racecourse,
-                    begin,
-                    end,
-                    limit,
-                    offset
-            );
-            throw new DalException(message, e);
-        }
-    }
-
-    @Override
-    public int findInTimestampDiapasonOnRacecourseCount(
-            RaceStatus status, long racecourse, Timestamp begin, Timestamp end
-    ) {
-        @Language("MySQL")
-        final String sqlStatement =
-                "SELECT COUNT(*) AS count " +
-                "FROM race " +
-                "WHERE status = ? AND racecourse_id = ? AND start_date_time BETWEEN ? AND ?";
-
-        return executor.executeCountQuery(sqlStatement, status.getName(), racecourse, begin, end);
-    }
-
-    @Override
-    public List<Race> findByNamePart(RaceStatus status, String name, int offset, int limit) {
-        @Language("MySQL")
-        final String call = "{ CALL find_by_name(?, ?, ?, ?) }";
-
-        return findByColumnPart(call, status, name, offset, limit);
-    }
-
-    @Override
-    public int findByNamePartCount(RaceStatus status, String name) {
-        @Language("MySQL")
-        String sqlStatement = "SELECT COUNT(*) AS count FROM race WHERE status = ? AND name LIKE ?";
-
-        return executor.executeCountQuery(sqlStatement, status.getName(), startsWith(name));
     }
 
     @Override

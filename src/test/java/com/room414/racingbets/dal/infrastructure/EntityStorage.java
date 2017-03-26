@@ -246,8 +246,6 @@ public class EntityStorage {
                 .setGender("mare")
                 .setTrainer(getTrainer(3))
                 .setOwner(getOwner(3))
-                .setSir(2)
-                .setDam(1)
         );
 
         horseMap.put(
@@ -259,8 +257,6 @@ public class EntityStorage {
                 .setGender("stallion")
                 .setTrainer(getTrainer(2))
                 .setOwner(getOwner(4))
-                .setSir(2)
-                .setDam(1)
         );
 
         horseMap.put(
@@ -272,8 +268,6 @@ public class EntityStorage {
                 .setGender("mare")
                 .setTrainer(getTrainer(1))
                 .setOwner(getOwner(5))
-                .setSir(3)
-                .setDam(4)
         );
 
         horseMap.put(
@@ -296,8 +290,6 @@ public class EntityStorage {
                 .setGender("stallion")
                 .setTrainer(getTrainer(2))
                 .setOwner(getOwner(4))
-                .setSir(2)
-                .setDam(1)
         );
 
         horseMap.put(
@@ -309,8 +301,6 @@ public class EntityStorage {
                 .setGender("mare")
                 .setTrainer(getTrainer(3))
                 .setOwner(getOwner(3))
-                .setSir(3)
-                .setDam(4)
         );
     }
 

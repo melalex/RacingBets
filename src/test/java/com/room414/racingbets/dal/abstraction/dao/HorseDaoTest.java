@@ -200,8 +200,6 @@ class HorseDaoTest {
                 .setGender("mare")
                 .setTrainer(trainer3)
                 .setOwner(owner3)
-                .setSir(3)
-                .setDam(4)
                 .build();
 
         horseDao.create(newEntity);

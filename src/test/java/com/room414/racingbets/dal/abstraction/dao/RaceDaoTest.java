@@ -160,7 +160,6 @@ class RaceDaoTest {
         List<Race> result = dao.findByRacecourse(RaceStatus.RIDING,  "Ron", 0, 1);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
-
     }
 
     @Test
