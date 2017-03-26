@@ -57,7 +57,7 @@ public class MySqlDaoHelper {
         }
     }
 
-    static int getCount(PreparedStatement statement) throws SQLException {
+    public static int getCount(PreparedStatement statement) throws SQLException {
         return getResult(statement, MySqlMapHelper::mapCount);
     }
 

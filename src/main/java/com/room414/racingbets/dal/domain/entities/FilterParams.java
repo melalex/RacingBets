@@ -11,7 +11,7 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @author Alexander Melashchenko
  * @version 1.0 26 Mar 2017
  */
-public class FilterCallParams implements Serializable {
+public class FilterParams implements Serializable {
     private static final long serialVersionUID = 6214553787035632610L;
 
     private RaceStatus raceStatus;
@@ -23,8 +23,12 @@ public class FilterCallParams implements Serializable {
     private int limit;
     private int offset;
 
-    public RaceStatus getRaceStatus() {
-        return raceStatus;
+    public String getRaceStatus() {
+        if (raceStatus != null) {
+            return raceStatus.getName();
+        } else {
+            return null;
+        }
     }
 
     public void setRaceStatus(RaceStatus raceStatus) {
@@ -48,6 +52,14 @@ public class FilterCallParams implements Serializable {
     }
 
     public void setRacecourseId(Long racecourseId) {
+        if (racecourseId <= 0) {
+            this.racecourseId = null;
+        } else {
+            this.racecourseId = racecourseId;
+        }
+    }
+
+    public void setRacecourseId(long racecourseId) {
         if (racecourseId <= 0) {
             this.racecourseId = null;
         } else {

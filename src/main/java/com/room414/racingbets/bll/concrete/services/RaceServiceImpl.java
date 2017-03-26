@@ -1,5 +1,6 @@
 package com.room414.racingbets.bll.concrete.services;
 
+import com.room414.racingbets.bll.abstraction.builders.FilterParamsBuilder;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.MessageService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
@@ -197,110 +198,13 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    public List<RaceDto> findAll(Pager pager) {
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            RaceDao horseDao = unitOfWork.getRaceDao();
-
-            List<Race> entities = horseDao.findAll(pager.getOffset(), pager.getLimit());
-            int count = horseDao.count();
-
-            pager.setCount(count);
-
-            return mapRaceList(entities);
-        }
+    public FilterParamsBuilder filterParamsBuilder() {
+        return null;
     }
 
     @Override
-    public List<RaceDto> findByRacecourse(RaceStatus status, long id, Pager pager) {
-        int limit = pager.getLimit();
-        int offset = pager.getOffset();
-
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            RaceDao raceDao = unitOfWork.getRaceDao();
-
-            List<Race> list = raceDao.findByRacecourseId(status, id, offset, limit);
-            int count = raceDao.findByRacecourseIdCount(status, id);
-
-            pager.setCount(count);
-
-            return mapRaceList(list);
-        }
+    public List<Race> filter(FilterParamsBuilder builder) {
+        return null;
     }
 
-    @Override
-    public List<RaceDto> findByDate(RaceStatus status, Date date, Pager pager) {
-        int limit = pager.getLimit();
-        int offset = pager.getOffset();
-
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            RaceDao raceDao = unitOfWork.getRaceDao();
-
-            Pair<Timestamp, Timestamp> pair = getDayStartAndEnd(date);
-
-            List<Race> list = raceDao.findInTimestampDiapason(
-                    status,
-                    pair.getFirstElement(),
-                    pair.getSecondElement(),
-                    offset,
-                    limit
-            );
-            int count = raceDao.findInTimestampDiapasonCount(
-                    status,
-                    pair.getFirstElement(),
-                    pair.getSecondElement()
-            );
-
-            pager.setCount(count);
-
-            return mapRaceList(list);
-        }
-    }
-
-    @Override
-    public List<RaceDto> findByDateAndRacecourse(RaceStatus status, Date date, long id, Pager pager) {
-        int limit = pager.getLimit();
-        int offset = pager.getOffset();
-
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            RaceDao raceDao = unitOfWork.getRaceDao();
-
-            Pair<Timestamp, Timestamp> pair = getDayStartAndEnd(date);
-
-            List<Race> list = raceDao.findInTimestampDiapasonOnRacecourse(
-                    status,
-                    id,
-                    pair.getFirstElement(),
-                    pair.getSecondElement(),
-                    offset,
-                    limit
-            );
-            int count = raceDao.findInTimestampDiapasonOnRacecourseCount(
-                    status,
-                    id,
-                    pair.getFirstElement(),
-                    pair.getSecondElement()
-            );
-
-            pager.setCount(count);
-
-            return mapRaceList(list);
-        }
-    }
-
-    @Override
-    public List<RaceDto> findByName(RaceStatus status, String name, Pager pager) {
-        int limit = pager.getLimit();
-        int offset = pager.getOffset();
-
-        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            RaceDao raceDao = unitOfWork.getRaceDao();
-
-            List<Race> entities = raceDao.findByNamePart(status, name, offset, limit);
-            int count = raceDao.findByNamePartCount(status, name);
-
-            pager.setCount(count);
-
-            return mapRaceList(entities);
-        }
-    }
 }

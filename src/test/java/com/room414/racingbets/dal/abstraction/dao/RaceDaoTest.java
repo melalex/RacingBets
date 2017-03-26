@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.domain.entities.FilterParams;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
@@ -120,7 +121,6 @@ class RaceDaoTest {
         long result = dao.count();
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
-
     }
 
     @Test
@@ -132,7 +132,13 @@ class RaceDaoTest {
 
         expectedResult.add(storage.getRace(1));
 
-        List<Race> result = dao.findByRacecourseId(RaceStatus.FINISHED,  1, 0, 1);
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setRacecourseId(1);
+        params.setLimit(1);
+        params.setOffset(0);
+
+        List<Race> result = dao.filter(params);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -143,32 +149,11 @@ class RaceDaoTest {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
-        long result = dao.findByRacecourseIdCount(RaceStatus.FINISHED, 1);
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setRacecourseId(1);
 
-        assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
-    }
-
-    @Test
-    @Tag("read")
-    void findByRacecourse() {
-        RaceDao dao = getDao();
-
-        List<Race> expectedResult = new LinkedList<>();
-
-        expectedResult.add(storage.getRace(2));
-
-        List<Race> result = dao.findByRacecourse(RaceStatus.RIDING,  "Ron", 0, 1);
-
-        assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
-    }
-
-    @Test
-    @Tag("read")
-    void findByRacecourseCount() {
-        RaceDao dao = getDao();
-        long expectedResult = 1;
-
-        long result = dao.findByRacecourseCount(RaceStatus.RIDING, "Ron");
+        long result = dao.count(params);
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -182,13 +167,14 @@ class RaceDaoTest {
 
         expectedResult.add(storage.getRace(1));
 
-        List<Race> result = dao.findInTimestampDiapason(
-                RaceStatus.FINISHED,
-                Timestamp.valueOf("2017-03-08 00:00:00"),
-                Timestamp.valueOf("2017-03-08 23:59:59"),
-                0,
-                1
-        );
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
+        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+        params.setLimit(1);
+        params.setOffset(0);
+
+        List<Race> result = dao.filter(params);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -199,11 +185,12 @@ class RaceDaoTest {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
-        long result = dao.findInTimestampDiapasonCount(
-                RaceStatus.FINISHED,
-                Timestamp.valueOf("2017-03-08 00:00:00"),
-                Timestamp.valueOf("2017-03-08 23:59:59")
-        );
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
+        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+
+        long result = dao.count(params);
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -217,14 +204,15 @@ class RaceDaoTest {
 
         expectedResult.add(storage.getRace(1));
 
-        List<Race> result = dao.findInTimestampDiapasonOnRacecourse(
-                RaceStatus.FINISHED,
-                1,
-                Timestamp.valueOf("2017-03-08 00:00:00"),
-                Timestamp.valueOf("2017-03-08 23:59:59"),
-                0,
-                1
-        );
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
+        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+        params.setRacecourseId(1);
+        params.setLimit(1);
+        params.setOffset(0);
+
+        List<Race> result = dao.filter(params);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -235,12 +223,13 @@ class RaceDaoTest {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
-        long result = dao.findInTimestampDiapasonOnRacecourseCount(
-                RaceStatus.FINISHED,
-                1,
-                Timestamp.valueOf("2017-03-08 00:00:00"),
-                Timestamp.valueOf("2017-03-08 23:59:59")
-        );
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
+        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+        params.setRacecourseId(1);
+
+        long result = dao.count(params);
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -254,7 +243,13 @@ class RaceDaoTest {
 
         expectedResult.add(storage.getRace(1));
 
-        List<Race> result = dao.findByNamePart(RaceStatus.FINISHED,  "Gem", 0, 1);
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setName("Gem");
+        params.setLimit(1);
+        params.setOffset(0);
+
+        List<Race> result = dao.filter(params);
 
         assert result.equals(expectedResult) : defaultAssertionFailMessage(result, expectedResult);
     }
@@ -265,7 +260,11 @@ class RaceDaoTest {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
-        long result = dao.findByNamePartCount(RaceStatus.FINISHED, "Gem");
+        FilterParams params = new FilterParams();
+        params.setRaceStatus(RaceStatus.FINISHED);
+        params.setName("Gem");
+
+        long result = dao.count(params);
 
         assert expectedResult == result : defaultAssertionFailMessage(result, expectedResult);
     }
