@@ -4,6 +4,9 @@ CREATE PROCEDURE horse_racing_test.filter_races(
   IN p_race_status   ENUM ('scheduled', 'riding', 'finished', 'rejected'),
   IN p_id            INT UNSIGNED,
   IN p_racecourse_id INT UNSIGNED,
+  IN p_horse_id      INT UNSIGNED,
+  IN p_trainer_id    INT UNSIGNED,
+  IN p_jockey_id     INT UNSIGNED,
   IN p_name          VARCHAR(45),
   IN p_begin         TIMESTAMP,
   IN p_end           TIMESTAMP,
@@ -64,7 +67,29 @@ CREATE PROCEDURE horse_racing_test.filter_races(
       NULL                        'prize.prize_size'
 
     FROM (SELECT *
-          FROM race
+          FROM (SELECT
+                  race.id              'id',
+                  race.start_date_time 'start_date_time',
+                  race.commission      'commission',
+                  race.distance        'distance',
+                  race.max_rating      'max_rating',
+                  race.min_age         'min_age',
+                  race.min_bet         'min_bet',
+                  race.min_rating      'min_rating',
+                  race.name            'name',
+                  race.race_class      'race_class',
+                  race.race_type       'race_type',
+                  race.status          'status',
+                  race.going           'going',
+                  race.racecourse_id   'racecourse_id'
+                FROM participant
+                  INNER JOIN race
+                    ON participant.race_id = race.id
+                WHERE (p_horse_id IS NULL OR participant.horse_id = p_horse_id)
+                      AND (p_trainer_id IS NULL OR participant.trainer_id = p_trainer_id)
+                      AND (p_jockey_id IS NULL OR participant.jockey_id = p_jockey_id)
+                GROUP BY race.id
+               ) AS race
           WHERE (p_race_status IS NULL OR race.status = p_race_status)
                 AND (p_id IS NULL OR race.id = p_id)
                 AND (p_racecourse_id IS NULL OR race.racecourse_id = p_racecourse_id)
@@ -141,7 +166,29 @@ CREATE PROCEDURE horse_racing_test.filter_races(
       prize.prize_size
 
     FROM (SELECT *
-          FROM race
+          FROM (SELECT
+                  race.id              'id',
+                  race.start_date_time 'start_date_time',
+                  race.commission      'commission',
+                  race.distance        'distance',
+                  race.max_rating      'max_rating',
+                  race.min_age         'min_age',
+                  race.min_bet         'min_bet',
+                  race.min_rating      'min_rating',
+                  race.name            'name',
+                  race.race_class      'race_class',
+                  race.race_type       'race_type',
+                  race.status          'status',
+                  race.going           'going',
+                  race.racecourse_id   'racecourse_id'
+                FROM participant
+                  INNER JOIN race
+                    ON participant.race_id = race.id
+                WHERE (p_horse_id IS NULL OR participant.horse_id = p_horse_id)
+                      AND (p_trainer_id IS NULL OR participant.trainer_id = p_trainer_id)
+                      AND (p_jockey_id IS NULL OR participant.jockey_id = p_jockey_id)
+                GROUP BY race.id
+               ) AS race
           WHERE (p_race_status IS NULL OR race.status = p_race_status)
                 AND (p_id IS NULL OR race.id = p_id)
                 AND (p_racecourse_id IS NULL OR race.racecourse_id = p_racecourse_id)
@@ -160,6 +207,9 @@ CREATE PROCEDURE horse_racing_test.count_races(
   IN  p_race_status   ENUM ('scheduled', 'riding', 'finished', 'rejected'),
   IN  p_id            INT UNSIGNED,
   IN  p_racecourse_id INT UNSIGNED,
+  IN  p_horse_id      INT UNSIGNED,
+  IN  p_trainer_id    INT UNSIGNED,
+  IN  p_jockey_id     INT UNSIGNED,
   IN  p_name          VARCHAR(45),
   IN  p_begin         TIMESTAMP,
   IN  p_end           TIMESTAMP,
@@ -168,7 +218,21 @@ CREATE PROCEDURE horse_racing_test.count_races(
   BEGIN
     SELECT COUNT(*)
     INTO count
-    FROM race
+    FROM (SELECT
+            race.id              'id',
+            race.start_date_time 'start_date_time',
+            race.name            'name',
+            race.status          'status',
+            race.racecourse_id   'racecourse_id'
+
+          FROM participant
+            INNER JOIN race
+              ON participant.race_id = race.id
+          WHERE (p_horse_id IS NULL OR participant.horse_id = p_horse_id)
+                AND (p_trainer_id IS NULL OR participant.trainer_id = p_trainer_id)
+                AND (p_jockey_id IS NULL OR participant.jockey_id = p_jockey_id)
+          GROUP BY race.id
+         ) AS race
     WHERE (p_race_status IS NULL OR race.status = p_race_status)
           AND (p_id IS NULL OR race.id = p_id)
           AND (p_racecourse_id IS NULL OR race.racecourse_id = p_racecourse_id)
@@ -176,4 +240,3 @@ CREATE PROCEDURE horse_racing_test.count_races(
           AND (p_begin IS NULL OR race.start_date_time >= p_begin)
           AND (p_end IS NULL OR race.start_date_time <= p_end);
   END //
-

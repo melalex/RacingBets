@@ -134,7 +134,7 @@ class RaceDaoTest {
 
         FilterParams params = new FilterParams();
         params.setRaceStatus(RaceStatus.FINISHED);
-        params.setRacecourseId(1);
+        params.setRacecourseId(1L);
         params.setLimit(1);
         params.setOffset(0);
 
@@ -151,7 +151,7 @@ class RaceDaoTest {
 
         FilterParams params = new FilterParams();
         params.setRaceStatus(RaceStatus.FINISHED);
-        params.setRacecourseId(1);
+        params.setRacecourseId(1L);
 
         long result = dao.count(params);
 
@@ -208,7 +208,7 @@ class RaceDaoTest {
         params.setRaceStatus(RaceStatus.FINISHED);
         params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
         params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
-        params.setRacecourseId(1);
+        params.setRacecourseId(1L);
         params.setLimit(1);
         params.setOffset(0);
 
@@ -227,7 +227,7 @@ class RaceDaoTest {
         params.setRaceStatus(RaceStatus.FINISHED);
         params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
         params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
-        params.setRacecourseId(1);
+        params.setRacecourseId(1L);
 
         long result = dao.count(params);
 

@@ -17,11 +17,15 @@ public class FilterParams implements Serializable {
     private RaceStatus raceStatus;
     private Long id;
     private Long racecourseId;
+    private Long horseId;
+    private Long trainerId;
+    private Long jockeyId;
     private String name;
     private Timestamp begin;
     private Timestamp end;
     private int limit;
     private int offset;
+
 
     public String getRaceStatus() {
         if (raceStatus != null) {
@@ -59,11 +63,39 @@ public class FilterParams implements Serializable {
         }
     }
 
-    public void setRacecourseId(long racecourseId) {
-        if (racecourseId <= 0) {
-            this.racecourseId = null;
+    public Long getHorseId() {
+        return horseId;
+    }
+
+    public void setHorseId(Long horseId) {
+        if (horseId <= 0) {
+            this.horseId = null;
         } else {
-            this.racecourseId = racecourseId;
+            this.horseId = horseId;
+        }
+    }
+
+    public Long getTrainerId() {
+        return trainerId;
+    }
+
+    public void setTrainerId(Long trainerId) {
+        if (trainerId <= 0) {
+            this.trainerId = null;
+        } else {
+            this.trainerId = trainerId;
+        }
+    }
+
+    public Long getJockeyId() {
+        return jockeyId;
+    }
+
+    public void setJockeyId(Long jockeyId) {
+        if (jockeyId <= 0) {
+            this.jockeyId = null;
+        } else {
+            this.jockeyId = jockeyId;
         }
     }
 

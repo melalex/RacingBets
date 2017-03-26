@@ -30,8 +30,6 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  */
 public class MySqlRaceDao implements RaceDao {
     private static final String TABLE_NAME = "race";
-    private static final String MAPPING_ERROR = "Exception during races mapping";
-
 
     private Connection connection;
     private MySqlSharedExecutor<Race> executor;
@@ -210,17 +208,20 @@ public class MySqlRaceDao implements RaceDao {
 
     private List<Race> callFilterProcedure(FilterParams params) {
         @Language("MySQL")
-        final String call = "{ CALL filter_races(?, ?, ?, ?, ?, ?, ?, ?) }";
+        final String call = "{ CALL filter_races(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }";
 
         try (CallableStatement statement = connection.prepareCall(call)) {
             setNullable(statement, 1, params.getRaceStatus(), Types.VARCHAR);
             setNullable(statement, 2, params.getId(), Types.INTEGER);
             setNullable(statement, 3, params.getRacecourseId(), Types.INTEGER);
-            setNullable(statement, 4, params.getName(), Types.VARCHAR);
-            setNullable(statement, 5, params.getBegin(), Types.TIMESTAMP);
-            setNullable(statement, 6, params.getEnd(), Types.TIMESTAMP);
-            setNullable(statement, 7, params.getLimit(), Types.INTEGER);
-            setNullable(statement, 8, params.getOffset(), Types.INTEGER);
+            setNullable(statement, 4, params.getHorseId(), Types.INTEGER);
+            setNullable(statement, 5, params.getTrainerId(), Types.INTEGER);
+            setNullable(statement, 6, params.getJockeyId(), Types.INTEGER);
+            setNullable(statement, 7, params.getName(), Types.VARCHAR);
+            setNullable(statement, 8, params.getBegin(), Types.TIMESTAMP);
+            setNullable(statement, 9, params.getEnd(), Types.TIMESTAMP);
+            setNullable(statement, 10, params.getLimit(), Types.INTEGER);
+            setNullable(statement, 11, params.getOffset(), Types.INTEGER);
 
             statement.execute();
 
@@ -280,17 +281,20 @@ public class MySqlRaceDao implements RaceDao {
     @Override
     public int count(FilterParams params) {
         @Language("MySQL")
-        final String call = "{ CALL count_races(?, ?, ?, ?, ?, ?, ?) }";
+        final String call = "{ CALL count_races(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }";
 
         try (CallableStatement statement = connection.prepareCall(call)) {
             setNullable(statement, 1, params.getRaceStatus(), Types.VARCHAR);
             setNullable(statement, 2, params.getId(), Types.INTEGER);
             setNullable(statement, 3, params.getRacecourseId(), Types.INTEGER);
-            setNullable(statement, 4, params.getName(), Types.VARCHAR);
-            setNullable(statement, 5, params.getBegin(), Types.TIMESTAMP);
-            setNullable(statement, 6, params.getEnd(), Types.TIMESTAMP);
+            setNullable(statement, 4, params.getHorseId(), Types.INTEGER);
+            setNullable(statement, 5, params.getTrainerId(), Types.INTEGER);
+            setNullable(statement, 6, params.getJockeyId(), Types.INTEGER);
+            setNullable(statement, 7, params.getName(), Types.VARCHAR);
+            setNullable(statement, 8, params.getBegin(), Types.TIMESTAMP);
+            setNullable(statement, 9, params.getEnd(), Types.TIMESTAMP);
 
-            statement.registerOutParameter(7, Types.INTEGER);
+            statement.registerOutParameter(10, Types.INTEGER);
 
             statement.execute();
 
