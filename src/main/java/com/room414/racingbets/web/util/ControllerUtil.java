@@ -33,27 +33,6 @@ public class ControllerUtil {
 
     }
 
-    public static void findAsParticipant(HttpServletRequest req,
-                                  HttpServletResponse resp,
-                                  Locale locale,
-                                  ParticipantGetter getter) throws IOException {
-        long id = getIdFromRequest(req);
-        int page = getPageFromRequest(req);
-
-        ResponseBuilder<RaceParticipantThumbnailDto> responseBuilder
-                = ResponseUtil.createResponseBuilder(resp, locale, PARTICIPANT_TYPE);
-
-        Pager pager = new PagerImpl(PARTICIPANT_LIMIT, page);
-
-        List<RaceParticipantThumbnailDto> horses = getter.call(id, pager);
-
-        responseBuilder.addAllToResult(horses);
-        responseBuilder.setCount(pager.getCount());
-
-        resp.setStatus(HttpServletResponse.SC_FOUND);
-        writeToResponse(resp, responseBuilder.buildSuccessResponse());
-    }
-
     public static <T> void delete(HttpServletRequest req,
                                   HttpServletResponse resp,
                                   ResponseBuilder<T> builder,

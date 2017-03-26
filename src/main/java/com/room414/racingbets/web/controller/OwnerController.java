@@ -5,7 +5,6 @@ import com.room414.racingbets.bll.abstraction.services.OwnerService;
 import com.room414.racingbets.bll.abstraction.services.ParticipantService;
 import com.room414.racingbets.bll.dto.entities.OwnerDto;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
-import com.room414.racingbets.web.util.ControllerUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,13 +74,6 @@ public class OwnerController {
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
-    }
-
-    /**
-     * GET: /owner/participant/{id}?page={page}
-     */
-    public void findAsParticipant(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ControllerUtil.findAsParticipant(req, resp, locale, participantService::findByOwner);
     }
 
     /**

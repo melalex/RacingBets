@@ -33,7 +33,6 @@ public class MainCachePool {
     private CachePool<Racecourse> racecourseCachePool = new CachePool<>(RACECOURSE_NAMESPACE);
     private CachePool<Trainer> trainerCachePool = new CachePool<>(TRAINER_NAMESPACE);
     private CachePool<Odds> oddsCachePool = new CachePool<>(ODDS_NAMESPACE);
-    private CachePool<RaceParticipantThumbnail> thumbnailCachePool = new CachePool<>(THUMBNAIL_NAMESPACE);
 
     private Map<String, Cache> cacheByNamespaceMap = createCacheByNamespaceMap();
 
@@ -49,7 +48,6 @@ public class MainCachePool {
                 .addMap(racecourseCachePool.getCacheByNamespaceMap())
                 .addMap(trainerCachePool.getCacheByNamespaceMap())
                 .addMap(oddsCachePool.getCacheByNamespaceMap())
-                .addMap(thumbnailCachePool.getCacheByNamespaceMap())
                 .build();
     }
 
@@ -95,10 +93,6 @@ public class MainCachePool {
 
     public CachePool<Odds> getOddsCachePool() {
         return oddsCachePool;
-    }
-
-    public CachePool<RaceParticipantThumbnail> getThumbnailCachePool() {
-        return thumbnailCachePool;
     }
 
 

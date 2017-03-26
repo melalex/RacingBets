@@ -93,7 +93,6 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
         if (participantCache == null) {
             participantCache = new CaffeineParticipantCache(
                     mainCachePool.getParticipantCachePool(),
-                    mainCachePool.getThumbnailCachePool(),
                     redisUnitOfWork.getRedisCache(),
                     getRaceCache()
             );
