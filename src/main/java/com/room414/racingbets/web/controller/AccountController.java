@@ -213,6 +213,7 @@ public class AccountController {
         }
 
         responseBuilder.addToResult(createToken(user));
+        resp.setStatus(HttpServletResponse.SC_OK);
         writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
@@ -298,12 +299,7 @@ public class AccountController {
      */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
-        long id = getIdFromRequest(req);
-
-        responseBuilder.addToResult(userService.find(id));
-
-        resp.setStatus(HttpServletResponse.SC_FOUND);
-        writeToResponse(resp, responseBuilder.buildSuccessResponse());
+        ControllerUtil.find(req, resp, responseBuilder, locale, userService::find);
     }
 
     /**

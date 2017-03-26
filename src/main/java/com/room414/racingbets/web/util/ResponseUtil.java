@@ -29,10 +29,26 @@ public class ResponseUtil {
 
     public static <T> void writeToResponse(HttpServletResponse httpServletResponse,
                                            Response<T> response) throws IOException {
-        PrintWriter writer = httpServletResponse.getWriter();
-        writer.write(response.toJson());
-        writer.close();
+        try (PrintWriter writer = httpServletResponse.getWriter()) {
+            writer.write(response.toJson());
+        }
     }
+
+    public static <T> void writeOk(HttpServletResponse resp, ResponseBuilder<T> builder) throws IOException {
+        resp.setStatus(HttpServletResponse.SC_OK);
+        writeToResponse(resp, builder.buildSuccessResponse());
+    }
+
+    public static <T> void invalidId(HttpServletResponse resp,
+                                     ResponseBuilder<T> builder,
+                                     Locale locale) throws IOException {
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.id");
+        Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, builder.getType(), null);
+        builder.addToErrors(error);
+        writeToResponse(resp, builder.buildErrorResponse());
+    }
+
 
     public static <T> void invalidRequest(HttpServletResponse resp,
                                           ResponseBuilder<T> builder,

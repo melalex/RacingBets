@@ -47,7 +47,6 @@ public class RaceServiceImpl implements RaceService {
 
     static class FilterParamsBuilderImpl implements FilterParamsBuilder {
         private RaceStatus raceStatus;
-        private Long id;
         private Long racecourseId;
         private Long horseId;
         private Long trainerId;
@@ -58,10 +57,10 @@ public class RaceServiceImpl implements RaceService {
         private int limit;
         private int offset;
 
-        private Pair<Timestamp, Timestamp> getDayStartAndEnd(Date date) {
+        private Pair<Timestamp, Timestamp> getDayStartAndEnd(long seconds) {
             GregorianCalendar cal = new GregorianCalendar();
 
-            cal.setTime(date);
+            cal.setTime(new Date(seconds));
             cal.set(Calendar.HOUR_OF_DAY, 0);
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
@@ -75,40 +74,42 @@ public class RaceServiceImpl implements RaceService {
             return new Pair<>(dayStart, dayEnd);
         }
 
+        private Long parseLong(String value) {
+            try {
+                return Long.parseLong(value);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+
+        }
 
         @Override
-        public FilterParamsBuilder setRaceStatus(RaceStatus raceStatus) {
-            this.raceStatus = raceStatus;
+        public FilterParamsBuilder setRaceStatus(String raceStatus) {
+            this.raceStatus = RaceStatus.getRaceStatus(raceStatus);
             return this;
         }
 
         @Override
-        public FilterParamsBuilder setId(Long id) {
-            this.id = id;
+        public FilterParamsBuilder setRacecourseId(String racecourseId) {
+            this.racecourseId = parseLong(racecourseId);
             return this;
         }
 
         @Override
-        public FilterParamsBuilder setRacecourseId(Long racecourseId) {
-            this.racecourseId = racecourseId;
+        public FilterParamsBuilder setHorseId(String horseId) {
+            this.horseId = parseLong(horseId);
             return this;
         }
 
         @Override
-        public FilterParamsBuilder setHorseId(Long horseId) {
-            this.horseId = horseId;
+        public FilterParamsBuilder setTrainerId(String trainerId) {
+            this.trainerId = parseLong(trainerId);
             return this;
         }
 
         @Override
-        public FilterParamsBuilder setTrainerId(Long trainerId) {
-            this.trainerId = trainerId;
-            return this;
-        }
-
-        @Override
-        public FilterParamsBuilder setJockeyId(Long jockeyId) {
-            this.jockeyId = jockeyId;
+        public FilterParamsBuilder setJockeyId(String jockeyId) {
+            this.jockeyId = parseLong(jockeyId);
             return this;
         }
 
@@ -119,10 +120,13 @@ public class RaceServiceImpl implements RaceService {
         }
 
         @Override
-        public FilterParamsBuilder setDate(Date date) {
-            Pair<Timestamp, Timestamp> beginAndEnd = getDayStartAndEnd(date);
-            this.begin = beginAndEnd.getFirstElement();
-            this.end = beginAndEnd.getSecondElement();
+        public FilterParamsBuilder setDate(String date) {
+            Long seconds = parseLong(date);
+            if (seconds != null) {
+                Pair<Timestamp, Timestamp> beginAndEnd = getDayStartAndEnd(seconds);
+                this.begin = beginAndEnd.getFirstElement();
+                this.end = beginAndEnd.getSecondElement();
+            }
             return this;
         }
 
@@ -143,7 +147,6 @@ public class RaceServiceImpl implements RaceService {
             FilterParams params = new FilterParams();
 
             params.setRaceStatus(raceStatus);
-            params.setId(id);
             params.setRacecourseId(racecourseId);
             params.setHorseId(horseId);
             params.setTrainerId(trainerId);

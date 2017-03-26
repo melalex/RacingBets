@@ -2,7 +2,6 @@ package com.room414.racingbets.web.controller;
 
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.HorseService;
-import com.room414.racingbets.bll.abstraction.services.ParticipantService;
 import com.room414.racingbets.bll.dto.entities.HorseDto;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.viewmodels.HorseForm;
@@ -22,7 +21,6 @@ import static com.room414.racingbets.web.util.ValidatorUtil.*;
 public class HorseController {
     private static final String ENTITY_TYPE = "Horse";
 
-    private ParticipantService participantService;
     private CrudControllerDelegate<HorseForm, HorseDto> crudControllerDelegate;
 
     private Locale locale;
@@ -30,12 +28,9 @@ public class HorseController {
     public HorseController(
             HorseService horseService,
             AccountService accountService,
-            ParticipantService participantService,
             Locale locale
     ) {
-        this.participantService = participantService;
         this.locale = locale;
-
         this.crudControllerDelegate = new CrudControllerDelegate<>(
                 horseService,
                 accountService,

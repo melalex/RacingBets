@@ -19,7 +19,6 @@ import static com.room414.racingbets.web.util.ValidatorUtil.validatePerson;
  */
 public class TrainerController {
     private static final String ENTITY_TYPE = "Trainer";
-    private ParticipantService participantService;
     private CrudControllerDelegate<TrainerDto, TrainerDto> crudControllerDelegate;
 
     private Locale locale;
@@ -30,9 +29,7 @@ public class TrainerController {
             ParticipantService participantService,
             Locale locale
     ) {
-        this.participantService = participantService;
         this.locale = locale;
-
         this.crudControllerDelegate = new CrudControllerDelegate<>(
                 trainerService,
                 accountService,

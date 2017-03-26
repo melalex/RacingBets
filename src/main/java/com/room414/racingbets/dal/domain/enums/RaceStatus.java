@@ -38,6 +38,6 @@ public enum  RaceStatus {
                 return v;
             }
         }
-        throw new IllegalArgumentException("There is no Gender named " + name);
+        return null;
     }
 }

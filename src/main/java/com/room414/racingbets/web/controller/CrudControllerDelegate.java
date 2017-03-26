@@ -63,9 +63,6 @@ public class CrudControllerDelegate<F, D> {
         return ResponseUtil.createResponseBuilder(resp, locale, entityType);
     }
 
-    /**
-     * POST: /horse
-     */
     public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         try {
@@ -101,9 +98,6 @@ public class CrudControllerDelegate<F, D> {
         }
     }
 
-    /**
-     * PUT: /horse
-     */
     public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         try {
@@ -139,45 +133,31 @@ public class CrudControllerDelegate<F, D> {
         }
     }
 
-    /**
-     * GET: /horse/{id}
-     */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
-        long id = getIdFromRequest(req);
-
-        responseBuilder.addToResult(crudService.find(id));
-
-        resp.setStatus(HttpServletResponse.SC_FOUND);
-        writeToResponse(resp, responseBuilder.buildSuccessResponse());
+        ControllerUtil.find(req, resp, responseBuilder, locale, crudService::find);
     }
 
-    /**
-     * GET: /horse?query={query};page={page}
-     */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String query = req.getParameter("query");
         int page = getPageFromRequest(req);
         Pager pager = new PagerImpl(ENTITY_LIMIT, page);
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
-        List<D> horses;
+        List<D> entities;
 
         if (query != null) {
-            horses = crudService.search(query, pager);
+            entities = crudService.search(query, pager);
         } else {
-            horses = crudService.findAll(pager);
+            entities = crudService.findAll(pager);
         }
 
-        responseBuilder.addAllToResult(horses);
+        responseBuilder.addAllToResult(entities);
         responseBuilder.setCount(pager.getCount());
 
         resp.setStatus(HttpServletResponse.SC_FOUND);
         writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
-    /**
-     * DELETE: horse/{id}
-     */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         ControllerUtil.delete(req, resp, responseBuilder, accountService, locale, crudService::delete);
