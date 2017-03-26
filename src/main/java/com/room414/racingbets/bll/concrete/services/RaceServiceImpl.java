@@ -1,6 +1,6 @@
 package com.room414.racingbets.bll.concrete.services;
 
-import com.room414.racingbets.bll.abstraction.builders.FilterParamsBuilder;
+import com.room414.racingbets.bll.abstraction.infrastructure.FilterParamsBuilder;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.MessageService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
@@ -8,11 +8,11 @@ import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
-import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.entities.Bet;
+import com.room414.racingbets.dal.domain.entities.FilterParams;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.BetStatus;
@@ -45,6 +45,119 @@ public class RaceServiceImpl implements RaceService {
         this.betsPerQuery = betsPerQuery;
     }
 
+    static class FilterParamsBuilderImpl implements FilterParamsBuilder {
+        private RaceStatus raceStatus;
+        private Long id;
+        private Long racecourseId;
+        private Long horseId;
+        private Long trainerId;
+        private Long jockeyId;
+        private String name;
+        private Timestamp begin;
+        private Timestamp end;
+        private int limit;
+        private int offset;
+
+        private Pair<Timestamp, Timestamp> getDayStartAndEnd(Date date) {
+            GregorianCalendar cal = new GregorianCalendar();
+
+            cal.setTime(date);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            Timestamp dayStart = new Timestamp(cal.getTime().getTime());
+
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            Timestamp dayEnd = new Timestamp(cal.getTime().getTime());
+
+            return new Pair<>(dayStart, dayEnd);
+        }
+
+
+        @Override
+        public FilterParamsBuilder setRaceStatus(RaceStatus raceStatus) {
+            this.raceStatus = raceStatus;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setRacecourseId(Long racecourseId) {
+            this.racecourseId = racecourseId;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setHorseId(Long horseId) {
+            this.horseId = horseId;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setTrainerId(Long trainerId) {
+            this.trainerId = trainerId;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setJockeyId(Long jockeyId) {
+            this.jockeyId = jockeyId;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setDate(Date date) {
+            Pair<Timestamp, Timestamp> beginAndEnd = getDayStartAndEnd(date);
+            this.begin = beginAndEnd.getFirstElement();
+            this.end = beginAndEnd.getSecondElement();
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setLimit(int limit) {
+            this.limit = limit;
+            return this;
+        }
+
+        @Override
+        public FilterParamsBuilder setOffset(int offset) {
+            this.offset = offset;
+            return this;
+        }
+
+        @Override
+        public FilterParams build() {
+            FilterParams params = new FilterParams();
+
+            params.setRaceStatus(raceStatus);
+            params.setId(id);
+            params.setRacecourseId(racecourseId);
+            params.setHorseId(horseId);
+            params.setTrainerId(trainerId);
+            params.setJockeyId(jockeyId);
+            params.setName(name);
+            params.setBegin(begin);
+            params.setEnd(end);
+            params.setLimit(limit);
+            params.setOffset(offset);
+
+            return null;
+        }
+    }
+
     private List<RaceDto> mapRaceList(List<Race> source) {
         return source
                 .stream()
@@ -57,23 +170,6 @@ public class RaceServiceImpl implements RaceService {
                 .stream()
                 .map(s -> mapper.map(s, BetDto.class))
                 .collect(Collectors.toList());
-    }
-
-    private Pair<Timestamp, Timestamp> getDayStartAndEnd(Date date) {
-        GregorianCalendar cal = new GregorianCalendar();
-
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        Timestamp dayStart = new Timestamp(cal.getTime().getTime());
-
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        Timestamp dayEnd = new Timestamp(cal.getTime().getTime());
-
-        return new Pair<>(dayStart, dayEnd);
     }
 
     @Override
@@ -199,12 +295,23 @@ public class RaceServiceImpl implements RaceService {
 
     @Override
     public FilterParamsBuilder filterParamsBuilder() {
-        return null;
+        return new FilterParamsBuilderImpl();
     }
 
     @Override
-    public List<Race> filter(FilterParamsBuilder builder) {
-        return null;
+    public List<RaceDto> filter(FilterParamsBuilder builder, Pager pager) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            builder.setLimit(pager.getLimit());
+            builder.setOffset(pager.getOffset());
+            FilterParams params = builder.build();
+
+            List<Race> entities = unitOfWork.getRaceDao().filter(params);
+            int count = unitOfWork.getRaceDao().count(params);
+
+            pager.setCount(count);
+
+            return mapRaceList(entities);
+        }
     }
 
 }

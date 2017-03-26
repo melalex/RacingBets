@@ -1,12 +1,9 @@
 package com.room414.racingbets.bll.abstraction.services;
 
-import com.room414.racingbets.bll.abstraction.builders.FilterParamsBuilder;
+import com.room414.racingbets.bll.abstraction.infrastructure.FilterParamsBuilder;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
-import com.room414.racingbets.dal.domain.entities.Race;
-import com.room414.racingbets.dal.domain.enums.RaceStatus;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,5 +23,5 @@ public interface RaceService {
 
     FilterParamsBuilder filterParamsBuilder();
 
-    List<Race> filter(FilterParamsBuilder builder);
+    List<RaceDto> filter(FilterParamsBuilder builder, Pager pager);
 }
