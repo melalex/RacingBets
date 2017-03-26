@@ -52,7 +52,8 @@ public class RaceController {
         return ResponseUtil.createResponseBuilder(resp, locale, ENTITY_TYPE);
     }
 
-    // TODO: add validation rules
+    // TODO: add more validation rules
+    // TODO: Race view model
     private void validate(RaceDto form, ResponseBuilder<RaceDto> responseBuilder) {
         notNull(form.getName(), responseBuilder, locale, "name", ENTITY_TYPE);
         notNull(form.getRacecourse(), responseBuilder, locale, "racecourse", ENTITY_TYPE);

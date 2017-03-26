@@ -15,6 +15,7 @@ public interface BetService {
         INVALID_BET,
         EMAIL_IS_NOT_CONFIRMED,
         NOT_ENOUGH_MONEY,
+        LESS_THAN_MIN_BET,
         RACE_IS_STARTED,
         SUCCESS
     }

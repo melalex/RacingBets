@@ -5,11 +5,13 @@ import com.room414.racingbets.bll.abstraction.services.BetService;
 import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.OddsDto;
 import com.room414.racingbets.bll.dto.entities.ParticipantDto;
+import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
+import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
@@ -72,6 +74,8 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
+    // TODO: replace this logic to controller
+    // TODO: create bet, race view model
     public Response makeBet(BetDto bet) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             if (!isBetValid(bet)) {
@@ -90,14 +94,14 @@ public class BetServiceImpl implements BetService {
                 return Response.NOT_ENOUGH_MONEY;
             }
 
-            RaceStatus raceStatus = unitOfWork
+            Race race = unitOfWork
                     .getRaceDao()
-                    .find(bet.getRaceId())
-                    .getRaceStatus();
+                    .find(bet.getRaceId());
 
-            if (raceStatus != RaceStatus.SCHEDULED) {
+            if (race.getRaceStatus() != RaceStatus.SCHEDULED) {
                 return Response.RACE_IS_STARTED;
             }
+
 
             Bet entity = mapper.map(bet, Bet.class);
 
