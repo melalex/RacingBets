@@ -72,21 +72,21 @@ public class RacecourseController {
     }
 
     /**
-     * GET: /owner/{id}
+     * GET: /owner/%d
      */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.findById(req, resp);
     }
 
     /**
-     * GET: /owner?query={query};page={page}
+     * GET: /owner?query=%s;page=%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
     }
 
     /**
-     * DELETE: owner/{id}
+     * DELETE: owner/%d
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.delete(req, resp);

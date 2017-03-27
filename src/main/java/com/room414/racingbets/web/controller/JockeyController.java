@@ -60,21 +60,21 @@ public class JockeyController {
     }
 
     /**
-     * GET: /jockey/{id}
+     * GET: /jockey/%d
      */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.findById(req, resp);
     }
 
     /**
-     * GET: /jockey?query={query};page={page}
+     * GET: /jockey?query=%s;page=%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
     }
 
     /**
-     * DELETE: jockey/{id}
+     * DELETE: jockey/%d
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.delete(req, resp);

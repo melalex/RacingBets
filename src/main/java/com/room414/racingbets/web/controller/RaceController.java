@@ -112,7 +112,7 @@ public class RaceController {
     }
 
     /**
-     * PUT: /race/start/{id}
+     * PUT: /race/start/%d
      */
     public void startRace(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
@@ -157,35 +157,35 @@ public class RaceController {
     }
 
     /**
-     * PUT: /race/reject/{id}
+     * PUT: /race/reject/%d
      */
     public void rejectRace(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         updateRace(req, resp, raceService::rejectRace);
     }
 
     /**
-     * PUT: /race/finish/{id}
+     * PUT: /race/finish/%d
      */
     public void finishRace(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         updateRace(req, resp, raceService::finishRace);
     }
 
     /**
-     * PUT: /race/{id}
+     * PUT: /race/%d
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         updateRace(req, resp, raceService::update);
     }
 
     /**
-     * DELETE: /race/{id}
+     * DELETE: /race/%d
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ControllerUtil.delete(req, resp, createResponseBuilder(resp), accountService, locale, raceService::delete);
     }
 
     /**
-     * GET: /race/{id}
+     * GET: /race/%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
@@ -193,14 +193,7 @@ public class RaceController {
     }
 
     /**
-     * GET: /race?status={status};
-     *            racecourse={racecourse};
-     *            horse={horse};
-     *            trainer={trainer};
-     *            jockey={jockey};
-     *            name={name};
-     *            date={date};
-     *            page={page}
+     * GET: /race?status=%s;racecourse=%d;horse=%d;trainer=%d;jockey=%d;name=%s;date=%d;page=%d
      */
     public void filter(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);

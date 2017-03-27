@@ -56,7 +56,8 @@ public class RequestUtil {
 
     public static long getIdFromRequest(HttpServletRequest req) {
         try {
-            return Long.parseLong(req.getRequestURI().replaceAll("[\\D]", ""));
+            String[] values = req.getRequestURI().split("/");
+            return Long.parseLong(values[values.length - 1]);
         } catch (NumberFormatException e) {
             return 0;
         }

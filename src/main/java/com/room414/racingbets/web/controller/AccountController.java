@@ -179,19 +179,21 @@ public class AccountController {
     }
 
     /**
-     * PUT: /account/refresh
+     * PUT: /account/refresh/%s
      */
     public void refresh(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String refreshToken = req.getParameter(REFRESH_TOKEN_PARAM_NAME);
+        String[] uri = req.getRequestURI().split("/");
+        String token = uri[uri.length - 1];
+
         ResponseBuilder<Token> responseBuilder = createResponseBuilder(resp);
 
-        if (refreshToken == null) {
+        if (token == null) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.refresh.param");
             invalidRequest(resp, responseBuilder, message);
             return;
         }
 
-        long id = accountService.getIdByRefreshToken(refreshToken);
+        long id = accountService.getIdByRefreshToken(token);
 
         if (id == 0) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.refresh");
@@ -218,7 +220,7 @@ public class AccountController {
     }
 
     /**
-     * PUT: /account/roles/{id}
+     * PUT: /account/roles/%d
      */
     public void setRoles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<Object> responseBuilder = createResponseBuilder(resp);
@@ -248,7 +250,7 @@ public class AccountController {
     }
 
     /**
-     * PUT: /account/balance/{id}
+     * PUT: /account/balance/%d
      */
     public void addMoney(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
@@ -278,7 +280,7 @@ public class AccountController {
     }
 
     /**
-     * PUT: /account/confirm/{token}
+     * PUT: /account/confirm/%s
      */
     public void confirmEmail(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
@@ -295,7 +297,7 @@ public class AccountController {
     }
 
     /**
-     * GET: /account/{id}
+     * GET: /account/%d
      */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
@@ -303,7 +305,7 @@ public class AccountController {
     }
 
     /**
-     * GET: /account?query={query};page={page}
+     * GET: /account?query=%s;page=%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String query = req.getParameter("query");
@@ -326,7 +328,7 @@ public class AccountController {
     }
 
     /**
-     * DELETE: account/{id}
+     * DELETE: account/%d
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);

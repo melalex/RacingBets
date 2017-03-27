@@ -60,21 +60,21 @@ public class TrainerController {
     }
 
     /**
-     * GET: /trainer/{id}
+     * GET: /trainer/%d
      */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.findById(req, resp);
     }
 
     /**
-     * GET: /trainer?query={query};page={page}
+     * GET: /trainer?query=%s;page=%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
     }
 
     /**
-     * DELETE: trainer/{id}
+     * DELETE: trainer/%d
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.delete(req, resp);
