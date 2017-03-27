@@ -5,6 +5,7 @@ import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.model.viewmodels.Response;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -86,6 +87,24 @@ public class ResponseUtil {
 
         resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
+        writeToResponse(resp, builder.buildErrorResponse());
+    }
+
+    public static void serverError(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<Object> builder = new ResponseBuilder<>();
+        String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, req.getLocale()).getString("server.error");
+        Error error = new Error(ErrorCode.SYSTEM_ERROR, message, null, null);
+        builder.addToErrors(error);
+        resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        writeToResponse(resp, builder.buildErrorResponse());
+    }
+
+    public static void notFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<Object> builder = new ResponseBuilder<>();
+        String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, req.getLocale()).getString("not.found");
+        Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, null, null);
+        builder.addToErrors(error);
+        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
         writeToResponse(resp, builder.buildErrorResponse());
     }
 

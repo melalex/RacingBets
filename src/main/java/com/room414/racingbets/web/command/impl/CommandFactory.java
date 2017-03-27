@@ -2,12 +2,13 @@ package com.room414.racingbets.web.command.impl;
 
 import com.room414.racingbets.web.command.interfaces.Action;
 import com.room414.racingbets.web.command.interfaces.ActionFactory;
+import com.room414.racingbets.web.command.interfaces.Command;
 import com.room414.racingbets.web.model.infrastructure.Route;
+import com.room414.racingbets.web.util.ResponseUtil;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
 
 /**
  * @author Alexander Melashchenko
@@ -17,11 +18,14 @@ public class CommandFactory {
     private List<Route> routes;
     private Map<String, ActionFactory> factoryByName;
 
-    public CommandFactory(List<Route> routes) {
+    public CommandFactory(List<Route> routes, Map<String, ActionFactory> factoryByName) {
         this.routes = routes;
+        this.factoryByName = factoryByName;
     }
 
-    public ControllerCommand create(String url, Locale locale) {
+    public Command create(HttpServletRequest req) {
+        String url = req.getRequestURI();
+        Locale locale = req.getLocale();
         Optional<Route> optionalRoute = routes
                 .stream()
                 .filter(r -> url.matches(r.getPattern()))
@@ -35,7 +39,7 @@ public class CommandFactory {
 
             return new ControllerCommand(action);
         } else {
-            return null;
+            return new ControllerCommand(ResponseUtil::notFound);
         }
     }
 }
