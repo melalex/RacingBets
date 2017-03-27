@@ -11,20 +11,11 @@ import java.util.Map;
  */
 // TODO: config by dozer
 public class BetForm {
-    private long id;
     private long raceId;
     private long user;
     private BigDecimal betSize;
     private BetType betType;
     private Map<Integer, Long> participants;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public long getRaceId() {
         return raceId;
@@ -69,7 +60,6 @@ public class BetForm {
     @Override
     public String toString() {
         return "BetForm{" +
-                "id=" + id +
                 ", raceId=" + raceId +
                 ", user=" + user +
                 ", betSize=" + betSize +

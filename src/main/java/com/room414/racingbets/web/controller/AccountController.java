@@ -216,6 +216,8 @@ public class AccountController {
             return;
         }
 
+        accountService.deleteRefreshToken(token);
+
         UserDto user = userService.find(id);
 
         if (user == null) {

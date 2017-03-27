@@ -3,6 +3,8 @@ package com.room414.racingbets.web.util;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
+import com.room414.racingbets.web.model.enums.ErrorCode;
+import com.room414.racingbets.web.model.viewmodels.Error;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -10,14 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.room414.racingbets.web.util.RequestUtil.getIdFromRequest;
 import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
-import static com.room414.racingbets.web.util.ResponseUtil.invalidId;
-import static com.room414.racingbets.web.util.ResponseUtil.permissionDenied;
-import static com.room414.racingbets.web.util.ResponseUtil.writeToResponse;
+import static com.room414.racingbets.web.util.ResponseUtil.*;
 
 /**
  * @author Alexander Melashchenko
@@ -32,6 +33,14 @@ public class ControllerUtil {
     public static <S, R> R map(S source, Class<R> clazz) {
         Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
         return beanMapper.map(source, clazz);
+    }
+
+    public static Error createError(ErrorCode code, String pm, String objectName, String propertyName, Locale locale) {
+        String message = ResourceBundle
+                .getBundle(ERROR_MESSAGE_BUNDLE, locale)
+                .getString(pm);
+
+        return new Error(code, message, objectName, propertyName);
     }
 
     public static <T> void delete(HttpServletRequest req,

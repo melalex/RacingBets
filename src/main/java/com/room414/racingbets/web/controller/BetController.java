@@ -13,7 +13,9 @@ import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
+import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.viewmodels.BetForm;
+import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.util.ResponseUtil;
 import com.room414.racingbets.web.util.ValidatorUtil;
 
@@ -22,7 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.ResourceBundle;
 
+import static com.room414.racingbets.web.util.ControllerUtil.createError;
 import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
 import static com.room414.racingbets.web.util.RequestUtil.getObject;
@@ -34,7 +39,7 @@ import static com.room414.racingbets.web.util.ValidatorUtil.*;
  * @version 1.0 23 Mar 2017
  */
 public class BetController {
-    private static final String ENTITY_TYPE = "Race";
+    private static final String ENTITY_TYPE = "Bet";
 
     private BetService betService;
     private AccountService accountService;
@@ -97,37 +102,53 @@ public class BetController {
         }
     }
 
-    private void validate(BetForm form, ResponseBuilder responseBuilder) {
+    private <T> void validate(BetForm form, ResponseBuilder<T> responseBuilder) {
         validateFields(form, responseBuilder);
         validateLogic(form, responseBuilder);
     }
 
-    private void validateFields(BetForm form, ResponseBuilder responseBuilder) {
-        validateRange(form.getId(), );
+    private <T> void validateFields(BetForm form, ResponseBuilder<T> responseBuilder) {
+        validateRange(form.getRaceId(), 1, Long.MAX_VALUE, responseBuilder, locale, "raceId", ENTITY_TYPE);
+        validateRange(form.getUser(), 1, Long.MAX_VALUE, responseBuilder, locale, "user", ENTITY_TYPE);
+
+        notNull(form.getBetSize(), responseBuilder, locale, "betSize", ENTITY_TYPE);
+        notNull(form.getBetType(), responseBuilder, locale, "betType", ENTITY_TYPE);
+        notNull(form.getParticipants(), responseBuilder, locale, "betType", ENTITY_TYPE);
     }
 
     private void validateLogic(BetForm form, ResponseBuilder responseBuilder) {
         if (!isValidBetType(form)) {
-
+            String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.bet.type");
+            Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, "betType");
+            responseBuilder.addToErrors(error);
         }
 
-        UserDto user = userService.find(form.getId());
+        UserDto user = userService.find(form.getUser());
 
         if (!user.isEmailConfirmed()) {
-
+            String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("email.not.confirmed");
+            Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, "betType");
+            responseBuilder.addToErrors(error);
         }
 
         if (!userService.tryGetMoney(user.getId(), form.getBetSize())) {
-
+            String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("not.enough.money");
+            Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, "betType");
+            responseBuilder.addToErrors(error);
         }
 
         RaceDto race = raceService.find(form.getRaceId());
 
         if (race.getRaceStatus() != RaceStatus.SCHEDULED) {
-
+            String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("race.started");
+            Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, "betType");
+            responseBuilder.addToErrors(error);
         }
 
         if (race.getMinBet().compareTo(form.getBetSize()) > 0) {
+            String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.bet.size");
+            Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, "raceId");
+            responseBuilder.addToErrors(error);
 
         }
     }
