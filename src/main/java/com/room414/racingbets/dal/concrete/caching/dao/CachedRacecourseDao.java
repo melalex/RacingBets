@@ -24,14 +24,14 @@ public class CachedRacecourseDao extends CacheCrudDao<Racecourse> implements Rac
 
     @Override
     public List<Racecourse> search(String namePart, int offset, int limit) {
-        String key = String.format("find:name:%s:%d:%d", namePart, limit, offset);
+        String key = String.format("search:name:%s:%d:%d", namePart, limit, offset);
 
         return cache.getManyCached(key, () -> dao.search(namePart, offset, limit));
     }
 
     @Override
     public int searchCount(String namePart) {
-        String key = "find:name:count" + namePart;
+        String key = "search:name:count" + namePart;
 
         return cache.getCachedCount(key, () -> dao.searchCount(namePart));
     }

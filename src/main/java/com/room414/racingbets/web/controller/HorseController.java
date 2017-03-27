@@ -25,7 +25,7 @@ public class HorseController {
 
     private Locale locale;
 
-    public HorseController(
+    HorseController(
             HorseService horseService,
             AccountService accountService,
             Locale locale
@@ -74,15 +74,15 @@ public class HorseController {
     /**
      * GET: /horse/%d
      */
-    public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.findById(req, resp);
+    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        crudControllerDelegate.find(req, resp);
     }
 
     /**
      * GET: /horse?query=%s;page=%d
      */
-    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.find(req, resp);
+    public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        crudControllerDelegate.search(req, resp);
     }
 
     /**

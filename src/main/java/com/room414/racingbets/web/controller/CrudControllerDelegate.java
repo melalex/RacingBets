@@ -124,12 +124,12 @@ class CrudControllerDelegate<F, D> {
         }
     }
 
-    void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         ControllerUtil.find(req, resp, responseBuilder, locale, crudService::find);
     }
 
-    void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String query = req.getParameter("query");
         int page = getPageFromRequest(req);
         Pager pager = new PagerImpl(ENTITY_LIMIT, page);

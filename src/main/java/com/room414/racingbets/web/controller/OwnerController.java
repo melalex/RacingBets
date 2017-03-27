@@ -2,7 +2,6 @@ package com.room414.racingbets.web.controller;
 
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.OwnerService;
-import com.room414.racingbets.bll.abstraction.services.ParticipantService;
 import com.room414.racingbets.bll.dto.entities.OwnerDto;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 
@@ -19,18 +18,15 @@ import static com.room414.racingbets.web.util.ValidatorUtil.validatePerson;
  */
 public class OwnerController {
     private static final String ENTITY_TYPE = "Owner";
-    private ParticipantService participantService;
     private CrudControllerDelegate<OwnerDto, OwnerDto> crudControllerDelegate;
 
     private Locale locale;
 
-    public OwnerController(
+    OwnerController(
             OwnerService ownerService,
             AccountService accountService,
-            ParticipantService participantService,
             Locale locale
     ) {
-        this.participantService = participantService;
         this.locale = locale;
 
         this.crudControllerDelegate = new CrudControllerDelegate<>(
@@ -65,15 +61,15 @@ public class OwnerController {
     /**
      * GET: /owner/%d
      */
-    public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.findById(req, resp);
+    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        crudControllerDelegate.find(req, resp);
     }
 
     /**
      * GET: /owner?query=%s;page=%d
      */
-    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.find(req, resp);
+    public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        crudControllerDelegate.search(req, resp);
     }
 
     /**

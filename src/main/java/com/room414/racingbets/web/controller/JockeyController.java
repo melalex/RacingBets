@@ -2,7 +2,6 @@ package com.room414.racingbets.web.controller;
 
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.JockeyService;
-import com.room414.racingbets.bll.abstraction.services.ParticipantService;
 import com.room414.racingbets.bll.dto.entities.JockeyDto;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 
@@ -23,10 +22,9 @@ public class JockeyController {
 
     private Locale locale;
 
-    public JockeyController(
+    JockeyController(
             JockeyService jockeyService,
             AccountService accountService,
-            ParticipantService participantService,
             Locale locale
     ) {
         this.locale = locale;
@@ -62,15 +60,15 @@ public class JockeyController {
     /**
      * GET: /jockey/%d
      */
-    public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.findById(req, resp);
+    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        crudControllerDelegate.find(req, resp);
     }
 
     /**
      * GET: /jockey?query=%s;page=%d
      */
-    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.find(req, resp);
+    public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        crudControllerDelegate.search(req, resp);
     }
 
     /**

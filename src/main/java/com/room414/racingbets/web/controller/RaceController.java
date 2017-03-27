@@ -42,7 +42,7 @@ public class RaceController {
     private AccountService accountService;
     private Locale locale;
 
-    public RaceController(RaceService raceService, AccountService accountService, Locale locale) {
+    RaceController(RaceService raceService, AccountService accountService, Locale locale) {
         this.raceService = raceService;
         this.accountService = accountService;
         this.locale = locale;

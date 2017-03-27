@@ -51,7 +51,7 @@ public class AccountController {
 
     private Locale locale;
 
-    public AccountController(
+    AccountController(
             AccountService accountService,
             UserService userService,
             MessageService messageService,

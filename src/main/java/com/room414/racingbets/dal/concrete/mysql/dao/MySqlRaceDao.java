@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate;
 import com.room414.racingbets.dal.domain.builders.RaceBuilder;
 import com.room414.racingbets.dal.domain.entities.FilterParams;
 import com.room414.racingbets.dal.domain.entities.Participant;
@@ -32,11 +32,11 @@ public class MySqlRaceDao implements RaceDao {
     private static final String TABLE_NAME = "race";
 
     private Connection connection;
-    private MySqlSharedExecutor<Race> executor;
+    private MySqlSharedDelegate<Race> executor;
 
     MySqlRaceDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSharedExecutor<>(
+        this.executor = new MySqlSharedDelegate<>(
                 connection,
                 statement -> getResultWithArray(statement, this::mapRaces),
                 statement -> getResultListWithArray(statement, this::mapRaces)

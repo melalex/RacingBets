@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.exception.UserAlreadyExistsException;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate;
 import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
@@ -29,11 +29,11 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     private static final String TABLE_NAME = "application_user";
 
     private Connection connection;
-    private MySqlSharedExecutor<ApplicationUser> executor;
+    private MySqlSharedDelegate<ApplicationUser> executor;
 
     MySqlApplicationUserDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSharedExecutor<>(
+        this.executor = new MySqlSharedDelegate<>(
                 connection,
                 statement -> getResultWithArray(statement, this::mapUsers),
                 statement -> getResultListWithArray(statement, this::mapUsers)

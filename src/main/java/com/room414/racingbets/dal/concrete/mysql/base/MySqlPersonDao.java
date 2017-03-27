@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.mysql.base;
 import com.room414.racingbets.dal.abstraction.dao.PersonDao;
 import com.room414.racingbets.dal.domain.base.Person;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate;
 
 import java.sql.*;
 import java.util.List;
@@ -15,10 +15,10 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 02 Mar 2017
  */
 public abstract class MySqlPersonDao<T extends Person> implements PersonDao<T> {
-    private MySqlSharedExecutor<T> executor;
+    private MySqlSharedDelegate<T> executor;
 
     public MySqlPersonDao(Connection connection) {
-        this.executor = new MySqlSharedExecutor<>(
+        this.executor = new MySqlSharedDelegate<>(
                 connection,
                 statement -> MySqlDaoHelper.getResult(statement, this::mapResultSet),
                 statement -> MySqlDaoHelper.getResultList(statement, this::mapResultSet)

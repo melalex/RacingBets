@@ -1,7 +1,8 @@
-package com.room414.racingbets.web.command;
+package com.room414.racingbets.web.command.interfaces;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @author Alexander Melashchenko
@@ -9,5 +10,5 @@ import javax.servlet.http.HttpServletResponse;
  */
 @FunctionalInterface
 public interface Action {
-    void execute(HttpServletRequest req, HttpServletResponse resp);
+    void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException;
 }

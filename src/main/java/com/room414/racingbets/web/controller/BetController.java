@@ -44,7 +44,7 @@ public class BetController {
 
     private Locale locale;
 
-    public BetController(
+    BetController(
             BetService betService,
             AccountService accountService,
             UserService userService,

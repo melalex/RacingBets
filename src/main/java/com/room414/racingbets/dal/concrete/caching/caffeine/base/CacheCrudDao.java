@@ -33,14 +33,14 @@ public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
 
     @Override
     public List<T> findAll() {
-        final String key = "find:all";
+        final String key = "search:all";
 
         return cache.getManyCached(key, () -> dao.findAll());
     }
 
     @Override
     public List<T> findAll(int offset, int limit) {
-        final String key = String.format("find:all:%d:%d", limit, offset);
+        final String key = String.format("search:all:%d:%d", limit, offset);
 
         return cache.getManyCached(key, () -> dao.findAll(offset, limit));
     }
@@ -67,6 +67,6 @@ public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
     }
 
     protected String getFindByIdKey(long id) {
-        return "find:" + id;
+        return "search:" + id;
     }
 }

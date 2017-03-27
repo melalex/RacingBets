@@ -2,7 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.ParticipantDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.domain.entities.Participant;
 import org.intellij.lang.annotations.Language;
@@ -22,10 +22,10 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
 public class MySqlParticipantDao implements ParticipantDao {
     private static final String TABLE_NAME = "participant";
 
-    private MySqlSharedExecutor<Participant> executor;
+    private MySqlSharedDelegate<Participant> executor;
 
     MySqlParticipantDao(Connection connection) {
-        this.executor = new MySqlSharedExecutor<>(
+        this.executor = new MySqlSharedDelegate<>(
                 connection,
                 statement -> getResult(statement, MySqlMapHelper::mapParticipant),
                 statement -> getResultList(statement, MySqlMapHelper::mapParticipant)

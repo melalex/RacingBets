@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 import com.room414.racingbets.dal.abstraction.dao.BetDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate;
 import com.room414.racingbets.dal.domain.builders.BetBuilder;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
@@ -30,11 +30,11 @@ public class MySqlBetDao implements BetDao {
     private static final String CALCULATING_ERROR_MESSAGE = "Exception during calculating odds for bet ";
 
     private Connection connection;
-    private MySqlSharedExecutor<Bet> executor;
+    private MySqlSharedDelegate<Bet> executor;
 
     MySqlBetDao(Connection connection) {
         this.connection = connection;
-        this.executor = new MySqlSharedExecutor<>(
+        this.executor = new MySqlSharedDelegate<>(
                 connection,
                 statement -> getResultWithArray(statement, this::mapBets),
                 statement -> getResultListWithArray(statement, this::mapBets)

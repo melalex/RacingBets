@@ -29,21 +29,21 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     public void create(ApplicationUser entity) {
         super.create(entity);
 
-        String key = String.format("find:login:password:%s:%s", entity.getLogin(), entity.getPassword());
+        String key = String.format("search:login:password:%s:%s", entity.getLogin(), entity.getPassword());
 
         cache.deleteOneCached(key);
     }
 
     @Override
     public List<ApplicationUser> search(String loginPart, int offset, int limit) {
-        String key = String.format("find:login:part:%s:%d:%d", loginPart, limit, offset);
+        String key = String.format("search:login:part:%s:%d:%d", loginPart, limit, offset);
 
         return cache.getManyCached(key, () -> dao.search(loginPart, offset, limit));
     }
 
     @Override
     public int searchCount(String loginPart) {
-        String key = "find:login:part:count:" + loginPart;
+        String key = "search:login:part:count:" + loginPart;
 
         return cache.getCachedCount(key, () -> dao.searchCount(loginPart));
     }
@@ -57,7 +57,7 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
 
     @Override
     public List<ApplicationUser> findByLoginAndEmail(String login, String email) {
-        String key = String.format("find:by:login:email:%s:%s", login, email);
+        String key = String.format("search:by:login:email:%s:%s", login, email);
 
         return cache.getManyCached(key, () -> dao.findByLoginAndEmail(login, email));
     }
@@ -91,7 +91,7 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     private String getFindByLogin(String login) {
-        return String.format("find:login:%s", login);
+        return String.format("search:login:%s", login);
     }
 
     private void removeFromCacheById(long id) {

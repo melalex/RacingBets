@@ -24,7 +24,7 @@ public class RacecourseController {
 
     private Locale locale;
 
-    public RacecourseController(
+    RacecourseController(
             RacecourseService ownerService,
             AccountService accountService,
             Locale locale
@@ -75,14 +75,14 @@ public class RacecourseController {
      * GET: /owner/%d
      */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.findById(req, resp);
+        crudControllerDelegate.find(req, resp);
     }
 
     /**
      * GET: /owner?query=%s;page=%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        crudControllerDelegate.find(req, resp);
+        crudControllerDelegate.search(req, resp);
     }
 
     /**

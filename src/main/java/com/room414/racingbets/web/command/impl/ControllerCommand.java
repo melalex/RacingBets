@@ -1,7 +1,10 @@
-package com.room414.racingbets.web.command;
+package com.room414.racingbets.web.command.impl;
+
+import com.room414.racingbets.web.command.interfaces.Action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @author Alexander Melashchenko
@@ -14,7 +17,7 @@ public class ControllerCommand {
         this.action = action;
     }
 
-    void execute(HttpServletRequest req, HttpServletResponse resp) {
+    void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         action.execute(req, resp);
     }
 }

@@ -31,28 +31,28 @@ public class CachedBetDao extends CacheCrudDao<Bet> implements BetDao {
 
     @Override
     public List<Bet> findByUserId(long id, int offset, int limit) {
-        String key = String.format("find:user:%d:%d:%d", id, limit, offset);
+        String key = String.format("search:user:%d:%d:%d", id, limit, offset);
 
         return cache.getManyCached(key, () -> dao.findByUserId(id, offset, limit));
     }
 
     @Override
     public int findByUserIdCount(long id) {
-        String key = "find:user:id";
+        String key = "search:user:id";
 
         return cache.getCachedCount(key, () -> dao.findByUserIdCount(id));
     }
 
     @Override
     public List<Bet> findByRaceId(long id, int offset, int limit) {
-        String key = String.format("find:race:%d:%d:%d", id, limit, offset);
+        String key = String.format("search:race:%d:%d:%d", id, limit, offset);
 
         return cache.getManyCached(key, () -> dao.findByRaceId(id, offset, limit));
     }
 
     @Override
     public int findByRaceIdCount(long id) {
-        String key = "find:race:id";
+        String key = "search:race:id";
 
         return cache.getCachedCount(key, () -> dao.findByRaceIdCount(id));
     }

@@ -2,7 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.HorseDao;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
-import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedExecutor;
+import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate;
 import com.room414.racingbets.dal.domain.entities.Horse;
 import org.intellij.lang.annotations.Language;
 
@@ -21,10 +21,10 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
 public class MySqlHorseDao implements HorseDao {
     private static final String TABLE_NAME = "horse";
 
-    private MySqlSharedExecutor<Horse> executor;
+    private MySqlSharedDelegate<Horse> executor;
 
     MySqlHorseDao(Connection connection) {
-        this.executor = new MySqlSharedExecutor<>(
+        this.executor = new MySqlSharedDelegate<>(
                 connection,
                 statement -> getResult(statement, MySqlMapHelper::mapHorse),
                 statement -> getResultList(statement, MySqlMapHelper::mapHorse)

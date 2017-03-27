@@ -15,12 +15,12 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @author Alexander Melashchenko
  * @version 1.0 03 Mar 2017
  */
-public class MySqlSharedExecutor<T> {
+public class MySqlSharedDelegate<T> {
     private Connection connection;
     private QueryExecutor<T> mapResult;
     private QueryExecutor<List<T>> mapResultList;
 
-    public MySqlSharedExecutor(Connection connection, QueryExecutor<T> mapResult, QueryExecutor<List<T>> mapResultList) {
+    public MySqlSharedDelegate(Connection connection, QueryExecutor<T> mapResult, QueryExecutor<List<T>> mapResultList) {
         this.connection = connection;
         this.mapResult = mapResult;
         this.mapResultList = mapResultList;
