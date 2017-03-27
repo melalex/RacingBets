@@ -46,7 +46,7 @@ class UserServiceImplTest {
         UserService service = new UserServiceImpl(unitOfWorkMockFactory, "SHA1PRNG");
         DozerBeanMapper mapper = new DozerBeanMapper();
 
-        mapper.setMappingFiles(Collections.singletonList("META-INF/dozer.xml"));
+        mapper.setMappingFiles(Collections.singletonList("META-INF/dozerBeanMapping.xml"));
 
         Field mapperField = UserServiceImpl.class.getDeclaredField("mapper");
         mapperField.setAccessible(true);

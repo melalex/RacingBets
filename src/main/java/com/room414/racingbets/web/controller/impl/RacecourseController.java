@@ -25,14 +25,14 @@ public class RacecourseController implements CrudController {
     private Locale locale;
 
     public RacecourseController(
-            RacecourseService ownerService,
+            RacecourseService racecourseService,
             AccountService accountService,
             Locale locale
     ) {
         this.locale = locale;
 
         this.crudControllerDelegate = new CrudControllerDelegate<>(
-                ownerService,
+                racecourseService,
                 accountService,
                 RacecourseDto.class,
                 RacecourseDto.class,
@@ -58,7 +58,7 @@ public class RacecourseController implements CrudController {
     }
 
     /**
-     * POST: /owner
+     * POST: /racecourse
      */
     @Override
     public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -66,7 +66,7 @@ public class RacecourseController implements CrudController {
     }
 
     /**
-     * PUT: /owner
+     * PUT: /racecourse
      */
     @Override
     public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -74,7 +74,7 @@ public class RacecourseController implements CrudController {
     }
 
     /**
-     * GET: /owner/%d
+     * GET: /racecourse/%d
      */
     @Override
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -82,7 +82,7 @@ public class RacecourseController implements CrudController {
     }
 
     /**
-     * GET: /owner?query=%s;page=%d
+     * GET: /racecourse?query=%s;page=%d
      */
     @Override
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -90,7 +90,7 @@ public class RacecourseController implements CrudController {
     }
 
     /**
-     * DELETE: owner/%d
+     * DELETE: racecourse/%d
      */
     @Override
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {

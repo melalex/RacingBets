@@ -1,12 +1,10 @@
 package com.room414.racingbets.bll.concrete.facade;
 
-import com.room414.racingbets.bll.abstraction.facade.BllFacade;
 import com.room414.racingbets.bll.abstraction.factories.infrastructure.JwtFactory;
 import com.room414.racingbets.bll.abstraction.factories.services.AbstractServiceFactory;
 import com.room414.racingbets.bll.concrete.factories.infrastructure.JwtFactoryImpl;
 import com.room414.racingbets.bll.concrete.factories.services.AbstractServiceFactoryImpl;
-import com.room414.racingbets.dal.abstraction.facade.DalFacade;
-import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
+import com.room414.racingbets.dal.concrete.facade.DalFacade;
 
 import java.util.Properties;
 
@@ -14,10 +12,19 @@ import java.util.Properties;
  * @author Alexander Melashchenko
  * @version 1.0 22 Mar 2017
  */
-public class BllFacadeImpl implements BllFacade {
+public class BllFacade {
+    private static BllFacade ourInstance = new BllFacade();
+
+    public static BllFacade getInstance() {
+        return ourInstance;
+    }
+
     private AbstractServiceFactory serviceFactory;
 
-    @Override
+    private BllFacade() {
+
+    }
+
     public void init(DalFacade dalFacade, Properties properties) {
         JwtFactory jwtFactory = createJwtFactory(properties);
         serviceFactory = new AbstractServiceFactoryImpl(dalFacade.getDalFactory(), jwtFactory, properties);
@@ -32,7 +39,6 @@ public class BllFacadeImpl implements BllFacade {
         return new JwtFactoryImpl(secret, algorithm, type, expire);
     }
 
-    @Override
     public AbstractServiceFactory getAbstractServiceFactory() {
         return serviceFactory;
     }

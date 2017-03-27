@@ -1,8 +1,317 @@
 <?xml version="1.0"?>
 <routes>
-    <route method="GET">
-        <pattern></pattern>
-        <controller></controller>
-        <action></action>
+    <route>
+        <method>POST</method>
+        <pattern>^/account/register$</pattern>
+        <controller>Account</controller>
+        <action>register</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/account/login$</pattern>
+        <controller>Account</controller>
+        <action>login</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/account/refresh/(\w)+$</pattern>
+        <controller>Account</controller>
+        <action>refresh</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/account/roles/(\d)+$</pattern>
+        <controller>Account</controller>
+        <action>register</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/account/balance/(\d)+$</pattern>
+        <controller>Account</controller>
+        <action>addMoney</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/account/confirm/(\w)+$</pattern>
+        <controller>Account</controller>
+        <action>confirmEmail</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/account/(\d)+$</pattern>
+        <controller>Account</controller>
+        <action>findById</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/account$</pattern>
+        <controller>Account</controller>
+        <action>find</action>
+    </route>
+
+    <route>
+        <method>DELETE</method>
+        <pattern>^/account/(\d)+$</pattern>
+        <controller>Account</controller>
+        <action>delete</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/account/register$</pattern>
+        <controller>Account</controller>
+        <action>register</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/bet$</pattern>
+        <controller>Bet</controller>
+        <action>makeBet</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/bet/odds$</pattern>
+        <controller>Bet</controller>
+        <action>getOdds</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/race$</pattern>
+        <controller>Race</controller>
+        <action>scheduleRace</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/race/start/(\d)+$</pattern>
+        <controller>Race</controller>
+        <action>startRace</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/race/reject/(\d)+$</pattern>
+        <controller>Race</controller>
+        <action>rejectRace</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/race/finish/(\d)+$</pattern>
+        <controller>Race</controller>
+        <action>finishRace</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/race/(\d)+$</pattern>
+        <controller>Race</controller>
+        <action>update</action>
+    </route>
+
+    <route>
+        <method>DELETE</method>
+        <pattern>^/race/(\d)+$</pattern>
+        <controller>Race</controller>
+        <action>delete</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/race/(\d)+$</pattern>
+        <controller>Race</controller>
+        <action>find</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/race$</pattern>
+        <controller>Race</controller>
+        <action>filter</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/horse$</pattern>
+        <controller>Horse</controller>
+        <action>create</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/horse$</pattern>
+        <controller>Horse</controller>
+        <action>update</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/horse/(\d)+$</pattern>
+        <controller>Horse</controller>
+        <action>find</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/horse$</pattern>
+        <controller>Horse</controller>
+        <action>search</action>
+    </route>
+
+    <route>
+        <method>DELETE</method>
+        <pattern>^/horse$</pattern>
+        <controller>Horse</controller>
+        <action>delete</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/jockey$</pattern>
+        <controller>Jockey</controller>
+        <action>create</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/jockey$</pattern>
+        <controller>Jockey</controller>
+        <action>update</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/jockey/(\d)+$</pattern>
+        <controller>Jockey</controller>
+        <action>find</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/jockey$</pattern>
+        <controller>Jockey</controller>
+        <action>search</action>
+    </route>
+
+    <route>
+        <method>DELETE</method>
+        <pattern>^/jockey$</pattern>
+        <controller>Jockey</controller>
+        <action>delete</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/owner$</pattern>
+        <controller>Owner</controller>
+        <action>create</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/owner$</pattern>
+        <controller>Owner</controller>
+        <action>update</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/owner/(\d)+$</pattern>
+        <controller>Owner</controller>
+        <action>find</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/owner$</pattern>
+        <controller>Owner</controller>
+        <action>search</action>
+    </route>
+
+    <route>
+        <method>DELETE</method>
+        <pattern>^/owner$</pattern>
+        <controller>Owner</controller>
+        <action>delete</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/racecourse$</pattern>
+        <controller>Racecourse</controller>
+        <action>create</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/racecourse$</pattern>
+        <controller>Racecourse</controller>
+        <action>update</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/racecourse/(\d)+$</pattern>
+        <controller>Racecourse</controller>
+        <action>find</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/racecourse$</pattern>
+        <controller>Racecourse</controller>
+        <action>search</action>
+    </route>
+
+    <route>
+        <method>DELETE</method>
+        <pattern>^/racecourse$</pattern>
+        <controller>Racecourse</controller>
+        <action>delete</action>
+    </route>
+
+    <route>
+        <method>POST</method>
+        <pattern>^/trainer$</pattern>
+        <controller>Trainer</controller>
+        <action>create</action>
+    </route>
+
+    <route>
+        <method>PUT</method>
+        <pattern>^/trainer$</pattern>
+        <controller>Trainer</controller>
+        <action>update</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/trainer/(\d)+$</pattern>
+        <controller>Trainer</controller>
+        <action>find</action>
+    </route>
+
+    <route>
+        <method>GET</method>
+        <pattern>^/trainer$</pattern>
+        <controller>Trainer</controller>
+        <action>search</action>
+    </route>
+
+    <route>
+        <method>DELETE</method>
+        <pattern>^/trainer$</pattern>
+        <controller>Trainer</controller>
+        <action>delete</action>
     </route>
 </routes>

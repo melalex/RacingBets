@@ -33,8 +33,7 @@ public class AbstractDalFactoryImpl implements AbstractDalFactory {
         this.tokenStorageFactory = tokenStorageFactory;
     }
 
-    public static AbstractDalFactory create(DataSource dataSource, JedisPool jedisPool, String dalFactoryProperties) {
-        Properties properties = readeFactoryProperties(dalFactoryProperties);
+    public static AbstractDalFactory create(DataSource dataSource, JedisPool jedisPool, Properties properties) {
         MainCachePool mainCachePool = new MainCachePool();
 
         UnitOfWorkFactory unitOfWorkFactory = new MySqlUnitOfWorkFactory(dataSource);
@@ -48,20 +47,6 @@ public class AbstractDalFactoryImpl implements AbstractDalFactory {
         TokenStorageFactory tokenStorageFactory = new RedisTokenStorageFactory(jedisPool, refreshExpireIn, confirmExpireIn);
 
         return new AbstractDalFactoryImpl(cachedUnitOfWorkFactory, tokenStorageFactory);
-    }
-
-    private static Properties readeFactoryProperties(String filePath) {
-        try {
-            Properties properties = new Properties();
-
-            InputStream is = new FileInputStream(filePath);
-            properties.load(is);
-
-            return properties;
-        } catch (IOException e) {
-            String message = "Exception during reading AbstractDalFactory properties";
-            throw new DalException(message, e);
-        }
     }
 
     @Override
