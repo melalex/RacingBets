@@ -1,7 +1,6 @@
 package com.room414.racingbets.web.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.CrudService;
@@ -20,16 +19,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import static com.room414.racingbets.web.util.RequestUtil.getIdFromRequest;
+import static com.room414.racingbets.web.util.ControllerUtil.map;
+import static com.room414.racingbets.web.util.RequestUtil.getObject;
 import static com.room414.racingbets.web.util.RequestUtil.getPageFromRequest;
-import static com.room414.racingbets.web.util.RequestUtil.getTokenFromRequest;
+import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 25 Mar 2017
  */
-public class CrudControllerDelegate<F, D> {
+class CrudControllerDelegate<F, D> {
     private static final int ENTITY_LIMIT = 20;
 
     private CrudService<D> crudService;
@@ -63,21 +63,17 @@ public class CrudControllerDelegate<F, D> {
         return ResponseUtil.createResponseBuilder(resp, locale, entityType);
     }
 
-    public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getTokenFromRequest(req);
+            String token = getJwtToken(req);
             if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-                ObjectMapper jsonMapper = new ObjectMapper();
-                F form = jsonMapper.readValue(
-                        req.getReader(),
-                        formClass
-                );
+                F form = getObject(req, formClass);
 
                 validator.validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(UNPROCESSABLE_ENTITY);
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
@@ -98,25 +94,20 @@ public class CrudControllerDelegate<F, D> {
         }
     }
 
-    public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getTokenFromRequest(req);
+            String token = getJwtToken(req);
             if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-                ObjectMapper jsonMapper = new ObjectMapper();
-                F form = jsonMapper.readValue(
-                        req.getReader(),
-                        formClass
-                );
+                F form = getObject(req, formClass);
 
                 validator.validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(UNPROCESSABLE_ENTITY);
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
-                    Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
-                    D dto = beanMapper.map(form, dtoClass);
+                    D dto = map(form, dtoClass);
 
                     crudService.update(dto);
                     responseBuilder.addToResult(dto);
@@ -133,12 +124,12 @@ public class CrudControllerDelegate<F, D> {
         }
     }
 
-    public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         ControllerUtil.find(req, resp, responseBuilder, locale, crudService::find);
     }
 
-    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String query = req.getParameter("query");
         int page = getPageFromRequest(req);
         Pager pager = new PagerImpl(ENTITY_LIMIT, page);
@@ -158,7 +149,7 @@ public class CrudControllerDelegate<F, D> {
         writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
-    public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
         ControllerUtil.delete(req, resp, responseBuilder, accountService, locale, crudService::delete);
     }

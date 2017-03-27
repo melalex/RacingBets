@@ -1,29 +1,22 @@
 package com.room414.racingbets.web.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.BetService;
 import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.OddsDto;
-import com.room414.racingbets.bll.dto.entities.ParticipantDto;
-import com.room414.racingbets.bll.dto.entities.RaceDto;
-import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.util.ResponseUtil;
-import org.dozer.DozerBeanMapperSingletonWrapper;
-import org.dozer.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-import static com.room414.racingbets.web.util.RequestUtil.getTokenFromRequest;
+import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
+import static com.room414.racingbets.web.util.RequestUtil.getObject;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
-import static com.room414.racingbets.web.util.ValidatorUtil.*;
-import static com.room414.racingbets.web.util.ValidatorUtil.STRING_MAX_LENGTH;
 
 /**
  * @author Alexander Melashchenko
@@ -31,7 +24,6 @@ import static com.room414.racingbets.web.util.ValidatorUtil.STRING_MAX_LENGTH;
  */
 public class BetController {
     private static final String ENTITY_TYPE = "Race";
-    private static final int ENTITY_LIMIT = 10;
 
     private BetService betService;
     private AccountService accountService;
@@ -58,18 +50,14 @@ public class BetController {
     public void makeBet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<BetDto> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getTokenFromRequest(req);
+            String token = getJwtToken(req);
             if (token != null && accountService.isInRole(token, Role.HANDICAPPER)) {
-                ObjectMapper jsonMapper = new ObjectMapper();
-                BetDto form = jsonMapper.readValue(
-                        req.getReader(),
-                        BetDto.class
-                );
+                BetDto form = getObject(req, BetDto.class);
 
                 validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(UNPROCESSABLE_ENTITY);
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     betService.makeBet(form);
@@ -91,18 +79,14 @@ public class BetController {
     public void getOdds(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<OddsDto> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getTokenFromRequest(req);
+            String token = getJwtToken(req);
             if (token != null && accountService.isInRole(token, Role.HANDICAPPER)) {
-                ObjectMapper jsonMapper = new ObjectMapper();
-                BetDto form = jsonMapper.readValue(
-                        req.getReader(),
-                        BetDto.class
-                );
+                BetDto form = getObject(req, BetDto.class);
 
                 validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(UNPROCESSABLE_ENTITY);
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     OddsDto odds = betService.getOdds(form);

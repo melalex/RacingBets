@@ -1,7 +1,6 @@
 package com.room414.racingbets.web.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.bll.abstraction.infrastructure.FilterParamsBuilder;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
@@ -22,9 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import static com.room414.racingbets.web.util.RequestUtil.getIdFromRequest;
-import static com.room414.racingbets.web.util.RequestUtil.getPageFromRequest;
-import static com.room414.racingbets.web.util.RequestUtil.getTokenFromRequest;
+import static com.room414.racingbets.web.util.RequestUtil.*;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
 import static com.room414.racingbets.web.util.ValidatorUtil.*;
 import static com.room414.racingbets.web.util.ValidatorUtil.STRING_MAX_LENGTH;
@@ -82,18 +79,14 @@ public class RaceController {
     public void scheduleRace(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getTokenFromRequest(req);
+            String token = getJwtToken(req);
             if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-                ObjectMapper jsonMapper = new ObjectMapper();
-                RaceDto form = jsonMapper.readValue(
-                        req.getReader(),
-                        RaceDto.class
-                );
+                RaceDto form = getObject(req, RaceDto.class);
 
                 validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(UNPROCESSABLE_ENTITY);
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     raceService.scheduleRace(form);
@@ -116,7 +109,7 @@ public class RaceController {
      */
     public void startRace(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
-        String token = getTokenFromRequest(req);
+        String token = getJwtToken(req);
         if (token != null && accountService.isInRole(token, Role.ADMIN)) {
             long id = getIdFromRequest(req);
 
@@ -133,18 +126,14 @@ public class RaceController {
 
     private void updateRace(HttpServletRequest req, HttpServletResponse resp, Consumer<RaceDto> updater) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
-        String token = getTokenFromRequest(req);
+        String token = getJwtToken(req);
         if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-            ObjectMapper jsonMapper = new ObjectMapper();
-            RaceDto form = jsonMapper.readValue(
-                    req.getReader(),
-                    RaceDto.class
-            );
+            RaceDto form = getObject(req, RaceDto.class);
 
             validate(form, responseBuilder);
 
             if (responseBuilder.hasErrors()) {
-                resp.setStatus(UNPROCESSABLE_ENTITY);
+                resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                 writeToResponse(resp, responseBuilder.buildErrorResponse());
             } else {
                 updater.accept(form);

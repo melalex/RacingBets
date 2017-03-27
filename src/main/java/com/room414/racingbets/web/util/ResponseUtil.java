@@ -20,7 +20,7 @@ public class ResponseUtil {
     private static final String ENCODING = "UTF-8";
 
     public static final String ERROR_MESSAGE_BUNDLE = "ErrorMessageBundle.properties";
-    public static final int UNPROCESSABLE_ENTITY = 422;
+    public static final int SC_UNPROCESSABLE_ENTITY = 422;
 
 
     private ResponseUtil() {
@@ -42,6 +42,7 @@ public class ResponseUtil {
     public static <T> void invalidId(HttpServletResponse resp,
                                      ResponseBuilder<T> builder,
                                      Locale locale) throws IOException {
+
         resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.id");
         Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, builder.getType(), null);
@@ -53,6 +54,7 @@ public class ResponseUtil {
     public static <T> void invalidRequest(HttpServletResponse resp,
                                           ResponseBuilder<T> builder,
                                           Locale locale) throws IOException {
+
         String messageForResponse = ResourceBundle
                 .getBundle(ERROR_MESSAGE_BUNDLE, locale)
                 .getString("invalid.request");

@@ -1,8 +1,13 @@
 package com.room414.racingbets.web.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
@@ -22,7 +27,7 @@ public class RequestUtil {
     /**
      * Gets JWT token from request
      */
-    public static String getTokenFromRequest(HttpServletRequest req) {
+    public static String getJwtToken(HttpServletRequest req) {
         String token = null;
         String header = req.getHeader(AUTH_HEADER);
 
@@ -31,6 +36,13 @@ public class RequestUtil {
         }
 
         return token;
+    }
+
+    public static <T> T getObject(HttpServletRequest req, Class<T> clazz) throws IOException {
+        try (BufferedReader in = req.getReader()) {
+            ObjectMapper jsonMapper = new ObjectMapper();
+            return jsonMapper.readValue(in, clazz);
+        }
     }
 
     /**

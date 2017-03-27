@@ -20,8 +20,6 @@ import com.room414.racingbets.web.model.viewmodels.RegistrationForm;
 import com.room414.racingbets.web.model.viewmodels.Token;
 import com.room414.racingbets.web.util.ControllerUtil;
 import com.room414.racingbets.web.util.ResponseUtil;
-import org.dozer.DozerBeanMapperSingletonWrapper;
-import org.dozer.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +30,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.*;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
 import static com.room414.racingbets.web.util.ValidatorUtil.*;
@@ -43,7 +42,6 @@ import static com.room414.racingbets.web.util.ValidatorUtil.*;
  */
 public class AccountController {
     private static final String ENTITY_TYPE = "User";
-    private static final String REFRESH_TOKEN_PARAM_NAME = "Refresh-token";
     private static final int ENTITY_LIMIT = 20;
 
     private AccountService accountService;
@@ -76,6 +74,23 @@ public class AccountController {
         return new Token(accessToken, expires, refreshToken);
     }
 
+    private <T> void validateEmail(String property, ResponseBuilder<T> builder, Locale locale, String type) {
+        if (property == null) {
+            return;
+        }
+
+        String pattern = "^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@" +
+                "[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
+        if (!property.matches(pattern)) {
+            String message = ResourceBundle
+                    .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
+                    .getString("invalid.email");
+
+            Error error = new Error(ErrorCode.INVALID_ERROR, message, type, "email");
+            builder.addToErrors(error);
+        }
+    }
+
     private <T> void validate(RegistrationForm form, ResponseBuilder<T> responseBuilder) {
         notNull(form.getFirstName(), responseBuilder, locale, "firstName", ENTITY_TYPE);
         notNull(form.getLastName(), responseBuilder, locale, "lastName", ENTITY_TYPE);
@@ -95,9 +110,14 @@ public class AccountController {
         validateStringLength(form.getEmail(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "email", ENTITY_TYPE);
         validateStringLength(form.getPassword(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "password", ENTITY_TYPE);
 
-        validateEmail(form.getEmail(), responseBuilder, locale, "email", ENTITY_TYPE);
+        validateEmail(form.getEmail(), responseBuilder, locale, ENTITY_TYPE);
 
         validateEmilLoginUniqueness(form, responseBuilder);
+    }
+
+    private String getToken(HttpServletRequest req) {
+        String[] uri = req.getRequestURI().split("/");
+        return uri[uri.length - 1];
     }
     
     private <T> void validateEmilLoginUniqueness(RegistrationForm form, ResponseBuilder<T> responseBuilder) {
@@ -122,20 +142,15 @@ public class AccountController {
     public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<Token> responseBuilder = createResponseBuilder(resp);
         try {
-            ObjectMapper jsonMapper = new ObjectMapper();
-            RegistrationForm form = jsonMapper.readValue(
-                    req.getReader(),
-                    RegistrationForm.class
-            );
+            RegistrationForm form = getObject(req, RegistrationForm.class);
 
             validate(form, responseBuilder);
 
             if (responseBuilder.hasErrors()) {
-                resp.setStatus(UNPROCESSABLE_ENTITY);
+                resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                 writeToResponse(resp, responseBuilder.buildErrorResponse());
             } else {
-                Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
-                UserDto dto = beanMapper.map(form, UserDto.class);
+                UserDto dto = map(form, UserDto.class);
 
                 userService.create(dto);
                 messageService.sendConfirmMessage(dto, accountService.getConfirmToken(dto.getId()));
@@ -182,8 +197,7 @@ public class AccountController {
      * PUT: /account/refresh/%s
      */
     public void refresh(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String[] uri = req.getRequestURI().split("/");
-        String token = uri[uri.length - 1];
+        String token = getToken(req);
 
         ResponseBuilder<Token> responseBuilder = createResponseBuilder(resp);
 
@@ -225,7 +239,7 @@ public class AccountController {
     public void setRoles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<Object> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getTokenFromRequest(req);
+            String token = getJwtToken(req);
             if (accountService.isInRole(token, Role.ADMIN)) {
                 ObjectMapper jsonMapper = new ObjectMapper();
                 JavaType type = jsonMapper.getTypeFactory().constructCollectionLikeType(Set.class, Role.class);
@@ -255,14 +269,9 @@ public class AccountController {
     public void addMoney(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getTokenFromRequest(req);
+            String token = getJwtToken(req);
             if (accountService.isInRole(token, Role.BOOKMAKER)) {
-                ObjectMapper jsonMapper = new ObjectMapper();
-                BigDecimal form = jsonMapper.readValue(
-                        req.getReader(),
-                        BigDecimal.class
-                );
-
+                BigDecimal form = getObject(req, BigDecimal.class);
                 long id = getIdFromRequest(req);
 
                 userService.putMoney(id, form);
@@ -285,8 +294,7 @@ public class AccountController {
     public void confirmEmail(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
 
-        String[] uri = req.getRequestURI().split("/");
-        String token = uri[uri.length - 1];
+        String token = getToken(req);
 
         long id = accountService.getIdByConfirmToken(token);
         userService.confirmEmail(id);

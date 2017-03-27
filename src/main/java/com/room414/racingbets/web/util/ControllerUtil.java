@@ -3,6 +3,8 @@ package com.room414.racingbets.web.util;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
+import org.dozer.DozerBeanMapperSingletonWrapper;
+import org.dozer.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.room414.racingbets.web.util.RequestUtil.getIdFromRequest;
-import static com.room414.racingbets.web.util.RequestUtil.getTokenFromRequest;
+import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
 import static com.room414.racingbets.web.util.ResponseUtil.invalidId;
 import static com.room414.racingbets.web.util.ResponseUtil.permissionDenied;
 import static com.room414.racingbets.web.util.ResponseUtil.writeToResponse;
@@ -27,13 +29,19 @@ public class ControllerUtil {
 
     }
 
+    public static <S, R> R map(S source, Class<R> clazz) {
+        Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
+        return beanMapper.map(source, clazz);
+    }
+
     public static <T> void delete(HttpServletRequest req,
                                   HttpServletResponse resp,
                                   ResponseBuilder<T> builder,
                                   AccountService accountService,
                                   Locale locale,
                                   Consumer<Long> deleter) throws IOException {
-        String token = getTokenFromRequest(req);
+
+        String token = getJwtToken(req);
         if (token != null && accountService.isInRole(token, Role.ADMIN)) {
             long id = getIdFromRequest(req);
 
@@ -52,6 +60,7 @@ public class ControllerUtil {
                                   ResponseBuilder<T> builder,
                                   Locale locale,
                                   Function<Long, T> finder) throws IOException {
+
         long id = getIdFromRequest(req);
 
         if (id <= 0) {
