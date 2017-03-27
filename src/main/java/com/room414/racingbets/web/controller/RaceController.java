@@ -5,11 +5,12 @@ import com.room414.racingbets.bll.abstraction.infrastructure.FilterParamsBuilder
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
-import com.room414.racingbets.bll.dto.entities.ParticipantDto;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
+import com.room414.racingbets.web.model.viewmodels.ParticipantForm;
+import com.room414.racingbets.web.model.viewmodels.RaceForm;
 import com.room414.racingbets.web.util.ControllerUtil;
 import com.room414.racingbets.web.util.ResponseUtil;
 
@@ -17,10 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.*;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
 import static com.room414.racingbets.web.util.ValidatorUtil.*;
@@ -49,28 +52,56 @@ public class RaceController {
         return ResponseUtil.createResponseBuilder(resp, locale, ENTITY_TYPE);
     }
 
-    // TODO: add more validation rules
-    // TODO: Race view model
-    private void validate(RaceDto form, ResponseBuilder<RaceDto> responseBuilder) {
-        notNull(form.getName(), responseBuilder, locale, "name", ENTITY_TYPE);
-        notNull(form.getRacecourse(), responseBuilder, locale, "racecourse", ENTITY_TYPE);
-        notNull(form.getStart(), responseBuilder, locale, "start", ENTITY_TYPE);
-        notNull(form.getMinBet(), responseBuilder, locale, "minBet", ENTITY_TYPE);
-        notNull(form.getRaceType(), responseBuilder, locale, "raceType", ENTITY_TYPE);
+    private void validate(RaceForm form, ResponseBuilder<RaceDto> builder) {
+        notNull(form.getName(), builder, locale, "name", ENTITY_TYPE);
+        notNull(form.getStart(), builder, locale, "start", ENTITY_TYPE);
+        notNull(form.getMinBet(), builder, locale, "minBet", ENTITY_TYPE);
+        notNull(form.getRaceType(), builder, locale, "raceType", ENTITY_TYPE);
+        notNull(form.getParticipants(), builder, locale, "participants", ENTITY_TYPE);
+        notNull(form.getPrizes(), builder, locale, "prizes", ENTITY_TYPE);
 
-        validateString(form.getName(), responseBuilder, locale, "name", ENTITY_TYPE);
+        validateString(form.getName(), builder, locale, "name", ENTITY_TYPE);
 
-        validateStringLength(form.getName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, responseBuilder, locale, "name", ENTITY_TYPE);
+        validateStringLength(form.getName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, builder, locale, "name", ENTITY_TYPE);
 
-        for (ParticipantDto participantDto : form.getParticipants()) {
-            validate(participantDto, responseBuilder);
+        validateRange(form.getRacecourse(), 1, Integer.MAX_VALUE, builder, locale, "racecourse", ENTITY_TYPE);
+        validateRange(form.getRaceClass(), 0, Integer.MAX_VALUE, builder, locale, "raceClass", ENTITY_TYPE);
+        validateRange(form.getMinAge(), 0, Integer.MAX_VALUE, builder, locale, "commission", ENTITY_TYPE);
+        validateRange(form.getMinRating(), 0, Integer.MAX_VALUE, builder, locale, "commission", ENTITY_TYPE);
+        validateRange(form.getMaxRating(), form.getMinRating(), Integer.MAX_VALUE, builder, locale, "commission", ENTITY_TYPE);
+
+        validateRange(form.getCommission(), 0, 1, builder, locale, "commission", ENTITY_TYPE);
+        validateRange(form.getMinBet().doubleValue(), 0, Double.MAX_VALUE, builder, locale, "minBet", ENTITY_TYPE);
+        validateRange(form.getDistance(), 0, Double.MAX_VALUE, builder, locale, "distance", ENTITY_TYPE);
+
+        if (form.getParticipants() != null) {
+            for (ParticipantForm participantDto : form.getParticipants()) {
+                validate(participantDto, builder);
+            }
+        }
+
+        if (form.getPrizes() != null) {
+            BigDecimal bigDecimal;
+            for (Integer place : form.getPrizes().keySet()) {
+                bigDecimal = form.getPrize(place);
+                if (bigDecimal == null) {
+                    continue;
+                }
+                validateRange(bigDecimal.doubleValue(), 0, Double.MAX_VALUE, builder, locale, "prizes", ENTITY_TYPE);
+            }
         }
     }
 
-    private void validate(ParticipantDto form, ResponseBuilder<RaceDto> responseBuilder) {
-        notNull(form.getHorse(), responseBuilder, locale, "horse", ENTITY_TYPE);
-        notNull(form.getJockey(), responseBuilder, locale, "jockey", ENTITY_TYPE);
-        notNull(form.getTrainer(), responseBuilder, locale, "trainer", ENTITY_TYPE);
+    private void validate(ParticipantForm form, ResponseBuilder<RaceDto> builder) {
+        validateRange(form.getNumber(), 0, Integer.MAX_VALUE, builder, locale, "number", ENTITY_TYPE);
+        validateRange(form.getHorse(), 1, Integer.MAX_VALUE, builder, locale, "horse", ENTITY_TYPE);
+        validateRange(form.getCarriedWeight(), 0, Double.MAX_VALUE, builder, locale, "carriedWeight", ENTITY_TYPE);
+        validateRange(form.getTopSpeed(), 0, Integer.MAX_VALUE, builder, locale, "topspeed", ENTITY_TYPE);
+        validateRange(form.getOfficialRating(), 0, Integer.MAX_VALUE, builder, locale, "officialRating", ENTITY_TYPE);
+        validateRange(form.getOdds(), 0, Double.MAX_VALUE, builder, locale, "odds", ENTITY_TYPE);
+        validateRange(form.getJockey(), 1, Integer.MAX_VALUE, builder, locale, "jockey", ENTITY_TYPE);
+        validateRange(form.getTrainer(), 1, Integer.MAX_VALUE, builder, locale, "trainer", ENTITY_TYPE);
+        validateRange(form.getPlace(), 0, Integer.MAX_VALUE, builder, locale, "place", ENTITY_TYPE);
     }
 
     /**
@@ -81,7 +112,7 @@ public class RaceController {
         try {
             String token = getJwtToken(req);
             if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-                RaceDto form = getObject(req, RaceDto.class);
+                RaceForm form = getObject(req, RaceForm.class);
 
                 validate(form, responseBuilder);
 
@@ -89,9 +120,11 @@ public class RaceController {
                     resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
-                    raceService.scheduleRace(form);
+                    RaceDto dto = map(form, RaceDto.class);
 
-                    responseBuilder.addToResult(form);
+                    raceService.scheduleRace(dto);
+
+                    responseBuilder.addToResult(dto);
                     resp.setStatus(HttpServletResponse.SC_CREATED);
 
                     writeToResponse(resp, responseBuilder.buildSuccessResponse());
@@ -128,7 +161,7 @@ public class RaceController {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
         String token = getJwtToken(req);
         if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-            RaceDto form = getObject(req, RaceDto.class);
+            RaceForm form = getObject(req, RaceForm.class);
 
             validate(form, responseBuilder);
 
@@ -136,8 +169,10 @@ public class RaceController {
                 resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                 writeToResponse(resp, responseBuilder.buildErrorResponse());
             } else {
-                updater.accept(form);
-                responseBuilder.addToResult(form);
+                RaceDto dto = map(form, RaceDto.class);
+
+                updater.accept(dto);
+                responseBuilder.addToResult(dto);
                 writeOk(resp, responseBuilder);
             }
         } else {

@@ -31,4 +31,34 @@
         </field>
     </mapping>
 
+    <mapping>
+        <class-a>com.room414.racingbets.bll.dto.entities.RaceDto</class-a>
+        <class-b>com.room414.racingbets.web.model.viewmodels.RaceForm</class-b>
+
+        <field>
+            <a>racecourse.id</a>
+            <b>racecourse</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>com.room414.racingbets.bll.dto.entities.ParticipantDto</class-a>
+        <class-b>com.room414.racingbets.web.model.viewmodels.ParticipantForm</class-b>
+
+        <field>
+            <a>horse.id</a>
+            <b>horse</b>
+        </field>
+
+        <field>
+            <a>jockey.id</a>
+            <b>jockey</b>
+        </field>
+
+        <field>
+            <a>trainer.id</a>
+            <b>trainer</b>
+        </field>
+    </mapping>
+
 </mappings>
