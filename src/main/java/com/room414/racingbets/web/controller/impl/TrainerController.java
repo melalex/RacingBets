@@ -47,6 +47,7 @@ public class TrainerController implements CrudController {
     /**
      * POST: /trainer
      */
+    @Override
     public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.create(req, resp);
     }
@@ -54,6 +55,7 @@ public class TrainerController implements CrudController {
     /**
      * PUT: /trainer
      */
+    @Override
     public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.update(req, resp);
     }
@@ -61,6 +63,7 @@ public class TrainerController implements CrudController {
     /**
      * GET: /trainer/%d
      */
+    @Override
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
     }
@@ -68,6 +71,7 @@ public class TrainerController implements CrudController {
     /**
      * GET: /trainer?query=%s;page=%d
      */
+    @Override
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.search(req, resp);
     }
@@ -75,6 +79,7 @@ public class TrainerController implements CrudController {
     /**
      * DELETE: trainer/%d
      */
+    @Override
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.delete(req, resp);
     }

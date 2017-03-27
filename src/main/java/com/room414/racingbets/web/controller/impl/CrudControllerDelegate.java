@@ -30,7 +30,7 @@ import static com.room414.racingbets.web.util.ResponseUtil.*;
  * @author Alexander Melashchenko
  * @version 1.0 25 Mar 2017
  */
-class CrudControllerDelegate<F, D> implements CrudController {
+class CrudControllerDelegate<F, D> {
     private static final int ENTITY_LIMIT = 20;
 
     private CrudService<D> crudService;

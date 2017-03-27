@@ -60,6 +60,7 @@ public class RacecourseController implements CrudController {
     /**
      * POST: /owner
      */
+    @Override
     public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.create(req, resp);
     }
@@ -67,6 +68,7 @@ public class RacecourseController implements CrudController {
     /**
      * PUT: /owner
      */
+    @Override
     public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.update(req, resp);
     }
@@ -74,20 +76,23 @@ public class RacecourseController implements CrudController {
     /**
      * GET: /owner/%d
      */
-    public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
     }
 
     /**
      * GET: /owner?query=%s;page=%d
      */
-    public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.search(req, resp);
     }
 
     /**
      * DELETE: owner/%d
      */
+    @Override
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.delete(req, resp);
     }

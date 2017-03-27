@@ -48,6 +48,7 @@ public class OwnerController implements CrudController {
     /**
      * POST: /owner
      */
+    @Override
     public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.create(req, resp);
     }
@@ -55,6 +56,7 @@ public class OwnerController implements CrudController {
     /**
      * PUT: /owner
      */
+    @Override
     public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.update(req, resp);
     }
@@ -62,6 +64,7 @@ public class OwnerController implements CrudController {
     /**
      * GET: /owner/%d
      */
+    @Override
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
     }
@@ -69,6 +72,7 @@ public class OwnerController implements CrudController {
     /**
      * GET: /owner?query=%s;page=%d
      */
+    @Override
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.search(req, resp);
     }
@@ -76,6 +80,7 @@ public class OwnerController implements CrudController {
     /**
      * DELETE: owner/%d
      */
+    @Override
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.delete(req, resp);
     }
