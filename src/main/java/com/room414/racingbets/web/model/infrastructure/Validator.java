@@ -1,4 +1,4 @@
-package com.room414.racingbets.web.infrastructure;
+package com.room414.racingbets.web.model.infrastructure;
 
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 

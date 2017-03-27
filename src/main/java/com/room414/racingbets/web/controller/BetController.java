@@ -9,25 +9,21 @@ import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.OddsDto;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.bll.dto.entities.UserDto;
-import com.room414.racingbets.dal.domain.entities.Race;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
-import com.room414.racingbets.web.model.viewmodels.BetForm;
+import com.room414.racingbets.web.model.forms.BetForm;
 import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.util.ResponseUtil;
-import com.room414.racingbets.web.util.ValidatorUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.ResourceBundle;
 
-import static com.room414.racingbets.web.util.ControllerUtil.createError;
 import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
 import static com.room414.racingbets.web.util.RequestUtil.getObject;

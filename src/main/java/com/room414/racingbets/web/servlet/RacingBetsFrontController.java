@@ -11,7 +11,7 @@ import java.io.IOException;
  * @author Alexander Melashchenko
  * @version 1.0 23 Mar 2017
  */
-@WebServlet(name = "RacingBetsFrontController")
+@WebServlet(name = "/")
 public class RacingBetsFrontController extends HttpServlet {
     private static final long serialVersionUID = -5124039442023640569L;
 

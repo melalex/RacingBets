@@ -4,7 +4,7 @@ import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.HorseService;
 import com.room414.racingbets.bll.dto.entities.HorseDto;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
-import com.room414.racingbets.web.model.viewmodels.HorseForm;
+import com.room414.racingbets.web.model.forms.HorseForm;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

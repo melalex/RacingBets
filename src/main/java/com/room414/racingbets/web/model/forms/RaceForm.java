@@ -1,4 +1,4 @@
-package com.room414.racingbets.web.model.viewmodels;
+package com.room414.racingbets.web.model.forms;
 
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;

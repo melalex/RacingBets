@@ -12,12 +12,13 @@ import com.room414.racingbets.bll.abstraction.services.UserService;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.domain.enums.Role;
-import com.room414.racingbets.web.infrastructure.PagerImpl;
+import com.room414.racingbets.web.model.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.viewmodels.Error;
-import com.room414.racingbets.web.model.viewmodels.RegistrationForm;
+import com.room414.racingbets.web.model.forms.RegistrationForm;
 import com.room414.racingbets.web.model.viewmodels.Token;
+import com.room414.racingbets.web.model.viewmodels.UserViewModel;
 import com.room414.racingbets.web.util.ControllerUtil;
 import com.room414.racingbets.web.util.ResponseUtil;
 
@@ -308,31 +309,50 @@ public class AccountController {
      * GET: /account/%d
      */
     public void findById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
-        ControllerUtil.find(req, resp, responseBuilder, locale, userService::find);
+        ResponseBuilder<UserViewModel> responseBuilder = createResponseBuilder(resp);
+        String token = getJwtToken(req);
+        Jwt jwt = accountService.getToken(token);
+        long id = getIdFromRequest(req);
+
+        if (jwt.getUserId() != id && jwt.isInRole(Role.ADMIN) && jwt.isInRole(Role.BOOKMAKER)){
+               permissionDenied(resp, responseBuilder, locale);
+        } else if (id <= 0) {
+            invalidId(resp, responseBuilder, locale);
+        } else {
+            UserDto dto = userService.find(id);
+            responseBuilder.addToResult(map(dto, UserViewModel.class));
+
+            resp.setStatus(HttpServletResponse.SC_FOUND);
+            writeToResponse(resp, responseBuilder.buildSuccessResponse());
+        }
     }
 
     /**
      * GET: /account?query=%s;page=%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String query = req.getParameter("query");
-        int page = getPageFromRequest(req);
-        Pager pager = new PagerImpl(ENTITY_LIMIT, page);
-        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
-        List<UserDto> horses;
+        ResponseBuilder<UserViewModel> responseBuilder = createResponseBuilder(resp);
+        String token = getJwtToken(req);
+        if (accountService.isInRole(token, Role.ADMIN) || accountService.isInRole(token, Role.BOOKMAKER)) {
+            String query = req.getParameter("query");
+            int page = getPageFromRequest(req);
+            Pager pager = new PagerImpl(ENTITY_LIMIT, page);
+            List<UserDto> users;
 
-        if (query != null) {
-            horses = userService.search(query, pager);
+            if (query != null) {
+                users = userService.search(query, pager);
+            } else {
+                users = userService.findAll(pager);
+            }
+
+            users.forEach(u -> responseBuilder.addToResult(map(u, UserViewModel.class)));
+            responseBuilder.setCount(pager.getCount());
+
+            resp.setStatus(HttpServletResponse.SC_FOUND);
+            writeToResponse(resp, responseBuilder.buildSuccessResponse());
         } else {
-            horses = userService.findAll(pager);
+            invalidRequest(resp, responseBuilder, locale);
         }
-
-        responseBuilder.addAllToResult(horses);
-        responseBuilder.setCount(pager.getCount());
-
-        resp.setStatus(HttpServletResponse.SC_FOUND);
-        writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
     /**

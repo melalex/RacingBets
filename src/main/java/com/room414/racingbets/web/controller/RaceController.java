@@ -7,10 +7,10 @@ import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.dal.domain.enums.Role;
-import com.room414.racingbets.web.infrastructure.PagerImpl;
+import com.room414.racingbets.web.model.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
-import com.room414.racingbets.web.model.viewmodels.ParticipantForm;
-import com.room414.racingbets.web.model.viewmodels.RaceForm;
+import com.room414.racingbets.web.model.forms.ParticipantForm;
+import com.room414.racingbets.web.model.forms.RaceForm;
 import com.room414.racingbets.web.util.ControllerUtil;
 import com.room414.racingbets.web.util.ResponseUtil;
 
