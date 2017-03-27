@@ -34,17 +34,6 @@ public class ValidatorUtil {
         }
     }
 
-    public static <T> void notNull(long property, ResponseBuilder<T> builder, Locale locale, String name, String type) {
-        if (property == 0) {
-            String message = ResourceBundle
-                    .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
-                    .getString("required");
-
-            Error error = new Error(ErrorCode.NOT_NULL, message, type, name);
-            builder.addToErrors(error);
-        }
-    }
-
     public static <T> void validateString(String property, ResponseBuilder<T> builder, Locale locale, String name, String type) {
         if (property == null) {
             return;
@@ -76,20 +65,29 @@ public class ValidatorUtil {
                     .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
                     .getString("invalid.string.length");
 
-            message = String.format(message, min, max);
-
-            Error error = new Error(ErrorCode.INVALID_ERROR, message, type, name);
+            Error error = new Error(ErrorCode.INVALID_ERROR, String.format(message, min, max), type, name);
             builder.addToErrors(error);
         }
     }
 
-    public static <T> void validateForeignKey(long property, ResponseBuilder<T> builder, Locale locale, String name, String type) {
-        if (property <= 0) {
+    public static <T> void validateRange(long property, long min, long max, ResponseBuilder<T> builder, Locale locale, String name, String type) {
+        if (property < min || property > max) {
             String message = ResourceBundle
                     .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
-                    .getString("invalid.foreign.key");
+                    .getString("invalid.range");
 
-            Error error = new Error(ErrorCode.INVALID_ERROR, message, type, name);
+            Error error = new Error(ErrorCode.INVALID_ERROR, String.format(message, min, max), type, name);
+            builder.addToErrors(error);
+        }
+    }
+
+    public static <T> void validateRange(double property, double min, double max, ResponseBuilder<T> builder, Locale locale, String name, String type) {
+        if (Double.compare(property, min) < 0 || Double.compare(property, max) > 0) {
+            String message = ResourceBundle
+                    .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
+                    .getString("invalid.range");
+
+            Error error = new Error(ErrorCode.INVALID_ERROR, String.format(message, min, max), type, name);
             builder.addToErrors(error);
         }
     }

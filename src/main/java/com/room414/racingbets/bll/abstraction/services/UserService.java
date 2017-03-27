@@ -29,4 +29,5 @@ public interface UserService {
     List<UserDto> findAll(Pager pager);
     List<UserDto> search(String login, Pager pager);
 
+    boolean tryGetMoney(long id, BigDecimal betSize);
 }

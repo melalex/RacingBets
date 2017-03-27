@@ -225,4 +225,17 @@ public class UserServiceImpl implements UserService {
             return mapList(entities);
         }
     }
+
+    @Override
+    public boolean tryGetMoney(long id, BigDecimal betSize) {
+        try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            boolean result = unitOfWork
+                    .getApplicationUserDao()
+                    .tryGetMoney(id, betSize);
+
+            unitOfWork.commit();
+
+            return result;
+        }
+    }
 }

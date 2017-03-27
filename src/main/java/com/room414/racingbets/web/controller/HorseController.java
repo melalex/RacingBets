@@ -53,8 +53,8 @@ public class HorseController {
         validateString(form.getName(), responseBuilder, locale, "name", ENTITY_TYPE);
         validateStringLength(form.getName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, responseBuilder, locale, "name", ENTITY_TYPE);
 
-        validateForeignKey(form.getOwner(), responseBuilder, locale, "owner", ENTITY_TYPE);
-        validateForeignKey(form.getTrainer(), responseBuilder, locale, "trainer", ENTITY_TYPE);
+        validateRange(form.getOwner(), 1, Long.MAX_VALUE, responseBuilder, locale, "owner", ENTITY_TYPE);
+        validateRange(form.getTrainer(), 1, Long.MAX_VALUE,responseBuilder, locale, "trainer", ENTITY_TYPE);
     }
 
     /**

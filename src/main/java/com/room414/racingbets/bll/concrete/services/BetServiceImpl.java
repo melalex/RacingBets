@@ -12,6 +12,7 @@ import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.entities.Race;
+import com.room414.racingbets.dal.domain.enums.BetStatus;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
@@ -33,76 +34,10 @@ public class BetServiceImpl implements BetService {
         this.factory = factory;
     }
 
-    private boolean isBetValid(BetDto bet) {
-        Map<Integer, ParticipantDto> participants = bet.getParticipants();
-
-        switch (bet.getBetType()) {
-            case SHOW:
-                return participants.size() == 3
-                        && participants.get(1) != null
-                        && participants.get(2) != null
-                        && participants.get(3) != null;
-            case PLACE:
-                return participants.size() == 2
-                        && participants.get(1) != null
-                        && participants.get(2) != null;
-            case WIN:
-                return participants.size() == 1
-                        && participants.get(1) != null;
-            case QUINELLA:
-                return participants.size() == 2
-                        && participants.get(1) != null
-                        && participants.get(2) != null;
-            case EXACTA:
-                return participants.size() == 2
-                        && participants.get(1) != null
-                        && participants.get(2) != null;
-            case TRIFECTA:
-                return participants.size() == 3
-                        && participants.get(1) != null
-                        && participants.get(2) != null
-                        && participants.get(3) != null;
-            case SUPERFECTA:
-                return participants.size() == 4
-                        && participants.get(1) != null
-                        && participants.get(2) != null
-                        && participants.get(3) != null
-                        && participants.get(4) != null;
-            default:
-                return false;
-        }
-    }
-
     @Override
-    // TODO: replace this logic to controller
-    // TODO: create bet, race view model
-    public Response makeBet(BetDto bet) {
+    public void makeBet(BetDto bet) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
-            if (!isBetValid(bet)) {
-                return Response.INVALID_BET;
-            }
-
-            if (!bet.getUser().isEmailConfirmed()) {
-                return Response.EMAIL_IS_NOT_CONFIRMED;
-            }
-
-            boolean moneyTaken = unitOfWork
-                    .getApplicationUserDao()
-                    .tryGetMoney(bet.getUser().getId(), bet.getBetSize());
-
-            if (!moneyTaken) {
-                return Response.NOT_ENOUGH_MONEY;
-            }
-
-            Race race = unitOfWork
-                    .getRaceDao()
-                    .find(bet.getRaceId());
-
-            if (race.getRaceStatus() != RaceStatus.SCHEDULED) {
-                return Response.RACE_IS_STARTED;
-            }
-
-
+            bet.setBetStatus(BetStatus.SCHEDULED);
             Bet entity = mapper.map(bet, Bet.class);
 
             unitOfWork.getBetDao().create(entity);
@@ -110,8 +45,6 @@ public class BetServiceImpl implements BetService {
             unitOfWork.commit();
 
             bet.setId(entity.getId());
-
-            return Response.SUCCESS;
         }
     }
 

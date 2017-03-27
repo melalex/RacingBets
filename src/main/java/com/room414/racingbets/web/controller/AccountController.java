@@ -101,13 +101,11 @@ public class AccountController {
         validateString(form.getFirstName(), responseBuilder, locale, "firstName", ENTITY_TYPE);
         validateString(form.getLastName(), responseBuilder, locale, "lastName", ENTITY_TYPE);
         validateString(form.getLogin(), responseBuilder, locale, "login", ENTITY_TYPE);
-        validateString(form.getEmail(), responseBuilder, locale, "email", ENTITY_TYPE);
         validateString(form.getPassword(), responseBuilder, locale, "password", ENTITY_TYPE);
 
         validateStringLength(form.getFirstName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, responseBuilder, locale, "firstName", ENTITY_TYPE);
         validateStringLength(form.getLastName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH,responseBuilder, locale, "lastName", ENTITY_TYPE);
         validateStringLength(form.getLogin(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "login", ENTITY_TYPE);
-        validateStringLength(form.getEmail(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "email", ENTITY_TYPE);
         validateStringLength(form.getPassword(), AUTH_STRING_MIN_LENGTH, AUTH_STRING_MAX_LENGTH,responseBuilder, locale, "password", ENTITY_TYPE);
 
         validateEmail(form.getEmail(), responseBuilder, locale, ENTITY_TYPE);
