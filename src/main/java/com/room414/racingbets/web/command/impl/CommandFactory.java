@@ -1,9 +1,12 @@
 package com.room414.racingbets.web.command.impl;
 
+import com.room414.racingbets.web.command.interfaces.Action;
+import com.room414.racingbets.web.command.interfaces.ActionFactory;
 import com.room414.racingbets.web.model.infrastructure.Route;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -12,6 +15,7 @@ import java.util.Optional;
  */
 public class CommandFactory {
     private List<Route> routes;
+    private Map<String, ActionFactory> factoryByName;
 
     public CommandFactory(List<Route> routes) {
         this.routes = routes;
@@ -25,7 +29,11 @@ public class CommandFactory {
 
         if (optionalRoute.isPresent()) {
             Route route = optionalRoute.get();
-            return null;
+            Action action = factoryByName
+                    .get(route.getController())
+                    .create(route.getAction(), locale);
+
+            return new ControllerCommand(action);
         } else {
             return null;
         }
