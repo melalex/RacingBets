@@ -1,8 +1,9 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.room414.racingbets.bll.abstraction.services.AccountService;
-import com.room414.racingbets.bll.abstraction.services.JockeyService;
-import com.room414.racingbets.bll.dto.entities.JockeyDto;
+import com.room414.racingbets.bll.abstraction.services.OwnerService;
+import com.room414.racingbets.bll.dto.entities.OwnerDto;
+import com.room414.racingbets.web.controller.interfaces.CrudController;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,63 +17,64 @@ import static com.room414.racingbets.web.util.ValidatorUtil.validatePerson;
  * @author Alexander Melashchenko
  * @version 1.0 23 Mar 2017
  */
-public class JockeyController {
-    private static final String ENTITY_TYPE = "Jockey";
-    private CrudControllerDelegate<JockeyDto, JockeyDto> crudControllerDelegate;
+public class OwnerController implements CrudController {
+    private static final String ENTITY_TYPE = "Owner";
+    private CrudControllerDelegate<OwnerDto, OwnerDto> crudControllerDelegate;
 
     private Locale locale;
 
-    JockeyController(
-            JockeyService jockeyService,
+    public OwnerController(
+            OwnerService ownerService,
             AccountService accountService,
             Locale locale
     ) {
         this.locale = locale;
+
         this.crudControllerDelegate = new CrudControllerDelegate<>(
-                jockeyService,
+                ownerService,
                 accountService,
-                JockeyDto.class,
-                JockeyDto.class,
+                OwnerDto.class,
+                OwnerDto.class,
                 ENTITY_TYPE,
                 locale,
                 this::validate
         );
     }
 
-    private void validate(JockeyDto form, ResponseBuilder<JockeyDto> responseBuilder) {
+    private void validate(OwnerDto form, ResponseBuilder<OwnerDto> responseBuilder) {
         validatePerson(form, responseBuilder, locale, ENTITY_TYPE);
     }
 
     /**
-     * POST: /jockey
+     * POST: /owner
      */
     public void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.create(req, resp);
     }
 
     /**
-     * PUT: /jockey
+     * PUT: /owner
      */
     public void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.update(req, resp);
     }
 
     /**
-     * GET: /jockey/%d
+     * GET: /owner/%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.find(req, resp);
     }
 
     /**
-     * GET: /jockey?query=%s;page=%d
+     * GET: /owner?query=%s;page=%d
      */
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.search(req, resp);
     }
 
     /**
-     * DELETE: jockey/%d
+     * DELETE: owner/%d
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         crudControllerDelegate.delete(req, resp);

@@ -3,6 +3,7 @@ package com.room414.racingbets.web.command.impl;
 import com.room414.racingbets.web.model.infrastructure.Route;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -16,7 +17,7 @@ public class CommandFactory {
         this.routes = routes;
     }
 
-    public ControllerCommand create(String url) {
+    public ControllerCommand create(String url, Locale locale) {
         Optional<Route> optionalRoute = routes
                 .stream()
                 .filter(r -> url.matches(r.getPattern()))

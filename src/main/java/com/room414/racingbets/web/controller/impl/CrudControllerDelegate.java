@@ -1,10 +1,11 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.CrudService;
 import com.room414.racingbets.dal.domain.enums.Role;
+import com.room414.racingbets.web.controller.interfaces.CrudController;
 import com.room414.racingbets.web.model.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.infrastructure.Validator;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
@@ -29,7 +30,7 @@ import static com.room414.racingbets.web.util.ResponseUtil.*;
  * @author Alexander Melashchenko
  * @version 1.0 25 Mar 2017
  */
-class CrudControllerDelegate<F, D> {
+class CrudControllerDelegate<F, D> implements CrudController {
     private static final int ENTITY_LIMIT = 20;
 
     private CrudService<D> crudService;

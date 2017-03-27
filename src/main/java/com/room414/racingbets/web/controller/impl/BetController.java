@@ -1,4 +1,4 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
@@ -44,7 +44,7 @@ public class BetController {
 
     private Locale locale;
 
-    BetController(
+    public BetController(
             BetService betService,
             AccountService accountService,
             UserService userService,

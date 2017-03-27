@@ -1,4 +1,4 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.room414.racingbets.bll.abstraction.infrastructure.FilterParamsBuilder;
@@ -42,7 +42,7 @@ public class RaceController {
     private AccountService accountService;
     private Locale locale;
 
-    RaceController(RaceService raceService, AccountService accountService, Locale locale) {
+    public RaceController(RaceService raceService, AccountService accountService, Locale locale) {
         this.raceService = raceService;
         this.accountService = accountService;
         this.locale = locale;

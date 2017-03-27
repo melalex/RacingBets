@@ -1,8 +1,9 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.HorseService;
 import com.room414.racingbets.bll.dto.entities.HorseDto;
+import com.room414.racingbets.web.controller.interfaces.CrudController;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.forms.HorseForm;
 
@@ -18,14 +19,14 @@ import static com.room414.racingbets.web.util.ValidatorUtil.*;
  * @author Alexander Melashchenko
  * @version 1.0 23 Mar 2017
  */
-public class HorseController {
+public class HorseController implements CrudController {
     private static final String ENTITY_TYPE = "Horse";
 
     private CrudControllerDelegate<HorseForm, HorseDto> crudControllerDelegate;
 
     private Locale locale;
 
-    HorseController(
+    public HorseController(
             HorseService horseService,
             AccountService accountService,
             Locale locale

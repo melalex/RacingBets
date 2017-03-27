@@ -1,4 +1,4 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
@@ -51,7 +51,7 @@ public class AccountController {
 
     private Locale locale;
 
-    AccountController(
+    public AccountController(
             AccountService accountService,
             UserService userService,
             MessageService messageService,

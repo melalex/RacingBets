@@ -1,8 +1,9 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.TrainerService;
 import com.room414.racingbets.bll.dto.entities.TrainerDto;
+import com.room414.racingbets.web.controller.interfaces.CrudController;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,13 +17,13 @@ import static com.room414.racingbets.web.util.ValidatorUtil.validatePerson;
  * @author Alexander Melashchenko
  * @version 1.0 23 Mar 2017
  */
-public class TrainerController {
+public class TrainerController implements CrudController {
     private static final String ENTITY_TYPE = "Trainer";
     private CrudControllerDelegate<TrainerDto, TrainerDto> crudControllerDelegate;
 
     private Locale locale;
 
-    TrainerController(
+    public TrainerController(
             TrainerService trainerService,
             AccountService accountService,
             Locale locale

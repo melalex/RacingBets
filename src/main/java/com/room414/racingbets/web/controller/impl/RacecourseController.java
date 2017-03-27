@@ -1,8 +1,9 @@
-package com.room414.racingbets.web.controller;
+package com.room414.racingbets.web.controller.impl;
 
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.RacecourseService;
 import com.room414.racingbets.bll.dto.entities.RacecourseDto;
+import com.room414.racingbets.web.controller.interfaces.CrudController;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,21 +11,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-import static com.room414.racingbets.web.util.ValidatorUtil.notNull;
-import static com.room414.racingbets.web.util.ValidatorUtil.validateString;
-import static com.room414.racingbets.web.util.ValidatorUtil.validateStringLength;
+import static com.room414.racingbets.web.util.ValidatorUtil.*;
+import static com.room414.racingbets.web.util.ValidatorUtil.STRING_MAX_LENGTH;
 
 /**
  * @author Alexander Melashchenko
  * @version 1.0 23 Mar 2017
  */
-public class RacecourseController {
+public class RacecourseController implements CrudController {
     private static final String ENTITY_TYPE = "Racecourse";
     private CrudControllerDelegate<RacecourseDto, RacecourseDto> crudControllerDelegate;
 
     private Locale locale;
 
-    RacecourseController(
+    public RacecourseController(
             RacecourseService ownerService,
             AccountService accountService,
             Locale locale
@@ -51,9 +51,9 @@ public class RacecourseController {
         validateString(form.getClerk(), responseBuilder, locale, "clerk", ENTITY_TYPE);
         validateString(form.getContact(), responseBuilder, locale, "contact", ENTITY_TYPE);
 
-        validateStringLength(form.getName(), 4, 45, responseBuilder, locale, "name", ENTITY_TYPE);
-        validateStringLength(form.getClerk(), 4, 45, responseBuilder, locale, "clerk", ENTITY_TYPE);
-        validateStringLength(form.getContact(), 4, 45, responseBuilder, locale, "contact", ENTITY_TYPE);
+        validateStringLength(form.getName(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, responseBuilder, locale, "name", ENTITY_TYPE);
+        validateStringLength(form.getClerk(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, responseBuilder, locale, "clerk", ENTITY_TYPE);
+        validateStringLength(form.getContact(), STRING_MIN_LENGTH, STRING_MAX_LENGTH, responseBuilder, locale, "contact", ENTITY_TYPE);
 
     }
 
