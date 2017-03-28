@@ -21,7 +21,6 @@ public class MySqlTestingUnitOfWork implements UnitOfWork {
     private OwnerDao ownerDao;
     private TrainerDao trainerDao;
 
-    private ParticipantDao participantDao;
     private RaceDao raceDao;
 
     private RacecourseDao racecourseDao;
@@ -76,14 +75,6 @@ public class MySqlTestingUnitOfWork implements UnitOfWork {
             trainerDao = new MySqlTrainerDao(connection);
         }
         return trainerDao;
-    }
-
-    @Override
-    public ParticipantDao getParticipantDao() {
-        if (participantDao == null) {
-            participantDao = new MySqlParticipantDao(connection);
-        }
-        return participantDao;
     }
 
     @Override

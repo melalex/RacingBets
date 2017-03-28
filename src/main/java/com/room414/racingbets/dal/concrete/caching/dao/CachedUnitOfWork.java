@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.concrete.caching.dao;
 
 import com.room414.racingbets.dal.abstraction.cache.CachingUnitOfWork;
 import com.room414.racingbets.dal.abstraction.dao.*;
-import com.room414.racingbets.dal.concrete.caching.caffeine.CaffeineCachingUnitOfWork;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.lazyload.*;
 
 /**
@@ -21,7 +20,6 @@ public class CachedUnitOfWork implements UnitOfWork {
     private OwnerDao ownerDao;
     private TrainerDao trainerDao;
 
-    private ParticipantDao participantDao;
     private RaceDao raceDao;
 
     private RacecourseDao racecourseDao;
@@ -96,17 +94,6 @@ public class CachedUnitOfWork implements UnitOfWork {
             );
         }
         return trainerDao;
-    }
-
-    @Override
-    public ParticipantDao getParticipantDao() {
-        if (participantDao == null) {
-            participantDao = new CachedParticipantDao(
-                    new LazyLoadParticipantDao(unitOfWork),
-                    cache.getParticipantCache()
-            );
-        }
-        return participantDao;
     }
 
     @Override

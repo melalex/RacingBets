@@ -2,7 +2,7 @@ package com.room414.racingbets.dal.concrete.caching.caffeine.caches;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.room414.racingbets.dal.abstraction.cache.JockeyCache;
-import com.room414.racingbets.dal.abstraction.cache.ParticipantCache;
+import com.room414.racingbets.dal.abstraction.cache.RaceCache;
 import com.room414.racingbets.dal.concrete.caching.caffeine.base.BaseCache;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.CachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisCache;
@@ -22,20 +22,20 @@ public class CaffeineJockeyCache extends BaseCache<Jockey> implements JockeyCach
     private static final TypeReference<Jockey> TYPE = new TypeReference<Jockey>() {};
     private static final TypeReference<List<Jockey>> LIST_TYPE = new TypeReference<List<Jockey>>() {};
 
-    private ParticipantCache participantCache;
+    private RaceCache raceCache;
 
     public CaffeineJockeyCache(
             CachePool<Jockey> cachePool,
             RedisCache redisCache,
-            ParticipantCache participantCache
+            RaceCache raceCache
     ) {
         super(cachePool, TYPE, LIST_TYPE, redisCache);
-        this.participantCache = participantCache;
+        this.raceCache = raceCache;
     }
 
     @Override
     public void deleteOneCached(String key) {
         super.deleteOneCached(key);
-        participantCache.deleteAllCached();
+        raceCache.deleteAllCached();
     }
 }

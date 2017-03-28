@@ -18,7 +18,6 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
     private JockeyServiceFactory jockeyServiceFactory;
     private MessageServiceFactory messageServiceFactory;
     private OwnerServiceFactory ownerServiceFactory;
-    private ParticipantServiceFactory participantServiceFactory;
     private RacecourseServiceFactory racecourseServiceFactory;
     private RaceServiceFactory raceServiceFactory;
     private TrainerServiceFactory trainerServiceFactory;
@@ -39,7 +38,6 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
         this.horseServiceFactory = new HorseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.jockeyServiceFactory = new JockeyServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.ownerServiceFactory = new OwnerServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
-        this.participantServiceFactory = new ParticipantServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.racecourseServiceFactory = new RacecourseServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
         this.trainerServiceFactory = new TrainerServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());
     }
@@ -72,11 +70,6 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
     @Override
     public OwnerServiceFactory createOwnerServiceFactory() {
         return ownerServiceFactory;
-    }
-
-    @Override
-    public ParticipantServiceFactory createParticipantServiceFactory() {
-        return participantServiceFactory;
     }
 
     @Override

@@ -30,19 +30,19 @@ public class RacingBetsFrontController extends HttpServlet {
     private CommandFactory putCommandFactory;
     private CommandFactory deleteCommandFactory;
 
-    public void setPostCommandFactory(CommandFactory postCommandFactory) {
+    void setPostCommandFactory(CommandFactory postCommandFactory) {
         this.postCommandFactory = postCommandFactory;
     }
 
-    public void setGetCommandFactory(CommandFactory getCommandFactory) {
+    void setGetCommandFactory(CommandFactory getCommandFactory) {
         this.getCommandFactory = getCommandFactory;
     }
 
-    public void setPutCommandFactory(CommandFactory putCommandFactory) {
+    void setPutCommandFactory(CommandFactory putCommandFactory) {
         this.putCommandFactory = putCommandFactory;
     }
 
-    public void setDeleteCommandFactory(CommandFactory deleteCommandFactory) {
+    void setDeleteCommandFactory(CommandFactory deleteCommandFactory) {
         this.deleteCommandFactory = deleteCommandFactory;
     }
 
@@ -52,7 +52,7 @@ public class RacingBetsFrontController extends HttpServlet {
         LifeCycle.startUp(this);
     }
 
-    private void commandExecutor(Command com, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private void commandExecutor(Command com, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             com.execute(req, resp);
         } catch (BllException | DalException e) {

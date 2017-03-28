@@ -18,7 +18,6 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
     private HorseCache horseCache;
     private JockeyCache jockeyCache;
     private OwnerCache ownerCache;
-    private ParticipantCache participantCache;
     private RaceCache raceCache;
     private RacecourseCache racecourseCache;
     private TrainerCache trainerCache;
@@ -57,7 +56,7 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
         if (horseCache == null) {
             horseCache = new CaffeineHorseCache(
                     mainCachePool.getHorseCachePool(),
-                    getParticipantCache(),
+                    raceCache,
                     redisUnitOfWork.getRedisCache()
             );
         }
@@ -70,7 +69,7 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
             jockeyCache = new CaffeineJockeyCache(
                     mainCachePool.getJockeyCachePool(),
                     redisUnitOfWork.getRedisCache(),
-                    getParticipantCache()
+                    raceCache
             );
         }
         return jockeyCache;
@@ -89,25 +88,12 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
     }
 
     @Override
-    public ParticipantCache getParticipantCache() {
-        if (participantCache == null) {
-            participantCache = new CaffeineParticipantCache(
-                    mainCachePool.getParticipantCachePool(),
-                    redisUnitOfWork.getRedisCache(),
-                    getRaceCache()
-            );
-        }
-        return participantCache;
-    }
-
-    @Override
     public RaceCache getRaceCache() {
         if (raceCache == null) {
             raceCache = new CaffeineRaceCache(
                     mainCachePool.getRaceCachePool(),
                     redisUnitOfWork.getRedisCache(),
-                    getBetCache(),
-                    getParticipantCache()
+                    getBetCache()
             );
         }
         return raceCache;

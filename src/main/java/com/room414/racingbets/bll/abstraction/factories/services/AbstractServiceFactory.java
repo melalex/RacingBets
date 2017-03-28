@@ -12,7 +12,6 @@ public interface AbstractServiceFactory {
     JockeyServiceFactory createJockeyServiceFactory();
     MessageServiceFactory createMessageServiceFactory();
     OwnerServiceFactory createOwnerServiceFactory();
-    ParticipantServiceFactory createParticipantServiceFactory();
     RacecourseServiceFactory createRacecourseServiceFactory();
     RaceServiceFactory createRaceServiceFactory();
     TrainerServiceFactory createTrainerServiceFactory();

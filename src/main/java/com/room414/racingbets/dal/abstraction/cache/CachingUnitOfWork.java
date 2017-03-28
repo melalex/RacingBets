@@ -10,7 +10,6 @@ public interface CachingUnitOfWork extends AutoCloseable {
     HorseCache getHorseCache();
     JockeyCache getJockeyCache();
     OwnerCache getOwnerCache();
-    ParticipantCache getParticipantCache();
     RaceCache getRaceCache();
     RacecourseCache getRacecourseCache();
     TrainerCache getTrainerCache();

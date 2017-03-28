@@ -16,7 +16,6 @@ public interface UnitOfWork extends AutoCloseable {
     OwnerDao getOwnerDao();
     TrainerDao getTrainerDao();
 
-    ParticipantDao getParticipantDao();
     RaceDao getRaceDao();
 
     RacecourseDao getRacecourseDao();

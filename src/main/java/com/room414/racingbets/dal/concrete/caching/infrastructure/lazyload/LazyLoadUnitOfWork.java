@@ -54,11 +54,6 @@ public class LazyLoadUnitOfWork implements UnitOfWork {
     }
 
     @Override
-    public ParticipantDao getParticipantDao() {
-        return getUnitOfWork().getParticipantDao();
-    }
-
-    @Override
     public RaceDao getRaceDao() {
         return getUnitOfWork().getRaceDao();
     }
