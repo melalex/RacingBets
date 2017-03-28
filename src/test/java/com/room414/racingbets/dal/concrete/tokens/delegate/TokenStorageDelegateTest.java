@@ -1,7 +1,7 @@
 package com.room414.racingbets.dal.concrete.tokens.delegate;
 
 import com.room414.racingbets.dal.infrastructure.factories.TestingRedisFactory;
-import com.room414.racingbets.dal.resolvers.RedisParameterResolver;
+import com.room414.racingbets.resolvers.RedisParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import redis.clients.jedis.Jedis;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alexander Melashchenko

@@ -4,6 +4,7 @@ import com.room414.racingbets.bll.abstraction.factories.infrastructure.JwtFactor
 import com.room414.racingbets.bll.abstraction.factories.services.AbstractServiceFactory;
 import com.room414.racingbets.bll.concrete.factories.infrastructure.JwtFactoryImpl;
 import com.room414.racingbets.bll.concrete.factories.services.AbstractServiceFactoryImpl;
+import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
 import com.room414.racingbets.dal.concrete.facade.DalFacade;
 
 import java.util.Properties;
@@ -25,9 +26,15 @@ public class BllFacade {
 
     }
 
-    public void init(DalFacade dalFacade, Properties properties) {
-        JwtFactory jwtFactory = createJwtFactory(properties);
-        serviceFactory = new AbstractServiceFactoryImpl(dalFacade.getDalFactory(), jwtFactory, properties);
+    /**
+     * @param mail {@code Properties} with JavaMail configuration
+     * @param jwt {@code Properties} with {@code JwtFactory} configuration
+     * @param bll {@code Properties} with {@code AbstractServiceFactory} configuration
+     */
+    public void init(Properties mail, Properties jwt, Properties bll) {
+        AbstractDalFactory dalFactory = DalFacade.getInstance().getDalFactory();
+        JwtFactory jwtFactory = createJwtFactory(jwt);
+        serviceFactory = new AbstractServiceFactoryImpl(dalFactory, jwtFactory, mail, bll);
     }
 
     private JwtFactory createJwtFactory(Properties properties) {

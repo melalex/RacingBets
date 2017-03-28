@@ -26,7 +26,7 @@ public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
             "classes",
             "datasource",
             "test",
-            "mysqlConfig.properties"
+            "mysql.properties"
     );
 
     private static MySqlTestingUnitOfWorkFactory ourInstance = createFactory();

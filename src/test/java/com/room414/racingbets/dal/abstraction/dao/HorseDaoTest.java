@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.domain.entities.Horse;
 import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
-import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
+import com.room414.racingbets.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 

@@ -1,25 +1,20 @@
 package com.room414.racingbets.bll.concrete.services;
 
-import com.room414.racingbets.bll.abstraction.services.BetService;
 import com.room414.racingbets.bll.abstraction.services.UserService;
 import com.room414.racingbets.bll.dto.entities.UserDto;
 import com.room414.racingbets.dal.abstraction.dao.ApplicationUserDao;
-import com.room414.racingbets.dal.abstraction.dao.BetDao;
-import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
-import org.dozer.DozerBeanMapper;
+import org.dozer.DozerBeanMapperSingletonWrapper;
+import org.dozer.Mapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 
 /**
@@ -44,9 +39,7 @@ class UserServiceImplTest {
         Mockito.when(applicationUserDaoMock.findByLogin(any())).then(i -> users.get(0));
 
         UserService service = new UserServiceImpl(unitOfWorkMockFactory, "SHA1PRNG");
-        DozerBeanMapper mapper = new DozerBeanMapper();
-
-        mapper.setMappingFiles(Collections.singletonList("META-INF/dozerBeanMapping.xml"));
+        Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 
         Field mapperField = UserServiceImpl.class.getDeclaredField("mapper");
         mapperField.setAccessible(true);

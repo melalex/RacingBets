@@ -1,8 +1,8 @@
-package com.room414.racingbets.dal.resolvers;
+package com.room414.racingbets.resolvers;
 
-import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
+import com.room414.racingbets.bll.abstraction.factories.infrastructure.JwtFactory;
+import com.room414.racingbets.bll.concrete.factories.infrastructure.JwtFactoryImpl;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
-import com.room414.racingbets.dal.infrastructure.factories.MySqlTestingUnitOfWorkFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
@@ -10,22 +10,23 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 
 /**
  * @author Alexander Melashchenko
- * @version 1.0 07 Mar 2017
+ * @version 1.0 22 Mar 2017
  */
-public class UnitOfWorkParameterResolver implements ParameterResolver {
+public class JwtFactoryResolver implements ParameterResolver {
     @Override
     public boolean supports(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         Class<?> type = parameterContext.getParameter().getType();
 
-        return type == UnitOfWork.class;
+        return type == JwtFactory.class;
     }
 
     @Override
     public Object resolve(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         try {
-            return MySqlTestingUnitOfWorkFactory.getInstance().createUnitOfWork();
+            return new JwtFactoryImpl("secret", "HmacSHA256", "jwt", 3600);
         } catch (DalException e) {
-            throw new ParameterResolutionException("Exception during creating MySqlTestingUnitOfWork instance", e);
+            throw new ParameterResolutionException("Exception during creating JwtFactory instance", e);
         }
     }
+
 }

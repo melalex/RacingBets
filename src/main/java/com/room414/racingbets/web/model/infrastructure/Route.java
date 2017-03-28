@@ -9,14 +9,31 @@ import java.io.Serializable;
 public class Route implements Serializable {
     private static final long serialVersionUID = -879039519582965243L;
 
+    public enum Method {
+        POST,
+        GET,
+        PUT,
+        DELETE
+    }
+
+    private Method method;
     private String pattern;
     private String controller;
     private String action;
 
-    public Route(String pattern, String controller, String action) {
+    public Route(Method method, String pattern, String controller, String action) {
+        this.method = method;
         this.pattern = pattern;
         this.controller = controller;
         this.action = action;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
     }
 
     public String getPattern() {
@@ -50,6 +67,7 @@ public class Route implements Serializable {
 
         Route route = (Route) o;
 
+        if (method != route.method) return false;
         if (pattern != null ? !pattern.equals(route.pattern) : route.pattern != null) return false;
         if (controller != null ? !controller.equals(route.controller) : route.controller != null) return false;
         return action != null ? action.equals(route.action) : route.action == null;
@@ -57,7 +75,8 @@ public class Route implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = pattern != null ? pattern.hashCode() : 0;
+        int result = method != null ? method.hashCode() : 0;
+        result = 31 * result + (pattern != null ? pattern.hashCode() : 0);
         result = 31 * result + (controller != null ? controller.hashCode() : 0);
         result = 31 * result + (action != null ? action.hashCode() : 0);
         return result;
@@ -66,7 +85,8 @@ public class Route implements Serializable {
     @Override
     public String toString() {
         return "Route{" +
-                "pattern='" + pattern + '\'' +
+                "method='" + method + '\'' +
+                ", pattern='" + pattern + '\'' +
                 ", controller='" + controller + '\'' +
                 ", action='" + action + '\'' +
                 '}';

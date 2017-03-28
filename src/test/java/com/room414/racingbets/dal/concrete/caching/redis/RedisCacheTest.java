@@ -3,7 +3,7 @@ package com.room414.racingbets.dal.concrete.caching.redis;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import com.room414.racingbets.dal.infrastructure.factories.TestingRedisFactory;
-import com.room414.racingbets.dal.resolvers.RedisParameterResolver;
+import com.room414.racingbets.resolvers.RedisParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import redis.clients.jedis.Jedis;

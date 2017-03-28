@@ -251,7 +251,7 @@ public class RaceServiceImpl implements RaceService {
                     odds = betDao.getOdds(betEntity);
                     amount = betEntity.getBetSize().multiply(odds.getDecimalOdds());
                     unitOfWork.getApplicationUserDao().putMoney(betEntity.getUser().getId(), amount);
-                    messageService.sendRejectMessage(bet, race);
+                    messageService.sendWinMessage(bet, race);
 
                 } else if (betEntity.getBetStatus() == BetStatus.LOSE) {
                     messageService.sendLoseMessage(bet, race);

@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.BetType;
 import com.room414.racingbets.dal.infrastructure.factories.TestingRedisFactory;
-import com.room414.racingbets.dal.resolvers.RedisParameterResolver;
+import com.room414.racingbets.resolvers.RedisParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import redis.clients.jedis.Jedis;

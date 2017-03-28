@@ -24,7 +24,7 @@ public class TestingRedisFactory implements AutoCloseable {
             "redis",
             "test",
             "config",
-            "redisConfig.properties"
+            "redis.properties"
     );
     private JedisPool jedisPool;
 

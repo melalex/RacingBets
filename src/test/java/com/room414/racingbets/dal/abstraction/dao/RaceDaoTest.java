@@ -7,7 +7,7 @@ import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
-import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
+import com.room414.racingbets.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 

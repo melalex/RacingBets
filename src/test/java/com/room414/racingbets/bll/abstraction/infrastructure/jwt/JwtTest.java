@@ -2,12 +2,11 @@ package com.room414.racingbets.bll.abstraction.infrastructure.jwt;
 
 import com.room414.racingbets.bll.abstraction.factories.infrastructure.JwtFactory;
 import com.room414.racingbets.dal.domain.enums.Role;
-import com.room414.racingbets.dal.resolvers.JwtFactoryResolver;
+import com.room414.racingbets.resolvers.JwtFactoryResolver;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alexander Melashchenko

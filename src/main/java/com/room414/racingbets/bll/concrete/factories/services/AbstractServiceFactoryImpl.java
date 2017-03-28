@@ -27,13 +27,12 @@ public class AbstractServiceFactoryImpl implements AbstractServiceFactory {
     public AbstractServiceFactoryImpl(
             AbstractDalFactory dalFactory,
             JwtFactory jwtFactory,
-            Properties properties
+            Properties mail,
+            Properties bll
     ) {
-        this.messageServiceFactory = new MessageServiceFactoryImpl(properties);
-        this.userServiceFactory = new UserServiceFactoryImpl(dalFactory.getUnitOfWorkFactory(), properties);
-        this.raceServiceFactory = new RaceServiceFactoryImpl(
-                dalFactory.getUnitOfWorkFactory(), messageServiceFactory, properties
-        );
+        this.messageServiceFactory = new MessageServiceFactoryImpl(mail);
+        this.userServiceFactory = new UserServiceFactoryImpl(dalFactory.getUnitOfWorkFactory(), bll);
+        this.raceServiceFactory = new RaceServiceFactoryImpl(dalFactory.getUnitOfWorkFactory(), messageServiceFactory, bll);
 
         this.accountServiceFactory = new AccountServiceFactoryImpl(dalFactory.getTokenStorageFactory(), jwtFactory);
         this.betServiceFactory = new BetServiceFactoryImpl(dalFactory.getUnitOfWorkFactory());

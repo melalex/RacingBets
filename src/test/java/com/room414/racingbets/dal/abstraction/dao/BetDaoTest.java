@@ -4,7 +4,7 @@ import com.room414.racingbets.dal.domain.entities.Bet;
 import com.room414.racingbets.dal.domain.entities.Odds;
 import com.room414.racingbets.dal.domain.enums.*;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
-import com.room414.racingbets.dal.resolvers.UnitOfWorkParameterResolver;
+import com.room414.racingbets.resolvers.UnitOfWorkParameterResolver;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;

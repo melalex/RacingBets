@@ -5,7 +5,7 @@ import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.concrete.infrastrucure.jwt.JwtImpl;
 import com.room414.racingbets.dal.abstraction.factories.TokenStorageFactory;
 import com.room414.racingbets.dal.domain.enums.Role;
-import com.room414.racingbets.dal.resolvers.JwtFactoryResolver;
+import com.room414.racingbets.resolvers.JwtFactoryResolver;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
