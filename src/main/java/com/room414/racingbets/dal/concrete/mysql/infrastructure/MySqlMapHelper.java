@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.domain.entities.*;
+import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.sql.ResultSet;
@@ -134,8 +135,10 @@ public class MySqlMapHelper {
         final String lastNameColumnName = namespace + ".last_name";
         final String emailColumnName = namespace + ".email";
         final String isEmailConfirmedColumnName = namespace + ".is_email_confirmed";
-        final String passwordColumnName = namespace + ".password";
+        final String passwordColumnName = namespace + ".password_hash";
+        final String saltColumnName = namespace + ".salt";
         final String balanceColumnName = namespace + ".balance";
+        final String languageColumnName = namespace + ".language";
 
         return ApplicationUser.builder()
                 .setId(resultSet.getLong(idColumnName))
@@ -145,7 +148,9 @@ public class MySqlMapHelper {
                 .setEmail(resultSet.getString(emailColumnName))
                 .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
                 .setPassword(resultSet.getString(passwordColumnName))
+                .setSalt(resultSet.getString(saltColumnName))
                 .setBalance(resultSet.getBigDecimal(balanceColumnName))
+                .setLanguage(Language.getLanguage(resultSet.getString(languageColumnName)))
                 .addRole(Role.HANDICAPPER)
                 .build();
     }

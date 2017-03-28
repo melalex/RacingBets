@@ -18,14 +18,8 @@ import java.util.Properties;
  * @version 1.0 15 Mar 2017
  */
 public class TestingRedisFactory implements AutoCloseable {
-    private static final Path REDIS_CONFIG_FILE_PATH = Paths.get(
-            System.getProperty("user.dir"),
-            "database",
-            "redis",
-            "test",
-            "config",
-            "redis.properties"
-    );
+    private static final String REDIS_CONFIG = "datasource/test/redis.properties";
+
     private JedisPool jedisPool;
 
     private TestingRedisFactory(JedisPool jedisPool) {
@@ -33,11 +27,9 @@ public class TestingRedisFactory implements AutoCloseable {
     }
 
     public static TestingRedisFactory createInstance() {
-        try {
+        try (InputStream in = TestingRedisFactory.class.getClassLoader().getResourceAsStream(REDIS_CONFIG)) {
             Properties properties = new Properties();
-
-            InputStream is = new FileInputStream(REDIS_CONFIG_FILE_PATH.toString());
-            properties.load(is);
+            properties.load(in);
 
             String host = properties.getProperty("redis.host");
             int port = Integer.valueOf(properties.getProperty("redis.port"));
@@ -49,7 +41,7 @@ public class TestingRedisFactory implements AutoCloseable {
 
             return new TestingRedisFactory(jedisPool);
         } catch (IOException e) {
-            throw new DalException("Exception during redis connection pool creation", e);
+            throw new RuntimeException("Exception during factory creation", e);
         }
     }
 

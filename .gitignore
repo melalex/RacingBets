@@ -128,3 +128,5 @@ src/main/webapp/
 !/src/META-INF/
 !/src/main/java/com/room414/racingbets/web/
 !/src/main/resources/
+!/src/main/webapp/WEB-INF/web.xml
+!/src/main/webapp/

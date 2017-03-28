@@ -79,7 +79,7 @@ CREATE TABLE `horse_racing`.`role` (
     ON DELETE CASCADE
 );
 
-CREATE TABLE `horse_racing`.`raceDto` (
+CREATE TABLE `horse_racing`.`race` (
   `id`              INT UNSIGNED                                                                                                                                       NOT NULL AUTO_INCREMENT,
   `name`            VARCHAR(45)                                                                                                                                        NOT NULL,
   `status`          ENUM ('scheduled', 'riding', 'finished', 'rejected')                                                                                               NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE `horse_racing`.`prize` (
   `place`      INT(2) UNSIGNED         NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  FOREIGN KEY (race_id) REFERENCES raceDto (id)
+  FOREIGN KEY (race_id) REFERENCES race (id)
     ON DELETE CASCADE
 );
 
@@ -120,12 +120,12 @@ CREATE TABLE `horse_racing`.`participant` (
   `carried_weight`  FLOAT UNSIGNED  NULL,
   `topspeed`        INT(3) UNSIGNED NULL,
   `official_rating` INT(5) UNSIGNED NULL,
-  `oddsDto`         DOUBLE UNSIGNED NULL,
+  `odds`         DOUBLE UNSIGNED NULL,
   `place`           INT(2) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (horse_id) REFERENCES horse (id),
-  FOREIGN KEY (race_id) REFERENCES raceDto (id)
+  FOREIGN KEY (race_id) REFERENCES race (id)
     ON DELETE CASCADE,
   FOREIGN KEY (jockey_id) REFERENCES jockey (id),
   FOREIGN KEY (trainer_id) REFERENCES trainer (id)
@@ -142,7 +142,7 @@ CREATE TABLE `horse_racing`.`bet` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   FOREIGN KEY (application_user_id) REFERENCES application_user (id)
     ON DELETE CASCADE,
-  FOREIGN KEY (race_id) REFERENCES raceDto (id)
+  FOREIGN KEY (race_id) REFERENCES race (id)
     ON DELETE CASCADE
 );
 

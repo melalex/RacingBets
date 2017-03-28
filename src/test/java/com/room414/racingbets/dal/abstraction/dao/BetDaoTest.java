@@ -321,7 +321,7 @@ class BetDaoTest {
 
     @Test
     @Tag("write")
-    void rejectBets(long raceId) {
+    void rejectBets() {
         // TODO: test this
     }
 }

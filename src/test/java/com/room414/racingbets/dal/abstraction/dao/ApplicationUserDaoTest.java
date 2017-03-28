@@ -290,7 +290,7 @@ class ApplicationUserDaoTest {
                 .setLastName("Allen")
                 .setEmail("melalex490@virginia.edu")
                 .setEmailConfirmed(true)
-                .setBalance(BigDecimal.valueOf(385.59))
+                .setBalance(entity.getBalance())
                 .setLanguage(Language.ENGLISH)
                 .addRole(Role.ADMIN)
                 .addRole(Role.BOOKMAKER)

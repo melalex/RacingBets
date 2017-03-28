@@ -5,11 +5,8 @@ import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.concrete.mysql.dao.MySqlTestingUnitOfWork;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,13 +18,7 @@ import java.util.Properties;
  * @version 1.0 07 Mar 2017
  */
 public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
-    private static final Path CONFIG_FILE_PATH = Paths.get(
-            "target",
-            "classes",
-            "datasource",
-            "test",
-            "mysql.properties"
-    );
+    private static final String MYSQL_CONFIG = "datasource/test/mysql.properties";
 
     private static MySqlTestingUnitOfWorkFactory ourInstance = createFactory();
 
@@ -40,11 +31,11 @@ public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
     }
 
 
-    private static MySqlTestingUnitOfWorkFactory createFactory()  {
-        try {
+    private static MySqlTestingUnitOfWorkFactory createFactory() {
+        try (InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(MYSQL_CONFIG)) {
             Properties properties = new Properties();
-            InputStream is = new FileInputStream(CONFIG_FILE_PATH.toString());
-            properties.load(is);
+            properties.load(in);
+
             String url = properties.getProperty("jdbc.url");
             String driver = properties.getProperty("jdbc.driver");
             String username = properties.getProperty("jdbc.username");
@@ -53,7 +44,8 @@ public class MySqlTestingUnitOfWorkFactory implements UnitOfWorkFactory {
             Class.forName(driver);
 
             return new MySqlTestingUnitOfWorkFactory(url, username, password);
-        } catch (ClassNotFoundException | IOException e) {
+
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("Exception during factory creation", e);
         }
     }

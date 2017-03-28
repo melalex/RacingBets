@@ -31,13 +31,13 @@ import java.util.stream.Collectors;
 class LifeCycle {
     private static final Log LOG = LogFactory.getLog(LifeCycle.class);
 
-    private static final String MYSQL_PROPERTIES = "mysql.properties";
-    private static final String REDIS_PROPERTIES = "redis.properties";
-    private static final String DAL_PROPERTIES = "dal.properties";
+    private static final String MYSQL_PROPERTIES = "datasource/main/mysql.properties";
+    private static final String REDIS_PROPERTIES = "datasource/main/redis.properties";
+    private static final String DAL_PROPERTIES = "appConfig/dal.properties";
 
-    private static final String JWT_PROPERTIES = "jwt.properties";
-    private static final String MAIL_PROPERTIES = "mail.properties";
-    private static final String BLL_PROPERTIES = "bll.properties";
+    private static final String JWT_PROPERTIES = "appConfig/jwt.properties";
+    private static final String MAIL_PROPERTIES = "appConfig/mail.properties";
+    private static final String BLL_PROPERTIES = "appConfig/bll.properties";
 
     private static final String ROUTES = "routes.xml";
 
