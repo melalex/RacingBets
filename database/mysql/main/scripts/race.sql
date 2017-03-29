@@ -96,6 +96,7 @@ CREATE PROCEDURE horse_racing.filter_races(
                 AND (p_name IS NULL OR race.name LIKE p_name)
                 AND (p_begin IS NULL OR race.start_date_time >= p_begin)
                 AND (p_end IS NULL OR race.start_date_time <= p_end)
+          ORDER BY race.start_date_time DESC
           LIMIT p_limit OFFSET p_offset) AS race
 
       INNER JOIN racecourse AS racecourse
@@ -195,6 +196,7 @@ CREATE PROCEDURE horse_racing.filter_races(
                 AND (p_name IS NULL OR race.name LIKE p_name)
                 AND (p_begin IS NULL OR race.start_date_time >= p_begin)
                 AND (p_end IS NULL OR race.start_date_time <= p_end)
+          ORDER BY race.start_date_time DESC
           LIMIT p_limit OFFSET p_offset) AS race
       INNER JOIN racecourse AS racecourse
         ON race.racecourse_id = racecourse.id

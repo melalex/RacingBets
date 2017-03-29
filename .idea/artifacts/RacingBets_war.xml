@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="RacingBets:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="horse-racing-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="RacingBets:war exploded" />
+    </root>
+  </artifact>
+</component>
