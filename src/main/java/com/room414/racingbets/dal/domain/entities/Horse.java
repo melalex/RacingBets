@@ -6,6 +6,9 @@ import com.room414.racingbets.dal.domain.enums.Gender;
 import java.io.Serializable;
 import java.sql.Date;
 
+import static com.room414.racingbets.dal.domain.infrastructure.EntityHelper.compareDates;
+import static com.room414.racingbets.dal.domain.infrastructure.EntityHelper.dateHash;
+
 /**
  * Class that represents Horse entity.
  * To create instances of Horse is recommended to use the HorseBuilder.
@@ -107,7 +110,7 @@ public class Horse implements Serializable {
             return false;
         }
 
-        if (birthday != null ? !birthday.equals(horse.birthday) : horse.birthday != null) {
+        if (birthday != null ? !compareDates(birthday, horse.birthday) : horse.birthday != null) {
             return false;
         }
 
@@ -125,7 +128,7 @@ public class Horse implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (trainer != null ? trainer.hashCode() : 0);
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        result = 31 * result + (birthday != null ? dateHash(birthday) : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
 
         return result;

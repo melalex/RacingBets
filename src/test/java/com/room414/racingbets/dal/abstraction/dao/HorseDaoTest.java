@@ -5,6 +5,7 @@ import com.room414.racingbets.dal.domain.entities.Owner;
 import com.room414.racingbets.dal.domain.entities.Trainer;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.resolvers.UnitOfWorkParameterResolver;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -159,7 +160,7 @@ class HorseDaoTest {
 
     @Test
     @Tag("write")
-    void createAndDelete_nullSireAndDam_createdDeleted() throws ParseException {
+    void createAndDelete() throws ParseException {
         HorseDao horseDao = getHorseDao();
 
         Trainer trainer3 = storage.getTrainer(3);
@@ -167,36 +168,7 @@ class HorseDaoTest {
 
         Horse newEntity = Horse.builder()
                 .setName("Prodder")
-                .setBirthday(sqlDateFromString("2011-12-26"))
-                .setGender("mare")
-                .setTrainer(trainer3)
-                .setOwner(owner3)
-                .build();
-
-        horseDao.create(newEntity);
-
-        Horse entity1 = horseDao.find(newEntity.getId());
-
-        assert newEntity.equals(entity1) : "Dao did not getUnitOfWorkFactory Person";
-
-        horseDao.delete(newEntity.getId());
-
-        Horse entity2 = horseDao.find(newEntity.getId());
-
-        assert entity2 == null : "Dao did not delete Person";
-    }
-
-    @Test
-    @Tag("write")
-    void createAndDelete_notNullSireAndDam_createdDeleted() throws ParseException {
-        HorseDao horseDao = getHorseDao();
-
-        Trainer trainer3 = storage.getTrainer(3);
-        Owner owner3 = storage.getOwner(3);
-
-        Horse newEntity = Horse.builder()
-                .setName("Prodder")
-                .setBirthday(sqlDateFromString("2011-12-26"))
+                .setBirthday(sqlDateFromString("2011-12-25"))
                 .setGender("mare")
                 .setTrainer(trainer3)
                 .setOwner(owner3)
@@ -212,7 +184,7 @@ class HorseDaoTest {
 
         Horse entity2 = horseDao.find(newEntity.getId());
 
-        assert entity2 == null : "Dao did not delete Person";
+        assert entity2 == null : "Dao did not delete Horse";
     }
 
     @Test
@@ -241,11 +213,8 @@ class HorseDaoTest {
         horseDao.update(updated);
 
         Horse afterSave = horseDao.find(targetId);
+        horseDao.update(entity);
 
         assert updated.equals(afterSave) : defaultAssertionFailMessage(afterSave, updated);
-
-        // rollback
-
-        horseDao.update(entity);
     }
 }

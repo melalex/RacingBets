@@ -8,7 +8,6 @@ import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlDateFromString;
+import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlTimestampFromString;
 
 /**
  * @author melalex
@@ -462,7 +462,7 @@ public class EntityStorage {
         );
     }
 
-    private void initRaceMap() {
+    private void initRaceMap() throws ParseException {
         RaceBuilder race1Builder = Race.builder()
                 .setId(1)
                 .setName("Gembucket")
@@ -470,7 +470,7 @@ public class EntityStorage {
                 .setCommission(0.14)
                 .setMinBet(BigDecimal.valueOf(2))
                 .setRacecourse(getRacecourse(1))
-                .setStart(Timestamp.valueOf("2017-03-08 10:32:36"))
+                .setStart(sqlTimestampFromString("2017-03-08 10:32:36"))
                 .setTrackCondition("Hard")
                 .setRaceType("flat")
                 .setRaceClass(1)
@@ -496,7 +496,7 @@ public class EntityStorage {
                 .setCommission(0.14)
                 .setMinBet(BigDecimal.valueOf(2))
                 .setRacecourse(getRacecourse(1))
-                .setStart(Timestamp.valueOf("2017-03-09 13:44:56"))
+                .setStart(sqlTimestampFromString("2017-03-09 13:44:56"))
                 .setTrackCondition("Firm")
                 .setRaceType("jump")
                 .setRaceClass(2)
@@ -522,7 +522,7 @@ public class EntityStorage {
                 .setCommission(0.14)
                 .setMinBet(BigDecimal.valueOf(2))
                 .setRacecourse(getRacecourse(2))
-                .setStart(Timestamp.valueOf("2017-03-10 12:00:00"))
+                .setStart(sqlTimestampFromString("2017-03-10 12:00:00"))
                 .setRaceType("harness")
                 .setRaceClass(2)
                 .setMinAge(2)
@@ -892,10 +892,6 @@ public class EntityStorage {
 
     public List<Racecourse> getAllRacecourses() {
         return racecourseMap.values().stream().map(RacecourseBuilder::build).collect(Collectors.toList());
-    }
-
-    public List<Participant> getAllParticipants() {
-        return participantMap.values().stream().map(ParticipantBuilder::build).collect(Collectors.toList());
     }
 
     public List<Race> getAllRaces() {

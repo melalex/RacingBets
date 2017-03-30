@@ -12,12 +12,12 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
+import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlTimestampFromString;
 
 
 /**
@@ -84,8 +84,8 @@ class RaceDaoTest {
         RaceDao dao = getDao();
         List<Race> expectedResult = new LinkedList<>();
 
-        expectedResult.add(storage.getRace(1));
         expectedResult.add(storage.getRace(2));
+        expectedResult.add(storage.getRace(3));
 
         List<Race> result = dao.findAll(0, 2);
 
@@ -160,7 +160,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapason() {
+    void findInTimestampDiapason() throws ParseException {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -169,8 +169,8 @@ class RaceDaoTest {
 
         FilterParams params = new FilterParams();
         params.setRaceStatus(RaceStatus.FINISHED);
-        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
-        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+        params.setBegin(sqlTimestampFromString("2017-03-08 00:00:00"));
+        params.setEnd(sqlTimestampFromString("2017-03-08 23:59:59"));
         params.setLimit(1);
         params.setOffset(0);
 
@@ -181,14 +181,14 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapasonCount() {
+    void findInTimestampDiapasonCount() throws ParseException {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
         FilterParams params = new FilterParams();
         params.setRaceStatus(RaceStatus.FINISHED);
-        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
-        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+        params.setBegin(sqlTimestampFromString("2017-03-08 00:00:00"));
+        params.setEnd(sqlTimestampFromString("2017-03-08 23:59:59"));
 
         long result = dao.count(params);
 
@@ -197,7 +197,7 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapasonOnRacecourse() {
+    void findInTimestampDiapasonOnRacecourse() throws ParseException {
         RaceDao dao = getDao();
 
         List<Race> expectedResult = new LinkedList<>();
@@ -206,8 +206,8 @@ class RaceDaoTest {
 
         FilterParams params = new FilterParams();
         params.setRaceStatus(RaceStatus.FINISHED);
-        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
-        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+        params.setBegin(sqlTimestampFromString("2017-03-08 00:00:00"));
+        params.setEnd(sqlTimestampFromString("2017-03-08 23:59:59"));
         params.setRacecourseId(1L);
         params.setLimit(1);
         params.setOffset(0);
@@ -219,14 +219,14 @@ class RaceDaoTest {
 
     @Test
     @Tag("read")
-    void findInTimestampDiapasonOnRacecourseCount() {
+    void findInTimestampDiapasonOnRacecourseCount() throws ParseException {
         RaceDao dao = getDao();
         long expectedResult = 1;
 
         FilterParams params = new FilterParams();
         params.setRaceStatus(RaceStatus.FINISHED);
-        params.setBegin(Timestamp.valueOf("2017-03-08 00:00:00"));
-        params.setEnd(Timestamp.valueOf("2017-03-08 23:59:59"));
+        params.setBegin(sqlTimestampFromString("2017-03-08 00:00:00"));
+        params.setEnd(sqlTimestampFromString("2017-03-08 23:59:59"));
         params.setRacecourseId(1L);
 
         long result = dao.count(params);
@@ -280,7 +280,7 @@ class RaceDaoTest {
                 .setCommission(0.14)
                 .setMinBet(BigDecimal.valueOf(5))
                 .setRacecourse(storage.getRacecourse(2))
-                .setStart(Timestamp.valueOf("2016-03-08 10:32:36"))
+                .setStart(sqlTimestampFromString("2016-03-08 10:32:36"))
                 .setTrackCondition(TrackCondition.GOOD_TO_SOFT)
                 .setRaceType(RaceType.HARNESS)
                 .setRaceClass(4)
@@ -324,7 +324,7 @@ class RaceDaoTest {
                 .setCommission(0.14)
                 .setMinBet(BigDecimal.valueOf(5))
                 .setRacecourse(storage.getRacecourse(2))
-                .setStart(Timestamp.valueOf("2016-03-08 10:32:36"))
+                .setStart(sqlTimestampFromString("2016-03-08 10:32:36"))
                 .setTrackCondition(TrackCondition.GOOD_TO_SOFT)
                 .setRaceType(RaceType.HARNESS)
                 .setRaceClass(4)
