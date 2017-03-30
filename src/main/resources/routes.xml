@@ -2,315 +2,315 @@
 <routes>
     <route>
         <method>POST</method>
-        <pattern>^api/account/register$</pattern>
+        <pattern>^account/register$</pattern>
         <controller>Account</controller>
         <action>register</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/account/login$</pattern>
+        <pattern>^account/login$</pattern>
         <controller>Account</controller>
         <action>login</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/account/refresh/(\w)+$</pattern>
+        <pattern>^account/refresh/(\w)+$</pattern>
         <controller>Account</controller>
         <action>refresh</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/account/roles/(\d)+$</pattern>
+        <pattern>^account/roles/(\d)+$</pattern>
         <controller>Account</controller>
         <action>register</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/account/balance/(\d)+$</pattern>
+        <pattern>^account/balance/(\d)+$</pattern>
         <controller>Account</controller>
         <action>addMoney</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/account/confirm/(\w)+$</pattern>
+        <pattern>^account/confirm/(\w)+$</pattern>
         <controller>Account</controller>
         <action>confirmEmail</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/account/(\d)+$</pattern>
+        <pattern>^account/(\d)+$</pattern>
         <controller>Account</controller>
         <action>findById</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/account$</pattern>
+        <pattern>^account$</pattern>
         <controller>Account</controller>
         <action>find</action>
     </route>
 
     <route>
         <method>DELETE</method>
-        <pattern>^api/account/(\d)+$</pattern>
+        <pattern>^account/(\d)+$</pattern>
         <controller>Account</controller>
         <action>delete</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/account/register$</pattern>
+        <pattern>^account/register$</pattern>
         <controller>Account</controller>
         <action>register</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/bet$</pattern>
+        <pattern>^bet$</pattern>
         <controller>Bet</controller>
         <action>makeBet</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/bet/odds$</pattern>
+        <pattern>^bet/odds$</pattern>
         <controller>Bet</controller>
         <action>getOdds</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/race$</pattern>
+        <pattern>^race$</pattern>
         <controller>Race</controller>
         <action>scheduleRace</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/race/start/(\d)+$</pattern>
+        <pattern>^race/start/(\d)+$</pattern>
         <controller>Race</controller>
         <action>startRace</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/race/reject/(\d)+$</pattern>
+        <pattern>^race/reject/(\d)+$</pattern>
         <controller>Race</controller>
         <action>rejectRace</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/race/finish/(\d)+$</pattern>
+        <pattern>^race/finish/(\d)+$</pattern>
         <controller>Race</controller>
         <action>finishRace</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/race/(\d)+$</pattern>
+        <pattern>^race/(\d)+$</pattern>
         <controller>Race</controller>
         <action>update</action>
     </route>
 
     <route>
         <method>DELETE</method>
-        <pattern>^api/race/(\d)+$</pattern>
+        <pattern>^race/(\d)+$</pattern>
         <controller>Race</controller>
         <action>delete</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/race/(\d)+$</pattern>
+        <pattern>^race/(\d)+$</pattern>
         <controller>Race</controller>
         <action>find</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/race$</pattern>
+        <pattern>^race$</pattern>
         <controller>Race</controller>
         <action>filter</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/horse$</pattern>
+        <pattern>^horse$</pattern>
         <controller>Horse</controller>
         <action>create</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/horse$</pattern>
+        <pattern>^horse$</pattern>
         <controller>Horse</controller>
         <action>update</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/horse/(\d)+$</pattern>
+        <pattern>^horse/(\d)+$</pattern>
         <controller>Horse</controller>
         <action>find</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/horse$</pattern>
+        <pattern>^horse$</pattern>
         <controller>Horse</controller>
         <action>search</action>
     </route>
 
     <route>
         <method>DELETE</method>
-        <pattern>^api/horse$</pattern>
+        <pattern>^horse$</pattern>
         <controller>Horse</controller>
         <action>delete</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/jockey$</pattern>
+        <pattern>^jockey$</pattern>
         <controller>Jockey</controller>
         <action>create</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/jockey$</pattern>
+        <pattern>^jockey$</pattern>
         <controller>Jockey</controller>
         <action>update</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/jockey/(\d)+$</pattern>
+        <pattern>^jockey/(\d)+$</pattern>
         <controller>Jockey</controller>
         <action>find</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/jockey$</pattern>
+        <pattern>^jockey$</pattern>
         <controller>Jockey</controller>
         <action>search</action>
     </route>
 
     <route>
         <method>DELETE</method>
-        <pattern>^api/jockey$</pattern>
+        <pattern>^jockey$</pattern>
         <controller>Jockey</controller>
         <action>delete</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/owner$</pattern>
+        <pattern>^owner$</pattern>
         <controller>Owner</controller>
         <action>create</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/owner$</pattern>
+        <pattern>^owner$</pattern>
         <controller>Owner</controller>
         <action>update</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/owner/(\d)+$</pattern>
+        <pattern>^owner/(\d)+$</pattern>
         <controller>Owner</controller>
         <action>find</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/owner$</pattern>
+        <pattern>^owner$</pattern>
         <controller>Owner</controller>
         <action>search</action>
     </route>
 
     <route>
         <method>DELETE</method>
-        <pattern>^api/owner$</pattern>
+        <pattern>^owner$</pattern>
         <controller>Owner</controller>
         <action>delete</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/racecourse$</pattern>
+        <pattern>^racecourse$</pattern>
         <controller>Racecourse</controller>
         <action>create</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/racecourse$</pattern>
+        <pattern>^racecourse$</pattern>
         <controller>Racecourse</controller>
         <action>update</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/racecourse/(\d)+$</pattern>
+        <pattern>^racecourse/(\d)+$</pattern>
         <controller>Racecourse</controller>
         <action>find</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/racecourse$</pattern>
+        <pattern>^racecourse$</pattern>
         <controller>Racecourse</controller>
         <action>search</action>
     </route>
 
     <route>
         <method>DELETE</method>
-        <pattern>^api/racecourse$</pattern>
+        <pattern>^racecourse$</pattern>
         <controller>Racecourse</controller>
         <action>delete</action>
     </route>
 
     <route>
         <method>POST</method>
-        <pattern>^api/trainer$</pattern>
+        <pattern>^trainer$</pattern>
         <controller>Trainer</controller>
         <action>create</action>
     </route>
 
     <route>
         <method>PUT</method>
-        <pattern>^api/trainer$</pattern>
+        <pattern>^trainer$</pattern>
         <controller>Trainer</controller>
         <action>update</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/trainer/(\d)+$</pattern>
+        <pattern>^trainer/(\d)+$</pattern>
         <controller>Trainer</controller>
         <action>find</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^api/trainer$</pattern>
+        <pattern>^trainer$</pattern>
         <controller>Trainer</controller>
         <action>search</action>
     </route>
 
     <route>
         <method>DELETE</method>
-        <pattern>^api/trainer$</pattern>
+        <pattern>^trainer$</pattern>
         <controller>Trainer</controller>
         <action>delete</action>
     </route>

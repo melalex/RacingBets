@@ -111,7 +111,7 @@ class LifeCycle {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     element = (Element) node;
                     method = Route.Method.valueOf(element.getElementsByTagName("method").item(0).getTextContent());
-                    pattern = element.getElementsByTagName("method").item(0).getTextContent();
+                    pattern = element.getElementsByTagName("pattern").item(0).getTextContent();
                     controller = element.getElementsByTagName("controller").item(0).getTextContent();
                     action = element.getElementsByTagName("action").item(0).getTextContent();
 
@@ -127,7 +127,7 @@ class LifeCycle {
         }
     }
 
-    static void startUp(RacingBetsFrontController servlet) throws ServletException {
+    static void startUp(FrontController servlet) throws ServletException {
         initDal();
         initBll();
 

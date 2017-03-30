@@ -21,9 +21,9 @@ import static com.room414.racingbets.web.util.ResponseUtil.serverError;
  * @version 1.0 23 Mar 2017
  */
 @WebServlet(name = "/")
-public class RacingBetsFrontController extends HttpServlet {
+public class FrontController extends HttpServlet {
     private static final long serialVersionUID = -5124039442023640569L;
-    private static final Log LOG = LogFactory.getLog(RacingBetsFrontController.class);
+    private static final Log LOG = LogFactory.getLog(FrontController.class);
 
     private CommandFactory postCommandFactory;
     private CommandFactory getCommandFactory;
