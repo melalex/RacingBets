@@ -20,7 +20,7 @@ public class ResponseUtil {
     private static final String CONTENT_TYPE = "application/json";
     private static final String ENCODING = "UTF-8";
 
-    public static final String ERROR_MESSAGE_BUNDLE = "ErrorMessageBundle.properties";
+    public static final String ERROR_MESSAGE_BUNDLE = "i18n/ErrorMessageBundle";
     public static final int SC_UNPROCESSABLE_ENTITY = 422;
 
 
@@ -96,15 +96,6 @@ public class ResponseUtil {
         Error error = new Error(ErrorCode.SYSTEM_ERROR, message, null, null);
         builder.addToErrors(error);
         resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        writeToResponse(resp, builder.buildErrorResponse());
-    }
-
-    public static void notFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseBuilder<Object> builder = new ResponseBuilder<>();
-        String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, req.getLocale()).getString("not.found");
-        Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, null, null);
-        builder.addToErrors(error);
-        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
         writeToResponse(resp, builder.buildErrorResponse());
     }
 

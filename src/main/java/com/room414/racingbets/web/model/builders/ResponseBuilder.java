@@ -41,7 +41,9 @@ public class ResponseBuilder<T> {
     }
 
     public ResponseBuilder<T> addToResult(T result) {
-        this.result.add(result);
+        if (result != null) {
+            this.result.add(result);
+        }
         return this;
     }
 
@@ -51,7 +53,9 @@ public class ResponseBuilder<T> {
     }
 
     public ResponseBuilder<T> addToErrors(Error error) {
-        this.errors.add(error);
+        if (error != null) {
+            this.errors.add(error);
+        }
         return this;
     }
 
