@@ -127,9 +127,7 @@ class LifeCycle {
         }
     }
 
-    static void startUp(FrontController servlet) throws ServletException {
-        initDal();
-        initBll();
+    private static void initCommandFactories(FrontController servlet) throws ServletException {
 
         Map<String, ActionFactory> actionFactoryMap = createActionFactoryMap();
         List<Route> routes = getRoutes();
@@ -158,6 +156,12 @@ class LifeCycle {
         servlet.setGetCommandFactory(new CommandFactory(getRoutes, actionFactoryMap));
         servlet.setPutCommandFactory(new CommandFactory(putRoutes, actionFactoryMap));
         servlet.setDeleteCommandFactory(new CommandFactory(deleteRoutes, actionFactoryMap));
+    }
+
+    static void startUp(FrontController servlet) throws ServletException {
+        initDal();
+        initBll();
+        initCommandFactories(servlet);
     }
 
     static void tearDown() {

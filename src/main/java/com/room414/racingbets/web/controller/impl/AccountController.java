@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.*;
@@ -165,9 +166,11 @@ public class AccountController {
     }
 
     /**
-     * PUT: /account/login
+     * GET: /account/login
      */
-    public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void login(HttpServletRequest req,
+                       HttpServletResponse resp,
+                       Function<UserDto, Boolean> rolesCheck) throws IOException {
         Pair<String, String> credentials = getBasicAuthFromRequest(req);
         ResponseBuilder<Token> responseBuilder = createResponseBuilder(resp);
 
@@ -179,7 +182,7 @@ public class AccountController {
 
         UserDto user = userService.findByLoginPassword(credentials.getFirstElement(), credentials.getSecondElement());
 
-        if (user == null) {
+        if (user == null || !rolesCheck.apply(user)) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("login");
             Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, ENTITY_TYPE, null);
             responseBuilder.addToErrors(error);
@@ -193,9 +196,11 @@ public class AccountController {
     }
 
     /**
-     * PUT: /account/refresh/%s
+     * GET: /account/refresh/%s
      */
-    public void refresh(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void refresh(HttpServletRequest req,
+                         HttpServletResponse resp,
+                         Function<UserDto, Boolean> rolesCheck) throws IOException {
         String token = getToken(req);
 
         ResponseBuilder<Token> responseBuilder = createResponseBuilder(resp);
@@ -221,7 +226,7 @@ public class AccountController {
 
         UserDto user = userService.find(id);
 
-        if (user == null) {
+        if (user == null || !rolesCheck.apply(user)) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("login");
             Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, ENTITY_TYPE, null);
             responseBuilder.addToErrors(error);
@@ -232,6 +237,35 @@ public class AccountController {
         responseBuilder.addToResult(createToken(user));
         resp.setStatus(HttpServletResponse.SC_OK);
         writeToResponse(resp, responseBuilder.buildSuccessResponse());
+    }
+
+    /**
+     * GET: /account/login
+     */
+    public void loginClient(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        login(req, resp, u -> u != null && (u.isInRole(Role.HANDICAPPER)));
+    }
+
+    /**
+     * GET: /account/admin/login
+     */
+    public void loginAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        login(req, resp, u -> u != null && (u.isInRole(Role.ADMIN) || u.isInRole(Role.BOOKMAKER)));
+    }
+
+
+    /**
+     * GET: /account/refresh
+     */
+    public void refreshClient(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        refresh(req, resp, u -> u != null && (u.isInRole(Role.HANDICAPPER)));
+    }
+
+    /**
+     * GET: /account/admin/refresh
+     */
+    public void refreshAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        refresh(req, resp, u -> u != null && (u.isInRole(Role.ADMIN) || u.isInRole(Role.BOOKMAKER)));
     }
 
     /**

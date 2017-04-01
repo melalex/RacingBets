@@ -5,7 +5,6 @@ import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.CrudService;
 import com.room414.racingbets.dal.domain.enums.Role;
-import com.room414.racingbets.web.controller.interfaces.CrudController;
 import com.room414.racingbets.web.model.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.infrastructure.Validator;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;

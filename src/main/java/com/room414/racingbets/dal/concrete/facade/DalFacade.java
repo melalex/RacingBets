@@ -1,5 +1,6 @@
 package com.room414.racingbets.dal.concrete.facade;
 
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.abstraction.factories.AbstractDalFactory;
 import com.room414.racingbets.dal.concrete.caching.infrastructure.pool.MainCachePool;
 import com.room414.racingbets.dal.concrete.caching.redis.RedisSubscriber;
@@ -7,13 +8,13 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**
  * @author melalex
  * @version 1.0 08 Mar 2017
  */
-// TODO: replace *.property files paths to upper level (maybe WEB?)
 public class DalFacade implements AutoCloseable {
     private static DalFacade ourInstance = new DalFacade();
 
@@ -85,5 +86,11 @@ public class DalFacade implements AutoCloseable {
     @Override
     public void close() {
         jedisPool.close();
+        try {
+            mysqlPool.close();
+        } catch (SQLException e) {
+            String message = "Exception during closing mysql connection pool";
+            throw new DalException(message, e);
+        }
     }
 }

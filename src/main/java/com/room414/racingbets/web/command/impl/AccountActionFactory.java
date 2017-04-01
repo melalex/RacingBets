@@ -23,8 +23,10 @@ public class AccountActionFactory implements ActionFactory {
         AccountController accountController = accountControllerFactory.create(locale);
         switch (name) {
             case "register": return accountController::register;
-            case "login": return accountController::login;
-            case "refresh": return accountController::refresh;
+            case "loginClient": return accountController::loginClient;
+            case "refreshClient": return accountController::loginClient;
+            case "loginAdmin": return accountController::loginAdmin;
+            case "refreshAdmin": return accountController::loginAdmin;
             case "setRoles": return accountController::setRoles;
             case "addMoney": return accountController::addMoney;
             case "confirmEmail": return accountController::confirmEmail;
