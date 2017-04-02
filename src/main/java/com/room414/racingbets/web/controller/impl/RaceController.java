@@ -217,7 +217,7 @@ public class RaceController {
     }
 
     /**
-     * GET: /race?status=%s;racecourse=%d;horse=%d;trainer=%d;jockey=%d;name=%s;date=%d;page=%d
+     * GET: /race?status=%s&racecourse=%d&horse=%d&trainer=%d&jockey=%d&name=%s&date=%d&page=%d
      */
     public void filter(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
@@ -238,7 +238,7 @@ public class RaceController {
         List<RaceDto> result = raceService.filter(paramsBuilder, pager);
 
         responseBuilder.addAllToResult(result);
-        responseBuilder.setCount(pager.getCount());
+        responseBuilder.setPager(pager);
 
         resp.setStatus(HttpServletResponse.SC_FOUND);
         writeToResponse(resp, responseBuilder.buildSuccessResponse());

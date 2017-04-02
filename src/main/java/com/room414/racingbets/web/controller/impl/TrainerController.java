@@ -69,7 +69,7 @@ public class TrainerController implements CrudController {
     }
 
     /**
-     * GET: /trainer?query=%s;page=%d
+     * GET: /trainer?query=%s&page=%d
      */
     @Override
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {

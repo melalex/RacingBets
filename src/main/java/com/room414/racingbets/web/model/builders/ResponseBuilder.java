@@ -1,5 +1,6 @@
 package com.room414.racingbets.web.model.builders;
 
+import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.web.model.enums.Status;
 import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.model.viewmodels.Response;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class ResponseBuilder<T> {
     private int count;
+    private int limit;
     private String type;
     private List<T> result = new LinkedList<>();
     private List<Error> errors = new LinkedList<>();
@@ -21,8 +23,9 @@ public class ResponseBuilder<T> {
         return errors.size() > 0;
     }
 
-    public ResponseBuilder<T> setCount(int count) {
-        this.count = count;
+    public ResponseBuilder<T> setPager(Pager pager) {
+        this.count = pager.getCount();
+        this.limit = pager.getLimit();
         return this;
     }
 
@@ -64,6 +67,7 @@ public class ResponseBuilder<T> {
 
         response.setStatus(Status.SUCCESS);
         response.setCount(count != 0 ? count : result.size());
+        response.setCount(limit != 0 ? limit : result.size());
         response.setResult(result);
         response.setType(type);
 
@@ -75,6 +79,7 @@ public class ResponseBuilder<T> {
 
         response.setStatus(Status.SUCCESS);
         response.setCount(count != 0 ? count : errors.size());
+        response.setCount(limit != 0 ? limit : errors.size());
         response.setResult(errors);
         response.setType(type);
 

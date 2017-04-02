@@ -24,6 +24,10 @@ public class Response<T> implements Serializable {
      */
     private int count;
     /**
+     * Records per page
+     */
+    private int limit;
+    /**
      * Resource (sometimes called the Object) type
      */
     private String type;
@@ -47,6 +51,10 @@ public class Response<T> implements Serializable {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 
     public String getType() {
@@ -78,6 +86,7 @@ public class Response<T> implements Serializable {
         Response<?> response = (Response<?>) o;
 
         if (count != response.count) return false;
+        if (limit != response.limit) return false;
         if (status != response.status) return false;
         if (type != null ? !type.equals(response.type) : response.type != null) return false;
         return result != null ? result.equals(response.result) : response.result == null;
@@ -87,6 +96,7 @@ public class Response<T> implements Serializable {
     public int hashCode() {
         int result1 = status != null ? status.hashCode() : 0;
         result1 = 31 * result1 + count;
+        result1 = 31 * result1 + limit;
         result1 = 31 * result1 + (type != null ? type.hashCode() : 0);
         result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
         return result1;
@@ -97,6 +107,7 @@ public class Response<T> implements Serializable {
         return "Response{" +
                 "status=" + status +
                 ", count=" + count +
+                ", limit=" + limit +
                 ", type='" + type + '\'' +
                 ", result=" + result +
                 '}';

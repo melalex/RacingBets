@@ -69,7 +69,7 @@ public class JockeyController implements CrudController {
     }
 
     /**
-     * GET: /jockey?query=%s;page=%d
+     * GET: /jockey?query=%s&page=%d
      */
     @Override
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -143,7 +143,7 @@ class CrudControllerDelegate<F, D> {
         }
 
         responseBuilder.addAllToResult(entities);
-        responseBuilder.setCount(pager.getCount());
+        responseBuilder.setPager(pager);
 
         resp.setStatus(HttpServletResponse.SC_FOUND);
         writeToResponse(resp, responseBuilder.buildSuccessResponse());

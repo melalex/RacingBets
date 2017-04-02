@@ -83,7 +83,7 @@ public class HorseController implements CrudController {
     }
 
     /**
-     * GET: /horse?query=%s;page=%d
+     * GET: /horse?query=%s&page=%d
      */
     @Override
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {

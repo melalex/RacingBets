@@ -362,7 +362,7 @@ public class AccountController {
     }
 
     /**
-     * GET: /account?query=%s;page=%d
+     * GET: /account?query=%s&page=%d
      */
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserViewModel> responseBuilder = createResponseBuilder(resp);
@@ -380,7 +380,7 @@ public class AccountController {
             }
 
             users.forEach(u -> responseBuilder.addToResult(map(u, UserViewModel.class)));
-            responseBuilder.setCount(pager.getCount());
+            responseBuilder.setPager(pager);
 
             resp.setStatus(HttpServletResponse.SC_FOUND);
             writeToResponse(resp, responseBuilder.buildSuccessResponse());

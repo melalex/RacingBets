@@ -70,7 +70,7 @@ public class OwnerController implements CrudController {
     }
 
     /**
-     * GET: /owner?query=%s;page=%d
+     * GET: /owner?query=%s&page=%d
      */
     @Override
     public void search(HttpServletRequest req, HttpServletResponse resp) throws IOException {
