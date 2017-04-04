@@ -40,4 +40,9 @@ public enum  RaceStatus {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

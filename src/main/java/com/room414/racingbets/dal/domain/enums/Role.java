@@ -54,6 +54,6 @@ public enum Role {
                 return v;
             }
         }
-        throw new IllegalArgumentException("There is no Role named " + name);
+        return null;
     }
 }

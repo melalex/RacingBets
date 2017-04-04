@@ -34,4 +34,9 @@ public enum BetStatus {
         }
         throw new IllegalArgumentException("There is no Gender named " + name);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

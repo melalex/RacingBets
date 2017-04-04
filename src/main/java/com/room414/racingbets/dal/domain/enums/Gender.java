@@ -26,6 +26,11 @@ public enum Gender {
                 return v;
             }
         }
-        throw new IllegalArgumentException("There is no Gender named " + name);
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

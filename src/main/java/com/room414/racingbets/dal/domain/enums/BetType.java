@@ -61,4 +61,9 @@ public enum BetType {
         }
         throw new IllegalArgumentException("There is no BetType named " + name);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

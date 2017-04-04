@@ -36,6 +36,11 @@ public enum RaceType {
                 return v;
             }
         }
-        throw new IllegalArgumentException("There is no RaceType named " + name);
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

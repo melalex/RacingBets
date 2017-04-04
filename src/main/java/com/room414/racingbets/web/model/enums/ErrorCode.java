@@ -92,4 +92,8 @@ public enum ErrorCode {
         throw new IllegalArgumentException("There is no ErrorCode named " + name);
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

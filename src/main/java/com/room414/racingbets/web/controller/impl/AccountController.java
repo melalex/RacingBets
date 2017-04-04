@@ -165,9 +165,6 @@ public class AccountController {
         }
     }
 
-    /**
-     * GET: /account/login
-     */
     private void login(HttpServletRequest req,
                        HttpServletResponse resp,
                        Function<UserDto, Boolean> rolesCheck) throws IOException {
@@ -195,9 +192,6 @@ public class AccountController {
         writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 
-    /**
-     * GET: /account/refresh/%s
-     */
     private void refresh(HttpServletRequest req,
                          HttpServletResponse resp,
                          Function<UserDto, Boolean> rolesCheck) throws IOException {
@@ -255,14 +249,14 @@ public class AccountController {
 
 
     /**
-     * GET: /account/refresh
+     * GET: /account/refresh/%s
      */
     public void refreshClient(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         refresh(req, resp, u -> u != null && (u.isInRole(Role.HANDICAPPER)));
     }
 
     /**
-     * GET: /account/admin/refresh
+     * GET: /account/admin/refresh/%s
      */
     public void refreshAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         refresh(req, resp, u -> u != null && (u.isInRole(Role.ADMIN) || u.isInRole(Role.BOOKMAKER)));

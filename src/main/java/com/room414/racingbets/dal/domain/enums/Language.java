@@ -29,7 +29,11 @@ public enum  Language {
                 return v;
             }
         }
-        throw new IllegalArgumentException("There is no Language with code " + name);
+        return null;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

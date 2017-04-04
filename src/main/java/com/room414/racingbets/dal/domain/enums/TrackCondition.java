@@ -44,6 +44,11 @@ public enum TrackCondition {
                 return v;
             }
         }
-        throw new IllegalArgumentException("There is no TrackCondition named " + name);
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
