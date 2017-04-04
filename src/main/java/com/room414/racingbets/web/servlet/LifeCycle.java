@@ -1,11 +1,14 @@
 package com.room414.racingbets.web.servlet;
 
+import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.factories.services.AbstractServiceFactory;
 import com.room414.racingbets.bll.concrete.facade.BllFacade;
+import com.room414.racingbets.dal.abstraction.exception.DalException;
 import com.room414.racingbets.dal.concrete.facade.DalFacade;
 import com.room414.racingbets.web.command.impl.*;
 import com.room414.racingbets.web.command.interfaces.ActionFactory;
 import com.room414.racingbets.web.controller.factories.ControllerFactoryCreator;
+import com.room414.racingbets.web.model.exceptions.WebException;
 import com.room414.racingbets.web.model.infrastructure.Route;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,6 +27,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.room414.racingbets.web.init.AppInitializer.*;
+
 /**
  * @author Alexander Melashchenko
  * @version 1.0 28 Mar 2017
@@ -31,46 +36,10 @@ import java.util.stream.Collectors;
 class LifeCycle {
     private static final Log LOG = LogFactory.getLog(LifeCycle.class);
 
-    private static final String MYSQL_PROPERTIES = "datasource/main/mysql.properties";
-    private static final String REDIS_PROPERTIES = "datasource/main/redis.properties";
-    private static final String DAL_PROPERTIES = "appConfig/dal.properties";
-
-    private static final String JWT_PROPERTIES = "appConfig/jwt.properties";
-    private static final String MAIL_PROPERTIES = "appConfig/mail.properties";
-    private static final String BLL_PROPERTIES = "appConfig/bll.properties";
-
     private static final String ROUTES = "routes.xml";
 
     private LifeCycle() {
 
-    }
-
-    private static Properties readProperties(String name) throws ServletException {
-        try (InputStream in = LifeCycle.class.getClassLoader().getResourceAsStream(name)) {
-            Properties properties = new Properties();
-            properties.load(in);
-            return properties;
-        } catch (IOException e) {
-            String message = String.format("Exception during reading properties from file '%s'", name);
-            LOG.error(message, e);
-            throw new ServletException(message, e);
-        }
-    }
-
-    private static void initDal() throws ServletException {
-        Properties mysql = readProperties(MYSQL_PROPERTIES);
-        Properties redis = readProperties(REDIS_PROPERTIES);
-        Properties dal = readProperties(DAL_PROPERTIES);
-
-        DalFacade.getInstance().initDal(mysql, redis, dal);
-    }
-
-    private static void initBll() throws ServletException {
-        Properties jwt = readProperties(JWT_PROPERTIES);
-        Properties mail = readProperties(MAIL_PROPERTIES);
-        Properties bll = readProperties(BLL_PROPERTIES);
-
-        BllFacade.getInstance().init(mail, jwt, bll);
     }
 
     private static Map<String, ActionFactory> createActionFactoryMap() {
@@ -159,9 +128,14 @@ class LifeCycle {
     }
 
     static void startUp(FrontController servlet) throws ServletException {
-        initDal();
-        initBll();
-        initCommandFactories(servlet);
+        try {
+            initApp();
+            initCommandFactories(servlet);
+        } catch (WebException | BllException | DalException e) {
+            String message = "Exception during application initialization";
+            LOG.error(message, e);
+            throw new ServletException(message, e);
+        }
     }
 
     static void tearDown() {

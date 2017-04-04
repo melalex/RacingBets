@@ -51,36 +51,36 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendWinMessage(BetDto bet, RaceDto race) {
         sendMessage(message -> {
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bet.getUser().getEmail()));
-            message.setSubject("sendWinMessage");
-            message.setText("Hello, this is sample for to check send email using JavaMailAPI ");
+//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bet.getUser().getEmail()));
+//            message.setSubject("sendWinMessage");
+//            message.setText("Hello, this is sample for to check send email using JavaMailAPI ");
         });
     }
 
     @Override
     public void sendLoseMessage(BetDto bet, RaceDto race) {
         sendMessage(message -> {
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bet.getUser().getEmail()));
-            message.setSubject("sendLoseMessage");
-            message.setText("Hello, this is sample for to check send email using JavaMailAPI ");
+//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bet.getUser().getEmail()));
+//            message.setSubject("sendLoseMessage");
+//            message.setText("Hello, this is sample for to check send email using JavaMailAPI ");
         });
     }
 
     @Override
     public void sendRejectMessage(BetDto bet, RaceDto race) {
         sendMessage(message -> {
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bet.getUser().getEmail()));
-            message.setSubject("sendRejectMessage");
-            message.setText("Hello, this is sample for to check send email using JavaMailAPI ");
+//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bet.getUser().getEmail()));
+//            message.setSubject("sendRejectMessage");
+//            message.setText("Hello, this is sample for to check send email using JavaMailAPI ");
         });
     }
 
     @Override
     public void sendConfirmMessage(UserDto user, String token) {
         sendMessage(message -> {
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
-            message.setSubject("sendConfirmMessage");
-            message.setText("Confirm email token: " + token);
+//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
+//            message.setSubject("sendConfirmMessage");
+//            message.setText("Confirm email token: " + token);
         });
     }
 }

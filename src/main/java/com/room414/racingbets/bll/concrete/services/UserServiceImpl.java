@@ -104,6 +104,8 @@ public class UserServiceImpl implements UserService {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             user.addRole(Role.HANDICAPPER);
             user.setBalance(new BigDecimal(0));
+            // TODO: change to false
+            user.setEmailConfirmed(true);
             ApplicationUser entity = mapper.map(user, ApplicationUser.class);
             hashPassword(entity);
             unitOfWork.getApplicationUserDao().create(entity);
