@@ -1,5 +1,8 @@
 package com.room414.racingbets.dal.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Preferred language of {@code ApplicationUser}
  *
@@ -19,10 +22,12 @@ public enum  Language {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
 
+    @JsonCreator
     public static Language getLanguage(String name) {
         for(Language v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {

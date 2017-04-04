@@ -1,5 +1,8 @@
 package com.room414.racingbets.dal.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Enum that represents type of bet.
  *
@@ -49,10 +52,12 @@ public enum BetType {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
 
+    @JsonCreator
     public static BetType getBetType(String name) {
         for(BetType v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {

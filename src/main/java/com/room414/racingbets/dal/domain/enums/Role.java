@@ -1,5 +1,7 @@
 package com.room414.racingbets.dal.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.room414.racingbets.dal.domain.entities.*;
 
 /**
@@ -39,15 +41,12 @@ public enum Role {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
+    @JsonCreator
     public static Role getRole(String name) {
         for(Role v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {
@@ -55,5 +54,10 @@ public enum Role {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

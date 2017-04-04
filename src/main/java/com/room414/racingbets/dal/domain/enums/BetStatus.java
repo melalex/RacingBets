@@ -1,5 +1,8 @@
 package com.room414.racingbets.dal.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * @author Alexander Melashchenko
  * @version 1.0 01 Mar 2017
@@ -22,10 +25,12 @@ public enum BetStatus {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
 
+    @JsonCreator
     public static BetStatus getStatus(String name) {
         for(BetStatus v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {

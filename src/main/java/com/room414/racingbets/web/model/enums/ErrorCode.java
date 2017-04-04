@@ -1,5 +1,8 @@
 package com.room414.racingbets.web.model.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Enum that represents response error codes
  *
@@ -79,10 +82,12 @@ public enum ErrorCode {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
 
+    @JsonCreator
     public static ErrorCode getErrorCode(String name) {
         for(ErrorCode v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {

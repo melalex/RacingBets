@@ -1,5 +1,8 @@
 package com.room414.racingbets.dal.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Enum that represents type of race.
  *
@@ -26,10 +29,12 @@ public enum RaceType {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
 
+    @JsonCreator
     public static RaceType getRaceType(String name) {
         for(RaceType v : values()) {
             if (v.getName().equalsIgnoreCase(name)) {

@@ -1,5 +1,8 @@
 package com.room414.racingbets.dal.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Represents track surface condition type.
  *
@@ -30,10 +33,12 @@ public enum TrackCondition {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
 
+    @JsonCreator
     public static TrackCondition getTrackCondition(String name) {
         if (name == null) {
             return null;
