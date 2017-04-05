@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.getObject;
@@ -59,7 +60,7 @@ class CrudControllerDelegate<F, D> {
         this.validator = validator;
     }
 
-    private ResponseBuilder<D> createResponseBuilder(HttpServletResponse resp) {
+    private <T> ResponseBuilder<T> createResponseBuilder(HttpServletResponse resp) {
         return ResponseUtil.createResponseBuilder(resp, locale, entityType);
     }
 
@@ -76,15 +77,19 @@ class CrudControllerDelegate<F, D> {
                     resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
+                    ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
+                    String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                            .getString("entity.created");
                     Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
                     D dto = beanMapper.map(form, dtoClass);
 
                     crudService.create(dto);
 
-                    responseBuilder.addToResult(dto);
+                    writeCommandResponseBuilder.addToResult(message);
+
                     resp.setStatus(HttpServletResponse.SC_CREATED);
 
-                    writeToResponse(resp, responseBuilder.buildSuccessResponse());
+                    writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
                 }
             } else {
                 permissionDenied(resp, responseBuilder, locale);
@@ -107,14 +112,17 @@ class CrudControllerDelegate<F, D> {
                     resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
+                    ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
+                    String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                            .getString("entity.updated");
                     D dto = map(form, dtoClass);
 
                     crudService.update(dto);
-                    responseBuilder.addToResult(dto);
+                    writeCommandResponseBuilder.addToResult(message);
 
                     resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 
-                    writeToResponse(resp, responseBuilder.buildSuccessResponse());
+                    writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
                 }
             } else {
                 permissionDenied(resp, responseBuilder, locale);
@@ -150,7 +158,7 @@ class CrudControllerDelegate<F, D> {
     }
 
     void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseBuilder<D> responseBuilder = createResponseBuilder(resp);
+        ResponseBuilder<String> responseBuilder = createResponseBuilder(resp);
         ControllerUtil.delete(req, resp, responseBuilder, accountService, locale, crudService::delete);
     }
 }

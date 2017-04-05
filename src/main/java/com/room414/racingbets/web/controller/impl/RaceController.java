@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import static com.room414.racingbets.web.util.ControllerUtil.map;
@@ -48,7 +49,7 @@ public class RaceController {
         this.locale = locale;
     }
 
-    private ResponseBuilder<RaceDto> createResponseBuilder(HttpServletResponse resp) {
+    private <T> ResponseBuilder<T> createResponseBuilder(HttpServletResponse resp) {
         return ResponseUtil.createResponseBuilder(resp, locale, ENTITY_TYPE);
     }
 
@@ -120,14 +121,18 @@ public class RaceController {
                     resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
+                    ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
+                    String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                            .getString("race.scheduled");
+
                     RaceDto dto = map(form, RaceDto.class);
 
                     raceService.scheduleRace(dto);
 
-                    responseBuilder.addToResult(dto);
+                    writeCommandResponseBuilder.addToResult(message);
                     resp.setStatus(HttpServletResponse.SC_CREATED);
 
-                    writeToResponse(resp, responseBuilder.buildSuccessResponse());
+                    writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
                 }
             } else {
                 permissionDenied(resp, responseBuilder, locale);
@@ -149,8 +154,16 @@ public class RaceController {
             if (id == 0) {
                 invalidId(resp, responseBuilder, locale);
             } else {
+                ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
+                String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                        .getString("race.started");
+
                 raceService.startRace(id);
-                writeOk(resp, responseBuilder);
+
+                writeCommandResponseBuilder.addToResult(message);
+                resp.setStatus(HttpServletResponse.SC_OK);
+
+                writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
             }
         } else {
             permissionDenied(resp, responseBuilder, locale);
@@ -169,11 +182,18 @@ public class RaceController {
                 resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                 writeToResponse(resp, responseBuilder.buildErrorResponse());
             } else {
+                ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
+                String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                        .getString("race.updated");
+
                 RaceDto dto = map(form, RaceDto.class);
 
                 updater.accept(dto);
-                responseBuilder.addToResult(dto);
-                writeOk(resp, responseBuilder);
+
+                writeCommandResponseBuilder.addToResult(message);
+                resp.setStatus(HttpServletResponse.SC_OK);
+
+                writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
             }
         } else {
             permissionDenied(resp, responseBuilder, locale);

@@ -266,7 +266,7 @@ public class AccountController {
      * PUT: /account/roles/%d
      */
     public void setRoles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseBuilder<Object> responseBuilder = createResponseBuilder(resp);
+        ResponseBuilder<String> responseBuilder = createResponseBuilder(resp);
         try {
             String token = getJwtToken(req);
             if (accountService.isInRole(token, Role.ADMIN)) {
@@ -280,6 +280,11 @@ public class AccountController {
                 long id = getIdFromRequest(req);
 
                 userService.setRoles(id, form);
+
+                String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                        .getString("account.set.roles");
+
+                responseBuilder.addToResult(message);
 
                 resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 
@@ -296,7 +301,7 @@ public class AccountController {
      * PUT: /account/balance/%d
      */
     public void addMoney(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
+        ResponseBuilder<String> responseBuilder = createResponseBuilder(resp);
         try {
             String token = getJwtToken(req);
             if (accountService.isInRole(token, Role.BOOKMAKER)) {
@@ -304,6 +309,11 @@ public class AccountController {
                 long id = getIdFromRequest(req);
 
                 userService.putMoney(id, form);
+
+                String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                        .getString("account.put.money");
+
+                responseBuilder.addToResult(message);
 
                 resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 
@@ -321,12 +331,17 @@ public class AccountController {
      * PUT: /account/confirm/%s
      */
     public void confirmEmail(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
+        ResponseBuilder<String> responseBuilder = createResponseBuilder(resp);
 
         String token = getToken(req);
 
         long id = accountService.getIdByConfirmToken(token);
         userService.confirmEmail(id);
+
+        String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                .getString("account.email.confirm");
+
+        responseBuilder.addToResult(message);
 
         resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 
@@ -387,7 +402,7 @@ public class AccountController {
      * DELETE: account/%d
      */
     public void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseBuilder<UserDto> responseBuilder = createResponseBuilder(resp);
+        ResponseBuilder<String> responseBuilder = createResponseBuilder(resp);
         ControllerUtil.delete(req, resp, responseBuilder, accountService, locale, userService::delete);
     }
 }

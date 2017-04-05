@@ -20,7 +20,8 @@ public class ResponseUtil {
     private static final String CONTENT_TYPE = "application/json";
     private static final String ENCODING = "UTF-8";
 
-    public static final String ERROR_MESSAGE_BUNDLE = "i18n/ErrorMessageBundle";
+    public static final String ERROR_MESSAGE_BUNDLE = "i18n/ErrorMessage";
+    public static final String SUCCESS_MESSAGE_BUNDLE = "i18n/SuccessMessage";
     public static final int SC_UNPROCESSABLE_ENTITY = 422;
 
 

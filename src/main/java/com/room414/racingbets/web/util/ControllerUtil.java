@@ -43,19 +43,23 @@ public class ControllerUtil {
         return new Error(code, message, objectName, propertyName);
     }
 
-    public static <T> void delete(HttpServletRequest req,
-                                  HttpServletResponse resp,
-                                  ResponseBuilder<T> builder,
-                                  AccountService accountService,
-                                  Locale locale,
-                                  Consumer<Long> deleter) throws IOException {
+    public static void delete(HttpServletRequest req,
+                              HttpServletResponse resp,
+                              ResponseBuilder<String> builder,
+                              AccountService accountService,
+                              Locale locale,
+                              Consumer<Long> deleter) throws IOException {
 
         String token = getJwtToken(req);
         if (token != null && accountService.isInRole(token, Role.ADMIN)) {
+            String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                    .getString("entity.deleted");
+
             long id = getIdFromRequest(req);
 
             deleter.accept(id);
 
+            builder.addToResult(message);
             resp.setStatus(HttpServletResponse.SC_OK);
 
             writeToResponse(resp, builder.buildSuccessResponse());
@@ -65,10 +69,10 @@ public class ControllerUtil {
     }
 
     public static <T> void find(HttpServletRequest req,
-                                  HttpServletResponse resp,
-                                  ResponseBuilder<T> builder,
-                                  Locale locale,
-                                  Function<Long, T> finder) throws IOException {
+                                HttpServletResponse resp,
+                                ResponseBuilder<T> builder,
+                                Locale locale,
+                                Function<Long, T> finder) throws IOException {
 
         long id = getIdFromRequest(req);
 
