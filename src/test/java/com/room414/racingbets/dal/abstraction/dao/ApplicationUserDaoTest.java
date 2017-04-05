@@ -335,13 +335,13 @@ class ApplicationUserDaoTest {
         ApplicationUser entity1 = dao.find(newEntity.getId());
 
         assert newEntity.equals(entity1) : "Dao did not create entity";
-        assert !entity1.isEmailConfirmed() : "Email already confirmed";
+        assert !entity1.getEmailConfirmed() : "Email already confirmed";
 
         dao.confirmEmail(newEntity.getId());
 
         ApplicationUser entity2 = dao.find(newEntity.getId());
 
-        assert entity2.isEmailConfirmed() : "Dao did not confirm email";
+        assert entity2.getEmailConfirmed() : "Dao did not confirm email";
 
         dao.delete(newEntity.getId());
     }

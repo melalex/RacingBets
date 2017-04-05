@@ -24,7 +24,7 @@ public class UserDto implements Serializable {
     private String password;
     private String firstName;
     private String lastName;
-    private boolean isEmailConfirmed;
+    private boolean emailConfirmed;
     private BigDecimal balance;
     private Set<Role> roles = new HashSet<>();
     private Language language;
@@ -80,12 +80,12 @@ public class UserDto implements Serializable {
         this.lastName = lastName;
     }
 
-    public boolean isEmailConfirmed() {
-        return isEmailConfirmed;
+    public boolean getEmailConfirmed() {
+        return emailConfirmed;
     }
 
     public void setEmailConfirmed(boolean emailConfirmed) {
-        isEmailConfirmed = emailConfirmed;
+        this.emailConfirmed = emailConfirmed;
     }
 
     public BigDecimal getBalance() {
@@ -149,7 +149,7 @@ public class UserDto implements Serializable {
             return false;
         }
 
-        if (isEmailConfirmed != userDto.isEmailConfirmed) {
+        if (emailConfirmed != userDto.emailConfirmed) {
             return false;
         }
 
@@ -197,7 +197,7 @@ public class UserDto implements Serializable {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (isEmailConfirmed ? 1 : 0);
+        result = 31 * result + (emailConfirmed ? 1 : 0);
         result = 31 * result + (balance != null ? balance.hashCode() : 0);
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
         result = 31 * result + (language != null ? language.hashCode() : 0);
@@ -214,7 +214,7 @@ public class UserDto implements Serializable {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", isEmailConfirmed=" + isEmailConfirmed +
+                ", emailConfirmed=" + emailConfirmed +
                 ", balance=" + balance +
                 ", roles=" + roles +
                 ", language=" + language +

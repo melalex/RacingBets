@@ -34,8 +34,13 @@ public class RedisUnitOfWork implements AutoCloseable {
 
     public void commit() {
         try {
-            redisBetCache.commit();
-            redisCache.commit();
+            if (redisBetCache != null) {
+                redisBetCache.commit();
+            }
+
+            if (redisCache != null) {
+                redisCache.commit();
+            }
         } catch (IOException e) {
             String message = "Can't close redis connection";
             throw new DalException(message, e);

@@ -30,7 +30,7 @@ public interface ApplicationUserDao extends SearchDao<Long, ApplicationUser> {
     List<ApplicationUser> findByLoginAndEmail(String login, String email);
 
     /**
-     * Set ApplicationUser isEmailConfirmed field to true to user with id == id param
+     * Set ApplicationUser getEmailConfirmed field to true to user with id == id param
      *
      * @param id ApplicationUser id
      */

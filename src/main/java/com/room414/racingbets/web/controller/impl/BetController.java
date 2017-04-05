@@ -121,7 +121,7 @@ public class BetController {
 
         UserDto user = userService.find(form.getUser());
 
-        if (!user.isEmailConfirmed()) {
+        if (!user.getEmailConfirmed()) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("email.not.confirmed");
             Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, "betType");
             responseBuilder.addToErrors(error);

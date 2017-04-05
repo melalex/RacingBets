@@ -8,6 +8,9 @@ import com.room414.racingbets.dal.concrete.facade.DalFacade;
 import com.room414.racingbets.dal.domain.enums.Gender;
 import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
+import com.room414.racingbets.web.model.forms.HorseForm;
+import org.dozer.DozerBeanMapperSingletonWrapper;
+import org.dozer.Mapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,6 +54,11 @@ public class DatabaseInitializer {
                 .create(superUser);
     }
 
+    private static Language getLanguage() {
+        long random = Math.round(Math.random() * 1);
+        return random == 0 ? Language.ENGLISH : Language.RUSSIAN;
+    }
+
     private static void initUsers() throws IOException {
         try (InputStream in = AppInitializer.class.getClassLoader().getResourceAsStream(USER_INITIAL_DATA)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -67,7 +75,7 @@ public class DatabaseInitializer {
             while (reader.ready()) {
                 line = reader.readLine();
                 userDto = jsonMapper.readValue(line, UserDto.class);
-
+                userDto.setLanguage(getLanguage());
                 userService.create(userDto);
             }
         }
@@ -82,18 +90,21 @@ public class DatabaseInitializer {
         try (InputStream in = AppInitializer.class.getClassLoader().getResourceAsStream(HORSE_INITIAL_DATA)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             ObjectMapper jsonMapper = new ObjectMapper();
+            Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
             HorseService horseService = BllFacade
                     .getInstance()
                     .getAbstractServiceFactory()
                     .createHorseServiceFactory()
                     .create();
 
+            HorseForm horseForm;
             HorseDto horseDto;
             String line;
 
             while (reader.ready()) {
                 line = reader.readLine();
-                horseDto = jsonMapper.readValue(line, HorseDto.class);
+                horseForm = jsonMapper.readValue(line, HorseForm.class);
+                horseDto = mapper.map(horseForm, HorseDto.class);
 
                 horseDto.setGender(getGender());
 
@@ -199,12 +210,11 @@ public class DatabaseInitializer {
 
         initSuperUser();
         initUsers();
-        initHorses();
-        initJockeys();
         initJockeys();
         initOwners();
         initTrainers();
         initRacecourses();
+        initHorses();
         initRaces();
 
         DalFacade.getInstance().close();

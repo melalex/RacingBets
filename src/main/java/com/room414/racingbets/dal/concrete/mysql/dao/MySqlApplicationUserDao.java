@@ -99,7 +99,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
             statement.setString(4, entity.getFirstName());
             statement.setString(5, entity.getLastName());
             statement.setString(6, entity.getEmail());
-            statement.setBoolean(7, entity.isEmailConfirmed());
+            statement.setBoolean(7, entity.getEmailConfirmed());
             statement.setBigDecimal(8, entity.getBalance());
             statement.setString(9, entity.getLanguage().getName());
 
@@ -122,7 +122,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                     entity.getFirstName(),
                     entity.getLastName(),
                     entity.getEmail(),
-                    entity.isEmailConfirmed(),
+                    entity.getEmailConfirmed(),
                     entity.getBalance(),
                     entity.getLanguage()
             );
@@ -218,7 +218,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getEmail(),
-                entity.isEmailConfirmed(),
+                entity.getEmailConfirmed(),
                 entity.getLanguage().getName(),
                 entity.getId()
         );

@@ -30,7 +30,7 @@ public class ApplicationUser implements Serializable {
     /**
      * It indicates whether the user has confirmed email.
      */
-    private boolean isEmailConfirmed;
+    private boolean emailConfirmed;
     /**
      * The cash balance of the user.
      */
@@ -104,12 +104,12 @@ public class ApplicationUser implements Serializable {
         this.lastName = lastName;
     }
 
-    public boolean isEmailConfirmed() {
-        return isEmailConfirmed;
+    public boolean getEmailConfirmed() {
+        return emailConfirmed;
     }
 
     public void setEmailConfirmed(boolean emailConfirmed) {
-        isEmailConfirmed = emailConfirmed;
+        this.emailConfirmed = emailConfirmed;
     }
 
     public BigDecimal getBalance() {
@@ -172,7 +172,7 @@ public class ApplicationUser implements Serializable {
             return false;
         }
 
-        if (isEmailConfirmed != user.isEmailConfirmed) {
+        if (emailConfirmed != user.emailConfirmed) {
             return false;
         }
 
@@ -225,7 +225,7 @@ public class ApplicationUser implements Serializable {
         result = 31 * result + (salt != null ? salt.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (isEmailConfirmed ? 1 : 0);
+        result = 31 * result + (emailConfirmed ? 1 : 0);
 
         long temp = balance != null ? Double.doubleToLongBits(balance.doubleValue()) : 0;
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -246,7 +246,7 @@ public class ApplicationUser implements Serializable {
                 ", salt='" + salt + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", isEmailConfirmed=" + isEmailConfirmed +
+                ", getEmailConfirmed=" + emailConfirmed +
                 ", balance=" + balance +
                 ", roles=" + roles +
                 ", language=" + language +

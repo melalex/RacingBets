@@ -137,7 +137,7 @@ public class UserViewModel implements Serializable {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", isEmailConfirmed=" + isEmailConfirmed +
+                ", getEmailConfirmed=" + isEmailConfirmed +
                 ", balance=" + balance +
                 ", roles=" + roles +
                 ", language=" + language +

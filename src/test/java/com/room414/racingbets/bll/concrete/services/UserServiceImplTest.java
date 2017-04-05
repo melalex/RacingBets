@@ -38,7 +38,13 @@ class UserServiceImplTest {
                 .create(any());
         Mockito.when(applicationUserDaoMock.findByLogin(any())).then(i -> users.get(0));
 
-        UserService service = new UserServiceImpl(unitOfWorkMockFactory, "SHA1PRNG");
+        UserService service = new UserServiceImpl(
+                unitOfWorkMockFactory,
+                "SHA1PRNG",
+                "SHA-512",
+                "UTF-8"
+        );
+
         Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 
         Field mapperField = UserServiceImpl.class.getDeclaredField("mapper");
