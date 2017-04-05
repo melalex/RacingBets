@@ -22,7 +22,7 @@ public class MySqlUnitOfWorkFactory implements UnitOfWorkFactory {
     @Override
     public UnitOfWork createUnitOfWork() {
         try {
-            return new MySqlUnitOfWork(connectionPool.getConnection());
+            return MySqlUnitOfWork.create(connectionPool.getConnection());
         } catch (SQLException e) {
             String message = "Can't get new connection from pool";
             throw new DalException(message, e);

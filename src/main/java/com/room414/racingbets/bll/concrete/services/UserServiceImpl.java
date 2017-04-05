@@ -10,11 +10,12 @@ import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
-import org.apache.commons.codec.binary.Base64;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
@@ -30,10 +31,19 @@ public class UserServiceImpl implements UserService {
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
     private UnitOfWorkFactory factory;
     private String randomAlgorithm;
+    private String hashAlgorithm;
+    private String encoding;
 
-    public UserServiceImpl(UnitOfWorkFactory factory, String randomAlgorithm) {
+    public UserServiceImpl(
+            UnitOfWorkFactory factory,
+            String randomAlgorithm,
+            String hashAlgorithm,
+            String encoding
+    ) {
         this.factory = factory;
         this.randomAlgorithm = randomAlgorithm;
+        this.hashAlgorithm = hashAlgorithm;
+        this.encoding = encoding;
     }
 
     class CheckResultImpl implements CheckResult {
@@ -73,8 +83,24 @@ public class UserServiceImpl implements UserService {
     }
 
     private String getSecurePassword(String passwordToHash, String salt) {
-        String passwordHash = Base64.encodeBase64URLSafeString(passwordToHash.getBytes());
-        return Base64.encodeBase64URLSafeString((passwordHash + salt).getBytes());
+        try {
+            MessageDigest md = MessageDigest.getInstance(hashAlgorithm);
+            md.update(salt.getBytes(encoding));
+            byte[] bytes = md.digest(passwordToHash.getBytes(encoding));
+            StringBuilder sb = new StringBuilder();
+
+            for (byte aByte : bytes) {
+                sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            String message = "No algorithm named " + hashAlgorithm;
+            throw new BllException(message, e);
+        } catch (UnsupportedEncodingException e) {
+            String message = "No encoding named " + encoding;
+            throw new BllException(message, e);
+        }
     }
 
     private void hashPassword(ApplicationUser user) {

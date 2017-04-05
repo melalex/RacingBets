@@ -57,7 +57,7 @@ CREATE TABLE `horse_racing_test`.`racecourse` (
 CREATE TABLE `horse_racing_test`.`application_user` (
   `id`                 INT UNSIGNED            NOT NULL AUTO_INCREMENT,
   `login`              VARCHAR(45)             NOT NULL,
-  `password_hash`      VARCHAR(45)             NOT NULL,
+  `password_hash`      CHAR(128)               NULL,
   `salt`               VARCHAR(45)             NOT NULL DEFAULT 'salt',
   `first_name`         VARCHAR(45)             NOT NULL,
   `last_name`          VARCHAR(45)             NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE `horse_racing_test`.`participant` (
   `carried_weight`  FLOAT UNSIGNED  NULL,
   `topspeed`        INT(3) UNSIGNED NULL,
   `official_rating` INT(5) UNSIGNED NULL,
-  `odds`         DOUBLE UNSIGNED NULL,
+  `odds`            DOUBLE UNSIGNED NULL,
   `place`           INT(2) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),

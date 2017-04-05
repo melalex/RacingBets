@@ -1,6 +1,8 @@
 CREATE SCHEMA `horse_racing`
   DEFAULT CHARACTER SET utf8;
 
+USE horse_racing;
+
 CREATE TABLE `horse_racing`.`jockey` (
   `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45)  NOT NULL,
@@ -55,8 +57,8 @@ CREATE TABLE `horse_racing`.`racecourse` (
 CREATE TABLE `horse_racing`.`application_user` (
   `id`                 INT UNSIGNED            NOT NULL AUTO_INCREMENT,
   `login`              VARCHAR(45)             NOT NULL,
-  `password_hash`      VARCHAR(45)             NOT NULL,
-  `salt`               VARCHAR(45)             NOT NULL,
+  `password_hash`      CHAR(128)               NOT NULL,
+  `salt`               VARCHAR(45)             NOT NULL DEFAULT 'salt',
   `first_name`         VARCHAR(45)             NOT NULL,
   `last_name`          VARCHAR(45)             NOT NULL,
   `email`              VARCHAR(45)             NOT NULL,
@@ -120,7 +122,7 @@ CREATE TABLE `horse_racing`.`participant` (
   `carried_weight`  FLOAT UNSIGNED  NULL,
   `topspeed`        INT(3) UNSIGNED NULL,
   `official_rating` INT(5) UNSIGNED NULL,
-  `odds`         DOUBLE UNSIGNED NULL,
+  `odds`            DOUBLE UNSIGNED NULL,
   `place`           INT(2) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
@@ -134,7 +136,7 @@ CREATE TABLE `horse_racing`.`participant` (
 CREATE TABLE `horse_racing`.`bet` (
   `id`                  INT UNSIGNED                                                                  NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED                                                                  NOT NULL,
-  'race_id'             INT UNSIGNED                                                                  NOT NULL,
+  `race_id`             INT UNSIGNED                                                                  NOT NULL,
   `bet_type`            ENUM ('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta') NOT NULL,
   `status`              ENUM ('scheduled', 'win', 'lose', 'rejected')                                 NOT NULL,
   `bet_size`            DECIMAL(12, 2)                                                                NOT NULL,
@@ -644,8 +646,6 @@ CREATE PROCEDURE horse_racing.filter_races(
       horse.name                  'horse.name',
       horse.birthday              'horse.birthday',
       horse.gender                'horse.gender',
-      horse.sire_id               'horse.sire_id',
-      horse.dam_id                'horse.dam_id',
       horse_owner.id              'horse_owner.id',
       horse_owner.first_name      'horse_owner.first_name',
       horse_owner.last_name       'horse_owner.last_name',
@@ -725,8 +725,6 @@ CREATE PROCEDURE horse_racing.filter_races(
       racecourse.longitude,
       racecourse.clerk,
       racecourse.contact,
-      NULL,
-      NULL,
       NULL,
       NULL,
       NULL,

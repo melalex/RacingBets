@@ -55,7 +55,7 @@ CREATE TABLE `horse_racing`.`racecourse` (
 CREATE TABLE `horse_racing`.`application_user` (
   `id`                 INT UNSIGNED            NOT NULL AUTO_INCREMENT,
   `login`              VARCHAR(45)             NOT NULL,
-  `password_hash`      VARCHAR(45)             NOT NULL,
+  `password_hash`      CHAR(128)               NOT NULL,
   `salt`               VARCHAR(45)             NOT NULL,
   `first_name`         VARCHAR(45)             NOT NULL,
   `last_name`          VARCHAR(45)             NOT NULL,
@@ -120,7 +120,7 @@ CREATE TABLE `horse_racing`.`participant` (
   `carried_weight`  FLOAT UNSIGNED  NULL,
   `topspeed`        INT(3) UNSIGNED NULL,
   `official_rating` INT(5) UNSIGNED NULL,
-  `odds`         DOUBLE UNSIGNED NULL,
+  `odds`            DOUBLE UNSIGNED NULL,
   `place`           INT(2) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
@@ -134,7 +134,7 @@ CREATE TABLE `horse_racing`.`participant` (
 CREATE TABLE `horse_racing`.`bet` (
   `id`                  INT UNSIGNED                                                                  NOT NULL AUTO_INCREMENT,
   `application_user_id` INT UNSIGNED                                                                  NOT NULL,
-  'race_id'             INT UNSIGNED                                                                  NOT NULL,
+  `race_id`             INT UNSIGNED                                                                  NOT NULL,
   `bet_type`            ENUM ('Show', 'Place', 'Win', 'Quinella', 'Exacta', 'Trifecta', 'Superfecta') NOT NULL,
   `status`              ENUM ('scheduled', 'win', 'lose', 'rejected')                                 NOT NULL,
   `bet_size`            DECIMAL(12, 2)                                                                NOT NULL,

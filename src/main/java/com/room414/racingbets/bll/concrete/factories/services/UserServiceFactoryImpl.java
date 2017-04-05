@@ -14,15 +14,18 @@ import java.util.Properties;
 public class UserServiceFactoryImpl implements UserServiceFactory {
     private UnitOfWorkFactory unitOfWorkFactory;
     private String randomAlgorithm;
+    private String hashAlgorithm;
+    private String encoding;
 
     UserServiceFactoryImpl(UnitOfWorkFactory unitOfWorkFactory, Properties properties) {
         this.unitOfWorkFactory = unitOfWorkFactory;
         this.randomAlgorithm = properties.getProperty("bll.random");
+        this.hashAlgorithm = properties.getProperty("bll.hash");
+        this.encoding = properties.getProperty("bll.encoding");
     }
 
     @Override
     public UserService create() {
-        // TODO: properties
-        return new UserServiceImpl(unitOfWorkFactory, randomAlgorithm);
+        return new UserServiceImpl(unitOfWorkFactory, randomAlgorithm, hashAlgorithm, encoding);
     }
 }
