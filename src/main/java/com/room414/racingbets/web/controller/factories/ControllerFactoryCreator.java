@@ -73,4 +73,8 @@ public class ControllerFactoryCreator {
                 serviceFactory.createAccountServiceFactory()
         );
     }
+
+    public ViewControllerFactory createViewControllerFactory() {
+        return new ViewControllerFactory();
+    }
 }

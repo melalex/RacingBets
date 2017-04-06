@@ -11,6 +11,8 @@
     <servlet-mapping>
         <servlet-name>front</servlet-name>
         <url-pattern>/api/*</url-pattern>
+        <url-pattern>/admin</url-pattern>
+        <url-pattern>/client</url-pattern>
     </servlet-mapping>
 
 </web-app>
