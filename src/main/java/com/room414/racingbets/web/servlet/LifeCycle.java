@@ -55,7 +55,6 @@ class LifeCycle {
         result.put("Race", new RaceActionFactory(controllerFactoryCreator.createRaceControllerFactory()));
         result.put("Racecourse", new CrudActionFactory(controllerFactoryCreator.createRacecourseControllerFactory()));
         result.put("Trainer", new CrudActionFactory(controllerFactoryCreator.createTrainerControllerFactory()));
-        result.put("ViewController", new ViewActionFactory(controllerFactoryCreator.createViewControllerFactory()));
 
         return result;
     }

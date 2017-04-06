@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes>
-
-    <route>
-        <method>GET</method>
-        <pattern>^/admin$</pattern>
-        <controller>ViewController</controller>
-        <action>returnAdminPage</action>
-    </route>
-
-    <route>
-        <method>GET</method>
-        <pattern>^/client$</pattern>
-        <controller>ViewController</controller>
-        <action>returnClientPage</action>
-    </route>
-
     <route>
         <method>POST</method>
         <pattern>^/api/account/register$</pattern>
