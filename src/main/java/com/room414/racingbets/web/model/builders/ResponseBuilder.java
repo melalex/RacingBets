@@ -77,7 +77,7 @@ public class ResponseBuilder<T> {
     public Response<Error> buildErrorResponse() {
         Response<Error> response = new Response<>();
 
-        response.setStatus(Status.SUCCESS);
+        response.setStatus(Status.ERROR);
         response.setCount(count != 0 ? count : errors.size());
         response.setCount(limit != 0 ? limit : errors.size());
         response.setResult(errors);

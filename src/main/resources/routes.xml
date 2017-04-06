@@ -9,28 +9,28 @@
 
     <route>
         <method>GET</method>
-        <pattern>^/api/login$</pattern>
+        <pattern>^/api/account/login$</pattern>
         <controller>Account</controller>
         <action>loginClient</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^/api/refresh/(\w)+$</pattern>
+        <pattern>^/api/account/refresh/(\w)+$</pattern>
         <controller>Account</controller>
         <action>refreshClient</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^/api/admin/login$</pattern>
+        <pattern>^/api/account/admin/login$</pattern>
         <controller>Account</controller>
         <action>loginAdmin</action>
     </route>
 
     <route>
         <method>GET</method>
-        <pattern>^/api/admin/refresh/(\w)+$</pattern>
+        <pattern>^/api/account/admin/refresh/(\w)+$</pattern>
         <controller>Account</controller>
         <action>refreshAdmin</action>
     </route>

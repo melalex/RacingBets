@@ -10,6 +10,7 @@ import com.room414.racingbets.dal.abstraction.dao.UnitOfWork;
 import com.room414.racingbets.dal.abstraction.factories.UnitOfWorkFactory;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
 import com.room414.racingbets.dal.domain.enums.Role;
+import org.apache.commons.codec.binary.Base64;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -70,22 +71,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private String getSalt() {
+    private byte[] getSalt() {
         try {
             SecureRandom sr = SecureRandom.getInstance(randomAlgorithm);
             byte[] salt = new byte[16];
             sr.nextBytes(salt);
-            return new String(salt);
+            return salt;
         } catch (NoSuchAlgorithmException e) {
             String message = "No algorithm named " + randomAlgorithm;
             throw new BllException(message, e);
         }
     }
 
-    private String getSecurePassword(String passwordToHash, String salt) {
+    private String getSecurePassword(String passwordToHash, byte[] salt) {
         try {
             MessageDigest md = MessageDigest.getInstance(hashAlgorithm);
-            md.update(salt.getBytes(encoding));
+            md.update(salt);
             byte[] bytes = md.digest(passwordToHash.getBytes(encoding));
             StringBuilder sb = new StringBuilder();
 
@@ -104,14 +105,21 @@ public class UserServiceImpl implements UserService {
     }
 
     private void hashPassword(ApplicationUser user) {
-        String salt = getSalt();
+        byte[] salt = getSalt();
         String password = getSecurePassword(user.getPassword(), salt);
-        user.setSalt(salt);
+        String saltString = Base64.encodeBase64String(salt);
+        user.setSalt(saltString);
         user.setPassword(password);
     }
 
     private boolean isValid(String password, ApplicationUser user) {
-        String passwordHash = getSecurePassword(password, user.getSalt());
+        // salt: VLHQoyp60NWpJ/OMuN9hwQ==
+        // password: secure
+        // hash: eea460d6c550e67f7e7797ead57823327ec7fa2afda6f72ba2a9582d15aa85a7adfe97c326a1a5260413e3217515d2b815179c52dea6bbf8a4dbce5ec48ca94f
+        // [84, -79, -48, -93, 42, 122, -48, -43, -87, 39, -13, -116, -72, -33, 97, -63]
+
+        byte[] salt = Base64.decodeBase64(user.getSalt());
+        String passwordHash = getSecurePassword(password, salt);
         return passwordHash.equals(user.getPassword());
     }
 
@@ -164,7 +172,9 @@ public class UserServiceImpl implements UserService {
                 entityToUpdate.setEmailConfirmed(false);
             }
 
-            entityToUpdate.setPassword(getSecurePassword(user.getPassword(), entityFromStorage.getSalt()));
+            byte[] salt = Base64.decodeBase64(entityFromStorage.getSalt());
+
+            entityToUpdate.setPassword(getSecurePassword(user.getPassword(), salt));
 
             dao.update(entityToUpdate);
 

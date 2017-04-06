@@ -209,13 +209,13 @@ public class DatabaseInitializer {
         initApp();
 
         initSuperUser();
-        initUsers();
-        initJockeys();
-        initOwners();
-        initTrainers();
-        initRacecourses();
-        initHorses();
-        initRaces();
+//        initUsers();
+//        initJockeys();
+//        initOwners();
+//        initTrainers();
+//        initRacecourses();
+//        initHorses();
+//        initRaces();
 
         DalFacade.getInstance().close();
     }
