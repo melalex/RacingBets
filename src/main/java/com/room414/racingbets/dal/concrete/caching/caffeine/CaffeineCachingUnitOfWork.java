@@ -56,7 +56,7 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
         if (horseCache == null) {
             horseCache = new CaffeineHorseCache(
                     mainCachePool.getHorseCachePool(),
-                    raceCache,
+                    getRaceCache(),
                     redisUnitOfWork.getRedisCache()
             );
         }
@@ -69,7 +69,7 @@ public class CaffeineCachingUnitOfWork implements CachingUnitOfWork {
             jockeyCache = new CaffeineJockeyCache(
                     mainCachePool.getJockeyCachePool(),
                     redisUnitOfWork.getRedisCache(),
-                    raceCache
+                    getRaceCache()
             );
         }
         return jockeyCache;
