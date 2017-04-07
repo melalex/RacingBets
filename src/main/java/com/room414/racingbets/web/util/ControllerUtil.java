@@ -3,8 +3,6 @@ package com.room414.racingbets.web.util;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
-import com.room414.racingbets.web.model.enums.ErrorCode;
-import com.room414.racingbets.web.model.viewmodels.Error;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -33,14 +31,6 @@ public class ControllerUtil {
     public static <S, R> R map(S source, Class<R> clazz) {
         Mapper beanMapper = DozerBeanMapperSingletonWrapper.getInstance();
         return beanMapper.map(source, clazz);
-    }
-
-    public static Error createError(ErrorCode code, String pm, String objectName, String propertyName, Locale locale) {
-        String message = ResourceBundle
-                .getBundle(ERROR_MESSAGE_BUNDLE, locale)
-                .getString(pm);
-
-        return new Error(code, message, objectName, propertyName);
     }
 
     public static void delete(HttpServletRequest req,
@@ -81,7 +71,7 @@ public class ControllerUtil {
         } else {
             builder.addToResult(finder.apply(id));
 
-            resp.setStatus(HttpServletResponse.SC_FOUND);
+            resp.setStatus(HttpServletResponse.SC_OK);
             writeToResponse(resp, builder.buildSuccessResponse());
         }
     }

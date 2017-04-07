@@ -3,6 +3,8 @@ package com.room414.racingbets.dal.concrete.tokens.delegate;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.UUID;
 
 /**
@@ -10,6 +12,9 @@ import java.util.UUID;
  * @version 1.0 21 Mar 2017
  */
 public class TokenStorageDelegate implements AutoCloseable {
+    private static final int BIG_INT_LENGTH = 130;
+    private static final int NUMERAL_SYSTEM = 32;
+
     private Jedis jedis;
     private String namespace;
     private int expireIn;
@@ -20,9 +25,14 @@ public class TokenStorageDelegate implements AutoCloseable {
         this.expireIn = expireIn;
     }
 
+    private String createToken() {
+        SecureRandom random = new SecureRandom();
+
+        return new BigInteger(BIG_INT_LENGTH, random).toString(NUMERAL_SYSTEM);
+    }
+
     public String createToken(long id) {
-        // TODO: maybe get something more powerful
-        String token = UUID.randomUUID().toString();
+        String token = createToken();
         String key = getKeyByToken(token);
 
         Pipeline pipeline = jedis.pipelined();

@@ -57,6 +57,10 @@ public class Response<T> implements Serializable {
         this.limit = limit;
     }
 
+    public int getLimit() {
+        return limit;
+    }
+
     public String getType() {
         return type;
     }

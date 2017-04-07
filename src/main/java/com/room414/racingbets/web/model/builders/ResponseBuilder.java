@@ -67,7 +67,7 @@ public class ResponseBuilder<T> {
 
         response.setStatus(Status.SUCCESS);
         response.setCount(count != 0 ? count : result.size());
-        response.setCount(limit != 0 ? limit : result.size());
+        response.setLimit(limit != 0 ? limit : result.size());
         response.setResult(result);
         response.setType(type);
 
@@ -79,7 +79,7 @@ public class ResponseBuilder<T> {
 
         response.setStatus(Status.ERROR);
         response.setCount(count != 0 ? count : errors.size());
-        response.setCount(limit != 0 ? limit : errors.size());
+        response.setLimit(limit != 0 ? limit : errors.size());
         response.setResult(errors);
         response.setType(type);
 
