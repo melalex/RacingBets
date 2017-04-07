@@ -16,4 +16,11 @@ public class CachedJockeyDao extends CachePersonDao<Jockey> implements JockeyDao
     CachedJockeyDao(JockeyDao dao, JockeyCache cache) {
         super(dao, cache);
     }
+
+    @Override
+    public long update(Jockey entity) {
+        cache.deleteOneCached(getFindByIdKey(entity.getId()));
+        cache.deleteManyCached();
+        return dao.update(entity);
+    }
 }

@@ -26,12 +26,10 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
-    public void create(ApplicationUser entity) {
-        super.create(entity);
-
-        String key = String.format("search:login:password:%s:%s", entity.getLogin(), entity.getPassword());
-
-        cache.deleteOneCached(key);
+    public long update(ApplicationUser entity) {
+        removeFromCacheById(entity.getId());
+        cache.deleteManyCached();
+        return dao.update(entity);
     }
 
     @Override
@@ -56,10 +54,9 @@ public class CachedApplicationUserDao extends CacheCrudDao<ApplicationUser> impl
     }
 
     @Override
+    // TODO: is should be cached
     public List<ApplicationUser> findByLoginAndEmail(String login, String email) {
-        String key = String.format("search:by:login:email:%s:%s", login, email);
-
-        return cache.getManyCached(key, () -> dao.findByLoginAndEmail(login, email));
+        return dao.findByLoginAndEmail(login, email);
     }
 
     @Override

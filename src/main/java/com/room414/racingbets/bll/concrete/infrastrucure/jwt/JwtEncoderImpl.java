@@ -9,9 +9,11 @@ import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.JwtEncoder;
 import com.room414.racingbets.dal.domain.enums.Role;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
@@ -76,11 +78,11 @@ public class JwtEncoderImpl implements JwtEncoder {
         try {
             String algorithm = jwt.getAlgorithm();
             Mac mac = Mac.getInstance(algorithm);
-            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), algorithm);
+            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes("UTF-8"), algorithm);
             mac.init(secretKey);
 
-            return new String(mac.doFinal((header + "." + payload).getBytes()));
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            return Hex.encodeHexString(mac.doFinal((header + "." + payload).getBytes("UTF-8")));
+        } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException e) {
             String message = defaultErrorMessage("generateSignature", jwt, header, payload);
             throw new BllException(message, e);
         }

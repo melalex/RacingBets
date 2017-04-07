@@ -16,4 +16,11 @@ public class CachedOwnerDao extends CachePersonDao<Owner> implements OwnerDao {
     CachedOwnerDao(OwnerDao dao, OwnerCache cache) {
         super(dao, cache);
     }
+
+    @Override
+    public long update(Owner entity) {
+        cache.deleteOneCached(getFindByIdKey(entity.getId()));
+        cache.deleteManyCached();
+        return dao.update(entity);
+    }
 }

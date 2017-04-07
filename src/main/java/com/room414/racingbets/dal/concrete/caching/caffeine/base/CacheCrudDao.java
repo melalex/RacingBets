@@ -53,11 +53,6 @@ public abstract class CacheCrudDao<T> implements CrudDao<Long, T> {
     }
 
     @Override
-    public long update(T entity) {
-        return dao.update(entity);
-    }
-
-    @Override
     public boolean delete(Long id) {
         final String key = getFindByIdKey(id);
 

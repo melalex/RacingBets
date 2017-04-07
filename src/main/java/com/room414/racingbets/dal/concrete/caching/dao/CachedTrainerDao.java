@@ -15,4 +15,11 @@ public class CachedTrainerDao extends CachePersonDao<Trainer> implements Trainer
     CachedTrainerDao(TrainerDao dao, TrainerCache cache) {
         super(dao, cache);
     }
+
+    @Override
+    public long update(Trainer entity) {
+        cache.deleteOneCached(getFindByIdKey(entity.getId()));
+        cache.deleteManyCached();
+        return dao.update(entity);
+    }
 }

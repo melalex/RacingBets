@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
-import static com.fasterxml.jackson.annotation.PropertyAccessor.NONE;
 
 /**
  * @author Alexander Melashchenko

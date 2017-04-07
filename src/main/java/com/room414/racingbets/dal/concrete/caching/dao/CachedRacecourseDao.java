@@ -36,4 +36,10 @@ public class CachedRacecourseDao extends CacheCrudDao<Racecourse> implements Rac
         return cache.getCachedCount(key, () -> dao.searchCount(namePart));
     }
 
+    @Override
+    public long update(Racecourse entity) {
+        cache.deleteOneCached(getFindByIdKey(entity.getId()));
+        cache.deleteManyCached();
+        return dao.update(entity);
+    }
 }

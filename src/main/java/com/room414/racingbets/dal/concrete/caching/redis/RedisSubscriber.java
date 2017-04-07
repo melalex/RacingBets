@@ -50,16 +50,25 @@ public class RedisSubscriber extends JedisPubSub {
     }
 
     private void invalidateAll(String message) {
-        cacheByNamespaceMap.get(message).invalidateAll();
+        Cache cache = cacheByNamespaceMap.get(message);
+        if (cache != null) {
+            cache.invalidateAll();
+        }
     }
 
     private void invalidateField(String message) {
         String[] strings = message.split("@");
-
-        cacheByNamespaceMap.get(strings[0]).invalidate(strings[1]);
+        Cache cache = cacheByNamespaceMap.get(strings[0]);
+        if (cache != null) {
+            cache.invalidate(strings[1]);
+        }
     }
 
     private void invalidateOdds(String message) {
-        cacheByNamespaceMap.get(MainCachePool.getOddsNamespace()).invalidate(message);
+        Cache cache = cacheByNamespaceMap.get(MainCachePool.getOddsNamespace());
+
+        if (cache != null) {
+            cache.invalidate(message);
+        }
     }
 }

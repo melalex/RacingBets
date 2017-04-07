@@ -30,6 +30,13 @@ public class CachedBetDao extends CacheCrudDao<Bet> implements BetDao {
     }
 
     @Override
+    public long update(Bet entity) {
+        cache.deleteOneCached(getFindByIdKey(entity.getId()));
+        cache.deleteManyCached();
+        return dao.update(entity);
+    }
+
+    @Override
     public List<Bet> findByUserId(long id, int offset, int limit) {
         String key = String.format("search:user:%d:%d:%d", id, limit, offset);
 

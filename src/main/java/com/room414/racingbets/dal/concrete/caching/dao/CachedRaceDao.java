@@ -92,4 +92,11 @@ public class CachedRaceDao extends CacheCrudDao<Race> implements RaceDao {
 
         return dao.updateStatus(id, status);
     }
+
+    @Override
+    public long update(Race entity) {
+        cache.deleteOneCached(getFindByIdKey(entity.getId()));
+        cache.deleteManyCached();
+        return dao.update(entity);
+    }
 }
