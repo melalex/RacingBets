@@ -184,7 +184,7 @@
 
     <route>
         <method>DELETE</method>
-        <pattern>^/api/horse$</pattern>
+        <pattern>^/api/horse/(\d)+$</pattern>
         <controller>Horse</controller>
         <action>delete</action>
     </route>
@@ -219,7 +219,7 @@
 
     <route>
         <method>DELETE</method>
-        <pattern>^/api/jockey$</pattern>
+        <pattern>^/api/jockey/(\d)+$</pattern>
         <controller>Jockey</controller>
         <action>delete</action>
     </route>
@@ -254,7 +254,7 @@
 
     <route>
         <method>DELETE</method>
-        <pattern>^/api/owner$</pattern>
+        <pattern>^/api/owner/(\d)+$</pattern>
         <controller>Owner</controller>
         <action>delete</action>
     </route>
@@ -289,7 +289,7 @@
 
     <route>
         <method>DELETE</method>
-        <pattern>^/api/racecourse$</pattern>
+        <pattern>^/api/racecourse/(\d)+$</pattern>
         <controller>Racecourse</controller>
         <action>delete</action>
     </route>
@@ -324,7 +324,7 @@
 
     <route>
         <method>DELETE</method>
-        <pattern>^/api/trainer$</pattern>
+        <pattern>^/api/trainer/(\d)+$</pattern>
         <controller>Trainer</controller>
         <action>delete</action>
     </route>

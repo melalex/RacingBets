@@ -18,7 +18,7 @@ import java.util.Properties;
 public class DalFacade implements AutoCloseable {
     private static DalFacade ourInstance = new DalFacade();
 
-    private MainCachePool pool = new MainCachePool();
+    private MainCachePool cachePool = new MainCachePool();
 
     private JedisPool jedisPool;
     private BasicDataSource mysqlPool;
@@ -71,12 +71,12 @@ public class DalFacade implements AutoCloseable {
     }
 
     private void initRedisSubscriber() {
-        RedisSubscriber redisSubscriber = new RedisSubscriber(pool.getCacheByNamespaceMap());
+        RedisSubscriber redisSubscriber = new RedisSubscriber(cachePool.getCacheByNamespaceMap());
         redisSubscriber.subscribe(jedisPool.getResource());
     }
 
     private void initDalFactory(Properties dalFactoryProperties) {
-        this.factory = AbstractDalFactoryImpl.create(mysqlPool, jedisPool, dalFactoryProperties);
+        this.factory = AbstractDalFactoryImpl.create(mysqlPool, jedisPool, cachePool, dalFactoryProperties);
     }
 
     public AbstractDalFactory getDalFactory() {

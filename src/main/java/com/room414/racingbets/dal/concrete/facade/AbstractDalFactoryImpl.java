@@ -33,9 +33,7 @@ public class AbstractDalFactoryImpl implements AbstractDalFactory {
         this.tokenStorageFactory = tokenStorageFactory;
     }
 
-    public static AbstractDalFactory create(DataSource dataSource, JedisPool jedisPool, Properties properties) {
-        MainCachePool mainCachePool = new MainCachePool();
-
+    public static AbstractDalFactory create(DataSource dataSource, JedisPool jedisPool, MainCachePool mainCachePool, Properties properties) {
         UnitOfWorkFactory unitOfWorkFactory = new MySqlUnitOfWorkFactory(dataSource);
         RedisUnitOfWorkFactory redisUnitOfWorkFactory = new RedisUnitOfWorkFactory(jedisPool);
         CachingUnitOfWorkFactory cachingUnitOfWorkFactory = new CaffeineCachingUnitOfWorkFactory(redisUnitOfWorkFactory, mainCachePool);

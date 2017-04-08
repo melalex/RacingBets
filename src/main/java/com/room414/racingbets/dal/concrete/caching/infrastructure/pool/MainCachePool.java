@@ -21,14 +21,12 @@ public class MainCachePool {
     private static final String RACECOURSE_NAMESPACE = "racecourse";
     private static final String TRAINER_NAMESPACE = "trainer";
     private static final String ODDS_NAMESPACE = "odds";
-    private static final String THUMBNAIL_NAMESPACE = "who:when";
 
     private CachePool<ApplicationUser> applicationUserCachePool = new CachePool<>(APPLICATION_USER_NAMESPACE);
     private CachePool<Bet> betCachePool = new CachePool<>(BET_NAMESPACE);
     private CachePool<Horse> horseCachePool = new CachePool<>(HORSE_NAMESPACE);
     private CachePool<Jockey> jockeyCachePool = new CachePool<>(JOCKEY_NAMESPACE);
     private CachePool<Owner> ownerCachePool = new CachePool<>(OWNER_NAMESPACE);
-    private CachePool<Participant> participantCachePool = new CachePool<>(PARTICIPANT_NAMESPACE);
     private CachePool<Race> raceCachePool = new CachePool<>(RACE_NAMESPACE);
     private CachePool<Racecourse> racecourseCachePool = new CachePool<>(RACECOURSE_NAMESPACE);
     private CachePool<Trainer> trainerCachePool = new CachePool<>(TRAINER_NAMESPACE);
@@ -43,7 +41,6 @@ public class MainCachePool {
                 .addMap(horseCachePool.getCacheByNamespaceMap())
                 .addMap(jockeyCachePool.getCacheByNamespaceMap())
                 .addMap(ownerCachePool.getCacheByNamespaceMap())
-                .addMap(participantCachePool.getCacheByNamespaceMap())
                 .addMap(raceCachePool.getCacheByNamespaceMap())
                 .addMap(racecourseCachePool.getCacheByNamespaceMap())
                 .addMap(trainerCachePool.getCacheByNamespaceMap())
@@ -73,10 +70,6 @@ public class MainCachePool {
 
     public CachePool<Owner> getOwnerCachePool() {
         return ownerCachePool;
-    }
-
-    public CachePool<Participant> getParticipantCachePool() {
-        return participantCachePool;
     }
 
     public CachePool<Race> getRaceCachePool() {
@@ -134,9 +127,5 @@ public class MainCachePool {
 
     public static String getOddsNamespace() {
         return ODDS_NAMESPACE;
-    }
-
-    public static String getThumbnailNamespace() {
-        return THUMBNAIL_NAMESPACE;
     }
 }
