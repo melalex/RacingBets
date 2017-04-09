@@ -60,6 +60,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean isInRole(String token, Role role) {
+        if (token == null) {
+            return false;
+        }
+
         Jwt jwt = jwtFactory.getDecoder().decode(token);
         return isValid(jwt) && jwt.isInRole(role);
     }

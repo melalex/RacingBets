@@ -304,8 +304,8 @@ public class AccountController {
         ResponseBuilder<String> responseBuilder = createResponseBuilder(resp);
         try {
             String token = getJwtToken(req);
-            if (accountService.isInRole(token, Role.BOOKMAKER)) {
-                BigDecimal form = getObject(req, BigDecimal.class);
+            if (accountService.isInRole(token, Role.ADMIN)) {
+                BigDecimal form = getDecimal(req);
                 long id = getIdFromRequest(req);
 
                 userService.putMoney(id, form);
@@ -321,7 +321,7 @@ public class AccountController {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException e) {
+        } catch (NumberFormatException e) {
             invalidRequest(resp, responseBuilder, locale);
         }
 
@@ -357,7 +357,7 @@ public class AccountController {
         Jwt jwt = accountService.getToken(token);
         long id = getIdFromRequest(req);
 
-        if (jwt.getUserId() != id && jwt.isInRole(Role.ADMIN) && jwt.isInRole(Role.BOOKMAKER)){
+        if (jwt != null && jwt.getUserId() != id && jwt.isInRole(Role.ADMIN)){
                permissionDenied(resp, responseBuilder, locale);
         } else if (id <= 0) {
             invalidId(resp, responseBuilder, locale);
@@ -365,7 +365,7 @@ public class AccountController {
             UserDto dto = userService.find(id);
             responseBuilder.addToResult(map(dto, UserViewModel.class));
 
-            resp.setStatus(HttpServletResponse.SC_FOUND);
+            resp.setStatus(HttpServletResponse.SC_OK);
             writeToResponse(resp, responseBuilder.buildSuccessResponse());
         }
     }
@@ -376,7 +376,7 @@ public class AccountController {
     public void find(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<UserViewModel> responseBuilder = createResponseBuilder(resp);
         String token = getJwtToken(req);
-        if (accountService.isInRole(token, Role.ADMIN) || accountService.isInRole(token, Role.BOOKMAKER)) {
+        if (accountService.isInRole(token, Role.ADMIN)) {
             String query = req.getParameter("query");
             int page = getPageFromRequest(req);
             Pager pager = new PagerImpl(ENTITY_LIMIT, page);
@@ -391,7 +391,7 @@ public class AccountController {
             users.forEach(u -> responseBuilder.addToResult(map(u, UserViewModel.class)));
             responseBuilder.setPager(pager);
 
-            resp.setStatus(HttpServletResponse.SC_FOUND);
+            resp.setStatus(HttpServletResponse.SC_OK);
             writeToResponse(resp, responseBuilder.buildSuccessResponse());
         } else {
             invalidRequest(resp, responseBuilder, locale);

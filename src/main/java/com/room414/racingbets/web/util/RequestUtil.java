@@ -45,6 +45,18 @@ public class RequestUtil {
         }
     }
 
+    public static BigDecimal getDecimal(HttpServletRequest req) throws IOException {
+        try (BufferedReader in = req.getReader()) {
+            String decimal = in.readLine();
+
+            if (decimal == null) {
+                throw new NumberFormatException();
+            }
+
+            return new BigDecimal(decimal);
+        }
+    }
+
     /**
      * Gets Basic Auth from request
      *
