@@ -8,11 +8,14 @@ import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.dal.abstraction.exception.InvalidIdException;
+import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.Role;
+import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.forms.ParticipantForm;
 import com.room414.racingbets.web.model.forms.RaceForm;
+import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.util.ControllerUtil;
 import com.room414.racingbets.web.util.ResponseUtil;
 
@@ -25,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.*;
@@ -108,6 +112,30 @@ public class RaceController {
         validateRange(form.getJockey(), 1, Integer.MAX_VALUE, builder, locale, "jockey", ENTITY_TYPE);
         validateRange(form.getTrainer(), 1, Integer.MAX_VALUE, builder, locale, "trainer", ENTITY_TYPE);
         validateRange(form.getPlace(), 0, Integer.MAX_VALUE, builder, locale, "place", ENTITY_TYPE);
+    }
+
+    private void validatePlaces(List<ParticipantForm> form, ResponseBuilder<RaceDto> builder) {
+        List<Integer> places = form
+                .stream()
+                .map(ParticipantForm::getPlace)
+                .sorted(Integer::compareTo)
+                .collect(Collectors.toList());
+
+        int i = 1;
+
+        for (Integer place : places) {
+            if (place != i) {
+                String message = ResourceBundle
+                        .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
+                        .getString("invalid.places");
+
+                Error error = new Error(ErrorCode.INVALID_ERROR, message, ENTITY_TYPE, "place");
+                builder.addToErrors(error);
+
+                break;
+            }
+            i++;
+        }
     }
 
     /**
@@ -224,7 +252,40 @@ public class RaceController {
      * PUT: /race/finish/%d
      */
     public void finishRace(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        updateRace(req, resp, raceService::finishRace);
+        ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
+        String token = getJwtToken(req);
+        try {
+            if (token != null && accountService.isInRole(token, Role.ADMIN)) {
+                RaceForm form = getObject(req, RaceForm.class);
+
+                validate(form, responseBuilder);
+                validatePlaces(form.getParticipants(), responseBuilder);
+
+                if (responseBuilder.hasErrors()) {
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
+                    writeToResponse(resp, responseBuilder.buildErrorResponse());
+                } else {
+                    ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
+                    String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                            .getString("race.updated");
+
+                    RaceDto dto = map(form, RaceDto.class);
+
+                    raceService.finishRace(dto);
+
+                    writeCommandResponseBuilder.addToResult(message);
+                    resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+
+                    writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
+                }
+            } else {
+                permissionDenied(resp, responseBuilder, locale);
+            }
+        } catch (JsonParseException | InvalidFormatException e) {
+            invalidRequest(resp, responseBuilder, locale);
+        }  catch (InvalidIdException e) {
+            invalidId(resp, responseBuilder, locale);
+        }
     }
 
     /**
