@@ -84,6 +84,15 @@ public class RaceController {
         }
 
         if (form.getParticipants() != null) {
+            if (form.getParticipants().size() < 4) {
+                String message = ResourceBundle
+                        .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
+                        .getString("min.participant.count");
+
+                Error error = new Error(ErrorCode.INVALID_ERROR, message, ENTITY_TYPE, "participants");
+                builder.addToErrors(error);
+            }
+
             for (ParticipantForm participantDto : form.getParticipants()) {
                 validate(participantDto, builder);
             }

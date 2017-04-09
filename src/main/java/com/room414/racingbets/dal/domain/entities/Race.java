@@ -225,8 +225,14 @@ public class Race implements Serializable {
         }
     }
 
-    public Participant getParticipant(int place) {
-        return participants.get(place);
+    public Map<Integer, Participant> getParticipantPlaceMap() {
+        Map<Integer, Participant> map = new HashMap<>();
+
+        for (Participant participant : participants) {
+            map.put(participant.getPlace(), participant);
+        }
+
+        return map;
     }
 
     @Override

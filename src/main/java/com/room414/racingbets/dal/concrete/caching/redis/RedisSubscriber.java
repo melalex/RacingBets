@@ -34,10 +34,6 @@ public class RedisSubscriber extends JedisPubSub {
         subscriberThread.start();
     }
 
-    public void unSubscribe() {
-        this.unsubscribe();
-    }
-
     @Override
     public void onPMessage(String pattern, String channel, String message) {
         switch (channel) {

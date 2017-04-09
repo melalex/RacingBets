@@ -128,7 +128,7 @@
 
     <route>
         <method>PUT</method>
-        <pattern>^/api/race/(\d)+$</pattern>
+        <pattern>^/api/race$</pattern>
         <controller>Race</controller>
         <action>update</action>
     </route>

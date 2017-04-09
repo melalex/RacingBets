@@ -339,11 +339,13 @@ public class MySqlBetDao implements BetDao {
         final String call = "{ CALL fix_race_result(?, ?, ?, ?, ?) }";
 
         try (CallableStatement statement = connection.prepareCall(call)) {
+            Map<Integer, Participant> placeParticipantMap = race.getParticipantPlaceMap();
+
             statement.setLong(1, race.getId());
-            statement.setLong(2, race.getParticipant(1).getId());
-            statement.setLong(3, race.getParticipant(2).getId());
-            statement.setLong(4, race.getParticipant(3).getId());
-            statement.setLong(5, race.getParticipant(4).getId());
+            statement.setLong(2, placeParticipantMap.get(1).getId());
+            statement.setLong(3, placeParticipantMap.get(2).getId());
+            statement.setLong(4, placeParticipantMap.get(3).getId());
+            statement.setLong(5, placeParticipantMap.get(4).getId());
 
             statement.execute();
         } catch (SQLException e) {
