@@ -6,7 +6,6 @@ import com.room414.racingbets.dal.abstraction.infrastructure.Pair;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Base64;

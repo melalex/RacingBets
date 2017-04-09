@@ -1,7 +1,7 @@
 package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.CrudService;
@@ -96,7 +96,7 @@ class CrudControllerDelegate<F, D> {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException | InvalidFormatException e) {
+        } catch (JsonParseException | JsonMappingException e) {
             invalidRequest(resp, responseBuilder, locale);
         }  catch (InvalidIdException e) {
             invalidId(resp, responseBuilder, locale);
@@ -131,7 +131,7 @@ class CrudControllerDelegate<F, D> {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException | InvalidFormatException e) {
+        } catch (JsonParseException | JsonMappingException e) {
             invalidRequest(resp, responseBuilder, locale);
         }  catch (InvalidIdException e) {
             invalidId(resp, responseBuilder, locale);

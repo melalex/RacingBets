@@ -1,6 +1,7 @@
 package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.BetService;
@@ -182,7 +183,7 @@ public class BetController {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException | InvalidFormatException e) {
+        } catch (JsonParseException | JsonMappingException e) {
             invalidRequest(resp, responseBuilder, locale);
         } catch (InvalidIdException e) {
             invalidId(resp, responseBuilder, locale);

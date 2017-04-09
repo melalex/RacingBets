@@ -23,6 +23,8 @@ public class DalFacade implements AutoCloseable {
     private JedisPool jedisPool;
     private BasicDataSource mysqlPool;
 
+    private RedisSubscriber redisSubscriber;
+
     private AbstractDalFactory factory;
 
     public static DalFacade getInstance() {
@@ -71,7 +73,7 @@ public class DalFacade implements AutoCloseable {
     }
 
     private void initRedisSubscriber() {
-        RedisSubscriber redisSubscriber = new RedisSubscriber(cachePool.getCacheByNamespaceMap());
+        redisSubscriber = new RedisSubscriber(cachePool.getCacheByNamespaceMap());
         redisSubscriber.subscribe(jedisPool.getResource());
     }
 
@@ -85,6 +87,7 @@ public class DalFacade implements AutoCloseable {
 
     @Override
     public void close() {
+        redisSubscriber.unsubscribe();
         jedisPool.close();
         try {
             mysqlPool.close();
