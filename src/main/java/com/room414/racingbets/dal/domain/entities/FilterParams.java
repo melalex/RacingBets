@@ -56,7 +56,7 @@ public class FilterParams implements Serializable {
     }
 
     public void setRacecourseId(Long racecourseId) {
-        if (racecourseId <= 0) {
+        if (racecourseId == null || racecourseId <= 0) {
             this.racecourseId = null;
         } else {
             this.racecourseId = racecourseId;
@@ -68,7 +68,7 @@ public class FilterParams implements Serializable {
     }
 
     public void setHorseId(Long horseId) {
-        if (horseId <= 0) {
+        if (horseId == null || horseId <= 0) {
             this.horseId = null;
         } else {
             this.horseId = horseId;
@@ -80,7 +80,7 @@ public class FilterParams implements Serializable {
     }
 
     public void setTrainerId(Long trainerId) {
-        if (trainerId <= 0) {
+        if (trainerId == null || trainerId <= 0) {
             this.trainerId = null;
         } else {
             this.trainerId = trainerId;
@@ -92,7 +92,7 @@ public class FilterParams implements Serializable {
     }
 
     public void setJockeyId(Long jockeyId) {
-        if (jockeyId <= 0) {
+        if (jockeyId == null || jockeyId <= 0) {
             this.jockeyId = null;
         } else {
             this.jockeyId = jockeyId;

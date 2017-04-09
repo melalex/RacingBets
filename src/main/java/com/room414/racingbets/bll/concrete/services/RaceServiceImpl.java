@@ -157,7 +157,7 @@ public class RaceServiceImpl implements RaceService {
             params.setLimit(limit);
             params.setOffset(offset);
 
-            return null;
+            return params;
         }
     }
 

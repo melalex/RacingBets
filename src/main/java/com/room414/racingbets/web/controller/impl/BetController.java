@@ -1,6 +1,7 @@
 package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.BetService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
@@ -9,6 +10,7 @@ import com.room414.racingbets.bll.dto.entities.BetDto;
 import com.room414.racingbets.bll.dto.entities.OddsDto;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
 import com.room414.racingbets.bll.dto.entities.UserDto;
+import com.room414.racingbets.dal.abstraction.exception.InvalidIdException;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
@@ -180,8 +182,10 @@ public class BetController {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException e) {
+        } catch (JsonParseException | InvalidFormatException e) {
             invalidRequest(resp, responseBuilder, locale);
+        } catch (InvalidIdException e) {
+            invalidId(resp, responseBuilder, locale);
         }
     }
 
@@ -210,7 +214,7 @@ public class BetController {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException e) {
+        } catch (JsonParseException | InvalidFormatException e) {
             invalidRequest(resp, responseBuilder, locale);
         }
     }

@@ -1,11 +1,13 @@
 package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.room414.racingbets.bll.abstraction.infrastructure.FilterParamsBuilder;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
 import com.room414.racingbets.bll.dto.entities.RaceDto;
+import com.room414.racingbets.dal.abstraction.exception.InvalidIdException;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
@@ -72,8 +74,11 @@ public class RaceController {
         validateRange(form.getMaxRating(), form.getMinRating(), Integer.MAX_VALUE, builder, locale, "commission", ENTITY_TYPE);
 
         validateRange(form.getCommission(), 0, 1, builder, locale, "commission", ENTITY_TYPE);
-        validateRange(form.getMinBet().doubleValue(), 0, Double.MAX_VALUE, builder, locale, "minBet", ENTITY_TYPE);
         validateRange(form.getDistance(), 0, Double.MAX_VALUE, builder, locale, "distance", ENTITY_TYPE);
+
+        if (form.getMinBet() != null) {
+            validateRange(form.getMinBet().doubleValue(), 0, Double.MAX_VALUE, builder, locale, "minBet", ENTITY_TYPE);
+        }
 
         if (form.getParticipants() != null) {
             for (ParticipantForm participantDto : form.getParticipants()) {
@@ -137,8 +142,10 @@ public class RaceController {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException e) {
+        } catch (JsonParseException | InvalidFormatException e) {
             invalidRequest(resp, responseBuilder, locale);
+        }  catch (InvalidIdException e) {
+            invalidId(resp, responseBuilder, locale);
         }
     }
 
@@ -161,7 +168,7 @@ public class RaceController {
                 raceService.startRace(id);
 
                 writeCommandResponseBuilder.addToResult(message);
-                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.setStatus(HttpServletResponse.SC_ACCEPTED);
 
                 writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
             }
@@ -173,30 +180,36 @@ public class RaceController {
     private void updateRace(HttpServletRequest req, HttpServletResponse resp, Consumer<RaceDto> updater) throws IOException {
         ResponseBuilder<RaceDto> responseBuilder = createResponseBuilder(resp);
         String token = getJwtToken(req);
-        if (token != null && accountService.isInRole(token, Role.ADMIN)) {
-            RaceForm form = getObject(req, RaceForm.class);
+        try {
+            if (token != null && accountService.isInRole(token, Role.ADMIN)) {
+                RaceForm form = getObject(req, RaceForm.class);
 
-            validate(form, responseBuilder);
+                validate(form, responseBuilder);
 
-            if (responseBuilder.hasErrors()) {
-                resp.setStatus(SC_UNPROCESSABLE_ENTITY);
-                writeToResponse(resp, responseBuilder.buildErrorResponse());
+                if (responseBuilder.hasErrors()) {
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
+                    writeToResponse(resp, responseBuilder.buildErrorResponse());
+                } else {
+                    ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
+                    String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                            .getString("race.updated");
+
+                    RaceDto dto = map(form, RaceDto.class);
+
+                    updater.accept(dto);
+
+                    writeCommandResponseBuilder.addToResult(message);
+                    resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+
+                    writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
+                }
             } else {
-                ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
-                String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
-                        .getString("race.updated");
-
-                RaceDto dto = map(form, RaceDto.class);
-
-                updater.accept(dto);
-
-                writeCommandResponseBuilder.addToResult(message);
-                resp.setStatus(HttpServletResponse.SC_OK);
-
-                writeToResponse(resp, writeCommandResponseBuilder.buildSuccessResponse());
+                permissionDenied(resp, responseBuilder, locale);
             }
-        } else {
-            permissionDenied(resp, responseBuilder, locale);
+        } catch (JsonParseException | InvalidFormatException e) {
+            invalidRequest(resp, responseBuilder, locale);
+        }  catch (InvalidIdException e) {
+            invalidId(resp, responseBuilder, locale);
         }
     }
 
@@ -260,7 +273,7 @@ public class RaceController {
         responseBuilder.addAllToResult(result);
         responseBuilder.setPager(pager);
 
-        resp.setStatus(HttpServletResponse.SC_FOUND);
+        resp.setStatus(HttpServletResponse.SC_OK);
         writeToResponse(resp, responseBuilder.buildSuccessResponse());
     }
 }

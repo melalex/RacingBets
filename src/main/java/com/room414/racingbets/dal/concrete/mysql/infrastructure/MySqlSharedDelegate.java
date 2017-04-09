@@ -1,6 +1,7 @@
 package com.room414.racingbets.dal.concrete.mysql.infrastructure;
 
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.exception.InvalidIdException;
 
 import java.sql.*;
 import java.util.List;
@@ -16,6 +17,8 @@ import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoH
  * @version 1.0 03 Mar 2017
  */
 public class MySqlSharedDelegate<T> {
+    public static final int MYSQL_FOREIGN_KEY_CONSTRAINT = 1452;
+
     private Connection connection;
     private QueryExecutor<T> mapResult;
     private QueryExecutor<List<T>> mapResultList;
@@ -105,6 +108,11 @@ public class MySqlSharedDelegate<T> {
             setValues(statement, objects);
             return queryExecutor.execute(statement);
         } catch (SQLException e) {
+            if(e.getErrorCode() == MYSQL_FOREIGN_KEY_CONSTRAINT){
+                String message = "Invalid foreign key";
+                throw new InvalidIdException(message, e);
+            }
+
             String message = defaultErrorMessage(sqlStatement, objects);
             throw new DalException(message, e);
         }

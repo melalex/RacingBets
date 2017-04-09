@@ -2,6 +2,7 @@ package com.room414.racingbets.dal.concrete.mysql.dao;
 
 import com.room414.racingbets.dal.abstraction.dao.RaceDao;
 import com.room414.racingbets.dal.abstraction.exception.DalException;
+import com.room414.racingbets.dal.abstraction.exception.InvalidIdException;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlMapHelper;
 import com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate;
 import com.room414.racingbets.dal.domain.builders.RaceBuilder;
@@ -20,6 +21,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlDaoHelper.*;
+import static com.room414.racingbets.dal.concrete.mysql.infrastructure.MySqlSharedDelegate.MYSQL_FOREIGN_KEY_CONSTRAINT;
 
 /**
  * Implementation of RaceDao that uses JDBC as data source.
@@ -127,8 +129,8 @@ public class MySqlRaceDao implements RaceDao {
                 entity.getStart(),
                 entity.getMinBet(),
                 entity.getCommission(),
-                entity.getTrackCondition().getName(),
-                entity.getRaceType().getName(),
+                entity.getTrackCondition() != null ? entity.getTrackCondition().getName() : null,
+                entity.getRaceType() != null ? entity.getRaceType().getName() : null,
                 entity.getRaceClass(),
                 entity.getMinAge(),
                 entity.getMinRating(),
@@ -171,6 +173,11 @@ public class MySqlRaceDao implements RaceDao {
 
             createEntities(statement, idSetters);
         } catch (SQLException e) {
+            if(e.getErrorCode() == MYSQL_FOREIGN_KEY_CONSTRAINT){
+                String message = "Invalid foreign key";
+                throw new InvalidIdException(message, e);
+            }
+
             String message = "Exception during adding participant faze while creating race " + entity.toString();
             throw new DalException(message, e);
         }
@@ -367,6 +374,11 @@ public class MySqlRaceDao implements RaceDao {
 
             statement.executeBatch();
         } catch (SQLException e) {
+            if(e.getErrorCode() == MYSQL_FOREIGN_KEY_CONSTRAINT){
+                String message = "Invalid foreign key";
+                throw new InvalidIdException(message, e);
+            }
+
             String message = "Exception during adding participant faze while creating race " + entity.toString();
             throw new DalException(message, e);
         }
