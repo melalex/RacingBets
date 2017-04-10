@@ -6,6 +6,9 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
 /**
  * @author Alexander Melashchenko
@@ -22,16 +25,14 @@ public class RedisSubscriber extends JedisPubSub {
         this.cacheByNamespaceMap = cacheByNamespaceMap;
     }
 
-    // TODO: is good?
     public void subscribe(Jedis jedis) {
         String channel = "racing:bets:*";
         Runnable subscribe = () -> {
             jedis.psubscribe(this, channel);
             jedis.close();
         };
-        Thread subscriberThread = new Thread(subscribe, "Subscriber");
-        subscriberThread.setDaemon(true);
-        subscriberThread.start();
+        ExecutorService executorService = newSingleThreadExecutor();
+        executorService.execute(subscribe);
     }
 
     @Override
