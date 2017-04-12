@@ -3,6 +3,8 @@ package com.room414.racingbets.web.controller.impl;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
+import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
 import com.room414.racingbets.bll.abstraction.services.BetService;
 import com.room414.racingbets.bll.abstraction.services.RaceService;
@@ -17,12 +19,14 @@ import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.forms.BetForm;
+import com.room414.racingbets.web.model.infrastructure.PagerImpl;
 import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -30,6 +34,7 @@ import java.util.ResourceBundle;
 import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
 import static com.room414.racingbets.web.util.RequestUtil.getObject;
+import static com.room414.racingbets.web.util.RequestUtil.getPageFromRequest;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
 import static com.room414.racingbets.web.util.ValidatorUtil.*;
 
@@ -39,6 +44,7 @@ import static com.room414.racingbets.web.util.ValidatorUtil.*;
  */
 public class BetController {
     private static final String ENTITY_TYPE = "Bet";
+    private static final int ENTITY_LIMIT = 20;
 
     private BetService betService;
     private AccountService accountService;
@@ -158,7 +164,7 @@ public class BetController {
     }
 
     /**
-     * POST: bet/
+     * POST: /bet
      */
     public void makeBet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<BetDto> responseBuilder = createResponseBuilder(resp);
@@ -170,7 +176,7 @@ public class BetController {
                 validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
+                    resp.sendError(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     BetDto dto = map(form, BetDto.class);
@@ -191,32 +197,52 @@ public class BetController {
     }
 
     /**
-     * POST: bet/odds
+     * POST: /bet/odds
      */
     public void getOdds(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ResponseBuilder<OddsDto> responseBuilder = createResponseBuilder(resp);
         try {
-            String token = getJwtToken(req);
-            if (token != null && accountService.isInRole(token, Role.HANDICAPPER)) {
-                BetForm form = getObject(req, BetForm.class);
+            BetForm form = getObject(req, BetForm.class);
 
-                validate(form, responseBuilder);
+            validate(form, responseBuilder);
 
-                if (responseBuilder.hasErrors()) {
-                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
-                    writeToResponse(resp, responseBuilder.buildErrorResponse());
-                } else {
-                    BetDto dto = map(form, BetDto.class);
-
-                    OddsDto odds = betService.getOdds(dto);
-                    responseBuilder.addToResult(odds);
-                    writeOk(resp, responseBuilder);
-                }
+            if (responseBuilder.hasErrors()) {
+                resp.sendError(SC_UNPROCESSABLE_ENTITY);
+                writeToResponse(resp, responseBuilder.buildErrorResponse());
             } else {
-                permissionDenied(resp, responseBuilder, locale);
+                BetDto dto = map(form, BetDto.class);
+
+                OddsDto odds = betService.getOdds(dto);
+                responseBuilder.addToResult(odds);
+                writeOk(resp, responseBuilder);
             }
         } catch (JsonParseException | InvalidFormatException e) {
             invalidRequest(resp, responseBuilder, locale);
+        }
+    }
+
+
+    /**
+     * GET: /bet
+     */
+    public void getBets(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ResponseBuilder<BetDto> responseBuilder = createResponseBuilder(resp);
+        Jwt token = accountService.getToken(getJwtToken(req));
+
+        if (accountService.isValid(token)) {
+            long id = token.getUserId();
+            int page = getPageFromRequest(req);
+            Pager pager = new PagerImpl(ENTITY_LIMIT, page);
+
+            List<BetDto> result = betService.getBetsByUser(id, pager);
+
+            responseBuilder.addAllToResult(result);
+            responseBuilder.setPager(pager);
+            resp.setStatus(HttpServletResponse.SC_OK);
+
+            writeToResponse(resp, responseBuilder.buildSuccessResponse());
+        } else {
+            permissionDenied(resp, responseBuilder, locale);
         }
     }
 }

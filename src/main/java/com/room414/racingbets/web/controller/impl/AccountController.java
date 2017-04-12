@@ -148,7 +148,7 @@ public class AccountController {
             validate(form, responseBuilder);
 
             if (responseBuilder.hasErrors()) {
-                resp.setStatus(SC_UNPROCESSABLE_ENTITY);
+                resp.sendError(SC_UNPROCESSABLE_ENTITY);
                 writeToResponse(resp, responseBuilder.buildErrorResponse());
             } else {
                 UserDto dto = map(form, UserDto.class);
@@ -184,7 +184,7 @@ public class AccountController {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("login");
             Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, ENTITY_TYPE, null);
             responseBuilder.addToErrors(error);
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             writeToResponse(resp, responseBuilder.buildErrorResponse());
             return;
         }
@@ -211,7 +211,7 @@ public class AccountController {
         if (id == 0) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.refresh");
             Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, null);
-            resp.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+            resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
             responseBuilder.addToErrors(error);
             writeToResponse(resp, responseBuilder.buildErrorResponse());
             return;
@@ -224,6 +224,7 @@ public class AccountController {
         if (user == null || !rolesCheck.apply(user)) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("login");
             Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, ENTITY_TYPE, null);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             responseBuilder.addToErrors(error);
             writeToResponse(resp, responseBuilder.buildErrorResponse());
             return;

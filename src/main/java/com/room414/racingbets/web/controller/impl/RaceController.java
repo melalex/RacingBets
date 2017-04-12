@@ -159,7 +159,7 @@ public class RaceController {
                 validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
+                    resp.sendError(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
@@ -223,7 +223,7 @@ public class RaceController {
                 validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
+                    resp.sendError(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
@@ -270,7 +270,7 @@ public class RaceController {
                 validatePlaces(form.getParticipants(), responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
+                    resp.sendError(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);

@@ -45,7 +45,7 @@ public class ResponseUtil {
                                      ResponseBuilder<T> builder,
                                      Locale locale) throws IOException {
 
-        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.id");
         Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, builder.getType(), null);
         builder.addToErrors(error);
@@ -70,7 +70,7 @@ public class ResponseUtil {
 
         Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, builder.getType(), null);
         builder.addToErrors(error);
-        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         writeToResponse(resp, builder.buildErrorResponse());
     }
 
@@ -86,7 +86,7 @@ public class ResponseUtil {
         );
         builder.addToErrors(error);
 
-        resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        resp.sendError(HttpServletResponse.SC_FORBIDDEN);
 
         writeToResponse(resp, builder.buildErrorResponse());
     }
@@ -96,7 +96,7 @@ public class ResponseUtil {
         String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, req.getLocale()).getString("server.error");
         Error error = new Error(ErrorCode.SYSTEM_ERROR, message, null, null);
         builder.addToErrors(error);
-        resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         writeToResponse(resp, builder.buildErrorResponse());
     }
 
