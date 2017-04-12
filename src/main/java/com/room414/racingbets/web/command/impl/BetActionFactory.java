@@ -24,6 +24,7 @@ public class BetActionFactory implements ActionFactory {
         switch (name) {
             case "makeBet": return betController::makeBet;
             case "getOdds": return betController::getOdds;
+            case "getBets": return betController::getBets;
             default: throw new IllegalArgumentException("There is no Action named " + name);
         }
     }

@@ -92,6 +92,13 @@
     </route>
 
     <route>
+        <method>GET</method>
+        <pattern>^/api/bet$</pattern>
+        <controller>Bet</controller>
+        <action>getBets</action>
+    </route>
+
+    <route>
         <method>POST</method>
         <pattern>^/api/bet/odds$</pattern>
         <controller>Bet</controller>

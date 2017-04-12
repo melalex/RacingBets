@@ -3,6 +3,7 @@ package com.room414.racingbets.web.controller.impl;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.room414.racingbets.bll.abstraction.infrastructure.BetError;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
 import com.room414.racingbets.bll.abstraction.infrastructure.pagination.Pager;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
@@ -12,8 +13,10 @@ import com.room414.racingbets.bll.dto.entities.OddsDto;
 import com.room414.racingbets.dal.abstraction.exception.InvalidIdException;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
+import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.forms.BetForm;
 import com.room414.racingbets.web.model.infrastructure.PagerImpl;
+import com.room414.racingbets.web.model.viewmodels.Error;
 import com.room414.racingbets.web.model.viewmodels.MakeBetResponse;
 import com.room414.racingbets.web.util.ResponseUtil;
 
@@ -24,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import static com.room414.racingbets.web.util.ControllerUtil.map;
 import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
@@ -68,6 +72,57 @@ public class BetController {
         return ResponseUtil.createResponseBuilder(resp, locale, ENTITY_TYPE);
     }
 
+    private Error errorByBetError(BetError error) {
+        String message;
+
+        switch (error.getErrorType()) {
+            case BET_IS_TOO_SMALL:
+                message = ResourceBundle
+                        .getBundle(ERROR_MESSAGE_BUNDLE, locale)
+                        .getString("invalid.bet.size");
+
+                return new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, error.getField());
+
+            case INVALID_BET_TYPE:
+                message = ResourceBundle
+                        .getBundle(ERROR_MESSAGE_BUNDLE, locale)
+                        .getString("invalid.bet.type");
+
+                return new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, error.getField());
+
+            case NOT_ENOUGH_MONEY:
+                message = ResourceBundle
+                        .getBundle(ERROR_MESSAGE_BUNDLE, locale)
+                        .getString("not.enough.money");
+
+                return new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, error.getField());
+
+            case UNCONFIRMED_EMAIL:
+                message = ResourceBundle
+                        .getBundle(ERROR_MESSAGE_BUNDLE, locale)
+                        .getString("email.not.confirmed");
+
+                return new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, error.getField());
+
+            case INVALID_RACE_STATUS:
+                message = ResourceBundle
+                        .getBundle(ERROR_MESSAGE_BUNDLE, locale)
+                        .getString("race.started");
+
+                return new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, error.getField());
+
+            default:
+                throw new IllegalArgumentException("Unknown error type " + error.getErrorType());
+        }
+    }
+
+    private <T> Consumer<BetError> betErrorConsumer(ResponseBuilder<T> builder) {
+        return e -> {
+            Error error = errorByBetError(e);
+            builder.addToErrors(error);
+        };
+    }
+
     /**
      * POST: /bet
      */
@@ -83,19 +138,27 @@ public class BetController {
                 if (responseBuilder.hasErrors()) {
                     resp.sendError(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
-                } else {
-                    BetDto dto = map(form, BetDto.class);
-
-                    BigDecimal balance = betService.makeBet(dto);
-                    String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
-                            .getString("make.bet");
-
-                    MakeBetResponse response = new MakeBetResponse(message, balance);
-
-                    responseBuilder.addToResult(response);
-                    resp.setStatus(HttpServletResponse.SC_ACCEPTED);
-                    writeToResponse(resp, responseBuilder.buildSuccessResponse());
+                    return;
                 }
+
+                BetDto dto = map(form, BetDto.class);
+
+                BigDecimal balance = betService.makeBet(dto, betErrorConsumer(responseBuilder));
+
+                if (responseBuilder.hasErrors()) {
+                    resp.sendError(SC_UNPROCESSABLE_ENTITY);
+                    writeToResponse(resp, responseBuilder.buildErrorResponse());
+                    return;
+                }
+
+                String message = ResourceBundle.getBundle(SUCCESS_MESSAGE_BUNDLE, locale)
+                        .getString("make.bet");
+
+                MakeBetResponse response = new MakeBetResponse(message, balance);
+
+                responseBuilder.addToResult(response);
+                resp.setStatus(HttpServletResponse.SC_ACCEPTED);
+                writeToResponse(resp, responseBuilder.buildSuccessResponse());
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
@@ -119,13 +182,22 @@ public class BetController {
             if (responseBuilder.hasErrors()) {
                 resp.sendError(SC_UNPROCESSABLE_ENTITY);
                 writeToResponse(resp, responseBuilder.buildErrorResponse());
-            } else {
-                BetDto dto = map(form, BetDto.class);
-
-                OddsDto odds = betService.getOdds(dto);
-                responseBuilder.addToResult(odds);
-                writeOk(resp, responseBuilder);
+                return;
             }
+
+            BetDto dto = map(form, BetDto.class);
+
+            OddsDto odds = betService.getOdds(dto, betErrorConsumer(responseBuilder));
+
+            if (responseBuilder.hasErrors()) {
+                resp.sendError(SC_UNPROCESSABLE_ENTITY);
+                writeToResponse(resp, responseBuilder.buildErrorResponse());
+                return;
+            }
+
+            responseBuilder.addToResult(odds);
+            writeOk(resp, responseBuilder);
+
         } catch (JsonParseException | InvalidFormatException e) {
             invalidRequest(resp, responseBuilder, locale);
         }

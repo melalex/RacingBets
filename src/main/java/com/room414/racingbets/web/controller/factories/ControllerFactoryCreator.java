@@ -2,8 +2,6 @@ package com.room414.racingbets.web.controller.factories;
 
 import com.room414.racingbets.bll.abstraction.factories.services.AbstractServiceFactory;
 
-import java.util.Locale;
-
 /**
  * @author Alexander Melashchenko
  * @version 1.0 27 Mar 2017
@@ -26,9 +24,7 @@ public class ControllerFactoryCreator {
     public BetControllerFactory createBetControllerFactory() {
         return new BetControllerFactory(
                 serviceFactory.createBetServiceFactory(),
-                serviceFactory.createAccountServiceFactory(),
-                serviceFactory.createUserServiceFactory(),
-                serviceFactory.createRaceServiceFactory()
+                serviceFactory.createAccountServiceFactory()
         );
     }
 
