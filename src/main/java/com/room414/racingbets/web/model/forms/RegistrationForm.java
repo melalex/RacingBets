@@ -4,16 +4,19 @@ import java.io.Serializable;
 
 /**
  * @author Alexander Melashchenko
- * @version 1.0 24 Mar 2017
+ * @version 1.0 12 Apr 2017
  */
 public class RegistrationForm implements Serializable {
-    private static final long serialVersionUID = 3553020485031355723L;
+    private static final long serialVersionUID = 4451081726846879098L;
 
     private String login;
     private String password;
     private String firstName;
     private String lastName;
     private String email;
+
+    public RegistrationForm() {
+    }
 
     public String getLogin() {
         return login;

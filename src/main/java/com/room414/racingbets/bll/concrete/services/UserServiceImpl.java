@@ -113,11 +113,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isValid(String password, ApplicationUser user) {
-        // salt: VLHQoyp60NWpJ/OMuN9hwQ==
-        // password: secure
-        // hash: eea460d6c550e67f7e7797ead57823327ec7fa2afda6f72ba2a9582d15aa85a7adfe97c326a1a5260413e3217515d2b815179c52dea6bbf8a4dbce5ec48ca94f
-        // [84, -79, -48, -93, 42, 122, -48, -43, -87, 39, -13, -116, -72, -33, 97, -63]
-
         byte[] salt = Base64.decodeBase64(user.getSalt());
         String passwordHash = getSecurePassword(password, salt);
         return passwordHash.equals(user.getPassword());

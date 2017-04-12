@@ -4,9 +4,12 @@ import com.room414.racingbets.bll.dto.base.PersonDto;
 import com.room414.racingbets.web.model.builders.ResponseBuilder;
 import com.room414.racingbets.web.model.enums.ErrorCode;
 import com.room414.racingbets.web.model.viewmodels.Error;
+import org.intellij.lang.annotations.Language;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Alexander Melashchenko
@@ -19,9 +22,33 @@ public class ValidatorUtil {
     public static final int AUTH_STRING_MAX_LENGTH = 45;
     public static final int AUTH_STRING_MIN_LENGTH = 1;
 
+    @Language("RegExp")
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
+
+
     private ValidatorUtil() {
 
     }
+
+    public static  <T> void validateEmail(String property, ResponseBuilder<T> builder, Locale locale, String type) {
+        if (property == null) {
+            return;
+        }
+
+        final Matcher matcher = EMAIL_PATTERN.matcher(property);
+
+        if (!matcher.matches()) {
+            String message = ResourceBundle
+                    .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
+                    .getString("invalid.email");
+
+            Error error = new Error(ErrorCode.INVALID_ERROR, message, type, "email");
+            builder.addToErrors(error);
+        }
+    }
+
 
     public static <T> void notNull(Object property, ResponseBuilder<T> builder, Locale locale, String name, String type) {
         if (property == null) {

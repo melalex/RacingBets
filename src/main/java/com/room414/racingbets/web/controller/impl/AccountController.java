@@ -77,23 +77,6 @@ public class AccountController {
         return new Token(accessToken, expires, refreshToken);
     }
 
-    private <T> void validateEmail(String property, ResponseBuilder<T> builder, Locale locale, String type) {
-        if (property == null) {
-            return;
-        }
-
-        String pattern = "^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@" +
-                "[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
-        if (!property.matches(pattern)) {
-            String message = ResourceBundle
-                    .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
-                    .getString("invalid.email");
-
-            Error error = new Error(ErrorCode.INVALID_ERROR, message, type, "email");
-            builder.addToErrors(error);
-        }
-    }
-
     private <T> void validate(RegistrationForm form, ResponseBuilder<T> responseBuilder) {
         notNull(form.getFirstName(), responseBuilder, locale, "firstName", ENTITY_TYPE);
         notNull(form.getLastName(), responseBuilder, locale, "lastName", ENTITY_TYPE);
@@ -148,13 +131,15 @@ public class AccountController {
             validate(form, responseBuilder);
 
             if (responseBuilder.hasErrors()) {
-                resp.sendError(SC_UNPROCESSABLE_ENTITY);
+                resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                 writeToResponse(resp, responseBuilder.buildErrorResponse());
             } else {
                 UserDto dto = map(form, UserDto.class);
 
                 userService.create(dto);
-                messageService.sendConfirmMessage(dto, accountService.getConfirmToken(dto.getId()));
+
+                // TODO: Uncomment for sending confirm emails
+                // messageService.sendConfirmMessage(dto, accountService.getConfirmToken(dto.getId()));
 
                 responseBuilder.addToResult(createToken(dto));
                 resp.setStatus(HttpServletResponse.SC_CREATED);
@@ -169,6 +154,7 @@ public class AccountController {
     private void login(HttpServletRequest req,
                        HttpServletResponse resp,
                        Function<UserDto, Boolean> rolesCheck) throws IOException {
+
         Pair<String, String> credentials = getBasicAuthFromRequest(req);
         ResponseBuilder<Token> responseBuilder = createResponseBuilder(resp);
 
@@ -184,7 +170,7 @@ public class AccountController {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("login");
             Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, ENTITY_TYPE, null);
             responseBuilder.addToErrors(error);
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             writeToResponse(resp, responseBuilder.buildErrorResponse());
             return;
         }
@@ -211,7 +197,7 @@ public class AccountController {
         if (id == 0) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("invalid.refresh");
             Error error = new Error(ErrorCode.INVALID_ARGUMENT, message, ENTITY_TYPE, null);
-            resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+            resp.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
             responseBuilder.addToErrors(error);
             writeToResponse(resp, responseBuilder.buildErrorResponse());
             return;
@@ -224,7 +210,7 @@ public class AccountController {
         if (user == null || !rolesCheck.apply(user)) {
             String message = ResourceBundle.getBundle(ERROR_MESSAGE_BUNDLE, locale).getString("login");
             Error error = new Error(ErrorCode.OBJECT_NOT_FOUND, message, ENTITY_TYPE, null);
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             responseBuilder.addToErrors(error);
             writeToResponse(resp, responseBuilder.buildErrorResponse());
             return;

@@ -76,7 +76,7 @@ class CrudControllerDelegate<F, D> {
                 validator.validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.sendError(SC_UNPROCESSABLE_ENTITY);
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
@@ -113,7 +113,7 @@ class CrudControllerDelegate<F, D> {
                 validator.validate(form, responseBuilder);
 
                 if (responseBuilder.hasErrors()) {
-                    resp.sendError(SC_UNPROCESSABLE_ENTITY);
+                    resp.setStatus(SC_UNPROCESSABLE_ENTITY);
                     writeToResponse(resp, responseBuilder.buildErrorResponse());
                 } else {
                     ResponseBuilder<String> writeCommandResponseBuilder = createResponseBuilder(resp);
