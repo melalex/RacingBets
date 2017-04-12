@@ -1,5 +1,6 @@
 package com.room414.racingbets.bll.concrete.services;
 
+import com.room414.racingbets.bll.abstraction.exceptions.BllException;
 import com.room414.racingbets.bll.abstraction.factories.infrastructure.JwtFactory;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
 import com.room414.racingbets.bll.abstraction.services.AccountService;
@@ -42,20 +43,33 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String getToken(Jwt jwt) {
-        return jwtFactory.getEncoder().encode(jwt);
+        if (jwt != null) {
+            return jwtFactory.getEncoder().encode(jwt);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public Jwt getToken(String token) {
-        return jwtFactory.getDecoder().decode(token);
+        try {
+            return jwtFactory.getDecoder().decode(token);
+        } catch (BllException e) {
+            return null;
+        }
+
     }
 
     @Override
     public boolean isValid(Jwt jwt) {
-        String expectedSignature = jwtFactory.getEncoder().generateSignature(jwt);
-        long now = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")).getTime().getTime();
-        return expectedSignature.equals(jwt.getSignature())
-                && jwt.getExpire() > now;
+        if (jwt != null) {
+            String expectedSignature = jwtFactory.getEncoder().generateSignature(jwt);
+            long now = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")).getTime().getTime();
+            return expectedSignature.equals(jwt.getSignature())
+                    && jwt.getExpire() > now;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -64,7 +78,8 @@ public class AccountServiceImpl implements AccountService {
             return false;
         }
 
-        Jwt jwt = jwtFactory.getDecoder().decode(token);
+        Jwt jwt = getToken(token);
+
         return isValid(jwt) && jwt.isInRole(role);
     }
 

@@ -52,7 +52,6 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         final String passwordColumnName = "application_user.password_hash";
         final String saltColumnName = "application_user.salt";
         final String balanceColumnName = "application_user.balance";
-        final String languageColumnName = "application_user.language";
         final String roleNameColumnName = "role.name";
 
         ApplicationUserBuilder builder;
@@ -71,8 +70,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                         .setEmailConfirmed(resultSet.getBoolean(isEmailConfirmedColumnName))
                         .setPassword(resultSet.getString(passwordColumnName))
                         .setSalt(resultSet.getString(saltColumnName))
-                        .setBalance(resultSet.getBigDecimal(balanceColumnName))
-                        .setLanguage(resultSet.getString(languageColumnName));
+                        .setBalance(resultSet.getBigDecimal(balanceColumnName));
 
                 builderById.put(id, builder);
             }
@@ -89,8 +87,8 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
     private void createApplicationUser(ApplicationUser entity) {
         final String sqlStatement =
                 "INSERT INTO application_user " +
-                "   (login, password_hash, salt, first_name, last_name, email, is_email_confirmed, balance, language) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "   (login, password_hash, salt, first_name, last_name, email, is_email_confirmed, balance) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getLogin());
@@ -101,7 +99,6 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
             statement.setString(6, entity.getEmail());
             statement.setBoolean(7, entity.getEmailConfirmed());
             statement.setBigDecimal(8, entity.getBalance());
-            statement.setString(9, entity.getLanguage().getName());
 
             createEntity(statement, entity::setId);
         } catch (SQLException e) {
@@ -123,8 +120,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                     entity.getLastName(),
                     entity.getEmail(),
                     entity.getEmailConfirmed(),
-                    entity.getBalance(),
-                    entity.getLanguage()
+                    entity.getBalance()
             );
 
             throw new DalException(message, e);
@@ -207,7 +203,7 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
         final String sqlStatement =
                 "UPDATE application_user " +
                 "SET login = ?, password_hash = ?, salt = ?, first_name = ?, last_name = ?, " +
-                "    email = ?, is_email_confirmed = ?, language = ? " +
+                "    email = ?, is_email_confirmed = ? " +
                 "WHERE id = ?";
 
         return executor.executeUpdateQuery(
@@ -219,7 +215,6 @@ public class MySqlApplicationUserDao implements ApplicationUserDao {
                 entity.getLastName(),
                 entity.getEmail(),
                 entity.getEmailConfirmed(),
-                entity.getLanguage().getName(),
                 entity.getId()
         );
     }

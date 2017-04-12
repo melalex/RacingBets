@@ -6,7 +6,6 @@ import com.room414.racingbets.bll.concrete.facade.BllFacade;
 import com.room414.racingbets.bll.dto.entities.*;
 import com.room414.racingbets.dal.concrete.facade.DalFacade;
 import com.room414.racingbets.dal.domain.enums.Gender;
-import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.web.model.forms.HorseForm;
 import org.dozer.DozerBeanMapperSingletonWrapper;
@@ -40,7 +39,6 @@ public class DatabaseInitializer {
         superUser.setEmail("melalex490@gmail.com");
         superUser.setFirstName("Alexander");
         superUser.setLastName("Melashchenko");
-        superUser.setLanguage(Language.RUSSIAN);
         superUser.setBalance(BigDecimal.valueOf(1000));
         superUser.addRole(Role.HANDICAPPER);
         superUser.addRole(Role.ADMIN);
@@ -52,11 +50,6 @@ public class DatabaseInitializer {
                 .createUserServiceFactory()
                 .create()
                 .create(superUser);
-    }
-
-    private static Language getLanguage() {
-        long random = Math.round(Math.random() * 1);
-        return random == 0 ? Language.ENGLISH : Language.RUSSIAN;
     }
 
     private static void initUsers() throws IOException {
@@ -75,7 +68,6 @@ public class DatabaseInitializer {
             while (reader.ready()) {
                 line = reader.readLine();
                 userDto = jsonMapper.readValue(line, UserDto.class);
-                userDto.setLanguage(getLanguage());
                 userService.create(userDto);
             }
         }
@@ -209,13 +201,13 @@ public class DatabaseInitializer {
         initApp();
 
         initSuperUser();
-//        initUsers();
-//        initJockeys();
-//        initOwners();
-//        initTrainers();
-//        initRacecourses();
-//        initHorses();
-//        initRaces();
+        initUsers();
+        initJockeys();
+        initOwners();
+        initTrainers();
+        initRacecourses();
+        initHorses();
+        initRaces();
 
         DalFacade.getInstance().close();
     }

@@ -2,6 +2,7 @@ package com.room414.racingbets.web.controller.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room414.racingbets.bll.abstraction.infrastructure.CheckResult;
 import com.room414.racingbets.bll.abstraction.infrastructure.jwt.Jwt;
@@ -160,7 +161,7 @@ public class AccountController {
 
                 writeToResponse(resp, responseBuilder.buildSuccessResponse());
             }
-        } catch (JsonParseException e) {
+        } catch (JsonParseException | JsonMappingException e) {
             invalidRequest(resp, responseBuilder, locale);
         }
     }
@@ -292,7 +293,7 @@ public class AccountController {
             } else {
                 permissionDenied(resp, responseBuilder, locale);
             }
-        } catch (JsonParseException e) {
+        } catch (JsonParseException | JsonMappingException e) {
             invalidRequest(resp, responseBuilder, locale);
         }
     }

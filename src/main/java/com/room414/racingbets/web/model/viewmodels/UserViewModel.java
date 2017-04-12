@@ -1,6 +1,5 @@
 package com.room414.racingbets.web.model.viewmodels;
 
-import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.io.Serializable;
@@ -23,7 +22,6 @@ public class UserViewModel implements Serializable {
     private boolean isEmailConfirmed;
     private BigDecimal balance;
     private Set<Role> roles = new HashSet<>();
-    private Language language;
 
     public long getId() {
         return id;
@@ -89,14 +87,6 @@ public class UserViewModel implements Serializable {
         this.roles = roles;
     }
 
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,8 +101,7 @@ public class UserViewModel implements Serializable {
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (balance != null ? !balance.equals(that.balance) : that.balance != null) return false;
-        if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
-        return language == that.language;
+        return roles != null ? roles.equals(that.roles) : that.roles == null;
     }
 
     @Override
@@ -125,7 +114,6 @@ public class UserViewModel implements Serializable {
         result = 31 * result + (isEmailConfirmed ? 1 : 0);
         result = 31 * result + (balance != null ? balance.hashCode() : 0);
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
-        result = 31 * result + (language != null ? language.hashCode() : 0);
         return result;
     }
 
@@ -137,10 +125,9 @@ public class UserViewModel implements Serializable {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", getEmailConfirmed=" + isEmailConfirmed +
+                ", isEmailConfirmed=" + isEmailConfirmed +
                 ", balance=" + balance +
                 ", roles=" + roles +
-                ", language=" + language +
                 ", emailConfirmed=" + isEmailConfirmed() +
                 '}';
     }

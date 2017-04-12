@@ -1,7 +1,6 @@
 package com.room414.racingbets.dal.domain.entities;
 
 import com.room414.racingbets.dal.domain.builders.ApplicationUserBuilder;
-import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.io.Serializable;
@@ -39,7 +38,6 @@ public class ApplicationUser implements Serializable {
      * Roles applied to concrete User.
      */
     private Set<Role> roles = new HashSet<>();
-    private Language language;
 
     public ApplicationUser() {
     }
@@ -148,14 +146,6 @@ public class ApplicationUser implements Serializable {
         return roles.contains(role);
     }
 
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -208,10 +198,6 @@ public class ApplicationUser implements Serializable {
             return false;
         }
 
-        if (language != user.language) {
-            return false;
-        }
-
         return true;
     }
 
@@ -231,7 +217,6 @@ public class ApplicationUser implements Serializable {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
 
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
-        result = 31 * result + (language != null ? language.hashCode() : 0);
 
         return result;
     }
@@ -249,7 +234,6 @@ public class ApplicationUser implements Serializable {
                 ", getEmailConfirmed=" + emailConfirmed +
                 ", balance=" + balance +
                 ", roles=" + roles +
-                ", language=" + language +
                 '}';
     }
 }

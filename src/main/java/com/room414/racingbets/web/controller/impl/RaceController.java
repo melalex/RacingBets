@@ -42,7 +42,7 @@ import static com.room414.racingbets.web.util.ValidatorUtil.STRING_MAX_LENGTH;
  */
 public class RaceController {
     private static final String ENTITY_TYPE = "Race";
-    private static final int ENTITY_LIMIT = 20;
+    private static final int ENTITY_LIMIT = 10;
 
     private RaceService raceService;
     private AccountService accountService;

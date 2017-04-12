@@ -77,11 +77,13 @@ public class CachedBetDao extends CacheCrudDao<Bet> implements BetDao {
 
     @Override
     public void fixRaceResult(Race race) {
+        cache.deleteAllCached();
         dao.fixRaceResult(race);
     }
 
     @Override
     public void rejectBets(long raceId) {
+        cache.deleteAllCached();
         dao.rejectBets(raceId);
     }
 }

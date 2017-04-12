@@ -64,7 +64,6 @@ CREATE TABLE `horse_racing`.`application_user` (
   `email`              VARCHAR(45)             NOT NULL,
   `is_email_confirmed` BOOL                    NOT NULL,
   `balance`            DECIMAL(12, 2) UNSIGNED NOT NULL,
-  `language`           ENUM ('en', 'ru')       NOT NULL DEFAULT 'en',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `login_UNIQUE` (`login` ASC),

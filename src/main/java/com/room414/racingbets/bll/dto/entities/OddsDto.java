@@ -61,7 +61,7 @@ public class OddsDto implements Serializable {
 
     public BigDecimal getDecimalOdds() {
         BigDecimal bookmakerPart = prizePool.multiply(new BigDecimal(commission));
-        BigDecimal amount = bookmakerPart.subtract(bookmakerPart);
+        BigDecimal amount = prizePool.subtract(bookmakerPart);
 
         return amount.divide(eventPool, SCALING, BigDecimal.ROUND_DOWN);
     }

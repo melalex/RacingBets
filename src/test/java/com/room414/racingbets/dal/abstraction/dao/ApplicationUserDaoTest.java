@@ -2,7 +2,6 @@ package com.room414.racingbets.dal.abstraction.dao;
 
 import com.room414.racingbets.dal.abstraction.exception.UserAlreadyExistsException;
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
-import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 import com.room414.racingbets.dal.infrastructure.EntityStorage;
 import com.room414.racingbets.resolvers.UnitOfWorkParameterResolver;
@@ -184,7 +183,6 @@ class ApplicationUserDaoTest {
                 .setEmail("melalex490@virginia.edu")
                 .setEmailConfirmed(true)
                 .setBalance(BigDecimal.valueOf(385.59))
-                .setLanguage(Language.ENGLISH)
                 .addRole(Role.ADMIN)
                 .addRole(Role.BOOKMAKER)
                 .addRole(Role.HANDICAPPER)
@@ -217,7 +215,6 @@ class ApplicationUserDaoTest {
                 .setEmail("melalex490@virginia.edu")
                 .setEmailConfirmed(true)
                 .setBalance(BigDecimal.valueOf(385.59))
-                .setLanguage(Language.ENGLISH)
                 .addRole(Role.ADMIN)
                 .addRole(Role.BOOKMAKER)
                 .addRole(Role.HANDICAPPER)
@@ -240,7 +237,6 @@ class ApplicationUserDaoTest {
                 .setEmail("pgordon0@google.ru")
                 .setEmailConfirmed(true)
                 .setBalance(BigDecimal.valueOf(385.59))
-                .setLanguage(Language.ENGLISH)
                 .addRole(Role.ADMIN)
                 .addRole(Role.BOOKMAKER)
                 .addRole(Role.HANDICAPPER)
@@ -263,7 +259,6 @@ class ApplicationUserDaoTest {
                 .setEmail("pgordon0@google.ru")
                 .setEmailConfirmed(true)
                 .setBalance(BigDecimal.valueOf(385.59))
-                .setLanguage(Language.ENGLISH)
                 .addRole(Role.ADMIN)
                 .addRole(Role.BOOKMAKER)
                 .addRole(Role.HANDICAPPER)
@@ -291,7 +286,6 @@ class ApplicationUserDaoTest {
                 .setEmail("melalex490@virginia.edu")
                 .setEmailConfirmed(true)
                 .setBalance(entity.getBalance())
-                .setLanguage(Language.ENGLISH)
                 .addRole(Role.ADMIN)
                 .addRole(Role.BOOKMAKER)
                 .addRole(Role.HANDICAPPER)
@@ -324,7 +318,6 @@ class ApplicationUserDaoTest {
                 .setEmail("melalex490@virginia.edu")
                 .setEmailConfirmed(false)
                 .setBalance(BigDecimal.valueOf(385.59))
-                .setLanguage(Language.ENGLISH)
                 .addRole(Role.ADMIN)
                 .addRole(Role.BOOKMAKER)
                 .addRole(Role.HANDICAPPER)

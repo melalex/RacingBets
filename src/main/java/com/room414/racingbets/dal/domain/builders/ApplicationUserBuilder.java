@@ -1,7 +1,6 @@
 package com.room414.racingbets.dal.domain.builders;
 
 import com.room414.racingbets.dal.domain.entities.ApplicationUser;
-import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.math.BigDecimal;
@@ -27,7 +26,6 @@ public class ApplicationUserBuilder {
     private boolean isEmailConfirmed;
     private BigDecimal balance;
     private Set<Role> roles;
-    private Language language;
 
     private Set<Role> getRoles() {
         if (roles == null) {
@@ -111,16 +109,6 @@ public class ApplicationUserBuilder {
         return this;
     }
 
-    public ApplicationUserBuilder setLanguage(Language language) {
-        this.language = language;
-        return this;
-    }
-
-    public ApplicationUserBuilder setLanguage(String language) {
-        this.language = Language.getLanguage(language);
-        return this;
-    }
-
     public ApplicationUser build() {
         ApplicationUser applicationUser = new ApplicationUser();
 
@@ -134,7 +122,6 @@ public class ApplicationUserBuilder {
         applicationUser.setBalance(balance);
         applicationUser.setEmailConfirmed(isEmailConfirmed);
         applicationUser.setRoles(getRoles());
-        applicationUser.setLanguage(language);
 
         return applicationUser;
     }

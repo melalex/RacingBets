@@ -1,6 +1,5 @@
 package com.room414.racingbets.bll.dto.entities;
 
-import com.room414.racingbets.dal.domain.enums.Language;
 import com.room414.racingbets.dal.domain.enums.Role;
 
 import java.io.Serializable;
@@ -27,7 +26,6 @@ public class UserDto implements Serializable {
     private boolean emailConfirmed;
     private BigDecimal balance;
     private Set<Role> roles = new HashSet<>();
-    private Language language;
 
     public UserDto() {
     }
@@ -124,14 +122,6 @@ public class UserDto implements Serializable {
         return roles.contains(role);
     }
 
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -181,10 +171,6 @@ public class UserDto implements Serializable {
             return false;
         }
 
-        if (language != userDto.language) {
-            return false;
-        }
-
         return true;
     }
 
@@ -200,7 +186,6 @@ public class UserDto implements Serializable {
         result = 31 * result + (emailConfirmed ? 1 : 0);
         result = 31 * result + (balance != null ? balance.hashCode() : 0);
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
-        result = 31 * result + (language != null ? language.hashCode() : 0);
 
         return result;
     }
@@ -217,7 +202,6 @@ public class UserDto implements Serializable {
                 ", emailConfirmed=" + emailConfirmed +
                 ", balance=" + balance +
                 ", roles=" + roles +
-                ", language=" + language +
                 '}';
     }
 }

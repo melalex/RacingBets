@@ -1,7 +1,5 @@
 package com.room414.racingbets.web.model.forms;
 
-import com.room414.racingbets.dal.domain.enums.Language;
-
 import java.io.Serializable;
 
 /**
@@ -16,7 +14,6 @@ public class RegistrationForm implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
-    private Language language;
 
     public String getLogin() {
         return login;
@@ -58,14 +55,6 @@ public class RegistrationForm implements Serializable {
         this.email = email;
     }
 
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,8 +66,7 @@ public class RegistrationForm implements Serializable {
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        return language == that.language;
+        return email != null ? email.equals(that.email) : that.email == null;
     }
 
     @Override
@@ -88,7 +76,6 @@ public class RegistrationForm implements Serializable {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (language != null ? language.hashCode() : 0);
         return result;
     }
 
@@ -100,7 +87,6 @@ public class RegistrationForm implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", language=" + language +
                 '}';
     }
 }
