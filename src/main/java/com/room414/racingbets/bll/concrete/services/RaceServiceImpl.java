@@ -245,16 +245,19 @@ public class RaceServiceImpl implements RaceService {
             entities = betDao.findByRaceId(raceId, i, betsPerQuery);
 
             for (Bet betEntity : entities) {
-                bet = mapper.map(betEntity, BetDto.class);
+                // TODO: uncomment for sending emails
+                // bet = mapper.map(betEntity, BetDto.class);
                 if (betEntity.getBetStatus() == BetStatus.WIN) {
 
                     odds = betDao.getOdds(betEntity);
                     amount = betEntity.getBetSize().multiply(odds.getDecimalOdds());
                     unitOfWork.getApplicationUserDao().putMoney(betEntity.getUser().getId(), amount);
-                    messageService.sendWinMessage(bet, race);
+                    // TODO: uncomment for sending emails
+                    //messageService.sendWinMessage(bet, race);
 
                 } else if (betEntity.getBetStatus() == BetStatus.LOSE) {
-                    messageService.sendLoseMessage(bet, race);
+                    // TODO: uncomment for sending emails
+                    ///messageService.sendLoseMessage(bet, race);
                 }
             }
         }
