@@ -58,6 +58,10 @@ public class FrontController extends HttpServlet {
         } catch (BllException | DalException e) {
             LOG.error(e);
             serverError(req, resp);
+        } catch (Exception e) {
+            String message = "Unknown exception";
+            LOG.error(message, e);
+            serverError(req, resp);
         }
     }
 

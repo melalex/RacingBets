@@ -66,7 +66,7 @@ public class ValidatorUtil {
             return;
         }
 
-        if (!property.matches("^[a-zA-Z0-9]*$")) {
+        if (!property.matches("^[а-яА-ЯёЁa-zA-Z0-9]+$")) {
             String message = ResourceBundle
                     .getBundle(ResponseUtil.ERROR_MESSAGE_BUNDLE, locale)
                     .getString("invalid.string");
