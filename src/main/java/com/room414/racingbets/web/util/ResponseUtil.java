@@ -36,11 +36,6 @@ public class ResponseUtil {
         }
     }
 
-    public static <T> void writeOk(HttpServletResponse resp, ResponseBuilder<T> builder) throws IOException {
-        resp.setStatus(HttpServletResponse.SC_OK);
-        writeToResponse(resp, builder.buildSuccessResponse());
-    }
-
     public static <T> void invalidId(HttpServletResponse resp,
                                      ResponseBuilder<T> builder,
                                      Locale locale) throws IOException {

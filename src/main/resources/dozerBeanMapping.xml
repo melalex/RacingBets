@@ -61,4 +61,14 @@
         </field>
     </mapping>
 
+    <mapping>
+        <class-a>com.room414.racingbets.bll.dto.entities.BetDto</class-a>
+        <class-b>com.room414.racingbets.web.model.forms.BetForm</class-b>
+            
+        <field>
+            <a>user.id</a>
+            <b>user</b>
+        </field>
+    </mapping>
+
 </mappings>

@@ -12,8 +12,7 @@ import java.math.BigDecimal;
  */
 public class OddsDto implements Serializable {
     private static final long serialVersionUID = -8512671896597348845L;
-    private static final int SCALING = 4;
-    
+
     private BigDecimal prizePool;
     private BigDecimal eventPool;
     private double commission;
@@ -53,17 +52,6 @@ public class OddsDto implements Serializable {
 
     public void setEventPool(BigDecimal eventPool) {
         this.eventPool = eventPool != null ? eventPool : BigDecimal.valueOf(0);
-    }
-
-    public double getDoubleOdds() {
-        return getDecimalOdds().doubleValue();
-    }
-
-    public BigDecimal getDecimalOdds() {
-        BigDecimal bookmakerPart = prizePool.multiply(new BigDecimal(commission));
-        BigDecimal amount = prizePool.subtract(bookmakerPart);
-
-        return amount.divide(eventPool, SCALING, BigDecimal.ROUND_DOWN);
     }
 
     @Override

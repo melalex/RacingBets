@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-import static com.room414.racingbets.web.util.ControllerUtil.map;
+import static com.room414.racingbets.web.model.mapping.MapUtil.betFormToDto;
 import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
 import static com.room414.racingbets.web.util.RequestUtil.getObject;
 import static com.room414.racingbets.web.util.RequestUtil.getPageFromRequest;
@@ -141,7 +141,7 @@ public class BetController {
                     return;
                 }
 
-                BetDto dto = map(form, BetDto.class);
+                BetDto dto = betFormToDto(form);
 
                 BigDecimal balance = betService.makeBet(dto, betErrorConsumer(responseBuilder));
 
@@ -185,7 +185,7 @@ public class BetController {
                 return;
             }
 
-            BetDto dto = map(form, BetDto.class);
+            BetDto dto = betFormToDto(form);
 
             OddsDto odds = betService.getOdds(dto, betErrorConsumer(responseBuilder));
 
@@ -196,7 +196,9 @@ public class BetController {
             }
 
             responseBuilder.addToResult(odds);
-            writeOk(resp, responseBuilder);
+
+            resp.setStatus(HttpServletResponse.SC_OK);
+            writeToResponse(resp, responseBuilder.buildSuccessResponse());
 
         } catch (JsonParseException | InvalidFormatException e) {
             invalidRequest(resp, responseBuilder, locale);

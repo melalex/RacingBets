@@ -30,6 +30,10 @@ public class UserDto implements Serializable {
     public UserDto() {
     }
 
+    public UserDto(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
