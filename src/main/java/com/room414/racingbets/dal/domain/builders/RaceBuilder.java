@@ -6,7 +6,6 @@ import com.room414.racingbets.dal.domain.entities.Racecourse;
 import com.room414.racingbets.dal.domain.enums.RaceStatus;
 import com.room414.racingbets.dal.domain.enums.RaceType;
 import com.room414.racingbets.dal.domain.enums.TrackCondition;
-import com.room414.racingbets.dal.domain.infrastructure.BuildHelper;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -16,9 +15,9 @@ import java.util.stream.Collectors;
 /**
  * Simplify creating Race instance using builder pattern.
  *
- * @see Race
  * @author Alexander Melashchenko
  * @version 1.0 28 Feb 2017
+ * @see Race
  */
 public class RaceBuilder {
     private long id;
@@ -43,10 +42,7 @@ public class RaceBuilder {
             participants = new LinkedList<>();
         }
 
-        return participants
-                .stream()
-                .sorted(Comparator.comparingInt(Participant::getNumber))
-                .collect(Collectors.toList());
+        return participants;
     }
 
     private Map<Integer, BigDecimal> getPrizes() {
@@ -68,12 +64,6 @@ public class RaceBuilder {
 
     public RaceBuilder setRacecourse(Racecourse racecourse) {
         this.racecourse = racecourse;
-        return this;
-    }
-
-    public RaceBuilder setRacecourseById(int id) {
-        this.racecourse = new Racecourse();
-        racecourse.setId(id);
         return this;
     }
 
@@ -156,29 +146,8 @@ public class RaceBuilder {
         return this;
     }
 
-    public RaceBuilder setParticipantsByIds(List<Long> ids) {
-        this.participants = BuildHelper.mapIdsToParticipants(ids);
-        return this;
-    }
-
     public RaceBuilder addParticipant(Participant participant) {
         getParticipants().add(participant);
-        return this;
-    }
-
-    public RaceBuilder addParticipantById(int id) {
-        Participant participant = new Participant();
-        participant.setId(id);
-        getParticipants().add(participant);
-        return this;
-    }
-
-    public RaceBuilder setPrizes(Map<Integer, BigDecimal> prizes) {
-        if (prizes != null) {
-            this.prizes = new HashMap<>(prizes);
-        } else {
-            this.prizes = null;
-        }
         return this;
     }
 
@@ -189,6 +158,10 @@ public class RaceBuilder {
 
     public Race build() {
         Race race = new Race();
+        List<Participant> sortedParticipants = getParticipants()
+                .stream()
+                .sorted(Comparator.comparingInt(Participant::getNumber))
+                .collect(Collectors.toList());
 
         race.setId(id);
         race.setName(name);
@@ -204,7 +177,7 @@ public class RaceBuilder {
         race.setMinRating(minRating);
         race.setMaxRating(maxRating);
         race.setDistance(distance);
-        race.setParticipants(getParticipants());
+        race.setParticipants(sortedParticipants);
         race.setPrizes(getPrizes());
 
         return race;
