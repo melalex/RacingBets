@@ -11,6 +11,7 @@ import com.room414.racingbets.dal.domain.infrastructure.BuildHelper;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Simplify creating Race instance using builder pattern.
@@ -41,7 +42,11 @@ public class RaceBuilder {
         if (participants == null) {
             participants = new LinkedList<>();
         }
-        return participants;
+
+        return participants
+                .stream()
+                .sorted(Comparator.comparingInt(Participant::getNumber))
+                .collect(Collectors.toList());
     }
 
     private Map<Integer, BigDecimal> getPrizes() {

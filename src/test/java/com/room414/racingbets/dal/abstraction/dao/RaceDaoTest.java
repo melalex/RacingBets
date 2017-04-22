@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.room414.racingbets.dal.infrastructure.TestHelper.defaultAssertionFailMessage;
 import static com.room414.racingbets.dal.infrastructure.TestHelper.sqlTimestampFromString;
@@ -84,8 +85,8 @@ class RaceDaoTest {
         RaceDao dao = getDao();
         List<Race> expectedResult = new LinkedList<>();
 
-        expectedResult.add(storage.getRace(2));
         expectedResult.add(storage.getRace(3));
+        expectedResult.add(storage.getRace(2));
 
         List<Race> result = dao.findAll(0, 2);
 
@@ -105,7 +106,10 @@ class RaceDaoTest {
     @Test
     @Tag("read")
     void findAll() throws ParseException {
-        List<Race> expectedResult = storage.getAllRaces();
+        List<Race> expectedResult = storage.getAllRaces()
+                .stream()
+                .sorted((r1, r2) -> r2.getStart().compareTo(r1.getStart()))
+                .collect(Collectors.toList());
 
         List<Race> result = getDao().findAll();
 

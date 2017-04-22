@@ -14,7 +14,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -68,7 +68,7 @@ public class MySqlRaceDao implements RaceDao {
         final String prizeColumnName = "prize.prize_size";
         final String placeColumnName = "prize.place";
 
-        Map<Long, RaceBuilder> builderById = new HashMap<>();
+        Map<Long, RaceBuilder> builderById = new LinkedHashMap<>();
 
         RaceBuilder builder;
         long id;

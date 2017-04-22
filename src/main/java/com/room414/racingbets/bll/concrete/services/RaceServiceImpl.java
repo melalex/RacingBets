@@ -196,7 +196,6 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
-    // TODO: isolation level
     public void rejectRace(RaceDto race) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             long raceId = race.getId();
@@ -225,9 +224,10 @@ public class RaceServiceImpl implements RaceService {
 
     private void fixRaceResult(UnitOfWork unitOfWork, RaceDto race) {
         Race raceEntity = mapper.map(race, Race.class);
+        raceEntity.setRaceStatus(RaceStatus.FINISHED);
+        // TODO: fix win odds
         unitOfWork.getRaceDao().update(raceEntity);
         unitOfWork.getBetDao().fixRaceResult(raceEntity);
-        unitOfWork.commit();
     }
 
     private void payOff(UnitOfWork unitOfWork, RaceDto race) {
@@ -237,7 +237,8 @@ public class RaceServiceImpl implements RaceService {
         int betsCount = betDao.findByRaceIdCount(raceId);
 
         List<Bet> entities;
-        BetDto bet;
+        // TODO: uncomment for sending emails
+        // BetDto bet;
         Odds odds;
         BigDecimal amount;
 
@@ -251,26 +252,36 @@ public class RaceServiceImpl implements RaceService {
 
                     odds = betDao.getOdds(betEntity);
                     amount = betEntity.getBetSize().multiply(odds.getDecimalOdds());
-                    unitOfWork.getApplicationUserDao().putMoney(betEntity.getUser().getId(), amount);
-                    // TODO: uncomment for sending emails
-                    //messageService.sendWinMessage(bet, race);
 
-                } else if (betEntity.getBetStatus() == BetStatus.LOSE) {
+                    // TODO: Create stored procedure for this
+                    unitOfWork.getApplicationUserDao().putMoney(betEntity.getUser().getId(), amount);
+
                     // TODO: uncomment for sending emails
-                    ///messageService.sendLoseMessage(bet, race);
+                    // messageService.sendWinMessage(bet, race);
                 }
+
+
+                // TODO: uncomment for sending emails
+                // else if (betEntity.getBetStatus() == BetStatus.LOSE) {
+                //      messageService.sendLoseMessage(bet, race);
+                // }
             }
         }
-
-        unitOfWork.commit();
     }
 
     @Override
-    // TODO: isolation level
+    // TODO: Serializable isolation level
     public void finishRace(RaceDto race) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
+            Race beforeFinish = unitOfWork.getRaceDao().find(race.getId());
+
+            if (beforeFinish.getRaceStatus() == RaceStatus.FINISHED) {
+                return;
+            }
+
             fixRaceResult(unitOfWork, race);
             payOff(unitOfWork, race);
+            unitOfWork.commit();
         }
     }
 
