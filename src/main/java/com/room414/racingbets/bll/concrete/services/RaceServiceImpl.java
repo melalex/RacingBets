@@ -228,6 +228,7 @@ public class RaceServiceImpl implements RaceService {
         // TODO: fix win odds
         unitOfWork.getRaceDao().update(raceEntity);
         unitOfWork.getBetDao().fixRaceResult(raceEntity);
+        unitOfWork.commit();
     }
 
     private void payOff(UnitOfWork unitOfWork, RaceDto race) {
