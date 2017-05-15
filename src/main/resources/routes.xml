@@ -135,7 +135,7 @@
 
     <route>
         <method>PUT</method>
-        <pattern>^/api/race$</pattern>
+        <pattern>^/api/race(/(\d)+)?$</pattern>
         <controller>Race</controller>
         <action>update</action>
     </route>
@@ -170,7 +170,7 @@
 
     <route>
         <method>PUT</method>
-        <pattern>^/api/horse$</pattern>
+        <pattern>^/api/horse(/(\d)+)?$</pattern>
         <controller>Horse</controller>
         <action>update</action>
     </route>
@@ -205,7 +205,7 @@
 
     <route>
         <method>PUT</method>
-        <pattern>^/api/jockey$</pattern>
+        <pattern>^/api/jockey(/(\d)+)?$</pattern>
         <controller>Jockey</controller>
         <action>update</action>
     </route>
@@ -240,7 +240,7 @@
 
     <route>
         <method>PUT</method>
-        <pattern>^/api/owner$</pattern>
+        <pattern>^/api/owner(/(\d)+)?$</pattern>
         <controller>Owner</controller>
         <action>update</action>
     </route>
@@ -275,7 +275,7 @@
 
     <route>
         <method>PUT</method>
-        <pattern>^/api/racecourse$</pattern>
+        <pattern>^/api/racecourse(/(\d)+)?$</pattern>
         <controller>Racecourse</controller>
         <action>update</action>
     </route>
@@ -310,7 +310,7 @@
 
     <route>
         <method>PUT</method>
-        <pattern>^/api/trainer$</pattern>
+        <pattern>^/api/trainer(/(\d)+)?$</pattern>
         <controller>Trainer</controller>
         <action>update</action>
     </route>

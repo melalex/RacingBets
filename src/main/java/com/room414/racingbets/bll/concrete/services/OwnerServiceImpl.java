@@ -43,6 +43,12 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
+    public void update(long id, OwnerDto entity) {
+        entity.setId(id);
+        update(entity);
+    }
+
+    @Override
     public void update(OwnerDto owner) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Owner entity = mapper.map(owner, Owner.class);

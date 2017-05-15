@@ -43,6 +43,12 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
+    public void update(long id, TrainerDto entity) {
+        entity.setId(id);
+        update(entity);
+    }
+
+    @Override
     public void update(TrainerDto trainer) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Trainer entity = mapper.map(trainer, Trainer.class);

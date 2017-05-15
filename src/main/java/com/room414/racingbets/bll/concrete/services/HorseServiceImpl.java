@@ -43,6 +43,12 @@ public class HorseServiceImpl implements HorseService {
     }
 
     @Override
+    public void update(long id, HorseDto entity) {
+        entity.setId(id);
+        update(entity);
+    }
+
+    @Override
     public void update(HorseDto horse) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Horse entity = mapper.map(horse, Horse.class);

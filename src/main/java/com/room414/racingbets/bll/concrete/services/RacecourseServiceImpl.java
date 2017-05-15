@@ -43,6 +43,12 @@ public class RacecourseServiceImpl implements RacecourseService {
     }
 
     @Override
+    public void update(long id, RacecourseDto entity) {
+        entity.setId(id);
+        update(entity);
+    }
+
+    @Override
     public void update(RacecourseDto racecourse) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Racecourse entity = mapper.map(racecourse, Racecourse.class);

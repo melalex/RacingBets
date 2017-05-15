@@ -23,9 +23,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static com.room414.racingbets.web.util.ControllerUtil.map;
-import static com.room414.racingbets.web.util.RequestUtil.getObject;
-import static com.room414.racingbets.web.util.RequestUtil.getPageFromRequest;
-import static com.room414.racingbets.web.util.RequestUtil.getJwtToken;
+import static com.room414.racingbets.web.util.RequestUtil.*;
 import static com.room414.racingbets.web.util.ResponseUtil.*;
 
 /**
@@ -121,7 +119,13 @@ class CrudControllerDelegate<F, D> {
                             .getString("entity.updated");
                     D dto = map(form, dtoClass);
 
-                    crudService.update(dto);
+                    long id = getIdFromRequest(req);
+                    if (id <= 0) {
+                        crudService.update(dto);
+                    } else {
+                        crudService.update(id, dto);
+                    }
+
                     writeCommandResponseBuilder.addToResult(message);
 
                     resp.setStatus(HttpServletResponse.SC_ACCEPTED);

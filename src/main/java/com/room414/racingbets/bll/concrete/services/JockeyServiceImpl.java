@@ -43,6 +43,12 @@ public class JockeyServiceImpl implements JockeyService {
     }
 
     @Override
+    public void update(long id, JockeyDto entity) {
+        entity.setId(id);
+        update(entity);
+    }
+
+    @Override
     public void update(JockeyDto jockey) {
         try (UnitOfWork unitOfWork = factory.createUnitOfWork()) {
             Jockey entity = mapper.map(jockey, Jockey.class);

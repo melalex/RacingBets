@@ -9,8 +9,9 @@ import java.util.List;
  * @version 1.0 25 Mar 2017
  */
 public interface CrudService<T> {
-    void create(T jockey);
-    void update(T jockey);
+    void create(T entity);
+    void update(long id, T entity);
+    void update(T entity);
     T find(long id);
     List<T> search(String searchString, Pager pager);
     List<T> findAll(Pager pager);
